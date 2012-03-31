@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "document.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -36,6 +37,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Document *Doc;
 };
 
 #endif // MAINWINDOW_H

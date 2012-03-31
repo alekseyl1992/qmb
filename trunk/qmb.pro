@@ -15,7 +15,10 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     document.cpp \
     xmlhighlighter.cpp \
-    mymodel/model.cpp
+    mymodel/model.cpp \
+    modelscene.cpp \
+    arrow.cpp \
+    modelitem.cpp
 
 HEADERS  += mainwindow.h \
     model.h \
@@ -28,7 +31,10 @@ HEADERS  += mainwindow.h \
     document.h \
     xmlhighlighter.h \
     main.h \
-    mymodel/model.h
+    mymodel/model.h \
+    modelscene.h \
+    arrow.h \
+    modelitem.h
 
 FORMS    += mainwindow.ui \
     document.ui
