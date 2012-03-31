@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "document.h"
 #include "ui_mainwindow.h"
 #include "main.h"
 #include "mymodel/model.h"
@@ -25,6 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mdiArea->setTabsMovable(true);
     //будет вынесено в отдельную функцию - создание проекта
     on_createModel_triggered();
+    int i = -1; //из-за пункта-заголовка
+    foreach(QAction *act, ui->mainToolBar->actions())
+            act->setData(i++);
+
+    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +39,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_createModel_triggered()
 {
     //здесь будет запрос на ввод имени проекта и места сохранения
-    Document *Doc = new Document(this);
+    Doc = new Document(this);
     Doc->setWindowTitle(QString(QString("Модель ") +
                                 QString::number(ui->mdiArea->subWindowList().size()+1)));
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
@@ -106,5 +110,6 @@ void MainWindow::tool_triggered()
         if(act != Sender)
             act->setChecked(false);
 
-    QMessageBox::information(this, "Выбран инструмент", Sender->text());
+    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
 }

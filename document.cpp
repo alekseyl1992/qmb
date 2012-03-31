@@ -1,13 +1,16 @@
 #include "document.h"
 #include "ui_document.h"
 #include "xmlhighlighter.h"
+#include <QMenu>
 
 Document::Document(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Document)
 {
     ui->setupUi(this);
-    XmlHighlighter *Hightlighter = new XmlHighlighter(ui->textEdit);
+    new XmlHighlighter(ui->textEdit);
+    Scene = new ModelScene(new QMenu(), this);
+    ui->graphicsView->setScene(Scene);
 }
 
 Document::~Document()
