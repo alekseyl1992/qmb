@@ -17,3 +17,8 @@ Document::~Document()
 {
     delete ui;
 }
+
+QTextEdit *Document::code()
+{
+    return ui->textEdit;
+}

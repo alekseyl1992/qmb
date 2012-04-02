@@ -43,6 +43,10 @@ void MainWindow::on_createModel_triggered()
     Doc->setWindowTitle(QString(QString("Модель ") +
                                 QString::number(ui->mdiArea->subWindowList().size()+1)));
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
+    Doc->code()->setText(R"(<?xml version="1.0" encoding="UTF-8"?>
+    <model name="Модель 1">
+
+    </model>)");
 }
 
 void MainWindow::on_openModel_triggered()
