@@ -93,7 +93,6 @@
    <addaction name="generatorTool"/>
    <addaction name="queueTool"/>
    <addaction name="handlerTool"/>
-   <addaction name="connectTool"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="simulationToolBar">
@@ -217,17 +216,6 @@
     <string>Обслуживающий аппарат</string>
    </property>
   </action>
-  <action name="connectTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Связь</string>
-   </property>
-   <property name="toolTip">
-    <string>Линия связи</string>
-   </property>
-  </action>
   <action name="toolsCaption">
    <property name="enabled">
     <bool>false</bool>
@@ -304,22 +292,6 @@
   </connection>
   <connection>
    <sender>handlerTool</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tool_triggered()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>connectTool</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>tool_triggered()</slot>

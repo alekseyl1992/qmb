@@ -3,6 +3,7 @@
 
 #include "modelscene.h"
 #include <QDialog>
+#include <QTextEdit>
 
 namespace Ui {
 class Document;
@@ -20,6 +21,8 @@ public:
     {
         return Scene;
     }
+
+    QTextEdit *code();
     
 private:
     Ui::Document *ui;
