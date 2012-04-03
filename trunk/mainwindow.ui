@@ -93,6 +93,7 @@
    <addaction name="generatorTool"/>
    <addaction name="queueTool"/>
    <addaction name="handlerTool"/>
+   <addaction name="terminatorTool"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="simulationToolBar">
@@ -254,6 +255,17 @@
     <string>Ctrl+W</string>
    </property>
   </action>
+  <action name="terminatorTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Терминатор</string>
+   </property>
+   <property name="toolTip">
+    <string>Терминатор</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
@@ -292,6 +304,22 @@
   </connection>
   <connection>
    <sender>handlerTool</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>tool_triggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>483</x>
+     <y>289</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>terminatorTool</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>tool_triggered()</slot>

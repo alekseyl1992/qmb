@@ -23,12 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mdiArea->setTabsClosable(true);
     ui->mdiArea->setTabsMovable(true);
     //будет вынесено в отдельную функцию - создание проекта
-    on_createModel_triggered();
+
     int i = -1; //из-за пункта-заголовка
     foreach(QAction *act, ui->mainToolBar->actions())
             act->setData(i++);
-
-    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    on_createModel_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +38,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_createModel_triggered()
 {
     //здесь будет запрос на ввод имени проекта и места сохранения
-    Doc = new Document(this);
+    Doc = new Document(this);    
+    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    connect(Doc->scene(), SIGNAL(itemInserted(ModelItem *)), this, SLOT(tool_triggered()));
+
     Doc->setWindowTitle(QString(QString("Модель ") +
                                 QString::number(ui->mdiArea->subWindowList().size()+1)));
     ui->mdiArea->addSubWindow(Doc)->showMaximized();

@@ -64,7 +64,7 @@ class ModelItem : public QGraphicsPolygonItem
 {
 public:
     enum { Type = UserType + 15 };
-    enum ItemType { Generator, Queue, Handler };
+    enum ItemType { Generator, Queue, Handler, Terminator };
 
     ModelItem(ItemType itemType, QMenu *contextMenu,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
