@@ -63,13 +63,25 @@ ModelItem::ModelItem(ItemType itemType, QMenu *contextMenu,
                       << QPointF(-100, -50);
             break;
         case Handler:
-            path.moveTo(200, 50);
+            /*path.moveTo(200, 50);
             path.arcTo(150, 0, 50, 50, 0, 90);
             path.arcTo(50, 0, 50, 50, 90, 90);
             path.arcTo(50, 50, 50, 50, 180, 90);
             path.arcTo(150, 50, 50, 50, 270, 90);
-            path.lineTo(200, 25);
+            path.lineTo(200, 25);*/
+            path.moveTo(100, 0);
+            path.arcTo(50, -50, 50, 50, 0, 90);
+            path.arcTo(-50, -50, 50, 50, 90, 90);
+            path.arcTo(-50, 0, 50, 50, 180, 90);
+            path.arcTo(50, 0, 50, 50, 270, 90);
+            path.lineTo(100, -25);
             myPolygon = path.toFillPolygon();
+            break;
+
+        case Terminator:
+            myPolygon << QPointF(-150, 0) << QPointF(-100, -50) << QPointF(100, -50)
+                      << QPointF(100, 50)
+                      << QPointF(-100, 50);
             break;
     }
     setPolygon(myPolygon);

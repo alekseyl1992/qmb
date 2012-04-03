@@ -124,7 +124,7 @@ void ModelScene::setItemType(ModelItem::ItemType type)
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton)
-        return;
+        myMode = InsertLine;
 
     ModelItem *item;
     switch (myMode) {
@@ -134,6 +134,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             addItem(item);
             item->setPos(mouseEvent->scenePos());
             emit itemInserted(item);
+            myMode = Mode::MoveItem;
             break;
 
         case InsertLine:
@@ -157,7 +158,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 //            textItem->setPos(mouseEvent->scenePos());
 //            emit textInserted(textItem);
     }
-    myMode = Mode::MoveItem;
+
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
@@ -173,7 +174,8 @@ void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (line != 0 && myMode == InsertLine) {
+    if (line != 0 && myMode == InsertLine)
+    {
         QList<QGraphicsItem *> startItems = items(line->line().p1());
         if (startItems.count() && startItems.first() == line)
             startItems.removeFirst();
@@ -200,6 +202,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             addItem(arrow);
             arrow->updatePosition();
         }
+        myMode = MoveItem;
     }
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
