@@ -34,7 +34,15 @@ HEADERS  += mainwindow.h \
     mymodel/model.h \
     modelscene.h \
     arrow.h \
-    modelitem.h
+    modelitem.h \
+    qmodel/request_generator.h \
+    qmodel/request.h \
+    qmodel/queue.h \
+    qmodel/qalgorithm.h \
+    qmodel/model.h \
+    qmodel/link.h \
+    qmodel/handler.h \
+    qmodel/exceptions.h
 
 FORMS    += mainwindow.ui \
     document.ui
