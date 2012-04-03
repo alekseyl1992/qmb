@@ -43,10 +43,7 @@ void MainWindow::on_createModel_triggered()
     Doc->setWindowTitle(QString(QString("Модель ") +
                                 QString::number(ui->mdiArea->subWindowList().size()+1)));
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
-    Doc->code()->setText(R"(<?xml version="1.0" encoding="UTF-8"?>
-    <model name="Модель 1">
-
-    </model>)");
+    //Doc->code()->setText(R"<?xml version=\"1.0\" encoding="UTF-8\"?> <model name=\"Модель 1\"> </model>)");
 }
 
 void MainWindow::on_openModel_triggered()
@@ -68,21 +65,26 @@ void MainWindow::on_closeModel_triggered()
 
 void MainWindow::on_startSimulation_triggered()
 {/*
-    qmodel::request_generator<int> gen;
-    qmodel::queue<int> q;
-    qmodel::handler<int> h;
-
-    std::thread th(generating, &gen, &q);
-    std::thread th2(add_to_handler, &h);
-    th.join();
-    th2.join();*/
-
     mymodel::generator *gen = new mymodel::generator();
     mymodel::handler *han = new mymodel::handler();
     qRegisterMetaType<mymodel::request>("request");
     connect(gen, SIGNAL(request_generated(request)), han, SLOT(handle(request)));
     gen->start();
-    qDebug() << "connected" << endl;
+    qDebug() << "connected" << endl;*/
+
+    qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
+    qmodel::queue<> q;
+    qmodel::handler<> h(std::chrono::milliseconds(5000));
+
+    qmodel::model<> newModel;
+    newModel.req_generators.push_back(gen);
+    newModel.queues.push_back(q);
+    newModel.handlers.push_back(h);
+
+    newModel.link_generators_queues.push_back(qmodel::link<qmodel::request_generator<>*, qmodel::queue<>* >(&gen, &q));
+    newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue<>*, qmodel::handler<>* >(&q, &h));
+
+    qmodel::qalgorithm::simulate_start(newModel);
 }
 
 void MainWindow::on_stopSimulation_triggered()
