@@ -14,16 +14,19 @@ class Document : public QDialog
     Q_OBJECT
     
 public:
+    enum Tabs {Model, Code, Simulation};
+
     explicit Document(QWidget *parent = 0);
+
     ~Document();
 
-    ModelScene *scene()
-    {
-        return Scene;
-    }
+    ModelScene *scene();
 
     QTextEdit *code();
-    
+    void setActiveTab(Tabs Tab);
+public slots:
+    void logChanged();
+
 private:
     Ui::Document *ui;
     ModelScene *Scene;

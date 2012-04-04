@@ -42,7 +42,8 @@ HEADERS  += mainwindow.h \
     qmodel/model.h \
     qmodel/link.h \
     qmodel/handler.h \
-    qmodel/exceptions.h
+    qmodel/exceptions.h \
+    simulationlog.h
 
 FORMS    += mainwindow.ui \
     document.ui

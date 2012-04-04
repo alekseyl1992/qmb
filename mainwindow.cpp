@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "main.h"
 #include "mymodel/model.h"
+#include "simulationlog.h"
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMessageBox>
@@ -45,7 +46,6 @@ void MainWindow::on_createModel_triggered()
     Doc->setWindowTitle(QString(QString("Модель ") +
                                 QString::number(ui->mdiArea->subWindowList().size()+1)));
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
-    //Doc->code()->setText(R"<?xml version=\"1.0\" encoding="UTF-8\"?> <model name=\"Модель 1\"> </model>)");
 }
 
 void MainWindow::on_openModel_triggered()
@@ -73,7 +73,11 @@ void MainWindow::on_startSimulation_triggered()
     connect(gen, SIGNAL(request_generated(request)), han, SLOT(handle(request)));
     gen->start();
     qDebug() << "connected" << endl;*/
+    Doc->setActiveTab(Document::Tabs::Simulation);
+    sLog.clear();
+    sLog << "Simulation started\n";
 
+    return;
     qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
     qmodel::queue<> q;
     qmodel::handler<> h(std::chrono::milliseconds(5000));
