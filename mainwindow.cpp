@@ -74,8 +74,8 @@ void MainWindow::on_startSimulation_triggered()
     gen->start();
     qDebug() << "connected" << endl;*/
     Doc->setActiveTab(Document::Tabs::Simulation);
-    sLog.clear();
-    sLog << "Simulation started\n";
+    sLog.reset();
+    sLog << "Simulation started\n" << endl;
 
     return;
     qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
