@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     mymodel/model.cpp \
     modelscene.cpp \
     arrow.cpp \
-    modelitem.cpp
+    modelitem.cpp \
+    elementpropwindow.cpp
 
 HEADERS  += mainwindow.h \
     model.h \
@@ -43,7 +44,9 @@ HEADERS  += mainwindow.h \
     qmodel/link.h \
     qmodel/handler.h \
     qmodel/exceptions.h \
-    simulationlog.h
+    simulationlog.h \
+    elementpropwindow.h
 
 FORMS    += mainwindow.ui \
-    document.ui
+    document.ui \
+    elementpropwindow.ui

@@ -16,7 +16,7 @@ class Document : public QDialog
 public:
     enum Tabs {Model, Code, Simulation};
 
-    explicit Document(QWidget *parent = 0);
+    explicit Document(QWidget *parent, QMenu *menu);
 
     ~Document();
 

@@ -4,16 +4,17 @@
 #include "simulationlog.h"
 #include <QMenu>
 
-Document::Document(QWidget *parent) :
+Document::Document(QWidget *parent, QMenu *menu) :
     QDialog(parent),
     ui(new Ui::Document)
 {
     ui->setupUi(this);
     new XmlHighlighter(ui->textEdit);
-    Scene = new ModelScene(new QMenu(), this);
+    Scene = new ModelScene(menu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
 
-    connect(&SimulationLog::Log(), SIGNAL(changed()), this, SLOT(logChanged()));
+    //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
+    connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));
 }
 
 Document::~Document()

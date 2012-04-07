@@ -72,7 +72,16 @@
     <addaction name="about"/>
     <addaction name="projectPage"/>
    </widget>
+   <widget class="QMenu" name="elementMenu">
+    <property name="title">
+     <string>Элемент</string>
+    </property>
+    <addaction name="elementProperties"/>
+    <addaction name="separator"/>
+    <addaction name="deleteElement"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="elementMenu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
   </widget>
@@ -188,6 +197,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Генератор</string>
    </property>
@@ -264,6 +276,16 @@
    </property>
    <property name="toolTip">
     <string>Терминатор</string>
+   </property>
+  </action>
+  <action name="elementProperties">
+   <property name="text">
+    <string>Свойства</string>
+   </property>
+  </action>
+  <action name="deleteElement">
+   <property name="text">
+    <string>Удалить</string>
    </property>
   </action>
  </widget>
