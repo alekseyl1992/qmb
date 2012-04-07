@@ -41,6 +41,7 @@
 #define MODELSCENE_H
 
 #include <QGraphicsScene>
+#include <QWheelEvent>
 #include "modelitem.h"
 //#include "modeltextitem.h"
 
@@ -89,6 +90,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void wheelEvent(QGraphicsSceneWheelEvent* event);
 
 private:
     bool isItemChange(int type);

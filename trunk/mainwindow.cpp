@@ -3,6 +3,7 @@
 #include "main.h"
 #include "mymodel/model.h"
 #include "simulationlog.h"
+#include "elementpropwindow.h"
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMessageBox>
@@ -39,7 +40,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_createModel_triggered()
 {
     //здесь будет запрос на ввод имени проекта и места сохранения
-    Doc = new Document(this);    
+    Doc = new Document(this, ui->elementMenu);
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
     connect(Doc->scene(), SIGNAL(itemInserted(ModelItem *)), this, SLOT(tool_triggered()));
 
@@ -124,4 +125,21 @@ void MainWindow::tool_triggered()
 
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
     Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
+}
+
+void MainWindow::on_deleteElement_triggered()
+{
+    //удаляем выделенные элементы и ассоциированные стрелочки
+    //TODO вынести всю работу с моделью в Document или даже Scene
+    foreach (QGraphicsItem *item, Doc->scene()->selectedItems()) {
+        if (item->type() == ModelItem::Type) {
+            qgraphicsitem_cast<ModelItem *>(item)->removeArrows();
+        }
+        Doc->scene()->removeItem(item);
+    }
+}
+
+void MainWindow::on_elementProperties_triggered()
+{
+    (new ElementPropWindow(this))->show();
 }

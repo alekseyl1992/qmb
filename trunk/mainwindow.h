@@ -35,6 +35,10 @@ private slots:
 
     void on_closeModel_triggered();
 
+    void on_deleteElement_triggered();
+
+    void on_elementProperties_triggered();
+
 private:
     Ui::MainWindow *ui;
     Document *Doc;

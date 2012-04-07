@@ -208,6 +208,17 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
+void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    //мастабирование окна
+    double scaleFactor = 1.2;
+
+    if(event->delta() > 0)
+        ((QGraphicsView*)parent())->scale(scaleFactor, scaleFactor);
+    else
+        ((QGraphicsView*)parent())->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+}
+
 bool ModelScene::isItemChange(int type)
 {
     foreach (QGraphicsItem *item, selectedItems()) {
