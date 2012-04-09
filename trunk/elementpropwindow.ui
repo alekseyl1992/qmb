@@ -13,6 +13,21 @@
     <height>79</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>309</width>
+    <height>79</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>309</width>
+    <height>79</height>
+   </size>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Свойства элемента</string>
   </property>

@@ -6,6 +6,8 @@ ElementPropWindow::ElementPropWindow(QWidget *parent) :
     ui(new Ui::ElementPropWindow)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Tool);
+    activateWindow();
 }
 
 ElementPropWindow::~ElementPropWindow()

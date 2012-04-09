@@ -34,7 +34,20 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QGraphicsView" name="graphicsView"/>
+        <widget class="QGraphicsView" name="graphicsView">
+         <property name="mouseTracking">
+          <bool>false</bool>
+         </property>
+         <property name="renderHints">
+          <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::NonCosmeticDefaultPen|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+         </property>
+         <property name="dragMode">
+          <enum>QGraphicsView::ScrollHandDrag</enum>
+         </property>
+         <property name="viewportUpdateMode">
+          <enum>QGraphicsView::FullViewportUpdate</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

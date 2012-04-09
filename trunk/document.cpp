@@ -3,6 +3,8 @@
 #include "xmlhighlighter.h"
 #include "simulationlog.h"
 #include <QMenu>
+#include <QComboBox>
+#include <QGraphicsOpacityEffect>
 
 Document::Document(QWidget *parent, QMenu *menu) :
     QDialog(parent),
@@ -12,6 +14,14 @@ Document::Document(QWidget *parent, QMenu *menu) :
     new XmlHighlighter(ui->textEdit);
     Scene = new ModelScene(menu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
+
+    //создаём окошко для отображения масштаба модели
+    QComboBox *box = new QComboBox(ui->graphicsView);
+    box->addItem(QIcon(), "100%");
+    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+    effect->setOpacity(0.5);
+    box->setGraphicsEffect(effect);
+
 
     //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
     connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));

@@ -49,6 +49,9 @@ ModelItem::ModelItem(ItemType itemType, QMenu *contextMenu,
 {
     myItemType = itemType;
     myContextMenu = contextMenu;
+    QPen iPen = pen();
+    iPen.setWidth(2);
+    setPen(iPen);
 
     QPainterPath path;
     switch (myItemType) {
