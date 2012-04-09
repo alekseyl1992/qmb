@@ -141,5 +141,6 @@ void MainWindow::on_deleteElement_triggered()
 
 void MainWindow::on_elementProperties_triggered()
 {
-    (new ElementPropWindow(this))->show();
+    ElementPropWindow *propWindow =  new ElementPropWindow(this);
+    propWindow->show();
 }

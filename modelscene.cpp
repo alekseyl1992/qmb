@@ -54,6 +54,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myItemColor = Qt::white;
     myTextColor = Qt::black;
     myLineColor = Qt::black;
+
 }
 
 void ModelScene::setLineColor(const QColor &color)
@@ -164,12 +165,13 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (myMode == InsertLine && line != 0) {
+    if (myMode == InsertLine && line != 0)
+    {
         QLineF newLine(line->line().p1(), mouseEvent->scenePos());
         line->setLine(newLine);
-    } else if (myMode == MoveItem) {
-        QGraphicsScene::mouseMoveEvent(mouseEvent);
     }
+    else if (myMode == MoveItem)
+        QGraphicsScene::mouseMoveEvent(mouseEvent);
 }
 
 void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -202,8 +204,8 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             addItem(arrow);
             arrow->updatePosition();
         }
-        myMode = MoveItem;
-    }
+
+    }myMode = MoveItem;
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
@@ -212,11 +214,17 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     //мастабирование окна
     double scaleFactor = 1.2;
+    QGraphicsView *view = (QGraphicsView*)parent();
+    QPointF fPos = event->scenePos();
+    if(itemAt(fPos) != nullptr)
+        view->centerOn(itemAt(fPos));
+    else
+        view->centerOn(fPos);
 
     if(event->delta() > 0)
-        ((QGraphicsView*)parent())->scale(scaleFactor, scaleFactor);
+        view->scale(scaleFactor, scaleFactor);
     else
-        ((QGraphicsView*)parent())->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        view->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
 bool ModelScene::isItemChange(int type)
