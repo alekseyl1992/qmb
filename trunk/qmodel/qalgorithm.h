@@ -14,6 +14,7 @@ namespace qmodel
 	{
 		std::mutex m, m2;
 		
+		bool simulate_flag; //флаг симул€ции
 
 		template<typename Type>
 			void linking_generators_and_queues(model<Type>& Model)
@@ -26,9 +27,8 @@ namespace qmodel
 				{
 					std::thread([&]()
 					{
-						Model.IDs.push_back(std::this_thread::get_id());
 						//for(int i=1;i<=5;i++)
-						for(;Model.get_simulate_flag() == true;)
+						for(;simulate_flag == true;)
 						{
 							link.lhs->generate_new_request();
 							for(;;)
@@ -56,7 +56,6 @@ namespace qmodel
 					{
 						std::thread([&]()
 						{
-							Model.IDs.push_back(std::this_thread::get_id());
 							/*
 								for(;;) //checking if the handler is free
 								{
@@ -68,7 +67,7 @@ namespace qmodel
 									}
 								}
 							*/
-							for(;Model.get_simulate_flag() == true;) //main loop for the thread
+							for(;simulate_flag == true;) //main loop for the thread
 							{
 								for(;;) //checking if the queue has an element
 								{
@@ -95,7 +94,7 @@ namespace qmodel
 		template<typename Type>
 			void simulation_start(model<Type>& Model)
 			{
-				Model.set_simulate_flag(true);
+				simulate_flag = true;
 				linking_generators_and_queues(Model);
 				linking_queues_and_handlers(Model);
 			}
@@ -103,7 +102,7 @@ namespace qmodel
 		template<typename Type>
 			void simulation_stop(model<Type>& Model)
 			{ //останавливает выполнение 
-				Model.set_simulate_flag(false);
+				simulate_flag = false;
 			}
 	}
 
