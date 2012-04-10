@@ -45,7 +45,6 @@ namespace qmodel
 	//getting next request
 	template<typename Type>
 		request<Type> queue<Type>::get_first() {
-			
 			request<Type> res = *(requests_in_queue.begin());
 			requests_in_queue.pop_front();
 			if(requests_in_queue.size() == 0)
