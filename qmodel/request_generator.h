@@ -22,13 +22,19 @@ namespace qmodel
 		void generate_new_request();
 		//gets next request 
 		request<Type> get_request();
-	
+
+		//gets generating period
+		int get_generating_period() const { return generating_period; }
+		//sets generating period
+		void set_generating_period(int period) { generating_period = period; }
+
+		//gets generated flag
 		bool is_generated() const { return is_generated_flag; }
 
 	private:
 		//Fields
 		request<Type>* new_req;
-		std::chrono::milliseconds generating_period;
+		int generating_period;
 		bool is_generated_flag;
 		static int all_generators_ids;
 
@@ -44,7 +50,7 @@ namespace qmodel
 	//Constructors
 	template<typename Type> inline
 		request_generator<Type>::request_generator(): 
-			 new_req(nullptr), is_generated_flag(false), generating_period(std::chrono::milliseconds(1000)) 
+			 new_req(nullptr), is_generated_flag(false), generating_period(1000) 
 	{ 
 		++all_generators_ids; 
 		generator_id = all_generators_ids;
@@ -53,7 +59,7 @@ namespace qmodel
 
 	template<typename Type> inline
 		request_generator<Type>::request_generator(int period): 
-			new_req(nullptr), is_generated_flag(false), generating_period(std::chrono::milliseconds(period)) 
+			new_req(nullptr), is_generated_flag(false), generating_period(period) 
 	{ 
 		++all_generators_ids; 
 		generator_id = all_generators_ids;
@@ -73,7 +79,7 @@ namespace qmodel
 	//generating new random request
 	template<typename Type>
 		void request_generator<Type>::generate_new_request() {
-			std::this_thread::sleep_for(generating_period);
+			std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
 			generate_request();
 	}
 

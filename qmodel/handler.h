@@ -11,13 +11,18 @@ namespace qmodel
 	{
 	public:
 		handler();
-		handler(std::chrono::milliseconds _handlePeriod);
+		handler(int _handlePeriod);
 		~handler() { delete cur_req; }
 
 		//Check the busy flag of the handler
 		bool is_free() const { return freedom_flag; }
-		//Send request to handler
+		//Send request to the handler
 		void handle(request<Type> req);
+
+		//gets generating period
+		int get_handling_period() const { return handling_period; }
+		//sets generating period
+		void set_handling_period(int period) { handling_period = period; }
 
 	private:
 		//finish the request
@@ -25,7 +30,7 @@ namespace qmodel
 
 		//fields
 		request<Type>* cur_req;
-		std::chrono::milliseconds handling_period;
+		int handling_period;
 		bool freedom_flag;
 	};
 
@@ -34,12 +39,12 @@ namespace qmodel
 	//Constructors
 	template<typename Type> inline
 		handler<Type>::handler(): 
-            cur_req(nullptr), handling_period(std::chrono::milliseconds(5000)), freedom_flag(true)
+            cur_req(nullptr), handling_period(5000), freedom_flag(true)
 		{ }
 
 
 	template<typename Type> inline
-		handler<Type>::handler(std::chrono::milliseconds _handlePeriod): 
+		handler<Type>::handler(int _handlePeriod): 
             cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true)
 		{ }
 
