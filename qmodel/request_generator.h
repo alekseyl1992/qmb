@@ -13,7 +13,7 @@ namespace qmodel
 	{
 	public:
 		request_generator();
-		request_generator(std::chrono::milliseconds period);
+		request_generator(int period);
 		~request_generator() { delete new_req; }
 
 		//Function generates new request
@@ -52,8 +52,8 @@ namespace qmodel
 	}
 
 	template<typename Type> inline
-		request_generator<Type>::request_generator(std::chrono::milliseconds period): 
-			new_req(nullptr), is_generated_flag(false), generating_period(period) 
+		request_generator<Type>::request_generator(int period): 
+			new_req(nullptr), is_generated_flag(false), generating_period(std::chrono::milliseconds(period)) 
 	{ 
 		++all_generators_ids; 
 		generator_id = all_generators_ids;

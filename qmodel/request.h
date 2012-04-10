@@ -33,7 +33,7 @@ namespace qmodel
 	{
 	public:
 		request(int gen_id, int _id, Type _content = NULL) : content(_content), id(gen_id, _id) { }
-		request(const request& req) : content(req.content), id(req.id) { }
+        request(const request& req) : content(req.content), id(req.id) { }
 		request& operator=(const request& r) { content = r.content; id = r.id; return *this; }
 		~request() { }
 

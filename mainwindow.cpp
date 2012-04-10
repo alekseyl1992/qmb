@@ -78,7 +78,7 @@ void MainWindow::on_startSimulation_triggered()
     sLog.reset();
     sLog << "Simulation started\n" << endl;
 
-    return;
+    //return;
     qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
     qmodel::request_generator<> gen2(std::chrono::milliseconds(5000));
     qmodel::queue<> q;

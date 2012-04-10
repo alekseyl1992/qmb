@@ -34,13 +34,13 @@ namespace qmodel
 	//Constructors
 	template<typename Type> inline
 		handler<Type>::handler(): 
-			freedom_flag(true), cur_req(nullptr), handling_period(std::chrono::milliseconds(5000)) 
+            cur_req(nullptr), handling_period(std::chrono::milliseconds(5000)), freedom_flag(true)
 		{ }
 
 
 	template<typename Type> inline
 		handler<Type>::handler(std::chrono::milliseconds _handlePeriod): 
-			freedom_flag(true), cur_req(nullptr), handling_period(_handlePeriod)
+            cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true)
 		{ }
 
 	//Send request to handler
