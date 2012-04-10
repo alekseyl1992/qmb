@@ -2,13 +2,10 @@
 #define H_HANDLER
 
 #include "request.h"
-#include <iostream>
-#include <thread>
-#include <QDebug>
+#include <ostream>
 
 namespace qmodel
 {
-
 	template<typename Type = int>
 	class handler
 	{
@@ -49,7 +46,7 @@ namespace qmodel
 	//Send request to handler
 	template<typename Type> inline
 		void handler<Type>::handle(request<Type> req) {
-            qDebug() << "Request[" << req.get_content() << "] was put to the handler" << endl;
+            sLog << "---Request[" << req.get_id() << "] was put to the handler" << endl;
 			freedom_flag = false;
 			cur_req = new request<Type>(req);
 			std::this_thread::sleep_for(std::chrono::milliseconds(handling_period));
@@ -59,7 +56,7 @@ namespace qmodel
 	//finish the request
 	template<typename Type> inline
 		void handler<Type>::finish_handling() {
-            qDebug() << "Request[" << cur_req->get_content() << "] finished handling" << endl;
+            sLog << "----Request[" << cur_req->get_id() << "] finished handling" << endl;
 			freedom_flag = true;
 	}
 
