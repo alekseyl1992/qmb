@@ -25,11 +25,7 @@ namespace qmodel
 		typedef queue<Type> t_queue;
 		typedef handler<Type> t_handler;
 
-		~model() { IDs.clear(); }
-
-		//getter - setter
-		bool get_simulate_flag() const { return simulate_flag; }
-		void set_simulate_flag(bool flag) { simulate_flag = flag; }
+		~model() { }
 
 		std::vector<t_generator> req_generators;
 		std::vector<t_queue> queues;
@@ -37,12 +33,7 @@ namespace qmodel
 
 		//links
 		std::vector< link <t_generator*, t_queue*> > link_generators_queues;
-		std::vector< link <t_queue*, t_handler*> > link_queues_handlers;
-
-		std::vector<std::thread::id> IDs; //all threads' ids will be kept here
-
-	private:
-		bool simulate_flag; //флаг симул€ции
+		std::vector< link <t_queue*, t_handler*> > link_queues_handlers;		
 	};
 	
 } //end namespace qmodel  

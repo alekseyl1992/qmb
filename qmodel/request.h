@@ -15,6 +15,8 @@ namespace qmodel
 
 		request_id& operator= (const request_id& req)
 		{
+            if (this = &req)
+                return *this;
 			__req_gen_id = req.__req_gen_id; 
 			__req_id = req.__req_id;
 			return *this;
