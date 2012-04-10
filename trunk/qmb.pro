@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 QMAKE_CXXFLAGS += -std=c++0x
 
 TARGET = qmb

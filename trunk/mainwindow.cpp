@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "main.h"
-#include "mymodel/model.h"
+//#include "mymodel/model.h"
+#include "qmodel/converter.h"
 #include "simulationlog.h"
 #include "elementpropwindow.h"
 #include <QDesktopServices>
@@ -53,6 +54,8 @@ void MainWindow::on_openModel_triggered()
 {
     QString FileName = QFileDialog::getOpenFileName(this, "Открыть",
                                                     "", "QMB XML Model (*.qxml)");
+    qmodel::model<> *newModel = qmodel::converter::LoadQModel(FileName);
+    qmodel::qalgorithm::simulation_start(*newModel);
 }
 
 void MainWindow::on_saveModel_triggered()
