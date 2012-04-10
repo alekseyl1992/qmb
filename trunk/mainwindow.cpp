@@ -79,11 +79,11 @@ void MainWindow::on_startSimulation_triggered()
     sLog << "Simulation started\n" << endl;
 
     //return;
-    qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
-    qmodel::request_generator<> gen2(std::chrono::milliseconds(5000));
+    qmodel::request_generator<> gen(1000);
+    qmodel::request_generator<> gen2(5000);
     qmodel::queue<> q;
-    qmodel::handler<> h(std::chrono::milliseconds(3000));
-    qmodel::handler<> h2(std::chrono::milliseconds(500));
+    qmodel::handler<> h(3000);
+    qmodel::handler<> h2(500);
 
     qmodel::model<> newModel;
     newModel.req_generators.push_back(gen);
@@ -99,6 +99,7 @@ void MainWindow::on_startSimulation_triggered()
     newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue<>*, qmodel::handler<>* >(&q, &h2));
 
     qmodel::qalgorithm::simulation_start(newModel);
+    //qmodel::qalgorithm::simulation_stop(newModel);
 }
 
 void MainWindow::on_stopSimulation_triggered()
