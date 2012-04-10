@@ -45,7 +45,16 @@ HEADERS  += mainwindow.h \
     qmodel/handler.h \
     qmodel/exceptions.h \
     simulationlog.h \
-    elementpropwindow.h
+    elementpropwindow.h \
+    qmodel/request_generator.h \
+    qmodel/request.h \
+    qmodel/queue.h \
+    qmodel/qalgorithm.h \
+    qmodel/model.h \
+    qmodel/link.h \
+    qmodel/handler.h \
+    qmodel/exceptions.h \
+    qmodel/converter.h
 
 FORMS    += mainwindow.ui \
     document.ui \

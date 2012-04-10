@@ -3,11 +3,10 @@
 
 #include <deque>
 #include "request.h"
-#include <QDebug>
 
 namespace qmodel
 {
-
+	
 	template<typename Type = int>
 	class queue
 	{
@@ -29,6 +28,7 @@ namespace qmodel
 	private:
 		std::deque< request<Type> > requests_in_queue;
 		bool having_request_flag;
+
 		
 	};
 
@@ -37,7 +37,7 @@ namespace qmodel
 	//adding request to the queue
 	template<typename Type>
 		void queue<Type>::add(request<Type> req) {
-            qDebug() << "Request[" << req.get_content() << "] was put to the queue" << endl;
+            sLog << "-Request[" << req.get_id() << "] was put to the queue" << endl;
 			requests_in_queue.push_back(req);
 			having_request_flag = true;
 	}
@@ -45,6 +45,7 @@ namespace qmodel
 	//getting next request
 	template<typename Type>
 		request<Type> queue<Type>::get_first() {
+			
 			request<Type> res = *(requests_in_queue.begin());
 			requests_in_queue.pop_front();
 			if(requests_in_queue.size() == 0)

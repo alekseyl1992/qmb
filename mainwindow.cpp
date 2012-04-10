@@ -80,18 +80,25 @@ void MainWindow::on_startSimulation_triggered()
 
     return;
     qmodel::request_generator<> gen(std::chrono::milliseconds(1000));
+    qmodel::request_generator<> gen2(std::chrono::milliseconds(5000));
     qmodel::queue<> q;
-    qmodel::handler<> h(std::chrono::milliseconds(5000));
+    qmodel::handler<> h(std::chrono::milliseconds(3000));
+    qmodel::handler<> h2(std::chrono::milliseconds(500));
 
     qmodel::model<> newModel;
     newModel.req_generators.push_back(gen);
+    newModel.req_generators.push_back(gen2);
     newModel.queues.push_back(q);
     newModel.handlers.push_back(h);
+    newModel.handlers.push_back(h2);
 
     newModel.link_generators_queues.push_back(qmodel::link<qmodel::request_generator<>*, qmodel::queue<>* >(&gen, &q));
-    newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue<>*, qmodel::handler<>* >(&q, &h));
+    newModel.link_generators_queues.push_back(qmodel::link<qmodel::request_generator<int>*, qmodel::queue<int>* >(&gen2, &q));
 
-    qmodel::qalgorithm::simulate_start(newModel);
+    newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue<>*, qmodel::handler<>* >(&q, &h));
+    newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue<>*, qmodel::handler<>* >(&q, &h2));
+
+    qmodel::qalgorithm::simulation_start(newModel);
 }
 
 void MainWindow::on_stopSimulation_triggered()
