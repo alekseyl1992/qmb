@@ -340,6 +340,8 @@ namespace converter
             //нужно сохранять
             //element->id()
             //element->pos()
+            //связи:
+            //element->arrows()
         }
     }
 
