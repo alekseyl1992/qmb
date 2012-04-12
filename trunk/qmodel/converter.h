@@ -1,4 +1,4 @@
-// основные функции
+/* основные функции
 
 //      qmodel::model<> *LoadQModel(QString xmlFileName)
 // возвращает ссылку на объект типа qmodel::model<>.
@@ -27,7 +27,8 @@
 // (см. mainwindow.cpp: строка 57,58)
 
 // так же , на всякий пожарный прилагаю листинг файла "example.qxml"
-/*
+*/
+/* example.qxml
 <!DOCTYPE qmodel>
 <qmodel>
  <req_generators>
@@ -62,7 +63,9 @@
 #define CONVERTER_H
 
 #include "model.h"
+#include "modelscene.h"
 
+#include <QDebug>
 #include <QtXml/QDomDocument>
 
 namespace qmodel
@@ -70,6 +73,11 @@ namespace qmodel
 
 namespace converter
 {
+    enum class ItemType
+    {
+        generator, queue, handler
+    };
+
     //добавляет генератор, очередь или хендлер в модель
     template <typename Type>
     void AddItem(qmodel::model<Type> *curModel, QString elemType, QString param)
@@ -316,11 +324,24 @@ namespace converter
         return loadedModel;
     }
 
-    //преобразует XML в набор объектов на виджете/сцене
-    void XMLStringToScene(QString XMLString);
+    //преобразует XML в набор объектов на сцене
+    void XMLToScene(QString FileName, ModelScene *scene)
+    {
+
+    }
 
     //обратно
-    void SceneToXMLString();
+    //это реализация первой идеи с тупым полным сохранением
+    void SceneToXML(ModelScene *scene, QString FileName)
+    {
+        foreach(QGraphicsItem *it, scene->items())
+        {
+            ModelItem *element = qgraphicsitem_cast<ModelItem *>(it);
+            //нужно сохранять
+            //element->id()
+            //element->pos()
+        }
+    }
 
 } //end namespace converter
 

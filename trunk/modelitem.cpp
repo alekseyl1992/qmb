@@ -43,12 +43,13 @@
 #include "modelitem.h"
 #include "arrow.h"
 
-ModelItem::ModelItem(ItemType itemType, QMenu *contextMenu,
+ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
              QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsPolygonItem(parent, scene)
 {
     myItemType = itemType;
     myContextMenu = contextMenu;
+    myId = itemId;
     QPen iPen = pen();
     iPen.setWidth(2);
     setPen(iPen);
@@ -95,15 +96,15 @@ ModelItem::ModelItem(ItemType itemType, QMenu *contextMenu,
 
 void ModelItem::removeArrow(Arrow *arrow)
 {
-    int index = arrows.indexOf(arrow);
+    int index = myArrows.indexOf(arrow);
 
     if (index != -1)
-        arrows.removeAt(index);
+        myArrows.removeAt(index);
 }
 
 void ModelItem::removeArrows()
 {
-    foreach (Arrow *arrow, arrows) {
+    foreach (Arrow *arrow, myArrows) {
         arrow->startItem()->removeArrow(arrow);
         arrow->endItem()->removeArrow(arrow);
         scene()->removeItem(arrow);
@@ -113,7 +114,7 @@ void ModelItem::removeArrows()
 
 void ModelItem::addArrow(Arrow *arrow)
 {
-    arrows.append(arrow);
+    myArrows.append(arrow);
 }
 
 QPixmap ModelItem::image() const
@@ -139,7 +140,7 @@ QVariant ModelItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
     if (change == QGraphicsItem::ItemPositionChange) {
-        foreach (Arrow *arrow, arrows) {
+        foreach (Arrow *arrow, myArrows) {
             arrow->updatePosition();
         }
     }

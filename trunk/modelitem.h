@@ -43,6 +43,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QList>
+#include <QMap>
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -66,7 +67,7 @@ public:
     enum { Type = UserType + 15 };
     enum ItemType { Generator, Queue, Handler, Terminator };
 
-    ModelItem(ItemType itemType, QMenu *contextMenu,
+    ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
 
     void removeArrow(Arrow *arrow);
@@ -79,6 +80,10 @@ public:
     QPixmap image() const;
     int type() const
         { return Type;}
+    int id() const
+        { return myId;}
+    const QList<Arrow *>& arrows()
+        { return myArrows;}
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
@@ -88,7 +93,8 @@ private:
     ItemType myItemType;
     QPolygonF myPolygon;
     QMenu *myContextMenu;
-    QList<Arrow *> arrows;
+    QList<Arrow *> myArrows;
+    int myId;
 };
 
 #endif
