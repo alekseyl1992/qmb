@@ -130,7 +130,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     ModelItem *item;
     switch (myMode) {
         case InsertItem:
-            item = new ModelItem(myItemType, myItemMenu);
+            item = new ModelItem(myItemType, items().count(), myItemMenu);
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
