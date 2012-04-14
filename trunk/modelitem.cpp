@@ -56,17 +56,17 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
 
     QPainterPath path;
     switch (myItemType) {
-        case Generator:
+        case ItemType::Generator:
             myPolygon << QPointF(-100, -50) << QPointF(100, -50)
                       << QPointF(150, 0) << QPointF(100, 50)
                       << QPointF(-100, 50);
             break;
-        case Queue:
+        case ItemType::Queue:
             myPolygon << QPointF(-100, -50) << QPointF(100, -50)
                       << QPointF(100, 50) << QPointF(-100, 50)
                       << QPointF(-100, -50);
             break;
-        case Handler:
+        case ItemType::Handler:
             /*path.moveTo(200, 50);
             path.arcTo(150, 0, 50, 50, 0, 90);
             path.arcTo(50, 0, 50, 50, 90, 90);
@@ -82,7 +82,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
             myPolygon = path.toFillPolygon();
             break;
 
-        case Terminator:
+        case ItemType::Terminator:
             myPolygon << QPointF(-150, 0) << QPointF(-100, -50) << QPointF(100, -50)
                       << QPointF(100, 50)
                       << QPointF(-100, 50);

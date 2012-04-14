@@ -48,7 +48,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
 {
     myItemMenu = itemMenu;
     myMode = MoveItem;
-    myItemType = ModelItem::ItemType::Generator;
+    myItemType = ItemType::Generator;
     line = 0;
     //textItem = 0;
     myItemColor = Qt::white;
@@ -105,7 +105,7 @@ void ModelScene::setMode(Mode mode)
     myMode = mode;
 }
 
-void ModelScene::setItemType(ModelItem::ItemType type)
+void ModelScene::setItemType(ItemType type)
 {
     myItemType = type;
 }
@@ -134,7 +134,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
-            emit itemInserted(item);
+            emit itemInserted(myItemType, item->id(), item->pos().toPoint());
             myMode = Mode::MoveItem;
             break;
 
@@ -212,19 +212,24 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    //мастабирование окна
-    double scaleFactor = 1.2;
-    QGraphicsView *view = (QGraphicsView*)parent();
-    QPointF fPos = event->scenePos();
-    if(itemAt(fPos) != nullptr)
-        view->centerOn(itemAt(fPos));
-    else
-        view->centerOn(fPos);
+    if(event->modifiers().testFlag(Qt::KeyboardModifier::ControlModifier))
+    {
+        //мастабирование окна
+        double scaleFactor = 1.2;
+        QGraphicsView *view = (QGraphicsView*)parent();
+        QPointF fPos = event->scenePos();
+        if(itemAt(fPos) != nullptr)
+            view->centerOn(itemAt(fPos));
+        else
+            view->centerOn(fPos);
 
-    if(event->delta() > 0)
-        view->scale(scaleFactor, scaleFactor);
-    else
-        view->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        if(event->delta() > 0)
+            view->scale(scaleFactor, scaleFactor);
+        else
+            view->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    }
+    else //прокрутка
+        QGraphicsScene::wheelEvent(event);
 }
 
 bool ModelScene::isItemChange(int type)

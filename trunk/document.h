@@ -2,12 +2,15 @@
 #define DOCUMENT_H
 
 #include "modelscene.h"
+#include "qmodel/modelstorage.h"
 #include <QDialog>
 #include <QTextEdit>
 
 namespace Ui {
 class Document;
 }
+
+//class ModelStorage; //forward declaration
 
 class Document : public QDialog
 {
@@ -16,7 +19,7 @@ class Document : public QDialog
 public:
     enum Tabs {Model, Code, Simulation};
 
-    explicit Document(QWidget *parent, QMenu *menu);
+    explicit Document(QWidget *parent, QMenu *menu, QString name);
 
     ~Document();
 
@@ -30,6 +33,7 @@ public slots:
 private:
     Ui::Document *ui;
     ModelScene *Scene;
+    qmodel::ModelStorage *Storage;
 };
 
 #endif // DOCUMENT_H

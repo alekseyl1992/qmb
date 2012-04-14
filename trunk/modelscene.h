@@ -43,6 +43,7 @@
 #include <QGraphicsScene>
 #include <QWheelEvent>
 #include "modelitem.h"
+#include "common.h"
 //#include "modeltextitem.h"
 
 QT_BEGIN_NAMESPACE
@@ -78,13 +79,14 @@ public:
 
 public slots:
     void setMode(Mode mode);
-    void setItemType(ModelItem::ItemType type);
+    void setItemType(ItemType type);
     //void editorLostFocus(DiagramTextItem *item);
 
 signals:
-    void itemInserted(ModelItem *item);
-    void textInserted(QGraphicsTextItem *item);
-    void itemSelected(QGraphicsItem *item);
+    //сигналы для оперативного изменения XML-дерева
+    void itemInserted(ItemType type, int id, QPoint pos);
+    void itemMoved(int id, QPoint pos);
+    void itemRemoved(int id);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
@@ -95,7 +97,7 @@ protected:
 private:
     bool isItemChange(int type);
 
-    ModelItem::ItemType myItemType;
+    ItemType myItemType;
     QMenu *myItemMenu;
     Mode myMode;
     bool leftButtonDown;

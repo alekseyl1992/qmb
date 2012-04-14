@@ -28,7 +28,6 @@ HEADERS  += mainwindow.h \
     qmodel/queue.h \
     qmodel/model.h \
     qmodel/handler.h \
-    qmodel/converter.h \
     document.h \
     xmlhighlighter.h \
     main.h \
@@ -54,7 +53,8 @@ HEADERS  += mainwindow.h \
     qmodel/link.h \
     qmodel/handler.h \
     qmodel/exceptions.h \
-    qmodel/converter.h
+    common.h \
+    qmodel/modelstorage.h
 
 FORMS    += mainwindow.ui \
     document.ui \

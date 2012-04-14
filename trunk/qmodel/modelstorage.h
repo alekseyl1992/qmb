@@ -64,44 +64,51 @@
 
 #include "model.h"
 #include "modelscene.h"
+#include "common.h"
 
 #include <QDebug>
 #include <QtXml/QDomDocument>
 
+//TODO: разнести на cpp/h
 namespace qmodel
 {
 
-namespace converter
+class ModelStorage : public QObject //для connect
 {
-    enum class ItemType
-    {
-        generator, queue, handler
-    };
+    Q_OBJECT
+
+public:
+    //TODO
+    ModelStorage(QString name) {}
 
     //добавляет генератор, очередь или хендлер в модель
     template <typename Type>
     void AddItem(qmodel::model<Type> *curModel, QString elemType, QString param)
     {
-        QMap<QString,int> entries;
-        entries["req_generator"]=0;
-        entries["queue"]=1;
-        entries["handler"]=2;
+        QMap<QString, ItemType> entries;
+        entries["req_generator"] = ItemType::Generator;
+        entries["queue"] = ItemType::Queue;
+        entries["handler"] = ItemType::Handler;
+        entries["terminator"] = ItemType::Terminator;
 
         request_generator<Type> *newgen;
         queue<Type> *newqueue;
         handler<Type> *newhnd;
 
+        //TODO добавить Terminator
         switch (entries[elemType])
         {
-            case 0: newgen = new request_generator<Type>(param.toInt());
-                    curModel->req_generators.push_back(*newgen);
-                    break;
-            case 1: newqueue = new queue<Type>();
-                    curModel->queues.push_back(*newqueue);
-                    break;
-            case 2: newhnd = new handler<Type>(param.toInt());
-                    curModel->handlers.push_back(*newhnd);
-            default:    break;
+            case ItemType::Generator:
+                newgen = new request_generator<Type>(param.toInt());
+                curModel->req_generators.push_back(*newgen);
+                break;
+            case ItemType::Queue:
+                newqueue = new queue<Type>();
+                curModel->queues.push_back(*newqueue);
+                break;
+            case ItemType::Handler:
+                newhnd = new handler<Type>(param.toInt());
+                curModel->handlers.push_back(*newhnd);
         }
     }
 
@@ -113,6 +120,7 @@ namespace converter
     void AddLink(qmodel::model<Type> *curModel, std::vector<QString> params)
     {
         QMap<QString,int> entries;
+        //TODO сделать по аналогии с AddItem
         entries["link_generator_queue"]=0;
         entries["link_queue_handler"]=1;
 
@@ -332,6 +340,7 @@ namespace converter
 
     //обратно
     //это реализация первой идеи с тупым полным сохранением
+    //DEPRECATED!, но пока не удалять
     void SceneToXML(ModelScene *scene, QString FileName)
     {
         foreach(QGraphicsItem *it, scene->items())
@@ -345,8 +354,24 @@ namespace converter
         }
     }
 
-} //end namespace converter
+public slots:
+    //TODO наполнить смыслом :D
+    void onItemInserted(ItemType type, int id, QPoint pos)
+    {
 
-} //end namespace qmodel
+    }
+
+    void onItemMoved(int id, QPoint pos)
+    {
+
+    }
+
+    void onItemRemoved(int id)
+    {
+
+    }
+}; //class
+
+} //namespace qmodel
 
 #endif // CONVERTER_H
