@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "main.h"
-//#include "mymodel/model.h"
-#include "qmodel/converter.h"
+#include "qmodel/modelstorage.h"
 #include "simulationlog.h"
 #include "elementpropwindow.h"
 #include <QDesktopServices>
@@ -41,12 +40,16 @@ MainWindow::~MainWindow()
 void MainWindow::on_createModel_triggered()
 {
     //здесь будет запрос на ввод имени проекта и места сохранения
-    Doc = new Document(this, ui->elementMenu);
-    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
-    connect(Doc->scene(), SIGNAL(itemInserted(ModelItem *)), this, SLOT(tool_triggered()));
 
-    Doc->setWindowTitle(QString(QString("Модель ") +
-                                QString::number(ui->mdiArea->subWindowList().size()+1)));
+    //формируем имя документа
+    QString Name = QString("Модель ") +
+            QString::number(ui->mdiArea->subWindowList().size()+1);
+
+    Doc = new Document(this, ui->elementMenu, Name);
+    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    //TODO всё-равно перейду на список, отжимать ен надо будет кнопку, и connect отпадёт
+    //connect(Doc->scene(), SIGNAL(itemInserted(ModelItem *)), this, SLOT(tool_triggered()));
+
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
 }
 
@@ -54,8 +57,11 @@ void MainWindow::on_openModel_triggered()
 {
     QString FileName = QFileDialog::getOpenFileName(this, "Открыть",
                                                     "", "QMB XML Model (*.qxml)");
-    qmodel::model<> *newModel = qmodel::converter::LoadQModel(FileName);
-    qmodel::qalgorithm::simulation_start(*newModel);
+    //TODO: подгрузка модели
+
+    //DEPRECTED
+    /*qmodel::model<> *newModel = qmodel::converter::LoadQModel(FileName);
+    qmodel::qalgorithm::simulation_start(*newModel);*/
 }
 
 void MainWindow::on_saveModel_triggered()
@@ -135,7 +141,8 @@ void MainWindow::tool_triggered()
             act->setChecked(false);
 
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
-    Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
+    //TODO переписать инит поля data
+    //Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
 }
 
 void MainWindow::on_deleteElement_triggered()

@@ -44,6 +44,7 @@
 #include <QGraphicsPixmapItem>
 #include <QList>
 #include <QMap>
+#include "common.h"
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -65,7 +66,6 @@ class ModelItem : public QGraphicsPolygonItem
 {
 public:
     enum { Type = UserType + 15 };
-    enum ItemType { Generator, Queue, Handler, Terminator };
 
     ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);

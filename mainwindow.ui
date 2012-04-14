@@ -73,6 +73,9 @@
     <addaction name="projectPage"/>
    </widget>
    <widget class="QMenu" name="elementMenu">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>Элемент</string>
     </property>
