@@ -61,6 +61,7 @@ public:
 
     Arrow(ModelItem *startItem, ModelItem *endItem,
       QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+    ~Arrow();
 
     int type() const
         { return Type; }

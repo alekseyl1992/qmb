@@ -161,7 +161,7 @@ void MainWindow::tool_triggered()
 
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
     //TODO переписать инит поля data
-    //Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
+    Doc->scene()->setItemType(ItemType(Sender->data().toInt()));
 }
 
 
