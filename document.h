@@ -5,6 +5,7 @@
 #include "qmodel/modelstorage.h"
 #include <QDialog>
 #include <QTextEdit>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class Document;
@@ -29,6 +30,8 @@ public:
     void setActiveTab(Tabs Tab);
 public slots:
     void logChanged();
+
+private slots:
 
 private:
     Ui::Document *ui;

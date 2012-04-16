@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-enum class ItemType
+enum class ItemType : int
 {
     Generator,
     Queue,
