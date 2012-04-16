@@ -39,6 +39,7 @@
 ****************************************************************************/
 
 #include <QtGui>
+#include <QGraphicsDropShadowEffect>
 
 #include "arrow.h"
 #include <math.h>
@@ -54,6 +55,15 @@ Arrow::Arrow(ModelItem *startItem, ModelItem *endItem,
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     myColor = Qt::black;
     setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius(15);
+    setGraphicsEffect(effect);
+}
+
+Arrow::~Arrow()
+{
+    delete graphicsEffect();
 }
 
 QRectF Arrow::boundingRect() const
