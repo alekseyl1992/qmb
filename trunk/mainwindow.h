@@ -3,6 +3,7 @@
 
 #include "document.h"
 #include <QMainWindow>
+#include <QTreeWidget>
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +39,8 @@ private slots:
     void on_deleteElement_triggered();
 
     void on_elementProperties_triggered();
+
+    void on_toolsView_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
     Ui::MainWindow *ui;

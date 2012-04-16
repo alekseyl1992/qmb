@@ -69,6 +69,7 @@ public:
 
     ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+    ~ModelItem();
 
     void removeArrow(Arrow *arrow);
     void removeArrows();
@@ -83,11 +84,12 @@ public:
     int id() const
         { return myId;}
     const QList<Arrow *>& arrows()
-        { return myArrows;}
+    { return myArrows;}
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 private:
     ItemType myItemType;

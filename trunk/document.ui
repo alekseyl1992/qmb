@@ -37,54 +37,6 @@
         <enum>QLayout::SetMaximumSize</enum>
        </property>
        <item>
-        <widget class="QDockWidget" name="dockWidget">
-         <property name="maximumSize">
-          <size>
-           <width>109</width>
-           <height>524287</height>
-          </size>
-         </property>
-         <property name="floating">
-          <bool>false</bool>
-         </property>
-         <property name="features">
-          <set>QDockWidget::AllDockWidgetFeatures</set>
-         </property>
-         <property name="allowedAreas">
-          <set>Qt::AllDockWidgetAreas</set>
-         </property>
-         <property name="windowTitle">
-          <string>Элементы</string>
-         </property>
-         <widget class="QWidget" name="dockWidgetContents">
-          <layout class="QGridLayout" name="gridLayout_2">
-           <property name="margin">
-            <number>0</number>
-           </property>
-           <item row="0" column="0">
-            <widget class="QTreeWidget" name="treeWidget">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="editTriggers">
-              <set>QAbstractItemView::NoEditTriggers</set>
-             </property>
-             <property name="columnCount">
-              <number>0</number>
-             </property>
-             <attribute name="headerVisible">
-              <bool>false</bool>
-             </attribute>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-       <item>
         <widget class="QGraphicsView" name="graphicsView">
          <property name="mouseTracking">
           <bool>false</bool>

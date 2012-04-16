@@ -2,6 +2,7 @@
 #include "ui_document.h"
 #include "xmlhighlighter.h"
 #include "simulationlog.h"
+#include "common.h"
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>
@@ -61,6 +62,6 @@ void Document::setActiveTab(Document::Tabs Tab)
 
 void Document::logChanged()
 {
-    //лучше переделать не на замену текста, а на добавление
+    //лучше переделать замену текста, на добавление
     ui->simulationLog->setText(SimulationLog::Log().text());
 }

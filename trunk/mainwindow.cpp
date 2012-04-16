@@ -9,7 +9,6 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QMdiSubWindow>
-#include <QToolButton>
 #include <QButtonGroup>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -24,11 +23,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mdiArea->setTabsClosable(true);
     ui->mdiArea->setTabsMovable(true);
+    setDockOptions(AnimatedDocks);
+    setCorner(Qt::TopLeftCorner, Qt::TopDockWidgetArea);
+    setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+    setCorner(Qt::TopRightCorner, Qt::TopDockWidgetArea);
+    setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
+    setCorner(Qt::BottomLeftCorner, Qt::BottomDockWidgetArea);
+    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+    setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
+    setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
+
     //будет вынесено в отдельную функцию - создание проекта
 
+    //DEPRECATED
     int i = -1; //из-за пункта-заголовка
     foreach(QAction *act, ui->mainToolBar->actions())
             act->setData(i++);
+
+    //добавляем инструменты
+    QTreeWidgetItem *BaseTools = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Основные")));
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Генератор")));
+    //item->setData(0, 1, (int)ItemType::Generator);
+    BaseTools->addChild(item);
+    ui->toolsView->insertTopLevelItem(0, BaseTools);
+
     on_createModel_triggered();
 }
 
@@ -132,6 +150,7 @@ void MainWindow::on_projectPage_triggered()
      QDesktopServices::openUrl(QUrl("http://opensvn.ru/project/qmb", QUrl::TolerantMode));
 }
 
+//DEPRECATED
 void MainWindow::tool_triggered()
 {
     //смена инструмента
@@ -143,6 +162,15 @@ void MainWindow::tool_triggered()
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
     //TODO переписать инит поля data
     //Doc->scene()->setItemType(ModelItem::ItemType(Sender->data().toInt()));
+}
+
+
+
+void MainWindow::on_toolsView_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    //смена текущего инструмента
+    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    Doc->scene()->setItemType(static_cast<ItemType>(current->data(0, 0).toInt()));
 }
 
 void MainWindow::on_deleteElement_triggered()

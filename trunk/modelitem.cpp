@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 #include <QtGui>
-
+#include <QGraphicsDropShadowEffect>
 #include "modelitem.h"
 #include "arrow.h"
 
@@ -67,12 +67,6 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
                       << QPointF(-100, -50);
             break;
         case ItemType::Handler:
-            /*path.moveTo(200, 50);
-            path.arcTo(150, 0, 50, 50, 0, 90);
-            path.arcTo(50, 0, 50, 50, 90, 90);
-            path.arcTo(50, 50, 50, 50, 180, 90);
-            path.arcTo(150, 50, 50, 50, 270, 90);
-            path.lineTo(200, 25);*/
             path.moveTo(100, 0);
             path.arcTo(50, -50, 50, 50, 0, 90);
             path.arcTo(-50, -50, 50, 50, 90, 90);
@@ -89,9 +83,36 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
             break;
     }
     setPolygon(myPolygon);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius(15);
+    setGraphicsEffect(effect);
+
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+}
+
+ModelItem::~ModelItem()
+{
+    delete graphicsEffect();
+}
+
+void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    // fill part of polygon
+    //устанавливаем градиентную заливку
+    QLinearGradient linearGrad(QPointF(0, 0),
+                               QPointF(0, boundingRect().height()));
+    linearGrad.setColorAt(0, QColor(250, 250, 230));
+    linearGrad.setColorAt(1, QColor(210, 210, 190));
+    painter->setBrush(QBrush(linearGrad));
+    QRectF rect = boundingRect();
+    //rect.setTop(rect.bottom() - fract * rect.height());
+    painter->drawPolygon(polygon().intersected(rect), fillRule());
+    //draw polygon outline
+    painter->setPen(pen());
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPolygon(polygon(), fillRule());
 }
 
 void ModelItem::removeArrow(Arrow *arrow)
