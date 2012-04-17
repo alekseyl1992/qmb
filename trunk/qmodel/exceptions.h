@@ -7,6 +7,9 @@ namespace qmodel
 	{
 		class no_requests
 		{ }; 
+
+		class too_big_id
+		{ };
 	}
 }
 #endif // !H_EXCEPTIONS

@@ -59,12 +59,12 @@
 </qmodel>
 */
 
-#ifndef CONVERTER_H
-#define CONVERTER_H
+#ifndef MODELSTORAGE_H
+#define MODELSTORAGE_H
 
 #include "model.h"
-#include "modelscene.h"
-#include "common.h"
+#include "../modelscene.h"
+#include "../common.h"
 
 #include <QDebug>
 #include <QtXml/QDomDocument>
@@ -82,8 +82,7 @@ public:
     ModelStorage(QString name) {}
 
     //добавляет генератор, очередь или хендлер в модель
-    template <typename Type>
-    void AddItem(qmodel::model<Type> *curModel, QString elemType, QString param)
+    void AddItem(qmodel::model *curModel, QString elemType, QString param)
     {
         QMap<QString, ItemType> entries;
         entries["req_generator"] = ItemType::Generator;
@@ -91,23 +90,23 @@ public:
         entries["handler"] = ItemType::Handler;
         entries["terminator"] = ItemType::Terminator;
 
-        request_generator<Type> *newgen;
-        queue<Type> *newqueue;
-        handler<Type> *newhnd;
+        generator *newgen;
+        queue *newqueue;
+        handler *newhnd;
 
         //TODO добавить Terminator
         switch (entries[elemType])
         {
             case ItemType::Generator:
-                newgen = new request_generator<Type>(param.toInt());
-                curModel->req_generators.push_back(*newgen);
+                newgen = new generator(param.toInt());
+                curModel->generators.push_back(*newgen);
                 break;
             case ItemType::Queue:
-                newqueue = new queue<Type>();
+                newqueue = new queue();
                 curModel->queues.push_back(*newqueue);
                 break;
             case ItemType::Handler:
-                newhnd = new handler<Type>(param.toInt());
+                newhnd = new handler(param.toInt());
                 curModel->handlers.push_back(*newhnd);
         }
     }
@@ -116,25 +115,24 @@ public:
     //в две функции, потому что для линка нужно больше параметров.
     //сама связь идет по сути по ид.
 
-    template <typename Type>
-    void AddLink(qmodel::model<Type> *curModel, std::vector<QString> params)
+    void AddLink(qmodel::model *curModel, std::vector<QString> params)
     {
         QMap<QString,int> entries;
         //TODO сделать по аналогии с AddItem
         entries["link_generator_queue"]=0;
         entries["link_queue_handler"]=1;
 
-        link<qmodel::request_generator<>*,qmodel::queue<>*> *link_gen_que;
-        link<qmodel::queue<>*,qmodel::handler<>*> *link_que_hnd;
+        link<generator*,queue*> *link_gen_que;
+        link<queue*,handler*> *link_que_hnd;
 
         switch (entries[params[0]])
         {
-            case 0:     link_gen_que = new link<qmodel::request_generator<>*,qmodel::queue<>*>
-                                                (&curModel->req_generators[params[1].toInt()],
+            case 0:     link_gen_que = new link<generator*,queue*>
+                                                (&curModel->generators[params[1].toInt()],
                                                 &curModel->queues[params[2].toInt()]);
                         curModel->link_generators_queues.push_back(*link_gen_que);
                         break;
-            case 1:     link_que_hnd = new link<qmodel::queue<>*,qmodel::handler<>*>
+            case 1:     link_que_hnd = new link<queue*,handler*>
                                                 (&curModel->queues[params[1].toInt()],
                                                 &curModel->handlers[params[2].toInt()]);
                         curModel->link_queues_handlers.push_back(*link_que_hnd);
@@ -143,15 +141,14 @@ public:
 
     }
 
-    template <typename Type=int>
-    void SaveQModel(qmodel::model<Type> *curModel, QString xmlFileName)
+    void SaveQModel(model *curModel, QString xmlFileName)
     {
         std::vector<QString> entries={"req_generators","queues","handlers","links"};
         std::vector<QString> subEntries={"req_generator","queue","handler","link"};
 
         std::vector<int> numOfElem =
         {
-            curModel->req_generators.size(),
+            curModel->generators.size(),
             curModel->queues.size(),
             curModel->handlers.size(),
             curModel->link_generators_queues.size()+
@@ -177,13 +174,13 @@ public:
 
                     switch (i)
                     {
-                        case 0: for (int j=0; j<curModel->req_generators.size(); j++)
+                        case 0: for (int j=0; j<curModel->generators.size(); j++)
                                 {
                                     QDomElement tempSubEntry = xmldoc.createElement(subEntries[i]);
-                                    if (curModel->req_generators[j].get_generating_period()!=0)
+                                    if (curModel->generators[j].get_generating_period()!=0)
                                     {
                                         QDomElement value = xmldoc.createElement("time");
-                                        QDomText text = xmldoc.createTextNode(QString::number(curModel->req_generators[j].get_generating_period()));
+                                        QDomText text = xmldoc.createTextNode(QString::number(curModel->generators[j].get_generating_period()));
                                         value.appendChild(text);
                                         tempSubEntry.appendChild(value);
                                     }
@@ -268,11 +265,10 @@ public:
     }
 
     // преобразует xml файл, в QDomDocument и затем в QModel
-    template <typename Type=int>
-    qmodel::model<Type> *LoadQModel(QString xmlFileName)
+    qmodel::model *LoadQModel(QString xmlFileName)
     {
-        qmodel::model<Type> *loadedModel;
-        loadedModel = new qmodel::model<Type>();
+        qmodel::model *loadedModel;
+        loadedModel = new qmodel::model();
 
         QFile xmlfile(xmlFileName);
         //считываем данные из xml файла в QDomDocument
@@ -374,4 +370,4 @@ public slots:
 
 } //namespace qmodel
 
-#endif // CONVERTER_H
+#endif // MODELSTORAGE_H
