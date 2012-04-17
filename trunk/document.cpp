@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>
+#include <QPushButton>
+#include <QLabel>
 
 Document::Document(QWidget *parent, QMenu *menu, QString name) :
     QDialog(parent),
@@ -36,6 +38,22 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
 
     //синхронизаци€ записи в объект sLog и соответсвующее поле в интерфейсе
     connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));
+
+    //мен€ем вид заголовка лога
+    /*QWidget *head = new QWidget(ui->logDock);
+    QLabel *label = new QLabel("Ћог симул€ции");
+    QPushButton *button = new QPushButton("_");
+    QRect geometry = button->geometry();
+    geometry.setWidth(geometry.height());
+    button->setGeometry(geometry);
+    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(label);
+    layout->addWidget(button);
+
+    head->setLayout(layout);
+    ui->logDock->setTitleBarWidget(head);*/
 }
 
 Document::~Document()
@@ -64,4 +82,12 @@ void Document::logChanged()
 {
     //лучше переделать замену текста, на добавление
     ui->simulationLog->setText(SimulationLog::Log().text());
+}
+
+void Document::on_logButton_toggled(bool checked)
+{
+    if(checked)
+        ui->logDock->show();
+    else
+        ui->logDock->hide();
 }

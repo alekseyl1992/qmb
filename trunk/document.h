@@ -33,6 +33,9 @@ public slots:
 
 private slots:
 
+
+    void on_logButton_toggled(bool checked);
+
 private:
     Ui::Document *ui;
     ModelScene *Scene;
