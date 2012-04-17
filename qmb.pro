@@ -15,46 +15,40 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     document.cpp \
     xmlhighlighter.cpp \
-    mymodel/model.cpp \
     modelscene.cpp \
     arrow.cpp \
     modelitem.cpp \
-    elementpropwindow.cpp
+    elementpropwindow.cpp \
+    qmodel/request_id.cpp \
+    qmodel/request.cpp \
+    qmodel/queue.cpp \
+    qmodel/qmbObject.cpp \
+    qmodel/model.cpp \
+    qmodel/link.cpp \
+    qmodel/handler.cpp \
+    qmodel/generator.cpp \
+    qmodel/exceptions.cpp
 
 HEADERS  += mainwindow.h \
-    model.h \
-    qmodel/request_generator.h \
-    qmodel/request.h \
-    qmodel/queue.h \
-    qmodel/model.h \
-    qmodel/handler.h \
     document.h \
     xmlhighlighter.h \
     main.h \
-    mymodel/model.h \
     modelscene.h \
     arrow.h \
     modelitem.h \
-    qmodel/request_generator.h \
-    qmodel/request.h \
-    qmodel/queue.h \
-    qmodel/qalgorithm.h \
-    qmodel/model.h \
-    qmodel/link.h \
-    qmodel/handler.h \
-    qmodel/exceptions.h \
     simulationlog.h \
     elementpropwindow.h \
-    qmodel/request_generator.h \
+    common.h \
+    qmodel/modelstorage.h \
     qmodel/request.h \
     qmodel/queue.h \
-    qmodel/qalgorithm.h \
+    qmodel/qmbObject.h \
     qmodel/model.h \
-    qmodel/link.h \
     qmodel/handler.h \
-    qmodel/exceptions.h \
-    common.h \
-    qmodel/modelstorage.h
+    qmodel/generator.h \
+    qmodel/link.h \
+    qmodel/request_id.h \
+    qmodel/exceptions.h
 
 FORMS    += mainwindow.ui \
     document.ui \
