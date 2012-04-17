@@ -42,7 +42,7 @@ namespace qmodel
 
 	//gets next request 
     request generator::get_request() {
-        if (new_req == NULL)
+        if (new_req == nullptr)
 			throw qmodel::exceptions::no_requests();
 		request res = *new_req;
 		new_req = nullptr;
