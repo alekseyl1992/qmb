@@ -45,11 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
             act->setData(i++);
 
     //добавляем инструменты
-    QTreeWidgetItem *BaseTools = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Основные")));
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Генератор")));
+    //QTreeWidgetItem *BaseTools = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Основные")));
+    //QTreeWidgetItem *item = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Генератор")));
     //item->setData(0, 1, (int)ItemType::Generator);
-    BaseTools->addChild(item);
-    ui->toolsView->insertTopLevelItem(0, BaseTools);
+    //BaseTools->addChild(item);
+    //ui->toolsView->insertTopLevelItem(0, BaseTools);
 
     on_createModel_triggered();
 }
