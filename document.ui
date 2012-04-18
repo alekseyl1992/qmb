@@ -20,6 +20,97 @@
    <property name="margin">
     <number>0</number>
    </property>
+   <item row="1" column="0">
+    <widget class="QFrame" name="statusBar">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <property name="horizontalSpacing">
+       <number>2</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QToolButton" name="logButton">
+        <property name="styleSheet">
+         <string notr="true">QToolButton:checked
+{
+	background-color: rgb(255, 255, 255);
+}
+QToolButton
+{
+	background-color: lightgray;
+}</string>
+        </property>
+        <property name="text">
+         <string>Лог симуляции</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+L</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::DelayedPopup</enum>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextOnly</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QToolButton" name="toolButton">
+        <property name="styleSheet">
+         <string notr="true">QToolButton:checked
+{
+	background-color: rgb(255, 255, 255);
+}
+QToolButton
+{
+	background-color: lightgray;
+}</string>
+        </property>
+        <property name="text">
+         <string>Статистика</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
@@ -36,7 +127,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="modelTab">
        <attribute name="title">
@@ -148,7 +239,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>148</width>
              <height>113</height>
             </size>
            </property>
@@ -176,6 +267,24 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="editTriggers">
+                <set>QAbstractItemView::NoEditTriggers</set>
+               </property>
+               <property name="showDropIndicator" stdset="0">
+                <bool>false</bool>
+               </property>
+               <property name="indentation">
+                <number>15</number>
+               </property>
+               <property name="animated">
+                <bool>true</bool>
+               </property>
+               <property name="allColumnsShowFocus">
+                <bool>false</bool>
+               </property>
+               <property name="headerHidden">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -264,6 +373,12 @@
       </widget>
      </widget>
      <widget class="QDockWidget" name="logDock">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>109</width>
@@ -291,97 +406,6 @@
        </layout>
       </widget>
      </widget>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QFrame" name="statusBar">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="horizontalSpacing">
-       <number>2</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>1</number>
-      </property>
-      <property name="topMargin">
-       <number>1</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QToolButton" name="logButton">
-        <property name="styleSheet">
-         <string notr="true">QToolButton:checked
-{
-	background-color: rgb(255, 255, 255);
-}
-QToolButton
-{
-	background-color: lightgray;
-}</string>
-        </property>
-        <property name="text">
-         <string>Лог симуляции</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+L</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::DelayedPopup</enum>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextOnly</enum>
-        </property>
-        <property name="autoRaise">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QToolButton" name="toolButton">
-        <property name="styleSheet">
-         <string notr="true">QToolButton:checked
-{
-	background-color: rgb(255, 255, 255);
-}
-QToolButton
-{
-	background-color: lightgray;
-}</string>
-        </property>
-        <property name="text">
-         <string>Статистика</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>

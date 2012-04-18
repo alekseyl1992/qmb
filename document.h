@@ -25,18 +25,19 @@ public:
     ~Document();
 
     ModelScene *scene();
-
     QTextEdit *code();
+
+    void showLog(bool show = true);
     void setActiveTab(Tabs Tab);
 public slots:
     void logChanged();
-
-private slots:
-
-
     void on_logButton_toggled(bool checked);
 
+private slots:
+    void on_toolsView_clicked(const QModelIndex &index);
+
 private:
+    static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
     qmodel::ModelStorage *Storage;

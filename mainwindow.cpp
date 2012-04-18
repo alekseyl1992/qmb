@@ -38,19 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     //будет вынесено в отдельную функцию - создание проекта
-
-    //DEPRECATED
-    int i = -1; //из-за пункта-заголовка
-    foreach(QAction *act, ui->mainToolBar->actions())
-            act->setData(i++);
-
-    //добавляем инструменты
-    //QTreeWidgetItem *BaseTools = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Основные")));
-    //QTreeWidgetItem *item = new QTreeWidgetItem(ui->toolsView, QStringList(QString("Генератор")));
-    //item->setData(0, 1, (int)ItemType::Generator);
-    //BaseTools->addChild(item);
-    //ui->toolsView->insertTopLevelItem(0, BaseTools);
-
     on_createModel_triggered();
 }
 
@@ -69,8 +56,6 @@ void MainWindow::on_createModel_triggered()
 
     Doc = new Document(this, ui->elementMenu, Name);
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
-    //TODO всё-равно перейду на список, отжимать ен надо будет кнопку, и connect отпадёт
-    //connect(Doc->scene(), SIGNAL(itemInserted(ModelItem *)), this, SLOT(tool_triggered()));
 
     ui->mdiArea->addSubWindow(Doc)->showMaximized();
 }
@@ -105,7 +90,7 @@ void MainWindow::on_startSimulation_triggered()
     connect(gen, SIGNAL(request_generated(request)), han, SLOT(handle(request)));
     gen->start();
     qDebug() << "connected" << endl;*/
-    Doc->setActiveTab(Document::Tabs::Simulation);
+    Doc->showLog();
     sLog.reset();
     sLog << "Simulation started\n" << endl;
 
@@ -150,30 +135,7 @@ void MainWindow::on_about_triggered()
 
 void MainWindow::on_projectPage_triggered()
 {
-     QDesktopServices::openUrl(QUrl("http://opensvn.ru/project/qmb", QUrl::TolerantMode));
-}
-
-//DEPRECATED
-void MainWindow::tool_triggered()
-{
-    //смена инструмента
-    QAction *Sender = (QAction*)sender();
-    foreach(QAction *act, ui->mainToolBar->actions())
-        if(act != Sender)
-            act->setChecked(false);
-
-    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
-    //TODO переписать инит поля data
-    Doc->scene()->setItemType(ItemType(Sender->data().toInt()));
-}
-
-
-
-void MainWindow::on_toolsView_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
-{
-    //смена текущего инструмента
-    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
-    Doc->scene()->setItemType(static_cast<ItemType>(current->data(0, 0).toInt()));
+     QDesktopServices::openUrl(QUrl("http://code.google.com/p/qmb/", QUrl::TolerantMode));
 }
 
 void MainWindow::on_deleteElement_triggered()

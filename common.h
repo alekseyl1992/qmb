@@ -3,6 +3,7 @@
 
 enum class ItemType : int
 {
+    InvalidItem,
     Generator,
     Queue,
     Handler,
