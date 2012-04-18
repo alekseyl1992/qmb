@@ -32,15 +32,11 @@ private slots:
 
     void on_projectPage_triggered();
 
-    void tool_triggered();
-
     void on_closeModel_triggered();
 
     void on_deleteElement_triggered();
 
     void on_elementProperties_triggered();
-
-    void on_toolsView_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 private:
     Ui::MainWindow *ui;

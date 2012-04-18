@@ -91,42 +91,6 @@
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <property name="allowedAreas">
-    <set>Qt::AllToolBarAreas</set>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="toolsCaption"/>
-   <addaction name="generatorTool"/>
-   <addaction name="queueTool"/>
-   <addaction name="handlerTool"/>
-   <addaction name="terminatorTool"/>
-  </widget>
-  <widget class="QToolBar" name="simulationToolBar">
-   <property name="windowTitle">
-    <string>toolBar_2</string>
-   </property>
-   <property name="floatable">
-    <bool>true</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="simCaption"/>
-   <addaction name="startSimulation"/>
-   <addaction name="stopSimulation"/>
-  </widget>
   <action name="createModel">
    <property name="text">
     <string>Создать</string>
@@ -296,72 +260,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>generatorTool</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tool_triggered()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>queueTool</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tool_triggered()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>handlerTool</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tool_triggered()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>terminatorTool</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tool_triggered()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>483</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>tool_triggered()</slot>
  </slots>

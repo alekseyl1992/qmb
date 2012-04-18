@@ -55,6 +55,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myTextColor = Qt::black;
     myLineColor = Qt::black;
 
+    ((QGraphicsView*)parent)->scale(0.5, 0.5);
 }
 
 void ModelScene::setLineColor(const QColor &color)
