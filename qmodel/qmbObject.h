@@ -3,20 +3,22 @@
 
 #include <string>
 
-class qmbObject
+namespace qmodel
 {
-public:
-	qmbObject() { }
-	qmbObject(int cur_id) : id(cur_id) { }
-	qmbObject(int cur_id, char* _name): id(cur_id), name(_name) { }
+    class qmbObject
+    {
+    public:
+        qmbObject() { }
+        qmbObject(int cur_id) : id(cur_id) { }
+        qmbObject(int cur_id, char* _name): id(cur_id), name(_name) { }
 
-	int get_id() const { return id; }
+        int get_id() const { return id; }
 
-protected:
-	int id;
+    protected:
+        int id;
 
-	//properties
-	std::string name;
-};
-
+        //properties
+        std::string name;
+    };
+}
 #endif // !H_QMBOBJECT
