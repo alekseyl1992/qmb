@@ -44,6 +44,7 @@
 #include <QGraphicsLineItem>
 
 #include "modelitem.h"
+#include "itemshadow.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;
@@ -54,7 +55,7 @@ class QGraphicsSceneMouseEvent;
 class QPainterPath;
 QT_END_NAMESPACE
 
-class Arrow : public QGraphicsLineItem
+class Arrow : public QGraphicsLineItem, public ItemShadow
 {
 public:
     enum { Type = UserType + 4 };
@@ -75,7 +76,6 @@ public:
         { return myEndItem; }
 
     void updatePosition();
-
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = 0);

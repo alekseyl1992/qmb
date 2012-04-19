@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     qmodel/link.cpp \
     qmodel/handler.cpp \
     qmodel/generator.cpp \
-    qmodel/exceptions.cpp
+    qmodel/exceptions.cpp \
+    itemshadow.cpp
 
 HEADERS  += mainwindow.h \
     document.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     qmodel/generator.h \
     qmodel/link.h \
     qmodel/request_id.h \
-    qmodel/exceptions.h
+    qmodel/exceptions.h \
+    itemshadow.h
 
 FORMS    += mainwindow.ui \
     document.ui \

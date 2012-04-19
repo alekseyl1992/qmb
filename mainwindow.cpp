@@ -27,15 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mdiArea->setTabsClosable(true);
     ui->mdiArea->setTabsMovable(true);
-    setDockOptions(AnimatedDocks);
-    setCorner(Qt::TopLeftCorner, Qt::TopDockWidgetArea);
-    setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
-    setCorner(Qt::TopRightCorner, Qt::TopDockWidgetArea);
-    setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
-    setCorner(Qt::BottomLeftCorner, Qt::BottomDockWidgetArea);
-    setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
-    setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
-    setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     //будет вынесено в отдельную функцию - создание проекта
     on_createModel_triggered();
@@ -57,7 +48,9 @@ void MainWindow::on_createModel_triggered()
     Doc = new Document(this, ui->elementMenu, Name);
     Doc->scene()->setMode(ModelScene::Mode::InsertItem);
 
-    ui->mdiArea->addSubWindow(Doc)->showMaximized();
+    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(Doc);
+    subWindow->showMaximized();
+    ui->mdiArea->setActiveSubWindow(subWindow);
 }
 
 void MainWindow::on_openModel_triggered()
@@ -79,6 +72,9 @@ void MainWindow::on_saveModel_triggered()
 
 void MainWindow::on_closeModel_triggered()
 {
+    if(ui->mdiArea->activeSubWindow() == nullptr)
+        ui->mdiArea->activateNextSubWindow();
+
     ui->mdiArea->closeActiveSubWindow();
 }
 

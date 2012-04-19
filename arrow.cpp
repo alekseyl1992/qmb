@@ -48,22 +48,17 @@ const qreal Pi = 3.14;
 
 Arrow::Arrow(ModelItem *startItem, ModelItem *endItem,
          QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsLineItem(parent, scene)
+    : QGraphicsLineItem(parent, scene), ItemShadow(this)
 {
     myStartItem = startItem;
     myEndItem = endItem;
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     myColor = Qt::black;
     setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-    effect->setBlurRadius(15);
-    setGraphicsEffect(effect);
 }
 
 Arrow::~Arrow()
 {
-    delete graphicsEffect();
 }
 
 QRectF Arrow::boundingRect() const

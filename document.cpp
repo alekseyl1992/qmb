@@ -31,11 +31,11 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
             Storage, SLOT(onItemRemoved(int)));
 
     //создаём окошко для отображения масштаба модели
-    QComboBox *box = new QComboBox(ui->graphicsView);
-    box->addItem(QIcon(), "100%");
-    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
-    effect->setOpacity(0.5);
-    box->setGraphicsEffect(effect);
+//    QComboBox *box = new QComboBox(ui->graphicsView);
+//    box->addItem(QIcon(), "100%");
+//    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+//    effect->setOpacity(0.5);
+//    box->setGraphicsEffect(effect);
 
     //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
     connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));
