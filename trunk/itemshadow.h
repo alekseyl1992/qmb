@@ -13,8 +13,8 @@ public:
 
 private:
     QGraphicsDropShadowEffect *effect;
-    qreal offset;
-    qreal blurRadius;
+    const qreal offset;
+    const qreal blurRadius;
 };
 
 #endif // ITEMSHADOW_H

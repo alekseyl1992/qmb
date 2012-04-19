@@ -46,6 +46,7 @@
 ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     : QGraphicsScene(parent)
 {
+    myScale = 1;
     myItemMenu = itemMenu;
     myMode = MoveItem;
     myItemType = ItemType::Generator;
@@ -130,6 +131,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     switch (myMode) {
         case InsertItem:
             item = new ModelItem(myItemType, items().count(), myItemMenu);
+            item->scaleShadow(myScale);
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
@@ -141,6 +143,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
                                         mouseEvent->scenePos()));
             line->setPen(QPen(myLineColor, 2));
+
             addItem(line);
             break;
 
@@ -201,6 +204,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             endItem->addArrow(arrow);
             arrow->setZValue(-1000.0);
             addItem(arrow);
+            arrow->scaleShadow(myScale);
             arrow->updatePosition();
         }
 
@@ -226,17 +230,18 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
         if(event->delta() < 0)
             scaleFactor = 1.0 / scaleFactor;
 
+        myScale *= scaleFactor;
         view->scale(scaleFactor, scaleFactor);
         foreach(QGraphicsItem *it, items())
         {
             ModelItem *item = qgraphicsitem_cast<ModelItem *>(it);
             if(item != nullptr)
-                item->scaleShadow(scaleFactor);
+                item->scaleShadow(myScale);
             else
             {
                 Arrow *arrow = qgraphicsitem_cast<Arrow *>(it);
                 if(arrow != nullptr)
-                    arrow->scaleShadow(scaleFactor);
+                    arrow->scaleShadow(myScale);
             }
         }
     }

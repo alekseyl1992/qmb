@@ -61,7 +61,7 @@ class ModelScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum Mode { InsertItem, InsertLine, InsertText, MoveItem };
+    enum Mode { InsertItem, InsertLine, /*InsertText,*/ MoveItem };
 
     ModelScene(QMenu *itemMenu, QObject *parent = 0);
     QFont font() const
@@ -97,6 +97,7 @@ protected:
 private:
     bool isItemChange(int type);
 
+    qreal myScale; //текущий масштаб сцены
     ItemType myItemType;
     QMenu *myItemMenu;
     Mode myMode;
