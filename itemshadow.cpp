@@ -16,8 +16,6 @@ ItemShadow::~ItemShadow()
 
 void ItemShadow::scaleShadow(qreal factor)
 {
-    offset *= factor;
-    blurRadius *= factor;
-    effect->setOffset(offset);
-    effect->setBlurRadius(blurRadius);
+    effect->setOffset(offset*factor);
+    effect->setBlurRadius(blurRadius*factor);
 }

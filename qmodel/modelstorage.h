@@ -141,6 +141,7 @@ public:
 
     }
 
+    //DEPRECATED
     void SaveQModel(model *curModel, QString xmlFileName)
     {
         std::vector<QString> entries={"req_generators","queues","handlers","links"};
