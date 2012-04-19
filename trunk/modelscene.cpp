@@ -54,8 +54,6 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myItemColor = Qt::white;
     myTextColor = Qt::black;
     myLineColor = Qt::black;
-
-    ((QGraphicsView*)parent)->scale(0.5, 0.5);
 }
 
 void ModelScene::setLineColor(const QColor &color)
@@ -219,15 +217,28 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
         double scaleFactor = 1.2;
         QGraphicsView *view = (QGraphicsView*)parent();
         QPointF fPos = event->scenePos();
+
         if(itemAt(fPos) != nullptr)
             view->centerOn(itemAt(fPos));
         else
             view->centerOn(fPos);
 
-        if(event->delta() > 0)
-            view->scale(scaleFactor, scaleFactor);
-        else
-            view->scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        if(event->delta() < 0)
+            scaleFactor = 1.0 / scaleFactor;
+
+        view->scale(scaleFactor, scaleFactor);
+        foreach(QGraphicsItem *it, items())
+        {
+            ModelItem *item = qgraphicsitem_cast<ModelItem *>(it);
+            if(item != nullptr)
+                item->scaleShadow(scaleFactor);
+            else
+            {
+                Arrow *arrow = qgraphicsitem_cast<Arrow *>(it);
+                if(arrow != nullptr)
+                    arrow->scaleShadow(scaleFactor);
+            }
+        }
     }
     else //прокрутка
         QGraphicsScene::wheelEvent(event);

@@ -42,9 +42,11 @@
 #define ModelItem_H
 
 #include <QGraphicsPixmapItem>
+#include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QMap>
 #include "common.h"
+#include "itemshadow.h"
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -62,7 +64,7 @@ QT_END_NAMESPACE
 
 class Arrow;
 
-class ModelItem : public QGraphicsPolygonItem
+class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 {
 public:
     enum { Type = UserType + 15 };
@@ -71,13 +73,16 @@ public:
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~ModelItem();
 
+    void addArrow(Arrow *arrow);
     void removeArrow(Arrow *arrow);
     void removeArrows();
+    void setScale(qreal factor);
+
     ItemType itemType() const
         { return myItemType; }
     QPolygonF polygon() const
         { return myPolygon; }
-    void addArrow(Arrow *arrow);
+
     QPixmap image() const;
     int type() const
         { return Type;}

@@ -302,13 +302,13 @@ QToolButton
             <bool>false</bool>
            </property>
            <property name="renderHints">
-            <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::NonCosmeticDefaultPen|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+            <set>QPainter::Antialiasing|QPainter::NonCosmeticDefaultPen|QPainter::TextAntialiasing</set>
            </property>
            <property name="dragMode">
             <enum>QGraphicsView::ScrollHandDrag</enum>
            </property>
            <property name="viewportUpdateMode">
-            <enum>QGraphicsView::FullViewportUpdate</enum>
+            <enum>QGraphicsView::SmartViewportUpdate</enum>
            </property>
           </widget>
          </widget>

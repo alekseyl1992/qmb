@@ -45,7 +45,7 @@
 
 ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
              QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsPolygonItem(parent, scene)
+    : QGraphicsPolygonItem(parent, scene), ItemShadow(this)
 {
     myItemType = itemType;
     myContextMenu = contextMenu;
@@ -82,10 +82,11 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
                       << QPointF(-100, 50);
             break;
     }
+    //уменьшаем
+    for(QPointF &pnt : myPolygon)
+        pnt /= 2;
+
     setPolygon(myPolygon);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-    effect->setBlurRadius(15);
-    setGraphicsEffect(effect);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -94,7 +95,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
 
 ModelItem::~ModelItem()
 {
-    delete graphicsEffect();
+
 }
 
 void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
