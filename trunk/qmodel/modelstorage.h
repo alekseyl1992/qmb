@@ -337,7 +337,7 @@ public:
 
     //обратно
     //это реализация первой идеи с тупым полным сохранением
-    //DEPRECATED!, но пока не удалять
+    //DEPRECATED, не реализовывать
     void SceneToXML(ModelScene *scene, QString FileName)
     {
         foreach(QGraphicsItem *it, scene->items())
@@ -351,6 +351,14 @@ public:
         }
     }
 
+    //получения поля name, item'а по его id для отображения на сцене
+    QString getItemName(int id)
+    {
+        return QString(); //stub
+    }
+
+    //TODO здесь будут метода для получения и записи полного списка параметров
+    //просто пока ещё не продуман формат хранения этих самывх форматов
 public slots:
     //TODO наполнить смыслом :D
     void onItemInserted(ItemType type, int id, QPoint pos)
