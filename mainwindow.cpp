@@ -72,10 +72,9 @@ void MainWindow::on_saveModel_triggered()
 
 void MainWindow::on_closeModel_triggered()
 {
-    if(ui->mdiArea->activeSubWindow() == nullptr)
-        ui->mdiArea->activateNextSubWindow();
-
-    ui->mdiArea->closeActiveSubWindow();
+    //костыль, иначе окно созданное сразу при запуске программы нельзя закрыть
+    if(!ui->mdiArea->subWindowList().empty())
+        ui->mdiArea->subWindowList(QMdiArea::ActivationHistoryOrder).back()->close();
 }
 
 void MainWindow::on_startSimulation_triggered()

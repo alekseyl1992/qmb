@@ -32,6 +32,7 @@ public:
 public slots:
     void logChanged();
     void on_logButton_toggled(bool checked);
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void on_toolsView_clicked(const QModelIndex &index);

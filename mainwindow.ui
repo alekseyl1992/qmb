@@ -232,9 +232,6 @@
    <property name="text">
     <string>Закрыть</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+W</string>
-   </property>
   </action>
   <action name="terminatorTool">
    <property name="checkable">
