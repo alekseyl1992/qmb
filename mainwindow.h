@@ -41,6 +41,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Document *Doc;
+
+    static const int maxOpenedModels = 128;
 };
 
 #endif // MAINWINDOW_H

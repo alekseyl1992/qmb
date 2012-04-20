@@ -12,6 +12,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QFileDialog>
+#include <QDataStream>
 
 #include "qmodel\generator.h"
 #include "qmodel\queue.h"
@@ -42,15 +43,34 @@ void MainWindow::on_createModel_triggered()
     //здесь будет запрос на ввод имени проекта и места сохранения
 
     //формируем имя документа
-    QString Name = QString("Модель ") +
-            QString::number(ui->mdiArea->subWindowList().size()+1);
+    QSet<QString> modelTitles;
+    for(QMdiSubWindow *wnd :  ui->mdiArea->subWindowList())
+        modelTitles << wnd->windowTitle();
 
-    Doc = new Document(this, ui->elementMenu, Name);
-    Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+    int modelId = -1;
+    for(int i=1; i<maxOpenedModels; i++)
+        if(!modelTitles.contains(QString("Модель %0").arg(i)))
+        {
+              modelId = i;
+              break;
+        }
 
-    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(Doc);
-    subWindow->showMaximized();
-    ui->mdiArea->setActiveSubWindow(subWindow);
+    if(modelId != -1)
+    {
+        QString Name = QString("Модель %0").arg(modelId);
+        Doc = new Document(this, ui->elementMenu, Name);
+        Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+
+        QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(Doc);
+        subWindow->showMaximized();
+        ui->mdiArea->setActiveSubWindow(subWindow);
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка",
+                     "Открыто слишком много моделей!\n"
+                     "Закройте хотя бы одну перед созданием новой.");
+    }
 }
 
 void MainWindow::on_openModel_triggered()
