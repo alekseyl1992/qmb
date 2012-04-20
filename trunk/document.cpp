@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QStandardItemModel>
+#include <QMessageBox>
 
 Document::Document(QWidget *parent, QMenu *menu, QString name) :
     QDialog(parent),
@@ -137,6 +138,15 @@ void Document::logChanged()
 void Document::on_logButton_toggled(bool checked)
 {
     showLog(checked);
+}
+
+void Document::closeEvent(QCloseEvent *event)
+{
+    int id = QMessageBox::question(this, "Закрытие модели", "Сохранить модель перед закрытием?",
+                          "Да", "Нет", "Отмена");
+    //TODO
+    if(id == 2) //отмена
+        event->ignore();
 }
 
 void Document::on_toolsView_clicked(const QModelIndex &index)
