@@ -44,7 +44,6 @@
 #include <QWheelEvent>
 #include "modelitem.h"
 #include "common.h"
-//#include "modeltextitem.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
@@ -61,26 +60,13 @@ class ModelScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum Mode { InsertItem, InsertLine, /*InsertText,*/ MoveItem };
+    enum Mode { InsertItem, InsertLine, MoveItem };
 
     ModelScene(QMenu *itemMenu, QObject *parent = 0);
-    QFont font() const
-        { return myFont; }
-    QColor textColor() const
-        { return myTextColor; }
-    QColor itemColor() const
-        { return myItemColor; }
-    QColor lineColor() const
-        { return myLineColor; }
-    void setLineColor(const QColor &color);
-    void setTextColor(const QColor &color);
-    void setItemColor(const QColor &color);
-    void setFont(const QFont &font);
 
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);
-    //void editorLostFocus(DiagramTextItem *item);
 
 signals:
     //сигналы для оперативного изменения XML-дерева
@@ -90,13 +76,17 @@ signals:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void wheelEvent(QGraphicsSceneWheelEvent* event);
 
-private:
-    bool isItemChange(int type);
+    //Drag'n'Drop
+    void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
+private:
     qreal myScale; //текущий масштаб сцены
     ItemType myItemType;
     QMenu *myItemMenu;
@@ -105,7 +95,6 @@ private:
     QPointF startPoint;
     QGraphicsLineItem *line;
     QFont myFont;
-    //DiagramTextItem *textItem;
     QColor myTextColor;
     QColor myItemColor;
     QColor myLineColor;

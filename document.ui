@@ -240,7 +240,7 @@ QToolButton
            <property name="minimumSize">
             <size>
              <width>148</width>
-             <height>113</height>
+             <height>114</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -250,14 +250,23 @@ QToolButton
             </size>
            </property>
            <property name="features">
-            <set>QDockWidget::DockWidgetMovable</set>
+            <set>QDockWidget::NoDockWidgetFeatures</set>
            </property>
            <property name="windowTitle">
             <string>Элементы</string>
            </property>
            <widget class="QWidget" name="dockWidgetContents">
             <layout class="QGridLayout" name="gridLayout_6">
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item row="0" column="0">
@@ -268,14 +277,40 @@ QToolButton
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="styleSheet">
+                <string notr="true">QTreeView {
+    show-decoration-selected: 1;
+}
+
+QTreeView::item:!enabled {
+	background-color: rgb(190, 210, 210);
+	color: black;
+	border: 1px solid #d9d9d9;
+}</string>
+               </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::NoEditTriggers</set>
                </property>
                <property name="showDropIndicator" stdset="0">
                 <bool>false</bool>
                </property>
+               <property name="dragEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="dragDropMode">
+                <enum>QAbstractItemView::DragOnly</enum>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>64</width>
+                 <height>32</height>
+                </size>
+               </property>
                <property name="indentation">
-                <number>15</number>
+                <number>0</number>
+               </property>
+               <property name="rootIsDecorated">
+                <bool>false</bool>
                </property>
                <property name="animated">
                 <bool>true</bool>
@@ -309,6 +344,9 @@ QToolButton
            </property>
            <property name="viewportUpdateMode">
             <enum>QGraphicsView::SmartViewportUpdate</enum>
+           </property>
+           <property name="rubberBandSelectionMode">
+            <enum>Qt::IntersectsItemShape</enum>
            </property>
           </widget>
          </widget>
