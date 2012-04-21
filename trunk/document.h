@@ -35,7 +35,7 @@ public slots:
     void closeEvent(QCloseEvent *event);
 
 private slots:
-    void on_toolsView_clicked(const QModelIndex &index);
+    void on_toolsView_pressed(const QModelIndex &index);
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;

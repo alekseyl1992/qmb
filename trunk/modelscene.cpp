@@ -57,49 +57,6 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myLineColor = Qt::black;
 }
 
-void ModelScene::setLineColor(const QColor &color)
-{
-    myLineColor = color;
-    if (isItemChange(Arrow::Type)) {
-        Arrow *item =
-            qgraphicsitem_cast<Arrow *>(selectedItems().first());
-        item->setColor(myLineColor);
-        update();
-    }
-}
-
-void ModelScene::setTextColor(const QColor &color)
-{
-//    myTextColor = color;
-//    if (isItemChange(DiagramTextItem::Type)) {
-//        DiagramTextItem *item =
-//            qgraphicsitem_cast<DiagramTextItem *>(selectedItems().first());
-//        item->setDefaultTextColor(myTextColor);
-//    }
-}
-
-void ModelScene::setItemColor(const QColor &color)
-{
-    myItemColor = color;
-    if (isItemChange(ModelItem::Type)) {
-        ModelItem *item =
-            qgraphicsitem_cast<ModelItem *>(selectedItems().first());
-        item->setBrush(myItemColor);
-    }
-}
-
-void ModelScene::setFont(const QFont &font)
-{
-//    myFont = font;
-
-//    if (isItemChange(DiagramTextItem::Type)) {
-//        QGraphicsTextItem *item =
-//            qgraphicsitem_cast<DiagramTextItem *>(selectedItems().first());
-//    if (item)
-//        item->setFont(myFont);
-//    }
-}
-
 void ModelScene::setMode(Mode mode)
 {
     myMode = mode;
@@ -110,59 +67,36 @@ void ModelScene::setItemType(ItemType type)
     myItemType = type;
 }
 
-//void ModelScene::editorLostFocus(DiagramTextItem *item)
-//{
-//    QTextCursor cursor = item->textCursor();
-//    cursor.clearSelection();
-//    item->setTextCursor(cursor);
-
-//    if (item->toPlainText().isEmpty()) {
-//        removeItem(item);
-//        item->deleteLater();
-//    }
-//}
-
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (mouseEvent->button() != Qt::LeftButton)
+    //Выделение ПКМ только если ничего не выбрано
+    if(mouseEvent->button() == Qt::RightButton && selectedItems().empty())
+    {
+        QGraphicsItem *item = itemAt(mouseEvent->scenePos());
+        if(item)
+            item->setSelected(true);
+    }
+
+    if(mouseEvent->button() != Qt::LeftButton)
         myMode = InsertLine;
 
-    ModelItem *item;
-    switch (myMode) {
-        case InsertItem:
-            item = new ModelItem(myItemType, items().count(), myItemMenu);
-            item->scaleShadow(myScale);
-            item->setBrush(myItemColor);
-            addItem(item);
-            item->setPos(mouseEvent->scenePos());
-            emit itemInserted(myItemType, item->id(), item->pos().toPoint());
-            myMode = Mode::MoveItem;
-            break;
 
-        case InsertLine:
-            line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
-                                        mouseEvent->scenePos()));
-            line->setPen(QPen(myLineColor, 2));
-
-            addItem(line);
-            break;
-
-//        case InsertText:
-//            textItem = new DiagramTextItem();
-//            textItem->setFont(myFont);
-//            textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
-//            textItem->setZValue(1000.0);
-//            connect(textItem, SIGNAL(lostFocus(DiagramTextItem*)),
-//                    this, SLOT(editorLostFocus(DiagramTextItem*)));
-//            connect(textItem, SIGNAL(selectedChange(QGraphicsItem*)),
-//                    this, SIGNAL(itemSelected(QGraphicsItem*)));
-//            addItem(textItem);
-//            textItem->setDefaultTextColor(myTextColor);
-//            textItem->setPos(mouseEvent->scenePos());
-//            emit textInserted(textItem);
+    if(myMode == InsertLine)
+    {
+        line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
+                                    mouseEvent->scenePos()));
+        line->setPen(QPen(myLineColor, 2));
+        addItem(line);
     }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
+{
+    //если что-то выбрано и мышь находиться над выбранным элементом
+    if(!selectedItems().empty() && itemAt(contextMenuEvent->scenePos()))
+        myItemMenu->popup(contextMenuEvent->screenPos());
 }
 
 void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -249,12 +183,28 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
         QGraphicsScene::wheelEvent(event);
 }
 
-bool ModelScene::isItemChange(int type)
+void ModelScene::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-    foreach (QGraphicsItem *item, selectedItems()) {
-        if (item->type() == type)
-            return true;
-    }
-    return false;
+    event->setDropAction(Qt::CopyAction);
+    event->accept();
+}
+
+void ModelScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->setDropAction(Qt::CopyAction);
+    event->accept();
+}
+
+void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    ModelItem *item = new ModelItem(myItemType, items().count(), myItemMenu);
+    item->scaleShadow(myScale);
+    item->setBrush(myItemColor);
+    addItem(item);
+    item->setPos(event->scenePos());
+    emit itemInserted(myItemType, item->id(), item->pos().toPoint());
+    myMode = Mode::MoveItem;
+
+    event->accept();
 }
 

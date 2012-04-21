@@ -110,6 +110,12 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QRectF rect = boundingRect();
     //rect.setTop(rect.bottom() - fract * rect.height());
     painter->drawPolygon(polygon().intersected(rect), fillRule());
+    if(isSelected())
+    {
+        painter->setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
+        painter->drawPolygon(polygon().intersected(rect), fillRule());
+    }
+
     //draw polygon outline
     painter->setPen(pen());
     painter->setBrush(Qt::NoBrush);

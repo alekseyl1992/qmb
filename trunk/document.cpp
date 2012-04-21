@@ -40,6 +40,9 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
 
     //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
     connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));
+    //убираем заголовок палитры
+    QWidget *nullHeader = new QWidget(this);
+    ui->toolsDock->setTitleBarWidget(nullHeader);
 
     //меняем вид заголовка лога
     /*QWidget *head = new QWidget(ui->logDock);
@@ -62,15 +65,19 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     QStandardItem *parentItem = model->invisibleRootItem();
 
     //основные
-    QStandardItem *groupItem = new QStandardItem("Основные");
+    QStandardItem *groupItem = new QStandardItem("Элементы");
     groupItem->setSelectable(false);
-    //groupItem->set
+    //groupItem->setEnabled(false);
+    groupItem->setTextAlignment(Qt::AlignCenter);
+    groupItem->setEnabled(false);
     parentItem->appendRow(groupItem);
+
     //генератор
     QModelIndex generatorIndex;
     {
         QStandardItem *item = new QStandardItem("Генератор");
         item->setData(int(ItemType::Generator));
+        item->setIcon(QIcon(ModelItem(ItemType::Generator, 0, nullptr).image()));
         groupItem->appendRow(item);
         generatorIndex = item->index();
     }
@@ -78,18 +85,21 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     {
         QStandardItem *item = new QStandardItem("Очередь");
         item->setData(int(ItemType::Queue));
+        item->setIcon(QIcon(ModelItem(ItemType::Queue, 0, nullptr).image()));
         groupItem->appendRow(item);
     }
     //обработчик
     {
         QStandardItem *item = new QStandardItem("Обработчик");
         item->setData(int(ItemType::Handler));
+        item->setIcon(QIcon(ModelItem(ItemType::Handler, 0, nullptr).image()));
         groupItem->appendRow(item);
     }
     //терминатор
     {
         QStandardItem *item = new QStandardItem("Терминатор");
         item->setData(int(ItemType::Terminator));
+        item->setIcon(QIcon(ModelItem(ItemType::Terminator, 0, nullptr).image()));
         groupItem->appendRow(item);
     }
 
@@ -149,7 +159,7 @@ void Document::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
-void Document::on_toolsView_clicked(const QModelIndex &index)
+void Document::on_toolsView_pressed(const QModelIndex &index)
 {
     //смена текущего инструмента
     ItemType itemType = (ItemType)index.data(ItemTypeRole).toInt();
