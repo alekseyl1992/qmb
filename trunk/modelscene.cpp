@@ -107,7 +107,11 @@ void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
         line->setLine(newLine);
     }
     else if (myMode == MoveItem)
+    {
         QGraphicsScene::mouseMoveEvent(mouseEvent);
+        //ресайз сцены при перемещаении элемента
+        resizeToPoint(mouseEvent->scenePos());
+    }
 }
 
 void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -153,6 +157,13 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
     {
         //мастабирование окна
         double scaleFactor = 1.2;
+
+        if(event->delta() < 0)
+            scaleFactor = 1.0 / scaleFactor;
+        myScale *= scaleFactor;
+        //if(myScale <= 1)
+        //    return;
+
         QGraphicsView *view = (QGraphicsView*)parent();
         QPointF fPos = event->scenePos();
 
@@ -161,10 +172,7 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
         else
             view->centerOn(fPos);
 
-        if(event->delta() < 0)
-            scaleFactor = 1.0 / scaleFactor;
 
-        myScale *= scaleFactor;
         view->scale(scaleFactor, scaleFactor);
         foreach(QGraphicsItem *it, items())
         {
@@ -197,6 +205,9 @@ void ModelScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
 void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
+    //ресайз сцены при добавлении элемента
+    resizeToPoint(event->scenePos());
+
     ModelItem *item = new ModelItem(myItemType, items().count(), myItemMenu);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
@@ -208,3 +219,33 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     event->accept();
 }
 
+void ModelScene::resizeToPoint(QPointF pos)
+{
+    QRectF rect = sceneRect();
+
+    if(!rect.contains(pos))
+    {
+        if(pos.x() < rect.left())
+        {
+            rect.setLeft(pos.x());
+            rect.setRight(-pos.x());
+        }
+        else if(pos.x() > rect.right())
+        {
+            rect.setRight(pos.x());
+            rect.setLeft(-pos.x());
+        }
+        if(pos.y() < rect.top())
+        {
+            rect.setTop(pos.y());
+            rect.setBottom(-pos.y());
+        }
+        else if(pos.y() > rect.bottom())
+        {
+            rect.setBottom(pos.y());
+            rect.setTop(-pos.y());
+        }
+
+        setSceneRect(rect);
+    }
+}

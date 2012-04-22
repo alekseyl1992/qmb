@@ -59,7 +59,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
         case ItemType::Generator:
             myPolygon << QPointF(-100, -50) << QPointF(100, -50)
                       << QPointF(150, 0) << QPointF(100, 50)
-                      << QPointF(-100, 50);
+                      << QPointF(-100, 50) << QPointF(-100, -50);
             break;
         case ItemType::Queue:
             myPolygon << QPointF(-100, -50) << QPointF(100, -50)
@@ -79,7 +79,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
         case ItemType::Terminator:
             myPolygon << QPointF(-150, 0) << QPointF(-100, -50) << QPointF(100, -50)
                       << QPointF(100, 50)
-                      << QPointF(-100, 50);
+                      << QPointF(-100, 50) << QPointF(-150, 0);
             break;
     }
     //уменьшаем
