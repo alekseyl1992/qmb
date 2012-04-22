@@ -302,8 +302,8 @@ QTreeView::item:!enabled {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>64</width>
-                 <height>32</height>
+                 <width>48</width>
+                 <height>48</height>
                 </size>
                </property>
                <property name="indentation">

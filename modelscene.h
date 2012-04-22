@@ -63,7 +63,6 @@ public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
     ModelScene(QMenu *itemMenu, QObject *parent = 0);
-
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);
@@ -98,6 +97,9 @@ private:
     QColor myTextColor;
     QColor myItemColor;
     QColor myLineColor;
+
+
+    void resizeToPoint(QPointF pos);
 };
 
 #endif // MODELSCENE_H

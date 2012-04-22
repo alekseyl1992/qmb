@@ -78,6 +78,7 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
         QStandardItem *item = new QStandardItem("Генератор");
         item->setData(int(ItemType::Generator));
         item->setIcon(QIcon(ModelItem(ItemType::Generator, 0, nullptr).image()));
+        //item->setSizeHint(QSize(32, 32));
         groupItem->appendRow(item);
         generatorIndex = item->index();
     }
