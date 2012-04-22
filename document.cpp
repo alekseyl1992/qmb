@@ -77,7 +77,7 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     {
         QStandardItem *item = new QStandardItem("Генератор");
         item->setData(int(ItemType::Generator));
-        item->setIcon(QIcon(ModelItem(ItemType::Generator, 0, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Generator, -1, nullptr).image()));
         //item->setSizeHint(QSize(32, 32));
         groupItem->appendRow(item);
         generatorIndex = item->index();
@@ -86,21 +86,21 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     {
         QStandardItem *item = new QStandardItem("Очередь");
         item->setData(int(ItemType::Queue));
-        item->setIcon(QIcon(ModelItem(ItemType::Queue, 0, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Queue, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
     //обработчик
     {
         QStandardItem *item = new QStandardItem("Обработчик");
         item->setData(int(ItemType::Handler));
-        item->setIcon(QIcon(ModelItem(ItemType::Handler, 0, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Handler, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
     //терминатор
     {
         QStandardItem *item = new QStandardItem("Терминатор");
         item->setData(int(ItemType::Terminator));
-        item->setIcon(QIcon(ModelItem(ItemType::Terminator, 0, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Terminator, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
 
@@ -108,6 +108,8 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     ui->toolsView->expandAll();
     //выбираем генератор
     ui->toolsView->setCurrentIndex(generatorIndex);
+
+    ui->logDock->resize(0, 30);
 }
 
 Document::~Document()

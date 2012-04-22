@@ -56,4 +56,5 @@ FORMS    += mainwindow.ui \
     elementpropwindow.ui
 
 OTHER_FILES += \
-    TODO.txt
+    TODO.txt \
+    DeprecatedCode.cpp

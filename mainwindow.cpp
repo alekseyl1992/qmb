@@ -58,12 +58,14 @@ void MainWindow::on_createModel_triggered()
     if(modelId != -1)
     {
         QString Name = QString("Модель %0").arg(modelId);
-        Doc = new Document(this, ui->elementMenu, Name);
-        Doc->scene()->setMode(ModelScene::Mode::InsertItem);
+        Document *newDoc = new Document(this, ui->elementMenu, Name);
+        newDoc->scene()->setMode(ModelScene::Mode::InsertItem);
 
-        QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(Doc);
+        QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
         subWindow->showMaximized();
         ui->mdiArea->setActiveSubWindow(subWindow);
+
+        Doc = newDoc;
     }
     else
     {
@@ -169,4 +171,10 @@ void MainWindow::on_elementProperties_triggered()
 {
     ElementPropWindow *propWindow =  new ElementPropWindow(this);
     propWindow->show();
+}
+
+void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
+{
+    if(arg1)
+        Doc = qobject_cast<Document *>(arg1->widget());
 }
