@@ -120,6 +120,12 @@ QToolButton
       <bool>false</bool>
      </property>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>3</verstretch>
+       </sizepolicy>
+      </property>
       <property name="tabPosition">
        <enum>QTabWidget::South</enum>
       </property>
@@ -232,20 +238,20 @@ QToolButton
           </property>
           <widget class="QDockWidget" name="toolsDock">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>148</width>
+             <width>156</width>
              <height>114</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>148</width>
+             <width>156</width>
              <height>524287</height>
             </size>
            </property>
@@ -305,6 +311,9 @@ QTreeView::item:!enabled {
                  <width>48</width>
                  <height>48</height>
                 </size>
+               </property>
+               <property name="textElideMode">
+                <enum>Qt::ElideLeft</enum>
                </property>
                <property name="indentation">
                 <number>0</number>
@@ -414,13 +423,13 @@ QTreeView::item:!enabled {
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
         <width>109</width>
-        <height>135</height>
+        <height>113</height>
        </size>
       </property>
       <property name="features">

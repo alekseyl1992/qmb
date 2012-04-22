@@ -63,6 +63,11 @@ public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
     ModelScene(QMenu *itemMenu, QObject *parent = 0);
+    qreal scale()
+    {
+        return myScale;
+    }
+
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);

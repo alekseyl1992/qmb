@@ -42,6 +42,7 @@
 #include <QGraphicsDropShadowEffect>
 #include "modelitem.h"
 #include "arrow.h"
+#include "modelscene.h"
 
 ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
              QGraphicsItem *parent, QGraphicsScene *scene)
@@ -55,38 +56,38 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
     setPen(iPen);
 
     QPainterPath path;
+    QRectF itemRect(0, 0, 200, 100);
     switch (myItemType) {
         case ItemType::Generator:
-            myPolygon << QPointF(-100, -50) << QPointF(100, -50)
-                      << QPointF(150, 0) << QPointF(100, 50)
-                      << QPointF(-100, 50) << QPointF(-100, -50);
+            path.addRect(itemRect);
+            path.addPolygon(QPolygonF() << QPointF(200, 0) << QPointF(230, 50) << QPointF(200, 100));
+            path = path.simplified();
             break;
+
         case ItemType::Queue:
-            myPolygon << QPointF(-100, -50) << QPointF(100, -50)
-                      << QPointF(100, 50) << QPointF(-100, 50)
-                      << QPointF(-100, -50);
+            path.addRect(itemRect);
             break;
+
         case ItemType::Handler:
-            path.moveTo(100, 0);
-            path.arcTo(50, -50, 50, 50, 0, 90);
-            path.arcTo(-50, -50, 50, 50, 90, 90);
-            path.arcTo(-50, 0, 50, 50, 180, 90);
-            path.arcTo(50, 0, 50, 50, 270, 90);
-            path.lineTo(100, -25);
-            myPolygon = path.toFillPolygon();
+            path.addRoundedRect(itemRect, 25, 25);
             break;
 
         case ItemType::Terminator:
-            myPolygon << QPointF(-150, 0) << QPointF(-100, -50) << QPointF(100, -50)
-                      << QPointF(100, 50)
-                      << QPointF(-100, 50) << QPointF(-150, 0);
+            path.addRect(itemRect.translated(30, 0));
+            path.addPolygon(QPolygonF() << QPointF(30, 0) << QPointF(0, 50) << QPointF(30, 100));
+            path = path.simplified();
             break;
     }
-    //уменьшаем
-    for(QPointF &pnt : myPolygon)
-        pnt /= 2;
 
+    itemRect = path.boundingRect();
+    path.translate(-itemRect.width()/2, -itemRect.height()/2);
+    myPolygon = path.toFillPolygon();
     setPolygon(myPolygon);
+
+    //уменьшаем, если не для палитры
+    if(itemId != -1)
+        for(QPointF &pnt : myPolygon)
+            pnt /= 2;
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -112,7 +113,13 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawPolygon(polygon().intersected(rect), fillRule());
     if(isSelected())
     {
-        painter->setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
+        QBrush brush = QBrush(Qt::black, Qt::Dense6Pattern);
+        qreal scale = ((ModelScene *)scene())->scale();
+        QTransform transform;
+        transform.scale(1./scale, 1./scale);
+        brush.setTransform(transform);
+        painter->setBrush(brush);
+
         painter->drawPolygon(polygon().intersected(rect), fillRule());
     }
 

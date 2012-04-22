@@ -3,7 +3,7 @@
 
 #include "document.h"
 #include <QMainWindow>
-#include <QTreeWidget>
+#include <QMdiSubWindow>
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +37,8 @@ private slots:
     void on_deleteElement_triggered();
 
     void on_elementProperties_triggered();
+
+    void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
 private:
     Ui::MainWindow *ui;
