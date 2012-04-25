@@ -3,9 +3,11 @@
 
 #include "modelscene.h"
 #include "qmodel/modelstorage.h"
+#include "qmodel/model.h"
 #include <QDialog>
 #include <QTextEdit>
 #include <QTreeWidgetItem>
+#include <QScrollBar>
 
 namespace Ui {
 class Document;
@@ -35,6 +37,7 @@ public slots:
     void logChanged();
     void on_logButton_toggled(bool checked);
     void closeEvent(QCloseEvent *event);
+    void onSimulationFinished();
 
 private slots:
     void on_toolsView_pressed(const QModelIndex &index);

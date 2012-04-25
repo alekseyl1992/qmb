@@ -4,7 +4,7 @@ namespace qmodel
 {
     int model::cur_id = 0;
 
-	bool model::is_all_generated() {
+    bool model::is_all_generated() {
 		bool all_completed = true;
 		std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
 			if (!link.lhs->is_finished())

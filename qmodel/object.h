@@ -2,11 +2,14 @@
 #define H_OBJECT
 
 #include <string>
+#include <QObject>
 
 namespace qmodel
 {
-    class object
+    class object : public QObject
 	{
+        Q_OBJECT
+
 	public:
         object() { }
         object(int cur_id) : id(cur_id) { }

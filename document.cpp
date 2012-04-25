@@ -144,13 +144,18 @@ void Document::setActiveTab(Document::Tabs Tab)
 
 void Document::startSimulation()
 {
-    Storage->getModel()->simulation_start();
+    showLog();
+    qmodel::model *model = Storage->getModel();
+    connect(model, SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
+    model->simulation_start();
 }
 
 void Document::logChanged()
 {
     //лучше переделать замену текста, на добавление
     ui->simulationLog->setText(SimulationLog::Log().text());
+    ui->simulationLog->verticalScrollBar()->setValue(
+                ui->simulationLog->verticalScrollBar()->maximum());
 }
 
 void Document::on_logButton_toggled(bool checked)
@@ -165,6 +170,13 @@ void Document::closeEvent(QCloseEvent *event)
     //TODO
     if(id == 2) //отмена
         event->ignore();
+}
+
+void Document::onSimulationFinished()
+{
+    int id = QMessageBox::question(this, windowTitle(), "Симуляция завершена успешно!\nПоказать статистику?");
+    if(id == QMessageBox::Yes)
+        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
 }
 
 void Document::on_toolsView_pressed(const QModelIndex &index)

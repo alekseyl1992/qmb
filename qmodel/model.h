@@ -19,11 +19,13 @@ namespace qmodel
 	//это класс, который реализует все связи между объектами модели
 	//он же содержит списки очередей, связанных генераторов и т.д. и т.п.
 	//это входной вектор логики
-	//и выходной из Converter
+    //и выходной из ModelStorage
 	
-	class model : public object
+    class model : public object
 	{
-		std::mutex model_mutex;
+        Q_OBJECT
+
+        std::mutex model_mutex;
 	public:
 		model(): object(++cur_id) { }
 		model(const model& ) { }
@@ -38,6 +40,9 @@ namespace qmodel
 
 		void simulation_start();
 		void simulation_stop();
+
+    signals:
+        void simulationFinished();
 
 	private:
 		void generator_queue_link_th();
