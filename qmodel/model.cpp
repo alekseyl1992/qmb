@@ -36,10 +36,13 @@ namespace qmodel
 		{
 			std::thread([&link, this]()
 			{
-				for(int i = 1; i <= link.lhs->get_num_requests() && is_simulating(); i++)
+                for(int i = 1; i <= link.lhs->get_num_requests(); i++)
 				{
-					if (!simulate_flag) //if the user switched simulating off
+                    if (!simulate_flag || !is_simulating()) //if the user switched simulating off
+                    {
+                        emit simulationFinished();
 						break;
+                    }
 					link.lhs->generate_new_request();
 					link.rhs->add(link.lhs->get_request());
 				}
@@ -53,10 +56,13 @@ namespace qmodel
 		{
 			std::thread([&link, this]()
 			{
-				for(; is_simulating(); )
+                for(; ; )
 				{
-					if (!simulate_flag) //if the user switched simulating off
-						break;
+                    if (!simulate_flag || !is_simulating()) //if the user switched simulating off
+                    {
+                        emit simulationFinished();
+                        break;
+                    }
 					std::unique_lock<std::mutex> lk(model_mutex);
 					if (link.lhs->has_request() && link.rhs->is_free())
 					{
