@@ -77,12 +77,19 @@ class ModelStorage : public QObject //для connect
 {
     Q_OBJECT
 
+private:
+    model *myModel;
+
 public:
     //TODO
-    ModelStorage(QString name) {}
+    ModelStorage(QString name)
+        : myModel(nullptr)
+    {
+
+    }
 
     //добавляет генератор, очередь или хендлер в модель
-    void AddItem(qmodel::model *curModel, QString elemType, QString param)
+    void AddItem(model *curModel, QString elemType, QString param)
     {
         QMap<QString, ItemType> entries;
         entries["req_generator"] = ItemType::Generator;
@@ -115,7 +122,7 @@ public:
     //в две функции, потому что для линка нужно больше параметров.
     //сама связь идет по сути по ид.
 
-    void AddLink(qmodel::model *curModel, std::vector<QString> params)
+    void AddLink(model *curModel, std::vector<QString> params)
     {
         QMap<QString,int> entries;
         //TODO сделать по аналогии с AddItem
@@ -266,10 +273,10 @@ public:
     }
 
     // преобразует xml файл, в QDomDocument и затем в QModel
-    qmodel::model *LoadQModel(QString xmlFileName)
+    model *LoadQModel(QString xmlFileName)
     {
-        qmodel::model *loadedModel;
-        loadedModel = new qmodel::model();
+        model *loadedModel;
+        loadedModel = new model();
 
         QFile xmlfile(xmlFileName);
         //считываем данные из xml файла в QDomDocument
@@ -327,6 +334,26 @@ public:
 
         //возвращается ссылка на модель
         return loadedModel;
+    }
+
+    //TODO form model here (instead of using LoadQModel)
+    model *getModel()
+    {
+        myModel = new model();
+        myModel->generators.push_back(qmodel::generator(500, 10));
+        myModel->generators.push_back(qmodel::generator(700, 5));
+        myModel->queues.push_back(qmodel::queue());
+        myModel->queues.push_back(qmodel::queue());
+        myModel->handlers.push_back(qmodel::handler(600));
+        myModel->handlers.push_back(qmodel::handler(800));
+
+        myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[0], &myModel->queues[0]));
+        //myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
+
+        myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[0]));
+        //myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[1]));
+
+        return myModel;
     }
 
     //преобразует XML в набор объектов на сцене

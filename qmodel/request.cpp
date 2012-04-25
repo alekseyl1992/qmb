@@ -2,14 +2,13 @@
 
 namespace qmodel
 {
-	/**********************Implementation**********************/
-    request::request(int gen_id, int _id) : id(gen_id, _id)
+	request::request(int gen_id, int _id) : id(gen_id, _id) 
 	{ }
 
-    request::request(const request& req) : id(req.id)
+	request::request(const request& req) : id(req.id)
 	{ }
 
-    request& request::operator=(const request& r) {
+	request& request::operator=(const request& r) { 
 		if (&r == this)
 			return *this;
 		id = r.id;

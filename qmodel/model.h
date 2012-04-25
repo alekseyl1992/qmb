@@ -12,7 +12,7 @@
 #include "handler.h"
 #include "link.h"
 #include "exceptions.h"
-#include "qmbObject.h"
+#include "object.h"
 
 namespace qmodel
 {
@@ -21,12 +21,17 @@ namespace qmodel
 	//это входной вектор логики
 	//и выходной из Converter
 	
-	class model : public qmbObject
+    class model : public object
 	{
-		std::mutex model_mutex;
+		
 	public:
-		model(): qmbObject(++cur_id) { }
+		std::mutex model_mutex;
+        model(): object(++cur_id) { }
 		model(const model& ) { }
+
+		~model()
+		{
+		}
 
 		std::vector<generator> generators;
 		std::vector<queue> queues;
@@ -36,6 +41,34 @@ namespace qmodel
 		std::vector< link <generator*, queue*> > link_generators_queues;
 		std::vector< link <queue*, handler*> > link_queues_handlers;
 
+		bool is_all_generated() {
+			bool all_completed = true;
+			std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
+				if (!link.lhs->is_finished())
+				{
+					all_completed = false;
+				}
+			});
+			return all_completed;
+		}
+
+		bool is_queue_clear() {
+			bool all_completed = true;
+			std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
+				if (link.lhs->get_size() != 0)
+				{
+					all_completed = false;
+				}
+			});
+			return all_completed;
+		}
+
+		bool is_simulating() {
+			bool ag = is_all_generated();
+			bool qc = is_queue_clear();
+			return !(is_all_generated() && is_queue_clear());
+		}
+
 		//algorithm
 		public:
 			void simulation_start();
@@ -44,17 +77,16 @@ namespace qmodel
 			void generator_queue_link_th();
 			void handler_queue_link_th();
 
-			bool is_simulating() {
-                //std::lock_guard<std::mutex> lock(model_mutex);
-				return simulate_flag;
-			}
-		
+			
+		std::vector<std::thread*> threads;
+
+		virtual void clean() { }
+
 	private:
 		bool simulate_flag;
-
 		static int cur_id;
 	};
-	
-} //end namespace qmodel  
+
+} //end namespace qmodel
 
 #endif // !H_MODEL

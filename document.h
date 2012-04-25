@@ -29,6 +29,8 @@ public:
 
     void showLog(bool show = true);
     void setActiveTab(Tabs Tab);
+
+    void startSimulation();
 public slots:
     void logChanged();
     void on_logButton_toggled(bool checked);

@@ -3,20 +3,21 @@
 
 #include <thread>
 
+
 #include "request.h"
 #include "exceptions.h"
-#include "qmbObject.h"
+#include "object.h"
 
 namespace qmodel
 {
-	class generator : public qmbObject
+    class generator : public object
 	{
 	public:
-        generator(int period = 0);
-        generator(const generator& gen);
+		generator(int period = 0, unsigned long long num_requests = 0);
+		generator(const generator& gen);
 		generator& operator=(const generator& gen);
 
-		~generator() { delete new_req; }
+		~generator() { }
 
 
 		//generating new request
@@ -32,10 +33,23 @@ namespace qmodel
 		//gets generated flag
 		bool is_generated() const { return is_generated_flag; }
 
+		//gets number of required requests
+		unsigned long long get_num_requests() const { return number_of_requests_to_generate; }
+		//sets number of required requests
+		void set_num_requests(unsigned long long num) { number_of_requests_to_generate = num; }
+
+		bool is_finished() const {
+			return cur_req_id >= number_of_requests_to_generate;
+		}
+
+		virtual void clean() { }
+
 	private:
 		//Fields
 		request* new_req;
 		int generating_period;
+		unsigned long long number_of_requests_to_generate;
+
 		bool is_generated_flag;
 
 		static int cur_id; //<- генератор

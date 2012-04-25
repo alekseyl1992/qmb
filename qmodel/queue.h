@@ -5,20 +5,19 @@
 #include <mutex>
 
 #include "request.h"
-#include "qmbObject.h"
+#include "object.h"
 
 namespace qmodel
 {
-	class queue : public qmbObject
+    class queue : public object
 	{
-		std::mutex queue_mutex;
-	public:
+        std::mutex queue_mutex;
+    public:
 		queue();
 		queue(const queue& q);
 		queue& operator=(const queue& q);
 
-		~queue() { }
-
+		~queue();
 		
 		//adding request to the queue
 		void add(request req);
@@ -32,10 +31,12 @@ namespace qmodel
 
 		//if the queue has a request
 		bool has_request() { 
-            //std::lock_guard<std::mutex> lock(queue_mutex);
-			return having_request_flag; 
+			//std::lock_guard<std::mutex> lk(queue_mutex);
+			return having_request_flag;
 		}
 		
+		virtual void clean() { }
+
 	private:
 		std::deque<request> requests_in_queue;
 		bool having_request_flag;
@@ -43,6 +44,7 @@ namespace qmodel
 		static int cur_id;
 		
 	};
+
 } //end namespace qmodel
 
 #endif // !H_QUEUE

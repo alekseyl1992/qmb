@@ -2,42 +2,50 @@
 
 namespace qmodel
 {
-	/**********************Implementation**********************/
-
-	int model::cur_id = 0;
+    int model::cur_id = 0;
 
 	void model::generator_queue_link_th() {
 		std::for_each(link_generators_queues.begin(), link_generators_queues.end(), 
-			[&](const link<generator*, queue*>& link) 
+			[&](link<generator*, queue*>& link) 
 		{
-			std::thread([&link, this]()
+			std::thread th([&link, this]()
 			{
-				for(int i = 1; i<=10 && is_simulating(); i++)
+				for(int i = 1; i <= link.lhs->get_num_requests() && is_simulating(); i++)
 				{
 					link.lhs->generate_new_request();
 					link.rhs->add(link.lhs->get_request());
-				}
-			}).detach();
 
+					if (!simulate_flag)
+						break;
+				}
+			});
+			//threads.push_back(&th);
+			th.detach();
 		});
 	}
 
 	void model::handler_queue_link_th() {
 		std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), 
-				[&](const link<queue*, handler*>& link) 
+				[&](link<queue*, handler*>& link) 
 		{
-			std::thread([&link, this]()
+			std::thread th([&link, this]()
 			{
-				for(; is_simulating();)
+				for(; is_simulating(); )
 				{
-                    std::lock_guard<std::mutex> lock(model_mutex);
+					if (!simulate_flag)
+						break;
+					std::unique_lock<std::mutex> lk(model_mutex);
 					if (link.lhs->has_request() && link.rhs->is_free())
 					{
+						//lk.unlock();
 						link.rhs->handle(link.lhs->get_first());
 					}
-				}
-			}).detach();
 
+					
+				}
+			});
+			//threads.push_back(&th);
+			th.detach();
 		});
 	}
 
@@ -52,4 +60,4 @@ namespace qmodel
 		simulate_flag = false;
 	}
 
-} //end namespace qmodel  
+} //end namespace qmodel

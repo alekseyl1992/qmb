@@ -1,6 +1,8 @@
 #ifndef H_REQUEST_ID
 #define H_REQUEST_ID
 
+#include <iostream>
+
 #include "../simulationlog.h"
 
 namespace qmodel
@@ -22,14 +24,13 @@ namespace qmodel
 		IntType __req_id;
 	};
 
-
 } //end namespace qmodel
 
 template<typename IntType>
-SimulationLog& operator<< (SimulationLog& os, qmodel::request_id<IntType> id)
-{
-    os << id.__req_gen_id << "-" << id.__req_id;
-    return os;
+SimulationLog& operator<< (SimulationLog& os, qmodel::request_id<IntType> id) {
+	//output of the id
+	os << id.__req_gen_id << "-" << id.__req_id;
+	return os;
 }
 
 #endif // !H_REQUEST_ID

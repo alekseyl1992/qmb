@@ -1,30 +1,31 @@
 #include "generator.h"
 
+
 namespace qmodel
 {
-	/**********************Implementation**********************/
-
 	int generator::cur_id = 0;
 
 	//Constructors
-    generator::generator(int period):
-			qmbObject(++cur_id), new_req(nullptr), generating_period(period) , is_generated_flag(false) { 
+	generator::generator(int period, unsigned long long num_requests): 
+            object(++cur_id), new_req(NULL), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
 		cur_req_id = 0; 
 	}
 
-    generator::generator(const generator& gen)  {
+	generator::generator(const generator& gen)  {
 		new_req = gen.new_req;
 		generating_period = gen.generating_period;
+		number_of_requests_to_generate = gen.number_of_requests_to_generate;
 		is_generated_flag = gen.is_generated_flag;
 		cur_req_id = gen.cur_req_id;
 	}
 
 	//assignment
-    generator& generator::operator=(const generator& gen) {
+	generator& generator::operator=(const generator& gen) {
 		if (this == &gen)
 			return *this;
 		new_req = gen.new_req;
 		generating_period = gen.generating_period;
+		number_of_requests_to_generate = gen.number_of_requests_to_generate;
 		is_generated_flag = gen.is_generated_flag;
 		cur_req_id = gen.cur_req_id;
 		return *this;
@@ -41,10 +42,9 @@ namespace qmodel
 	}
 
 	//gets next request 
-    request generator::get_request() {
-        if (new_req == nullptr)
-			throw qmodel::exceptions::no_requests();
+	request generator::get_request() {
 		request res = *new_req;
+		delete new_req;
 		new_req = nullptr;
 		is_generated_flag = false;
 		return res;
