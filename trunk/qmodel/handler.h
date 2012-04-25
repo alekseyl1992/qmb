@@ -6,21 +6,25 @@
 #include <mutex>
 
 #include "request.h"
-#include "qmbObject.h"
+#include "object.h"
 
 namespace qmodel
 {
-	class handler : public qmbObject
+    class handler : public object
 	{
+		std::mutex handler_mutex;
 	public:
 		handler(int _handlePeriod = 0);
 		handler(const handler& h);
 		handler& operator=(const handler& h);
 
-		~handler() { delete cur_req; }
+		~handler() { }
 
 		//Check the busy flag of the handler
-		bool is_free() const { return freedom_flag; }
+		bool is_free() { 
+			//std::lock_guard<std::mutex> lk(handler_mutex);
+			return freedom_flag; 
+		}
 		//Send request to the handler
 		void handle(request req);
 
@@ -28,6 +32,9 @@ namespace qmodel
 		int get_handling_period() const { return handling_period; }
 		//sets generating period
 		void set_handling_period(int period) { handling_period = period; }
+
+
+		virtual void clean() { }
 
 	private:
 		

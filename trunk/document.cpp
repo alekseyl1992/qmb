@@ -142,6 +142,11 @@ void Document::setActiveTab(Document::Tabs Tab)
     ui->tabWidget->setCurrentIndex(Tab);
 }
 
+void Document::startSimulation()
+{
+    Storage->getModel()->simulation_start();
+}
+
 void Document::logChanged()
 {
     //лучше переделать замену текста, на добавление

@@ -2,16 +2,14 @@
 
 namespace qmodel
 {
-	/**********************Implementation**********************/
-
 	int handler::cur_id = 0;
 
 	//Constructor
-    handler::handler(int _handlePeriod):
-		qmbObject(++cur_id), cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true) 
+	handler::handler(int _handlePeriod): 
+        object(++cur_id), cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true)
 	{ }
 
-    handler::handler(const handler& h) :
+	handler::handler(const handler& h) : 
 		cur_req(h.cur_req), handling_period(h.handling_period), freedom_flag(h.freedom_flag) 
 	{ }
 
@@ -27,6 +25,7 @@ namespace qmodel
 
 	//Send request to handler
     void handler::handle(request req) {
+		std::lock_guard<std::mutex> lk(handler_mutex);
 		freedom_flag = false;
 		cur_req = new request(req);
         sLog << "---Request[" << req.get_id() << "] was put to the handler " << get_id() << endl;
@@ -38,6 +37,7 @@ namespace qmodel
     void handler::finish_handling() {
         sLog << "----Request[" << cur_req->get_id() << "] finished handling in handler " << get_id() << endl;
 		freedom_flag = true;
+		delete cur_req;
 	}
 
 } //end namespace qmodel

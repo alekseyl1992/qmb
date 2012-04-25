@@ -18,16 +18,17 @@ SOURCES += main.cpp\
     arrow.cpp \
     modelitem.cpp \
     elementpropwindow.cpp \
-    qmodel/request_id.cpp \
-    qmodel/request.cpp \
-    qmodel/queue.cpp \
-    qmodel/qmbObject.cpp \
+    itemshadow.cpp \
     qmodel/model.cpp \
     qmodel/link.cpp \
-    qmodel/handler.cpp \
-    qmodel/generator.cpp \
     qmodel/exceptions.cpp \
-    itemshadow.cpp
+    qmodel/object.cpp \
+    qmodel/queue.cpp \
+    qmodel/generator.cpp \
+    qmodel/handler.cpp \
+    qmodel/request_id.cpp \
+    qmodel/request.cpp \
+    qmodel/object.cpp
 
 HEADERS  += mainwindow.h \
     document.h \
@@ -42,14 +43,15 @@ HEADERS  += mainwindow.h \
     qmodel/modelstorage.h \
     qmodel/request.h \
     qmodel/queue.h \
-    qmodel/qmbObject.h \
+    qmodel/object.h \
     qmodel/model.h \
     qmodel/handler.h \
     qmodel/generator.h \
     qmodel/link.h \
     qmodel/request_id.h \
     qmodel/exceptions.h \
-    itemshadow.h
+    itemshadow.h \
+    qmodel/object.h
 
 FORMS    += mainwindow.ui \
     document.ui \

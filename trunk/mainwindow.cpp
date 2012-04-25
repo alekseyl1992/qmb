@@ -82,8 +82,8 @@ void MainWindow::on_openModel_triggered()
     //TODO: подгрузка модели
 
     //DEPRECTED
-    /*qmodel::model<> *newModel = qmodel::converter::LoadQModel(FileName);
-    qmodel::qalgorithm::simulation_start(*newModel);*/
+    /*qmb::model<> *newModel = qmb::converter::LoadQModel(FileName);
+    qmb::qalgorithm::simulation_start(*newModel);*/
 }
 
 void MainWindow::on_saveModel_triggered()
@@ -112,28 +112,33 @@ void MainWindow::on_startSimulation_triggered()
     sLog << "Simulation started\n" << endl;
 
     //return;
-    qmodel::generator gen(1000);
-    //qmodel::generator gen2(5000);
+    /*qmodel::generator gen(500, 5);
+    qmodel::generator gen2(700, 5);
     qmodel::queue q;
-    qmodel::handler h(3000);
-    //qmodel::handler h2(500);
+    qmodel::queue q2;
+    qmodel::handler h(600);
+    qmodel::handler h2(800);
 
     qmodel::model newModel;
     newModel.generators.push_back(gen);
-    //newModel.generators.push_back(gen2);
+    newModel.generators.push_back(gen2);
     newModel.queues.push_back(q);
     newModel.handlers.push_back(h);
-    //newModel.handlers.push_back(h2);
+    newModel.handlers.push_back(h2);
 
     newModel.link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&gen, &q));
     //newModel.link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&gen2, &q));
 
     newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h));
     //newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h2));
+    //newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h2));
 
     newModel.simulation_start();
-}
+    //newModel.simulation_stop();
 
+   */
+    Doc->startSimulation();
+}
 void MainWindow::on_stopSimulation_triggered()
 {
 
