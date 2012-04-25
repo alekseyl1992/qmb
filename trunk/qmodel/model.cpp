@@ -4,23 +4,46 @@ namespace qmodel
 {
     int model::cur_id = 0;
 
+	bool model::is_all_generated() {
+		bool all_completed = true;
+		std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
+			if (!link.lhs->is_finished())
+			{
+				all_completed = false;
+			}
+		});
+		return all_completed;
+	}
+
+	bool model::is_queues_clear() {
+		bool all_completed = true;
+		std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
+			if (link.lhs->get_size() != 0)
+			{
+				all_completed = false;
+			}
+		});
+		return all_completed;
+	}
+
+	bool model::is_simulating() {
+		return !(is_all_generated() && is_queues_clear());
+	}
+
 	void model::generator_queue_link_th() {
 		std::for_each(link_generators_queues.begin(), link_generators_queues.end(), 
 			[&](link<generator*, queue*>& link) 
 		{
-			std::thread th([&link, this]()
+			std::thread([&link, this]()
 			{
 				for(int i = 1; i <= link.lhs->get_num_requests() && is_simulating(); i++)
 				{
+					if (!simulate_flag) //if the user switched simulating off
+						break;
 					link.lhs->generate_new_request();
 					link.rhs->add(link.lhs->get_request());
-
-					if (!simulate_flag)
-						break;
 				}
-			});
-			//threads.push_back(&th);
-			th.detach();
+			}).detach();
 		});
 	}
 
@@ -28,35 +51,31 @@ namespace qmodel
 		std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), 
 				[&](link<queue*, handler*>& link) 
 		{
-			std::thread th([&link, this]()
+			std::thread([&link, this]()
 			{
 				for(; is_simulating(); )
 				{
-					if (!simulate_flag)
+					if (!simulate_flag) //if the user switched simulating off
 						break;
 					std::unique_lock<std::mutex> lk(model_mutex);
 					if (link.lhs->has_request() && link.rhs->is_free())
 					{
-						//lk.unlock();
 						link.rhs->handle(link.lhs->get_first());
 					}
-
-					
 				}
-			});
-			//threads.push_back(&th);
-			th.detach();
+			}).detach();
 		});
 	}
 
 	void model::simulation_start() {
+		//starts simulating
 		simulate_flag = true;
 		generator_queue_link_th();
 		handler_queue_link_th();
 	}
 
 	void model::simulation_stop() {
-		//останавливает выполнение
+		//stops simulating
 		simulate_flag = false;
 	}
 
