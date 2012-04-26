@@ -174,7 +174,11 @@ void Document::closeEvent(QCloseEvent *event)
 
 void Document::onSimulationFinished()
 {
-    int id = QMessageBox::question(this, windowTitle(), "Симуляция завершена успешно!\nПоказать статистику?");
+    int id = QMessageBox::question(
+                this, windowTitle(),
+                "Симуляция завершена успешно!\nПоказать статистику?",
+                QMessageBox::Yes, QMessageBox::No);
+
     if(id == QMessageBox::Yes)
         QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
 }
@@ -183,9 +187,6 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
 {
     //смена текущего инструмента
     ItemType itemType = (ItemType)index.data(ItemTypeRole).toInt();
-    if(itemType != ItemType::InvalidItem)
-    {
-        Scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
-        Scene->setItemType(itemType);
-    }
+    Scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
+    Scene->setItemType(itemType);
 }

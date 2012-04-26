@@ -60,3 +60,6 @@ FORMS    += mainwindow.ui \
 OTHER_FILES += \
     TODO.txt \
     DeprecatedCode.cpp
+
+RESOURCES += \
+    resources.qrc
