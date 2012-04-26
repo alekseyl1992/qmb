@@ -91,6 +91,8 @@ public:
     const QList<Arrow *>& arrows()
     { return myArrows;}
 
+    QString typeAsString();
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);

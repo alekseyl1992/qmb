@@ -208,7 +208,7 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     //ресайз сцены при добавлении элемента
     resizeToPoint(event->scenePos());
 
-    ModelItem *item = new ModelItem(myItemType, items().count(), myItemMenu);
+    ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType), myItemMenu);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
     addItem(item);
@@ -249,3 +249,44 @@ void ModelScene::resizeToPoint(QPointF pos)
         setSceneRect(rect);
     }
 }
+
+int ModelScene::getFreeId(ItemType itemType)
+{
+    //формируем список занятых id
+    QSet<int> ids;
+    int maxId = 1;
+    int minId = 0;
+    foreach(QGraphicsItem *it, items())
+    {
+        ModelItem *modelItem = qgraphicsitem_cast<ModelItem *>(it);
+        if(modelItem != nullptr)
+        {
+            if(modelItem->itemType() == itemType)
+            {
+                ids << modelItem->id();
+                if(modelItem->id() > maxId)
+                    maxId = modelItem->id();
+                if(modelItem->id() < minId || minId == 0)
+                    minId = modelItem->id();
+            }
+        }
+    }
+
+    //ищем свободный
+    if(!ids.empty())
+    {
+        if(minId != 1) //если есть пропуск вначале
+            return 1;
+
+        //ищем разрыв в нумерации
+        for(auto it = ids.begin(); it != ids.end()-1; ++it)
+            if((*it+1) != *(it+1))
+                return (*it+1);
+
+        //не нашли, значит max
+        return maxId + 1;
+    }
+    else //пустая сцена
+        return 1;
+}
+

@@ -92,7 +92,7 @@ protected:
 
 private:
     qreal myScale; //текущий масштаб сцены
-    ItemType myItemType;
+    ItemType myItemType; //TODO ?
     QMenu *myItemMenu;
     Mode myMode;
     bool leftButtonDown;
@@ -105,6 +105,7 @@ private:
 
 
     void resizeToPoint(QPointF pos);
+    int getFreeId(ItemType itemType); //находит ближайщий пустой id
 };
 
 #endif // MODELSCENE_H

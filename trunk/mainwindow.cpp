@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //TODO опционально оставить весь текст на английском, затем перевети лингвистом
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("CP1251"));
     ui->setupUi(this);
 

@@ -101,7 +101,6 @@ ModelItem::~ModelItem()
 
 void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    // fill part of polygon
     //устанавливаем градиентную заливку
     QLinearGradient linearGrad(QPointF(0, 0),
                                QPointF(0, boundingRect().height()));
@@ -123,7 +122,11 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawPolygon(polygon().intersected(rect), fillRule());
     }
 
-    //draw polygon outline
+    painter->drawText(polygon().boundingRect(),
+                      typeAsString() + QString(" %0").arg(myId),
+                      QTextOption(Qt::AlignCenter));
+
+    //рамочка
     painter->setPen(pen());
     painter->setBrush(Qt::NoBrush);
     painter->drawPolygon(polygon(), fillRule());
@@ -162,6 +165,24 @@ QPixmap ModelItem::image() const
     painter.drawPolyline(myPolygon);
 
     return pixmap;
+}
+
+QString ModelItem::typeAsString()
+{
+    switch(myItemType)
+    {
+    case ItemType::Generator:
+        return "Генератор";
+    case ItemType::Queue:
+        return "Очередь";
+    case ItemType::Handler:
+        return "Обработчик";
+    case ItemType::Terminator:
+        return "Терминатор";
+
+    default:
+        return "Нечто";
+    }
 }
 
 void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
