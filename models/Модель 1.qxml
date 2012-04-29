@@ -1,0 +1,28 @@
+<!DOCTYPE qmodel>
+<qmodel>
+ <req_generators>
+  <req_generator>
+   <time>1000</time>
+  </req_generator>
+ </req_generators>
+ <queues>
+  <queue/>
+ </queues>
+ <handlers>
+  <handler>
+   <time>3000</time>
+  </handler>
+ </handlers>
+ <links>
+  <link>
+   <type>link_generator_queue</type>
+   <req_generator_id>0</req_generator_id>
+   <queue_id>0</queue_id>
+  </link>
+  <link>
+   <type>link_queue_handler</type>
+   <queue_id>0</queue_id>
+   <handler_id>0</handler_id>
+  </link>
+ </links>
+</qmodel>
