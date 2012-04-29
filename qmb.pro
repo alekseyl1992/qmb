@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
+QT       += core gui xml opengl webkit
 QMAKE_CXXFLAGS += -std=c++0x
 
 TARGET = qmb
@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     qmodel/handler.cpp \
     qmodel/request_id.cpp \
     qmodel/request.cpp \
-    qmodel/object.cpp
+    qmodel/object.cpp \
+    homewidget.cpp
 
 HEADERS  += mainwindow.h \
     document.h \
@@ -51,11 +52,14 @@ HEADERS  += mainwindow.h \
     qmodel/request_id.h \
     qmodel/exceptions.h \
     itemshadow.h \
-    qmodel/object.h
+    ifillablemodel.h \
+    lsfss.h \
+    homewidget.h
 
 FORMS    += mainwindow.ui \
     document.ui \
-    elementpropwindow.ui
+    elementpropwindow.ui \
+    homewidget.ui
 
 OTHER_FILES += \
     TODO.txt \

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HomeWidget</class>
+ <widget class="QDialog" name="HomeWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>568</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" rowspan="3" colspan="2">
+    <widget class="QWebView" name="webView">
+     <property name="url">
+      <url>
+       <string>qrc:/pages/resources/homepage.html</string>
+      </url>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCommandLinkButton" name="openModelButton">
+     <property name="text">
+      <string>Открыть модель</string>
+     </property>
+     <property name="description">
+      <string>Выбрать *.qxml файл модели</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QCommandLinkButton" name="createModelButton">
+     <property name="text">
+      <string>Создать модель</string>
+     </property>
+     <property name="description">
+      <string>Создать новый *.qxml файл</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

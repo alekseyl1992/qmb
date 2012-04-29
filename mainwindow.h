@@ -4,6 +4,7 @@
 #include "document.h"
 #include <QMainWindow>
 #include <QMdiSubWindow>
+#include <functional>
 
 namespace Ui {
 class MainWindow;
@@ -16,8 +17,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    
-private slots:
+public slots:
     void on_createModel_triggered();
 
     void on_openModel_triggered();
@@ -45,6 +45,9 @@ private:
     Document *Doc;
 
     static const int maxOpenedModels = 128;
+
+    void createMenuButton();
+    void createHomeWidget();
 };
 
 #endif // MAINWINDOW_H

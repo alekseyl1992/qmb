@@ -33,20 +33,28 @@ public:
     void setActiveTab(Tabs Tab);
 
     void startSimulation();
+
+    void stopSimulation();
 public slots:
     void logChanged();
     void on_logButton_toggled(bool checked);
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void onSimulationFinished();
 
 private slots:
     void on_toolsView_pressed(const QModelIndex &index);
+
+    void on_startButton_clicked();
+
+    void on_stopButton_clicked();
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
     qmodel::ModelStorage *Storage;
+    bool bSimulating;
 };
 
 #endif // DOCUMENT_H

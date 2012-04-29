@@ -3,6 +3,7 @@
 #include "qmodel/modelstorage.h"
 #include "simulationlog.h"
 #include "elementpropwindow.h"
+#include "homewidget.h"
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMessageBox>
@@ -13,11 +14,16 @@
 #include <QGraphicsView>
 #include <QFileDialog>
 #include <QDataStream>
+#include <QToolButton>
+#include <QFont>
+#include <QMenu>
+#include <QTimer>
 
 #include "qmodel\generator.h"
 #include "qmodel\queue.h"
 #include "qmodel\handler.h"
 #include "qmodel\model.h"
+#include "lsfss.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mdiArea->setTabsClosable(true);
     ui->mdiArea->setTabsMovable(true);
 
-    //будет вынесено в отдельную функцию - создание проекта
-    on_createModel_triggered();
+    createMenuButton();
+    createHomeWidget();
 }
 
 MainWindow::~MainWindow()
@@ -59,12 +65,27 @@ void MainWindow::on_createModel_triggered()
     if(modelId != -1)
     {
         QString Name = QString("Модель %0").arg(modelId);
-        Document *newDoc = new Document(this, ui->elementMenu, Name);
+        //TODO вернуть меню
+        Document *newDoc = new Document(this, new QMenu(this), Name);
         newDoc->scene()->setMode(ModelScene::Mode::InsertItem);
 
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
         subWindow->showMaximized();
         ui->mdiArea->setActiveSubWindow(subWindow);
+
+        //добавляем кнопку старта симуляции в заголовку вкладки
+        /*QTabBar *tabBar = subWindow->findChild<QTabBar *>();
+        //QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
+        QToolButton *startButton = new QToolButton(tabBar);
+        startButton->setIcon(QIcon(":/icons/start"));
+        startButton->setGeometry(0, 0, 20, 20);
+        //startButton->setText("Старт");
+        //startButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        QFont font = tabBar->font();
+        font.setBold(true);
+        //tabBar->setFont(font);
+        startButton->setAutoRaise(true);
+        tabBar->setTabButton(modelId-1, QTabBar::LeftSide, startButton);*/
 
         Doc = newDoc;
     }
@@ -181,6 +202,90 @@ void MainWindow::on_elementProperties_triggered()
 
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
 {
-    if(arg1)
-        Doc = qobject_cast<Document *>(arg1->widget());
+    if(!arg1 && ui->mdiArea->subWindowList().empty())
+        createHomeWidget();
+}
+
+void MainWindow::createHomeWidget()
+{
+    HomeWidget *homeWidget = new HomeWidget(this);
+    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(homeWidget);
+    subWindow->setWindowTitle("Добро пожаловать");
+    subWindow->showMaximized();
+
+    connect(homeWidget, SIGNAL(createModel()), this, SLOT(on_createModel_triggered()));
+    connect(homeWidget, SIGNAL(openModel()), this, SLOT(on_openModel_triggered()));
+}
+
+void MainWindow::createMenuButton()
+{
+    //добавляем меню перед списком табов
+    QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
+    QToolButton *menuButton = new QToolButton(ui->mdiArea);
+    menuButton->setGeometry(1, 1, 48, 26);
+    menuButton->setText("QMB");
+    menuButton->setCheckable(true);
+    menuButton->setChecked(false);
+    QFont font = menuButton->font();
+    font.setBold(true);
+    menuButton->setFont(font);
+    QMenu *mainMenu = new QMenu(this);
+    mainMenu->addAction("Создать модель", this, SLOT(on_createModel_triggered()));
+    mainMenu->addAction("Открыть модель", this, SLOT(on_openModel_triggered()));
+    mainMenu->addSeparator();
+    mainMenu->addAction("О программе", this, SLOT(on_about_triggered()));
+    mainMenu->addSeparator();
+    mainMenu->addAction("Выход", this, SLOT(close()));
+
+    //отжимаем кнопку меню через dt -> 0, чтобы меню не лоткрылось при повторном нажатии на кнопку
+    ::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
+    {
+         QTimer::singleShot(100, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
+    });
+
+    std::function<void()> onClick = [mainMenu, menuButton]
+    {
+        if(menuButton->isChecked())
+        {
+            mainMenu->exec(menuButton->mapToGlobal(QPoint(0, 26)));
+        }
+    };
+    ::connect(menuButton, SIGNAL(clicked()), onClick);
+
+    tabBar->setStyleSheet(R"(
+        QTabBar::tab
+        {
+            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                      stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+            border: 2px solid #C4C4C3;
+            border-bottom-color: #C2C7CB;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            min-width: 8ex;
+            padding: 2px;
+        }
+        QTabBar::tab:selected, QTabBar::tab:hover
+        {
+            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                        stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                        stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+        }
+
+        QTabBar::tab:selected
+        {
+            border-color: #9B9B9B;
+            border-bottom-color: #C2C7CB; /* same as pane color */
+        }
+
+        QTabBar::tab:!selected
+        {
+            margin-top: 2px;
+        }
+
+        QTabBar::tab:first, QTabBar::tab:only-one
+        {
+            margin-left: 50;
+        }
+    )");
 }
