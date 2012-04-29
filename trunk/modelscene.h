@@ -43,6 +43,7 @@
 #include <QGraphicsScene>
 #include <QWheelEvent>
 #include "modelitem.h"
+#include "ifillablemodel.h"
 #include "common.h"
 
 QT_BEGIN_NAMESPACE
@@ -55,7 +56,7 @@ class QGraphicsTextItem;
 class QColor;
 QT_END_NAMESPACE
 
-class ModelScene : public QGraphicsScene
+class ModelScene : public QGraphicsScene, public IFillableModel
 {
     Q_OBJECT
 
@@ -67,6 +68,12 @@ public:
     {
         return myScale;
     }
+
+    void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint())
+    {
+
+    }
+    void addLink(int idFrom, int idTo){}
 
 public slots:
     void setMode(Mode mode);

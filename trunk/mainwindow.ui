@@ -42,55 +42,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1084</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Модель</string>
-    </property>
-    <addaction name="createModel"/>
-    <addaction name="openModel"/>
-    <addaction name="saveModel"/>
-    <addaction name="separator"/>
-    <addaction name="closeModel"/>
-   </widget>
-   <widget class="QMenu" name="menu_2">
-    <property name="title">
-     <string>Симуляция</string>
-    </property>
-    <addaction name="startSimulation"/>
-    <addaction name="stopSimulation"/>
-   </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>?</string>
-    </property>
-    <addaction name="about"/>
-    <addaction name="projectPage"/>
-   </widget>
-   <widget class="QMenu" name="elementMenu">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>Элемент</string>
-    </property>
-    <addaction name="elementProperties"/>
-    <addaction name="separator"/>
-    <addaction name="deleteElement"/>
-   </widget>
-   <addaction name="menu"/>
-   <addaction name="elementMenu"/>
-   <addaction name="menu_2"/>
-   <addaction name="menu_3"/>
-  </widget>
   <action name="createModel">
    <property name="text">
     <string>Создать</string>
@@ -124,6 +75,9 @@
    </property>
   </action>
   <action name="stopSimulation">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Остановить</string>
    </property>
@@ -147,101 +101,9 @@
     <string>Страничка проекта</string>
    </property>
   </action>
-  <action name="arrowTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>F:/Программирование/Графика/glyphs/menu.ico</normaloff>F:/Программирование/Графика/glyphs/menu.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Указатель</string>
-   </property>
-   <property name="toolTip">
-    <string>Указатель</string>
-   </property>
-  </action>
-  <action name="generatorTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Генератор</string>
-   </property>
-   <property name="toolTip">
-    <string>Генератор</string>
-   </property>
-  </action>
-  <action name="queueTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Очередь</string>
-   </property>
-   <property name="toolTip">
-    <string>Очередь</string>
-   </property>
-  </action>
-  <action name="handlerTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Обработчик</string>
-   </property>
-   <property name="toolTip">
-    <string>Обслуживающий аппарат</string>
-   </property>
-  </action>
-  <action name="toolsCaption">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Элементы</string>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-     <underline>false</underline>
-     <kerning>true</kerning>
-    </font>
-   </property>
-  </action>
-  <action name="simCaption">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Симуляция</string>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-  </action>
   <action name="closeModel">
    <property name="text">
     <string>Закрыть</string>
-   </property>
-  </action>
-  <action name="terminatorTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Терминатор</string>
-   </property>
-   <property name="toolTip">
-    <string>Терминатор</string>
    </property>
   </action>
   <action name="elementProperties">

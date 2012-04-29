@@ -10,13 +10,19 @@
 #include <QLabel>
 #include <QStandardItemModel>
 #include <QMessageBox>
+#include <QProgressBar>
+#include <QtOpenGL/QGLWidget>
 
 Document::Document(QWidget *parent, QMenu *menu, QString name) :
-    QDialog(parent),
-    ui(new Ui::Document)
+    QDialog(parent), bSimulating(false), ui(new Ui::Document)
 {
     ui->setupUi(this);
     setWindowTitle(name);
+    ui->progressBar->hide();
+    ui->stopButton->hide();
+
+    //ахалай-махалай, OpenGL accelearation подключай
+    ui->graphicsView->setViewport(new QGLWidget(this));
 
     new XmlHighlighter(ui->textEdit);
     Scene = new ModelScene(menu, ui->graphicsView);
@@ -60,7 +66,7 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     head->setLayout(layout);
     ui->logDock->setTitleBarWidget(head);*/
 
-    //добавляем инструменты
+     //добавляем инструменты
     QStandardItemModel *model = new QStandardItemModel(ui->toolsView);
     QStandardItem *parentItem = model->invisibleRootItem();
 
@@ -145,9 +151,30 @@ void Document::setActiveTab(Document::Tabs Tab)
 void Document::startSimulation()
 {
     showLog();
-    qmodel::model *model = Storage->getModel();
+    ui->progressBar->show();
+    ui->startButton->hide();
+    ui->stopButton->show();
+
+    qmodel::model *model = Storage->getModel(true);
     connect(model, SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
     model->simulation_start();
+    bSimulating = true;
+}
+
+void Document::stopSimulation()
+{
+    int id = QMessageBox::question(
+                this, windowTitle(),
+                "Вы действительно хотите прервать симуляцию?",
+                QMessageBox::Yes, QMessageBox::No);
+
+    if(id == QMessageBox::Yes)
+    {
+        Storage->getModel()->simulation_stop();
+        ui->progressBar->hide();
+        ui->startButton->show();
+        ui->stopButton->hide();
+    }
 }
 
 void Document::logChanged()
@@ -172,12 +199,23 @@ void Document::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
-void Document::onSimulationFinished()
+void Document::keyPressEvent(QKeyEvent *event)
 {
+   if(event->key() != Qt::Key_Escape)
+       QDialog::keyPressEvent(event);
+}
+
+void Document::onSimulationFinished()
+{    
+    ui->progressBar->hide();
+    ui->startButton->show();
+    ui->stopButton->hide();
+
     int id = QMessageBox::question(
                 this, windowTitle(),
                 "Симуляция завершена успешно!\nПоказать статистику?",
                 QMessageBox::Yes, QMessageBox::No);
+
 
     if(id == QMessageBox::Yes)
         QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
@@ -189,4 +227,14 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
     ItemType itemType = (ItemType)index.data(ItemTypeRole).toInt();
     Scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
     Scene->setItemType(itemType);
+}
+
+void Document::on_startButton_clicked()
+{
+    startSimulation();
+}
+
+void Document::on_stopButton_clicked()
+{
+    stopSimulation();
 }

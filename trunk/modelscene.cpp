@@ -86,7 +86,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
                                     mouseEvent->scenePos()));
         line->setPen(QPen(myLineColor, 2));
-        addItem(line);
+        QGraphicsScene::addItem(line);
     }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
@@ -141,7 +141,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             startItem->addArrow(arrow);
             endItem->addArrow(arrow);
             arrow->setZValue(-1000.0);
-            addItem(arrow);
+            QGraphicsScene::addItem(arrow);
             arrow->scaleShadow(myScale);
             arrow->updatePosition();
         }
@@ -211,7 +211,7 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType), myItemMenu);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
-    addItem(item);
+    QGraphicsScene::addItem(item);
     item->setPos(event->scenePos());
     emit itemInserted(myItemType, item->id(), item->pos().toPoint());
     myMode = Mode::MoveItem;
