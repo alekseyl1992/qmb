@@ -131,8 +131,8 @@ void MainWindow::on_startSimulation_triggered()
     gen->start();
     qDebug() << "connected" << endl;*/
     Doc->showLog();
-    sLog.reset();
-    sLog << "Simulation started\n" << endl;
+    sLog.clear();
+    sLog.writeLine("Simulation started");
 
     //return;
     /*qmodel::generator gen(500, 5);

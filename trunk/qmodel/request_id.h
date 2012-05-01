@@ -2,12 +2,12 @@
 #define H_REQUEST_ID
 
 #include <iostream>
-
+#include <sstream>
 #include "../simulationlog.h"
+typedef unsigned long long IntType;
 
 namespace qmodel
 {
-	template<typename IntType = unsigned long long>
 	struct request_id
 	{
 		request_id(): __req_gen_id(0), __req_id(0) { }
@@ -26,11 +26,6 @@ namespace qmodel
 
 } //end namespace qmodel
 
-template<typename IntType>
-SimulationLog& operator<< (SimulationLog& os, qmodel::request_id<IntType> id) {
-	//output of the id
-	os << id.__req_gen_id << "-" << id.__req_id;
-	return os;
-}
+std::basic_ostream<char>& operator<< (std::basic_ostream<char>& os, const qmodel::request_id &id);
 
 #endif // !H_REQUEST_ID

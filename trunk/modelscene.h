@@ -82,7 +82,7 @@ public slots:
 signals:
     //сигналы для оперативного изменения XML-дерева
     void itemInserted(ItemType type, int id, QPoint pos);
-    void itemMoved(int id, QPoint pos);
+    void itemMoved(ItemType type, int id, QPoint pos);
     void itemRemoved(int id);
 
 protected:

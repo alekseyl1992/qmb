@@ -146,7 +146,15 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             arrow->updatePosition();
         }
 
-    }myMode = MoveItem;
+    }
+    else if(myMode == MoveItem)
+    {
+        ModelItem *item = qgraphicsitem_cast<ModelItem *>(this->itemAt(mouseEvent->pos()));
+        if(item != nullptr)
+            emit itemMoved(item->itemType(), item->id(), item->pos().toPoint());
+    }
+
+    myMode = MoveItem;
     line = 0;
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }

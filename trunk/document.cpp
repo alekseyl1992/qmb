@@ -3,6 +3,7 @@
 #include "xmlhighlighter.h"
 #include "simulationlog.h"
 #include "common.h"
+#include "lsfss.h"
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>
@@ -32,10 +33,10 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     //связываяем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
             Storage, SLOT(onItemInserted(ItemType, int, QPoint)));
-    connect(Scene, SIGNAL(itemMoved(int, QPoint)),
-            Storage, SLOT(onItemMoved(int, QPoint)));
-    connect(Scene, SIGNAL(itemRemoved(int)),
-            Storage, SLOT(onItemRemoved(int)));
+    connect(Scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
+            Storage, SLOT(onItemMoved(ItemType, int, QPoint)));
+    connect(Scene, SIGNAL(itemRemoved(ItemType, int)),
+            Storage, SLOT(onItemRemoved(ItemType, int)));
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -45,7 +46,12 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
 //    box->setGraphicsEffect(effect);
 
     //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
-    connect(&sLog, SIGNAL(changed()), this, SLOT(logChanged()));
+    connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
+    ::connect(&sLog, SIGNAL(cleared()), [this]
+    {
+        ui->simulationLog->clear();
+    });
+
     //убираем заголовок палитры
     QWidget *nullHeader = new QWidget(this);
     ui->toolsDock->setTitleBarWidget(nullHeader);
@@ -177,10 +183,10 @@ void Document::stopSimulation()
     }
 }
 
-void Document::logChanged()
+void Document::logChanged(QString line)
 {
     //лучше переделать замену текста, на добавление
-    ui->simulationLog->setText(SimulationLog::Log().text());
+    ui->simulationLog->addItem(line);
     ui->simulationLog->verticalScrollBar()->setValue(
                 ui->simulationLog->verticalScrollBar()->maximum());
 }

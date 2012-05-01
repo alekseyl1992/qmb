@@ -3,6 +3,7 @@
 
 #include <string>
 #include <QObject>
+#include <sstream>
 
 namespace qmodel
 {

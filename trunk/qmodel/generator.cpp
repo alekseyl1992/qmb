@@ -38,7 +38,12 @@ namespace qmodel
 		new_req = new request(id, ++cur_req_id);
 		is_generated_flag = true;
 		
-        sLog << "Request[" << new_req->get_id() << "] generated" << endl;
+        //теперь выглядит громоздко,
+        //но было необходимо сделать запись в лог через 1 вызов ф-ции,
+        //а не через последовательность вызовов
+        std::stringstream ss;
+        ss << "Request[" << new_req->get_id() << "] generated";
+        sLog.writeLine(ss.str());
 	}
 
 	//gets next request 

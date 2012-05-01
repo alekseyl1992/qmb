@@ -19,10 +19,10 @@ namespace qmodel
 		~request() { }
 
 		//gets the request id
-		request_id<> get_id() const { return id; }
+        request_id get_id() const { return id; }
 
 	private:
-		request_id<> id;
+        request_id id;
 	};
 
 } //end namespace qmodel
