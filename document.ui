@@ -518,7 +518,7 @@ QTreeView::item:!enabled {
       <property name="minimumSize">
        <size>
         <width>109</width>
-        <height>113</height>
+        <height>115</height>
        </size>
       </property>
       <property name="features">
@@ -533,11 +533,7 @@ QTreeView::item:!enabled {
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QTextEdit" name="simulationLog">
-          <property name="textInteractionFlags">
-           <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-          </property>
-         </widget>
+         <widget class="QListWidget" name="simulationLog"/>
         </item>
        </layout>
       </widget>

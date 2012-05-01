@@ -31,7 +31,10 @@ namespace qmodel
 	//adding request to the queue
 	void queue::add(request req) {
         std::lock_guard<std::mutex> lk(queue_mutex);
-        sLog << "-Request[" << req.get_id() << "] was put to the queue " << get_id() << endl;
+
+        std::stringstream ss;
+        ss << "-Request[" << req.get_id() << "] was put to the queue " << get_id();
+        sLog.writeLine(ss.str());
 		requests_in_queue.push_back(req);
 		if(requests_in_queue.size() == 0)
 			having_request_flag = false;

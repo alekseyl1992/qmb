@@ -36,7 +36,7 @@ public:
 
     void stopSimulation();
 public slots:
-    void logChanged();
+    void logChanged(QString line);
     void on_logButton_toggled(bool checked);
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);

@@ -1,17 +1,16 @@
 #ifndef SIMULATIONLOG_H
 #define SIMULATIONLOG_H
-#include <QTextStream>
+#include <QObject>
+#include <QString>
+#include <string>
 
 //singleton, связь между логикой и интерфейсом
-class SimulationLog : public QObject, public QTextStream
+class SimulationLog : public QObject
 {
     Q_OBJECT
 
 private:
-    QString str;
-
     SimulationLog()
-        : QTextStream(&str)
     {
 
     }
@@ -22,7 +21,7 @@ public:
         return log;
     }
 
-    SimulationLog& operator <<(QTextStream & (*fun)(QTextStream &))
+    /*SimulationLog& operator <<(QTextStream & (*fun)(QTextStream &))
     {
         (*fun)(*this);
         emit changed();
@@ -36,15 +35,22 @@ public:
 
         emit changed();
         return *this;
+    }*/
+
+    //thread-safe writing
+    void writeLine(std::string line)
+    {
+        emit changed(QString(line.c_str()));
     }
 
-    QString& text() const
+    void clear()
     {
-        return *this->string();
+        emit cleared();
     }
 
 signals:
-    void changed();
+    void changed(QString);
+    void cleared();
 };
 
 #define sLog SimulationLog::Log()
