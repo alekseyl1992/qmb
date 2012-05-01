@@ -6,7 +6,4 @@
         <file alias="start">resources/play.ico</file>
         <file alias="stop">resources/stopplay.ico</file>
     </qresource>
-    <qresource prefix="/pages">
-        <file>resources/homepage.html</file>
-    </qresource>
 </RCC>

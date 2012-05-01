@@ -30,8 +30,6 @@ public slots:
 
     void on_about_triggered();
 
-    void on_projectPage_triggered();
-
     void on_closeModel_triggered();
 
     void on_deleteElement_triggered();
@@ -39,6 +37,8 @@ public slots:
     void on_elementProperties_triggered();
 
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
+
+    void openModel(QString path);
 
 private:
     Ui::MainWindow *ui;

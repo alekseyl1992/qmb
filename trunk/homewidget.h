@@ -2,6 +2,7 @@
 #define HOMEWIDGET_H
 
 #include <QDialog>
+#include <QDebug>
 
 namespace Ui {
 class HomeWidget;
@@ -19,9 +20,16 @@ private slots:
     void on_createModelButton_clicked();
 
     void on_openModelButton_clicked();
+
+    void on_aboutButton_clicked();
+
+    void on_exitButton_clicked();
+
 signals:
     void createModel();
     void openModel();
+    void openModelByPath(QString path);
+    void aboutClick();
 
 private:
     Ui::HomeWidget *ui;
