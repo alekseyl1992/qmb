@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml opengl webkit
+QT       += core gui xml opengl
 QMAKE_CXXFLAGS += -std=c++0x
 
 TARGET = qmb

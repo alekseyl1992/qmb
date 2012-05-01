@@ -4,7 +4,6 @@
 #include "simulationlog.h"
 #include "elementpropwindow.h"
 #include "homewidget.h"
-#include <QDesktopServices>
 #include <QUrl>
 #include <QMessageBox>
 #include <QTextCodec>
@@ -99,13 +98,15 @@ void MainWindow::on_createModel_triggered()
 
 void MainWindow::on_openModel_triggered()
 {
-    QString FileName = QFileDialog::getOpenFileName(this, "Открыть",
+    QString fileName = QFileDialog::getOpenFileName(this, "Открыть",
                                                     "", "QMB XML Model (*.qxml)");
-    //TODO: подгрузка модели
+    openModel(fileName);
+}
 
-    //DEPRECTED
-    /*qmb::model<> *newModel = qmb::converter::LoadQModel(FileName);
-    qmb::qalgorithm::simulation_start(*newModel);*/
+void MainWindow::openModel(QString path)
+{
+    //TODO: подгрузка модели
+    QMessageBox::information(this, "Загрузка модели...", path);
 }
 
 void MainWindow::on_saveModel_triggered()
@@ -177,11 +178,6 @@ void MainWindow::on_about_triggered()
                              "\t\t\t\t2012 г.");
 }
 
-void MainWindow::on_projectPage_triggered()
-{
-     QDesktopServices::openUrl(QUrl("http://code.google.com/p/qmb/", QUrl::TolerantMode));
-}
-
 void MainWindow::on_deleteElement_triggered()
 {
     //удаляем выделенные элементы и ассоциированные стрелочки
@@ -215,6 +211,8 @@ void MainWindow::createHomeWidget()
 
     connect(homeWidget, SIGNAL(createModel()), this, SLOT(on_createModel_triggered()));
     connect(homeWidget, SIGNAL(openModel()), this, SLOT(on_openModel_triggered()));
+    connect(homeWidget, SIGNAL(openModelByPath(const QString &)), this, SLOT(openModel(const QString &)));
+    connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(on_about_triggered()));
 }
 
 void MainWindow::createMenuButton()
