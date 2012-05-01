@@ -1,64 +1,3 @@
-/* основные функции
-
-//      qmodel::model<> *LoadQModel(QString xmlFileName)
-// возвращает ссылку на объект типа qmodel::model<>.
-// в качестве параметра требует путь или имя файла
-// пример qmodel::model<> *newModel = qmodel::converter::LoadQModel(FileName);
-
-// void SaveQModel(qmodel::model<Type> *curModel, QString xmlFileName)
-// сохраняет данные о модели в xml файл
-// в качестве аргументов принимает указатель на модель, котораяч будет сохранена
-// в файл QString xmlFileName
-// пример SaveQModel(newModel,"d:\\new.qxml");
-
-// ATTENTION!!!!
-// функция сохранения реализована не полностью, не сохраняет связи между
-// хендлерами, генераторами и очередями. =)
-
-// функции AddItem и AddLink вспомогательные, используются в LoadQModel
-
-// если найдется возможность испольовать контейнер объектов разных классов
-// то можно будет весьма сильно сократить код!
-
-// на момент этой ревизии (16 вроде ) помимо измений в этой файле, можно
-// заметить изменения еще в файле mainWindow.cpp и qt.pro
-// в файле проекта добавлен ключ xml (см. qt.pro: строка 7)
-// в файле формы реализовано нажатие кнопки "открыть"
-// (см. mainwindow.cpp: строка 57,58)
-
-// так же , на всякий пожарный прилагаю листинг файла "example.qxml"
-*/
-/* example.qxml
-<!DOCTYPE qmodel>
-<qmodel>
- <req_generators>
-  <req_generator>
-   <time>1000</time>
-  </req_generator>
- </req_generators>
- <queues>
-  <queue/>
- </queues>
- <handlers>
-  <handler>
-   <time>3000</time>
-  </handler>
- </handlers>
- <links>
-  <link>
-   <type>link_generator_queue</type>
-   <req_generator_id>0</req_generator_id>
-   <queue_id>0</queue_id>
-  </link>
-  <link>
-   <type>link_queue_handler</type>
-   <queue_id>0</queue_id>
-   <handler_id>0</handler_id>
-  </link>
- </links>
-</qmodel>
-*/
-
 #ifndef MODELSTORAGE_H
 #define MODELSTORAGE_H
 
@@ -69,83 +8,38 @@
 #include <QDebug>
 #include <QtXml/QDomDocument>
 
-//TODO: разнести на cpp/h
 namespace qmodel
 {
+
+//константы символьные. выношу как и обещал
+const QString ItemNames[]={"Generator","Queue",
+                "Handler","Terminator"};
 
 class ModelStorage : public QObject //для connect
 {
     Q_OBJECT
 
 private:
-    model *myModel;
+    model* myModel;
+    QDomDocument* curDoc;
+// пока
+    QDomElement root, gens, queues, handlers, terms;
+
+    //функции для добавления линков и итемов в модель.
+    //убрал их в private
+    void AddItem(model *curModel, QString elemType, QString param);
+    void AddLink(model *curModel, std::vector<QString> params);
 
 public:
-    //TODO
-    ModelStorage(QString name)
-        : myModel(nullptr)
+    ModelStorage(QString name) : myModel(nullptr)
     {
+        curDoc = new QDomDocument("qmodel");
 
-    }
+        //формирование "подписи" xml файла (первая строка - тип xml)
+        root = curDoc->createElement(name);
+        curDoc->appendChild(root);
 
-    //добавляет генератор, очередь или хендлер в модель
-    void AddItem(model *curModel, QString elemType, QString param)
-    {
-        QMap<QString, ItemType> entries;
-        entries["req_generator"] = ItemType::Generator;
-        entries["queue"] = ItemType::Queue;
-        entries["handler"] = ItemType::Handler;
-        entries["terminator"] = ItemType::Terminator;
-
-        generator *newgen;
-        queue *newqueue;
-        handler *newhnd;
-
-        //TODO добавить Terminator
-        switch (entries[elemType])
-        {
-            case ItemType::Generator:
-                newgen = new generator(param.toInt());
-                curModel->generators.push_back(*newgen);
-                break;
-            case ItemType::Queue:
-                newqueue = new queue();
-                curModel->queues.push_back(*newqueue);
-                break;
-            case ItemType::Handler:
-                newhnd = new handler(param.toInt());
-                curModel->handlers.push_back(*newhnd);
-        }
-    }
-
-    //добавляет линк в модель
-    //в две функции, потому что для линка нужно больше параметров.
-    //сама связь идет по сути по ид.
-
-    void AddLink(model *curModel, std::vector<QString> params)
-    {
-        QMap<QString,int> entries;
-        //TODO сделать по аналогии с AddItem
-        entries["link_generator_queue"]=0;
-        entries["link_queue_handler"]=1;
-
-        link<generator*,queue*> *link_gen_que;
-        link<queue*,handler*> *link_que_hnd;
-
-        switch (entries[params[0]])
-        {
-            case 0:     link_gen_que = new link<generator*,queue*>
-                                                (&curModel->generators[params[1].toInt()],
-                                                &curModel->queues[params[2].toInt()]);
-                        curModel->link_generators_queues.push_back(*link_gen_que);
-                        break;
-            case 1:     link_que_hnd = new link<queue*,handler*>
-                                                (&curModel->queues[params[1].toInt()],
-                                                &curModel->handlers[params[2].toInt()]);
-                        curModel->link_queues_handlers.push_back(*link_que_hnd);
-            default:    break;
-        }
-
+        qDebug() << curDoc->toString() << endl;
     }
 
     //DEPRECATED
@@ -337,74 +231,23 @@ public:
     }
 
     //TODO form model here (instead of using LoadQModel)
-    model *getModel(bool create = false)
-    {
-        if(create) //создание модели
-        {
-            myModel = new model();
-            myModel->generators.push_back(qmodel::generator(500, 10));
-            myModel->generators.push_back(qmodel::generator(700, 5));
-            myModel->queues.push_back(qmodel::queue());
-            myModel->queues.push_back(qmodel::queue());
-            myModel->handlers.push_back(qmodel::handler(600));
-            myModel->handlers.push_back(qmodel::handler(800));
-
-            myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[0], &myModel->queues[0]));
-            //myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
-
-            myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[0]));
-            //myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[1]));
-        }
-
-        return myModel;
-    }
+    model *getModel(bool create = false);
 
     //преобразует XML в набор объектов на сцене
-    void XMLToScene(QString FileName, ModelScene *scene)
-    {
-
-    }
-
-    //обратно
-    //это реализация первой идеи с тупым полным сохранением
-    //DEPRECATED, не реализовывать
-    void SceneToXML(ModelScene *scene, QString FileName)
-    {
-        foreach(QGraphicsItem *it, scene->items())
-        {
-            ModelItem *element = qgraphicsitem_cast<ModelItem *>(it);
-            //нужно сохранять
-            //element->id()
-            //element->pos()
-            //связи:
-            //element->arrows()
-        }
-    }
+    void XMLToScene(QString FileName, ModelScene *scene);
 
     //получения поля name, item'а по его id для отображения на сцене
-    QString getItemName(int id)
-    {
-        return QString(); //stub
-    }
+    QString getItemName(int id); // ? не понял
 
     //TODO здесь будут метода для получения и записи полного списка параметров
     //просто пока ещё не продуман формат хранения этих самывх форматов
-public slots:
-    //TODO наполнить смыслом :D
-    void onItemInserted(ItemType type, int id, QPoint pos)
-    {
 
-    }
+public slots:  
 
-    void onItemMoved(int id, QPoint pos)
-    {
+    void onItemInserted(ItemType type, int id, QPoint pos);
+    void onItemMoved(ItemType type, int id, QPoint pos);
+    void onItemRemoved(ItemType type, int id);
 
-    }
-
-    void onItemRemoved(int id)
-    {
-
-    }
 }; //class
 
 } //namespace qmodel
