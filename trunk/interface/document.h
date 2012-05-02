@@ -33,7 +33,6 @@ public:
     void setActiveTab(Tabs Tab);
 
     void startSimulation();
-
     void stopSimulation();
 public slots:
     void logChanged(QString line);

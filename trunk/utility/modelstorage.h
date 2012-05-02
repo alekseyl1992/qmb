@@ -3,6 +3,7 @@
 
 #include "logic/model.h"
 #include "utility/common.h"
+#include "utility/ifillablemodel.h"
 
 #include <QDebug>
 #include <QtXml/QDomDocument>
@@ -239,6 +240,9 @@ public:
 
     //получения поля name, item'а по его id для отображения на сцене
     QString getItemName(int id); // ? не понял
+    bool saveModel(QString path);
+    bool loadModel(QString path);
+    void fillModel(IFillableModel *iModel);
 
     //TODO здесь будут метода для получения и записи полного списка параметров
     //просто пока ещё не продуман формат хранения этих самывх форматов

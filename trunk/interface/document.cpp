@@ -171,7 +171,8 @@ void Document::setActiveTab(Document::Tabs Tab)
 void Document::startSimulation()
 {
     ui->simulationLog->clear();
-    showLog();
+    showLog();    
+    ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
     ui->startButton->hide();
     ui->stopButton->show();
@@ -191,7 +192,9 @@ void Document::stopSimulation()
 
     if(id == QMessageBox::Yes)
     {
+        bSimulating = false;
         Storage->getModel()->simulation_stop();
+        ui->graphicsView->setEnabled(true);
         ui->progressBar->hide();
         ui->startButton->show();
         ui->stopButton->hide();
@@ -213,10 +216,24 @@ void Document::on_logButton_toggled(bool checked)
 
 void Document::closeEvent(QCloseEvent *event)
 {
+    if(bSimulating)
+    {
+        int id = QMessageBox::question(this, "Закрытие модели",
+                                       "Симуляция не завершена, вы действительно хотите закрыть модель?",
+                                       QMessageBox::Yes, QMessageBox::No);
+        if(id == QMessageBox::Yes)
+            stopSimulation();
+        else
+            return event->ignore();
+    }
+
     int id = QMessageBox::question(this, "Закрытие модели", "Сохранить модель перед закрытием?",
-                          "Да", "Нет", "Отмена");
-    //TODO
-    if(id == 2) //отмена
+                              QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+
+    //TODO сохранение модели
+    if(id == QMessageBox::Yes)
+        Storage->saveModel(QString());
+    else if(id == QMessageBox::Cancel)
         event->ignore();
 }
 
@@ -228,9 +245,11 @@ void Document::keyPressEvent(QKeyEvent *event)
 
 void Document::onSimulationFinished()
 {    
+    bSimulating = false;
     ui->progressBar->hide();
     ui->startButton->show();
     ui->stopButton->hide();
+    ui->graphicsView->setEnabled(true);
 
     int id = QMessageBox::question(
                 this, windowTitle(),

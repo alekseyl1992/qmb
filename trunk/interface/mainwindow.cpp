@@ -108,10 +108,18 @@ void MainWindow::openModel(QString path)
     QMessageBox::information(this, "Загрузка модели...", path);
 }
 
+void MainWindow::saveModel(QString path)
+{
+    //TODO: сохранение модели
+    QMessageBox::information(this, "Сохранение модели...", path);
+}
+
 void MainWindow::on_saveModel_triggered()
 {
     QString FileName =  QFileDialog::getSaveFileName(this, "Сохранить",
-                                                    "", "QMB XML Model (*.qxml)");
+                                                    "", "QMB XML Model (*.qm)");
+
+    saveModel(FileName);
 }
 
 void MainWindow::on_closeModel_triggered()
@@ -227,5 +235,6 @@ void MainWindow::createMenuButton()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     foreach(QMdiSubWindow *wnd, ui->mdiArea->subWindowList())
-        wnd->close();
+        if(!wnd->close())
+            return event->ignore();
 }
