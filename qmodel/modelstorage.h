@@ -12,8 +12,8 @@ namespace qmodel
 {
 
 //константы символьные. выношу как и обещал
-const QString ItemNames[]={"Generator","Queue",
-                "Handler","Terminator"};
+const QString ItemNames[] = {"Generator","Queue",
+                            "Handler","Terminator"};
 
 class ModelStorage : public QObject //для connect
 {
@@ -247,6 +247,8 @@ public slots:
     void onItemInserted(ItemType type, int id, QPoint pos);
     void onItemMoved(ItemType type, int id, QPoint pos);
     void onItemRemoved(ItemType type, int id);
+    void onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
 }; //class
 

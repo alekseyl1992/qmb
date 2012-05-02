@@ -57,6 +57,46 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myLineColor = Qt::black;
 }
 
+void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
+{
+    ModelItem *item = new ModelItem(itemType, id, myItemMenu);
+    item->setPos(pos);
+    item->scaleShadow(myScale);
+    item->setBrush(myItemColor);
+    QGraphicsScene::addItem(item);
+}
+
+void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idTo)
+{
+    ModelItem *startItem = nullptr;
+    ModelItem *endItem = nullptr;
+    //ищем item'ы по их id
+    foreach(QGraphicsItem *qItem, items())
+    {
+        ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
+        if(mItem != nullptr)
+            if(mItem->itemType() == fromType && mItem->id() == idFrom)
+                startItem = mItem;
+            else if(mItem->itemType() == toType && mItem->id() == idTo)
+                endItem = mItem;
+    }
+
+    if(startItem && endItem)
+    {
+        Arrow *arrow = new Arrow(startItem, endItem);
+        arrow->setColor(myLineColor);
+        startItem->addArrow(arrow);
+        endItem->addArrow(arrow);
+        arrow->setZValue(-1000.0);
+        QGraphicsScene::addItem(arrow);
+        arrow->scaleShadow(myScale);
+        arrow->updatePosition();
+    }
+    else
+        QMessageBox::critical((QWidget *)parent(), "Ошибка",
+                              QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4").arg((int)fromType, idFrom, (int)toType, idTo));
+}
+
 void ModelScene::setMode(Mode mode)
 {
     myMode = mode;
@@ -144,12 +184,15 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             QGraphicsScene::addItem(arrow);
             arrow->scaleShadow(myScale);
             arrow->updatePosition();
+
+            emit linkInserted(startItem->itemType(), startItem->id(),
+                           endItem->itemType(), endItem->id());
         }
 
     }
     else if(myMode == MoveItem)
     {
-        ModelItem *item = qgraphicsitem_cast<ModelItem *>(this->itemAt(mouseEvent->pos()));
+        ModelItem *item = qgraphicsitem_cast<ModelItem *>(this->itemAt(mouseEvent->scenePos()));
         if(item != nullptr)
             emit itemMoved(item->itemType(), item->id(), item->pos().toPoint());
     }
@@ -298,3 +341,16 @@ int ModelScene::getFreeId(ItemType itemType)
         return 1;
 }
 
+void ModelScene::removeSelectedItems()
+{
+    foreach(QGraphicsItem *item, selectedItems())
+    {
+        if(item->type() == ModelItem::Type)
+        {
+            ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
+            mItem->removeArrows();
+            emit itemRemoved(mItem->itemType(), mItem->id());
+        }
+        removeItem(item);
+    }
+}
