@@ -69,12 +69,10 @@ public:
         return myScale;
     }
 
-    void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint())
-    {
+    void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint());
+    void addLink(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
-    }
-    void addLink(int idFrom, int idTo){}
-
+    void removeSelectedItems();
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);
@@ -83,7 +81,9 @@ signals:
     //сигналы для оперативного изменения XML-дерева
     void itemInserted(ItemType type, int id, QPoint pos);
     void itemMoved(ItemType type, int id, QPoint pos);
-    void itemRemoved(int id);
+    void itemRemoved(ItemType type, int id);
+    void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);

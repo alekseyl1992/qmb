@@ -23,7 +23,7 @@ Document::Document(QWidget *parent, QString name) :
     ui->progressBar->hide();
     ui->stopButton->hide();
 
-    //ахалай-махалай, OpenGL accelearation подключай
+    //ахалай-махалай, OpenGL acceleration подключай
     ui->graphicsView->setViewport(new QGLWidget(this));
 
     new XmlHighlighter(ui->textEdit);
@@ -36,14 +36,7 @@ Document::Document(QWidget *parent, QString name) :
 
     itemMenu->addAction("Удалить", new connect_functor_helper(this, [this]
     {
-        foreach (QGraphicsItem *item, Scene->selectedItems())
-        {
-            if (item->type() == ModelItem::Type)
-            {
-                qgraphicsitem_cast<ModelItem *>(item)->removeArrows();
-            }
-            Scene->removeItem(item);
-        }
+        Scene->removeSelectedItems();
     }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
@@ -57,6 +50,10 @@ Document::Document(QWidget *parent, QString name) :
             Storage, SLOT(onItemMoved(ItemType, int, QPoint)));
     connect(Scene, SIGNAL(itemRemoved(ItemType, int)),
             Storage, SLOT(onItemRemoved(ItemType, int)));
+    connect(Scene, SIGNAL(linkInserted(ItemType,int,ItemType,int)),
+            Storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
+    connect(Scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
+            Storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);

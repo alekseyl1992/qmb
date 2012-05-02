@@ -117,12 +117,22 @@ namespace qmodel
 
     void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
     {
-        qDebug() << "item Moved";
+        qDebug() << "onItemMoved";
     }
 
     void ModelStorage::onItemRemoved(ItemType type, int id)
     {
-        qDebug() << "item reMoved";
+        qDebug() << "onItemRemoved";
+    }
+
+    void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
+    {
+        qDebug() << "onLinkInserted";
+    }
+
+    void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo)
+    {
+        qDebug() << "onLinkRemoved";
     }
 
     //добавляет генератор, очередь или хендлер в модель
