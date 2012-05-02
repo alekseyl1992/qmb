@@ -174,7 +174,7 @@ void MainWindow::createMenuButton()
     //отжимаем кнопку меню через dt -> 0, чтобы меню не лоткрылось при повторном нажатии на кнопку
     ::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
     {
-         QTimer::singleShot(100, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
+         QTimer::singleShot(200, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
     });
 
     std::function<void()> onClick = [mainMenu, menuButton]
