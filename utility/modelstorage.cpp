@@ -43,6 +43,22 @@ namespace logic
         return QString(); //stub
     }
 
+    bool ModelStorage::saveModel(QString path)
+    {
+        return true;
+    }
+
+    bool ModelStorage::loadModel(QString path)
+    {
+        return true;
+    }
+
+    void ModelStorage::fillModel(IFillableModel *iModel)
+    {
+
+    }
+
+
     void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
     {
         switch (type)

@@ -32,6 +32,8 @@ public slots:
 
     void openModel(QString path);
 
+    void saveModel(QString path);
+
     void closeEvent(QCloseEvent *event);
 
 private:
