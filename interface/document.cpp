@@ -205,8 +205,7 @@ void Document::logChanged(QString line)
 {
     //лучше переделать замену текста, на добавление
     ui->simulationLog->addItem(line);
-    ui->simulationLog->verticalScrollBar()->setValue(
-                ui->simulationLog->verticalScrollBar()->maximum());
+    ui->simulationLog->scrollToBottom();
 }
 
 void Document::on_logButton_toggled(bool checked)
