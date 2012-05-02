@@ -438,7 +438,7 @@ QTreeView::item:!enabled {
             <set>QPainter::Antialiasing|QPainter::NonCosmeticDefaultPen|QPainter::TextAntialiasing</set>
            </property>
            <property name="dragMode">
-            <enum>QGraphicsView::ScrollHandDrag</enum>
+            <enum>QGraphicsView::RubberBandDrag</enum>
            </property>
            <property name="viewportUpdateMode">
             <enum>QGraphicsView::SmartViewportUpdate</enum>

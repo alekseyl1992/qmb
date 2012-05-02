@@ -65,7 +65,7 @@ void MainWindow::on_createModel_triggered()
     {
         QString Name = QString("Модель %0").arg(modelId);
         //TODO вернуть меню
-        Document *newDoc = new Document(this, new QMenu(this), Name);
+        Document *newDoc = new Document(this, Name);
         newDoc->scene()->setMode(ModelScene::Mode::InsertItem);
 
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
@@ -122,51 +122,6 @@ void MainWindow::on_closeModel_triggered()
         ui->mdiArea->subWindowList(QMdiArea::ActivationHistoryOrder).back()->close();
 }
 
-void MainWindow::on_startSimulation_triggered()
-{/*
-    mymodel::generator *gen = new mymodel::generator();
-    mymodel::handler *han = new mymodel::handler();
-    qRegisterMetaType<mymodel::request>("request");
-    connect(gen, SIGNAL(request_generated(request)), han, SLOT(handle(request)));
-    gen->start();
-    qDebug() << "connected" << endl;*/
-    Doc->showLog();
-    sLog.clear();
-    sLog.writeLine("Simulation started");
-
-    //return;
-    /*qmodel::generator gen(500, 5);
-    qmodel::generator gen2(700, 5);
-    qmodel::queue q;
-    qmodel::queue q2;
-    qmodel::handler h(600);
-    qmodel::handler h2(800);
-
-    qmodel::model newModel;
-    newModel.generators.push_back(gen);
-    newModel.generators.push_back(gen2);
-    newModel.queues.push_back(q);
-    newModel.handlers.push_back(h);
-    newModel.handlers.push_back(h2);
-
-    newModel.link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&gen, &q));
-    //newModel.link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&gen2, &q));
-
-    newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h));
-    //newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h2));
-    //newModel.link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&q, &h2));
-
-    newModel.simulation_start();
-    //newModel.simulation_stop();
-
-   */
-    Doc->startSimulation();
-}
-void MainWindow::on_stopSimulation_triggered()
-{
-
-}
-
 void MainWindow::on_about_triggered()
 {
     QMessageBox::information(this, "О программе",
@@ -176,24 +131,6 @@ void MainWindow::on_about_triggered()
                              "Латкин Игорь\n"
                              "Назаров Константин\n\n"
                              "\t\t\t\t2012 г.");
-}
-
-void MainWindow::on_deleteElement_triggered()
-{
-    //удаляем выделенные элементы и ассоциированные стрелочки
-    //TODO вынести всю работу с моделью в Document или даже Scene
-    foreach (QGraphicsItem *item, Doc->scene()->selectedItems()) {
-        if (item->type() == ModelItem::Type) {
-            qgraphicsitem_cast<ModelItem *>(item)->removeArrows();
-        }
-        Doc->scene()->removeItem(item);
-    }
-}
-
-void MainWindow::on_elementProperties_triggered()
-{
-    ElementPropWindow *propWindow =  new ElementPropWindow(this);
-    propWindow->show();
 }
 
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
@@ -286,4 +223,10 @@ void MainWindow::createMenuButton()
             margin-left: 50;
         }
     )");
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    foreach(QMdiSubWindow *wnd, ui->mdiArea->subWindowList())
+        wnd->close();
 }
