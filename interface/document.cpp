@@ -41,7 +41,7 @@ Document::Document(QWidget *parent, QString name) :
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
-    Storage = new qmodel::ModelStorage(name);
+    Storage = new logic::ModelStorage(name);
 
     //связываяем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
@@ -176,7 +176,7 @@ void Document::startSimulation()
     ui->startButton->hide();
     ui->stopButton->show();
 
-    qmodel::model *model = Storage->getModel(true);
+    logic::model *model = Storage->getModel(true);
     connect(model, SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
     model->simulation_start();
     bSimulating = true;

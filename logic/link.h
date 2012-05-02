@@ -1,7 +1,7 @@
 #ifndef H_LINK
 #define H_LINK
 
-namespace qmodel
+namespace logic
 {
 	template<typename LHS_T, typename RHS_T>
 	struct link
@@ -13,5 +13,5 @@ namespace qmodel
 		RHS_T rhs;
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 #endif // !H_LINK

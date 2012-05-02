@@ -8,7 +8,7 @@
 #include "request_id.h"
 
 
-namespace qmodel
+namespace logic
 {
 	class request
 	{
@@ -25,6 +25,6 @@ namespace qmodel
         request_id id;
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 
 #endif // !H_REQUEST

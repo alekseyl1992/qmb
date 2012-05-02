@@ -1,7 +1,7 @@
 #ifndef H_EXCEPTIONS
 #define H_EXCEPTIONS
 
-namespace qmodel
+namespace logic
 {
 	namespace exceptions
 	{

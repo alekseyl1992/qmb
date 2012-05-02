@@ -53,7 +53,7 @@ private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
-    qmodel::ModelStorage *Storage;
+    logic::ModelStorage *Storage;
     bool bSimulating;
 };
 

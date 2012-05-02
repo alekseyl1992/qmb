@@ -1,6 +1,6 @@
 #include "request.h"
 
-namespace qmodel
+namespace logic
 {
 	request::request(int gen_id, int _id) : id(gen_id, _id) 
 	{ }
@@ -15,4 +15,4 @@ namespace qmodel
 		return *this;
 	}
 
-} //end namespace qmodel
+} //end namespace logic

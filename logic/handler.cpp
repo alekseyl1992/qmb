@@ -1,6 +1,6 @@
 #include "handler.h"
 
-namespace qmodel
+namespace logic
 {
 	int handler::cur_id = 0;
 
@@ -45,4 +45,4 @@ namespace qmodel
 		delete cur_req;
 	}
 
-} //end namespace qmodel
+} //end namespace logic

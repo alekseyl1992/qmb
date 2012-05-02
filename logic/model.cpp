@@ -1,6 +1,6 @@
 #include "model.h"
 
-namespace qmodel
+namespace logic
 {
     int model::cur_id = 0;
 
@@ -36,7 +36,7 @@ namespace qmodel
 		{
 			std::thread([&link, this]()
 			{
-                for(int i = 1; i <= link.lhs->get_num_requests(); i++)
+                for(ull_t i = 1; i <= link.lhs->get_num_requests(); i++)
 				{
                     if (!simulate_flag || !is_simulating()) //if the user switched simulating off
                     {
@@ -84,4 +84,4 @@ namespace qmodel
 		simulate_flag = false;
 	}
 
-} //end namespace qmodel
+} //end namespace logic

@@ -14,7 +14,7 @@
 #include "exceptions.h"
 #include "object.h"
 
-namespace qmodel
+namespace logic
 {
 	//это класс, который реализует все связи между объектами модели
 	//он же содержит списки очередей, связанных генераторов и т.д. и т.п.
@@ -61,6 +61,6 @@ namespace qmodel
 		static int cur_id;
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 
 #endif // !H_MODEL

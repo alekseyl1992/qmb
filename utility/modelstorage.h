@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QPoint>
 
-namespace qmodel
+namespace logic
 {
 
 //константы символьные. выношу как и обещал
@@ -34,7 +34,7 @@ private:
 public:
     ModelStorage(QString name) : myModel(nullptr)
     {
-        curDoc = new QDomDocument("qmodel");
+        curDoc = new QDomDocument("logic");
 
         //формирование "подписи" xml файла (первая строка - тип xml)
         root = curDoc->createElement(name);
@@ -62,9 +62,9 @@ public:
         if (xmlfile.open(QFile::WriteOnly | QFile::Truncate))
         {
             QTextStream out(&xmlfile);
-            QDomDocument xmldoc("qmodel");
+            QDomDocument xmldoc("logic");
 
-            QDomElement root = xmldoc.createElement("qmodel");
+            QDomElement root = xmldoc.createElement("logic");
             xmldoc.appendChild(root);
 
             //если использовать какой-нить список из разных типов объектов
@@ -167,7 +167,7 @@ public:
         }
     }
 
-    // преобразует xml файл, в QDomDocument и затем в QModel
+    // преобразует xml файл, в QDomDocument и затем в logic
     model *LoadQModel(QString xmlFileName)
     {
         model *loadedModel;
@@ -183,7 +183,7 @@ public:
                 // корневой пункт
                 QDomElement root = xmldoc.documentElement();
                 // если xml не для нашей программы, выходим
-                if (root.tagName() != "qmodel")
+                if (root.tagName() != "logic")
                     return NULL;
                 else
                 {
@@ -250,6 +250,6 @@ public slots:
 
 }; //class
 
-} //namespace qmodel
+} //namespace logic
 
 #endif // MODELSTORAGE_H

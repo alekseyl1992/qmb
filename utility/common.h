@@ -9,4 +9,6 @@ enum class ItemType : int
     Terminator
 };
 
+typedef unsigned long long ull_t;
+
 #endif // COMMON_H
