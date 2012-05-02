@@ -75,10 +75,12 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
     {
         ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
         if(mItem != nullptr)
+        {
             if(mItem->itemType() == fromType && mItem->id() == idFrom)
                 startItem = mItem;
             else if(mItem->itemType() == toType && mItem->id() == idTo)
                 endItem = mItem;
+        }
     }
 
     if(startItem && endItem)
@@ -94,7 +96,7 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
     }
     else
         QMessageBox::critical((QWidget *)parent(), "Ошибка",
-                              QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4").arg((int)fromType, idFrom, (int)toType, idTo));
+                              QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4").arg((QString)((int)fromType), (QString)idFrom, (QString)((int)toType), (QString)idTo));
 }
 
 void ModelScene::setMode(Mode mode)

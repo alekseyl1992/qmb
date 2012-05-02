@@ -2,7 +2,7 @@
 
 namespace logic
 {
-	int handler::cur_id = 0;
+    int handler::cur_id = 0;
 
 	//Constructor
 	handler::handler(int _handlePeriod): 

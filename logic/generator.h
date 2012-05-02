@@ -44,6 +44,7 @@ namespace logic
 
 		virtual void clean() { }
 
+        static int cur_id; //<- генератор
 	private:
 		//Fields
 		request* new_req;
@@ -52,9 +53,9 @@ namespace logic
 
 		bool is_generated_flag;
 
-		static int cur_id; //<- генератор
         ull_t cur_req_id; //<- запрос
 	};
+
 
 } //end namespace logic
 

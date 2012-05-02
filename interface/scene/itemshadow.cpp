@@ -1,7 +1,7 @@
 #include "itemshadow.h"
 
 ItemShadow::ItemShadow(QGraphicsItem *item)
-    : blurRadius(10), offset(5)
+    : offset(5), blurRadius(10)
 {
     effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius(blurRadius);

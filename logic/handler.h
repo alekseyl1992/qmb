@@ -33,6 +33,7 @@ namespace logic
 
 		virtual void clean() { }
 
+        static int cur_id;
 	private:
 		
 		//finish the request
@@ -42,8 +43,6 @@ namespace logic
 		request* cur_req;
 		int handling_period;
 		bool freedom_flag;
-
-		static int cur_id;
 	};
 
 } //end namespace logic

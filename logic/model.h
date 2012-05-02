@@ -32,9 +32,9 @@ namespace logic
 
 		~model() { }
 
-		bool is_all_generated(); //checks if all generators finished their work
-		bool is_queues_clear(); //checks if all queues are clear
-		bool is_simulating(); //checks the sumulation
+        bool are_all_generated(); //checks if all generators finished their work
+        bool are_queues_clear(); //checks if all queues are clear
+        bool is_simulating_finished(); //checks the sumulation
 
 		virtual void clean() { }
 
@@ -48,6 +48,7 @@ namespace logic
 		void generator_queue_link_th();
 		void handler_queue_link_th();
 
+
 	public: //members <- TODO: make private
 		std::vector<generator> generators; //all generators are kept here
 		std::vector<queue> queues; //all queues are kept here
@@ -58,7 +59,7 @@ namespace logic
 		std::vector< link <queue*, handler*> > link_queues_handlers;
 
 		bool simulate_flag;
-		static int cur_id;
+        static int cur_id;
 	};
 
 } //end namespace logic

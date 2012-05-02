@@ -16,7 +16,7 @@
 #include <QtOpenGL/QGLWidget>
 
 Document::Document(QWidget *parent, QString name) :
-    QDialog(parent), bSimulating(false), ui(new Ui::Document)
+    QDialog(parent), ui(new Ui::Document), bSimulating(false)
 {
     ui->setupUi(this);
     setWindowTitle(name);
