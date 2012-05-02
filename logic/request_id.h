@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "../simulationlog.h"
+#include "utility/simulationlog.h"
 typedef unsigned long long IntType;
 
 namespace qmodel

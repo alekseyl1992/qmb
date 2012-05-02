@@ -1,12 +1,13 @@
 #ifndef MODELSTORAGE_H
 #define MODELSTORAGE_H
 
-#include "model.h"
-#include "../modelscene.h"
-#include "../common.h"
+#include "logic/model.h"
+#include "utility/common.h"
 
 #include <QDebug>
 #include <QtXml/QDomDocument>
+#include <QFile>
+#include <QPoint>
 
 namespace qmodel
 {
@@ -43,7 +44,7 @@ public:
     }
 
     //DEPRECATED
-    void SaveQModel(model *curModel, QString xmlFileName)
+    /*void SaveQModel(model *curModel, QString xmlFileName)
     {
         std::vector<QString> entries={"req_generators","queues","handlers","links"};
         std::vector<QString> subEntries={"req_generator","queue","handler","link"};
@@ -228,13 +229,10 @@ public:
 
         //возвращается ссылка на модель
         return loadedModel;
-    }
+    }*/
 
     //TODO form model here (instead of using LoadQModel)
     model *getModel(bool create = false);
-
-    //преобразует XML в набор объектов на сцене
-    void XMLToScene(QString FileName, ModelScene *scene);
 
     //получения поля name, item'а по его id для отображения на сцене
     QString getItemName(int id); // ? не понял

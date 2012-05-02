@@ -1,4 +1,5 @@
 #include "modelstorage.h"
+#include <QPoint>
 
 namespace qmodel
 {
@@ -23,11 +24,6 @@ namespace qmodel
 
         return myModel;
     };
-
-    void ModelStorage::XMLToScene(QString FileName, ModelScene *scene)
-    {
-
-    }
 
 /*    void ModelStorage::SceneToXML(ModelScene *scene, QString FileName)
     {

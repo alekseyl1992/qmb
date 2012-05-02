@@ -42,9 +42,9 @@
 
 #include <QGraphicsScene>
 #include <QWheelEvent>
-#include "modelitem.h"
-#include "ifillablemodel.h"
-#include "common.h"
+#include "interface/scene/modelitem.h"
+#include "utility/ifillablemodel.h"
+#include "utility/common.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;

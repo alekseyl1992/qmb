@@ -1,9 +1,9 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "modelscene.h"
-#include "qmodel/modelstorage.h"
-#include "qmodel/model.h"
+#include "interface/scene/modelscene.h"
+#include "utility/modelstorage.h"
+#include "logic/model.h"
 #include <QDialog>
 #include <QTextEdit>
 #include <QTreeWidgetItem>

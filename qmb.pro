@@ -10,61 +10,60 @@ QMAKE_CXXFLAGS += -std=c++0x
 TARGET = qmb
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    document.cpp \
-    xmlhighlighter.cpp \
-    modelscene.cpp \
-    arrow.cpp \
-    modelitem.cpp \
-    elementpropwindow.cpp \
-    itemshadow.cpp \
-    qmodel/model.cpp \
-    qmodel/link.cpp \
-    qmodel/exceptions.cpp \
-    qmodel/object.cpp \
-    qmodel/queue.cpp \
-    qmodel/generator.cpp \
-    qmodel/handler.cpp \
-    qmodel/request_id.cpp \
-    qmodel/request.cpp \
-    qmodel/object.cpp \
-    homewidget.cpp \
-    qmodel/modelstorage.cpp
+SOURCES += main.cpp \
+    interface/mainwindow.cpp \
+    interface/document.cpp \
+    utility/xmlhighlighter.cpp \
+    interface/scene/modelscene.cpp \
+    interface/scene/arrow.cpp \
+    interface/scene/modelitem.cpp \
+    interface/elementpropwindow.cpp \
+    interface/scene/itemshadow.cpp \
+    logic/model.cpp \
+    logic/link.cpp \
+    logic/exceptions.cpp \
+    logic/object.cpp \
+    logic/queue.cpp \
+    logic/generator.cpp \
+    logic/handler.cpp \
+    logic/request_id.cpp \
+    logic/request.cpp \
+    logic/object.cpp \
+    interface/homewidget.cpp \
+    utility/modelstorage.cpp
 
-HEADERS  += mainwindow.h \
-    document.h \
-    xmlhighlighter.h \
-    main.h \
-    modelscene.h \
-    arrow.h \
-    modelitem.h \
-    simulationlog.h \
-    elementpropwindow.h \
-    common.h \
-    qmodel/modelstorage.h \
-    qmodel/request.h \
-    qmodel/queue.h \
-    qmodel/object.h \
-    qmodel/model.h \
-    qmodel/handler.h \
-    qmodel/generator.h \
-    qmodel/link.h \
-    qmodel/request_id.h \
-    qmodel/exceptions.h \
-    itemshadow.h \
-    ifillablemodel.h \
-    lsfss.h \
-    homewidget.h
+HEADERS  += interface/mainwindow.h \
+    interface/document.h \
+    utility/xmlhighlighter.h \
+    logic/main.h \
+    interface/scene/modelscene.h \
+    interface/scene/arrow.h \
+    interface/scene/modelitem.h \
+    utility/simulationlog.h \
+    interface/elementpropwindow.h \
+    utility/common.h \
+    utility/modelstorage.h \
+    logic/request.h \
+    logic/queue.h \
+    logic/object.h \
+    logic/model.h \
+    logic/handler.h \
+    logic/generator.h \
+    logic/link.h \
+    logic/request_id.h \
+    logic/exceptions.h \
+    interface/scene/itemshadow.h \
+    utility/ifillablemodel.h \
+    utility/lsfss.h \
+    interface/homewidget.h
 
-FORMS    += mainwindow.ui \
-    document.ui \
-    elementpropwindow.ui \
-    homewidget.ui
+FORMS    += interface/mainwindow.ui \
+    interface/document.ui \
+    interface/elementpropwindow.ui \
+    interface/homewidget.ui
 
 OTHER_FILES += \
-    TODO.txt \
-    DeprecatedCode.cpp
+    TODO.txt
 
 RESOURCES += \
     resources.qrc
