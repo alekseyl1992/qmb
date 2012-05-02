@@ -3,7 +3,7 @@
 
 namespace logic
 {
-	int generator::cur_id = 0;
+int generator::cur_id = 0;
 
 	//Constructors
     generator::generator(int period, ull_t num_requests):

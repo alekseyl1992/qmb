@@ -34,12 +34,10 @@ namespace logic
 
 		virtual void clean() { }
 
+        static int cur_id;
 	private:
 		std::deque<request> requests_in_queue;
 		bool having_request_flag;
-
-		static int cur_id;
-		
 	};
 
 } //end namespace logic

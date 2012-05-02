@@ -183,6 +183,9 @@ namespace logic
             case ItemType::Handler:
                 newhnd = new handler(param.toInt());
                 curModel->handlers.push_back(*newhnd);
+                break;
+            case ItemType::Terminator:
+                break;
         }
     }
 
