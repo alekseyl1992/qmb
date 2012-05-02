@@ -29,9 +29,16 @@ SOURCES += main.cpp \
     logic/generator.cpp \
     logic/queue.cpp \
     logic/handler.cpp \
-    logic/model.cpp
+    logic/model.cpp \
+    utility/lsfss.cpp
 
-HEADERS  += interface/mainwindow.h \
+HEADERS  += utility/xmlhighlighter.h \
+    utility/simulationlog.h \
+    utility/modelstorage.h \
+    utility/common.h \
+    utility/ifillablemodel.h \
+    utility/lsfss.h \
+    interface/mainwindow.h \
     interface/document.h \
     interface/scene/modelscene.h \
     interface/scene/arrow.h \
@@ -39,12 +46,6 @@ HEADERS  += interface/mainwindow.h \
     interface/elementpropwindow.h \
     interface/scene/itemshadow.h \
     interface/homewidget.h \
-    utility/xmlhighlighter.h \
-    utility/simulationlog.h \
-    utility/modelstorage.h \
-    utility/common.h \
-    utility/ifillablemodel.h \
-    utility/lsfss.h \
     logic/exceptions.h \
     logic/link.h \
     logic/object.h \
