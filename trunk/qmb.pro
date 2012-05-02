@@ -35,7 +35,6 @@ SOURCES += main.cpp \
 HEADERS  += interface/mainwindow.h \
     interface/document.h \
     utility/xmlhighlighter.h \
-    logic/main.h \
     interface/scene/modelscene.h \
     interface/scene/arrow.h \
     interface/scene/modelitem.h \

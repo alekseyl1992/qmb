@@ -1,6 +1,6 @@
 #include "object.h"
 
-namespace qmodel
+namespace logic
 {
 
 }

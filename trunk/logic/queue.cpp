@@ -1,6 +1,6 @@
 #include "queue.h"
 
-namespace qmodel
+namespace logic
 {
     int queue::cur_id = 0;
 
@@ -66,4 +66,4 @@ namespace qmodel
 		return res;
 	}
 
-} //end namespace qmodel
+} //end namespace logic

@@ -8,7 +8,7 @@
 #include "request.h"
 #include "object.h"
 
-namespace qmodel
+namespace logic
 {
     class handler : public object
 	{
@@ -21,10 +21,7 @@ namespace qmodel
 		~handler() { }
 
 		//Check the busy flag of the handler
-		bool is_free() { 
-			//std::lock_guard<std::mutex> lk(handler_mutex);
-			return freedom_flag; 
-		}
+        bool is_free() { return freedom_flag; }
 		//Send request to the handler
 		void handle(request req);
 
@@ -49,6 +46,6 @@ namespace qmodel
 		static int cur_id;
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 
 #endif // !H_HANDLER

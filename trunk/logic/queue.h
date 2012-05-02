@@ -7,7 +7,7 @@
 #include "request.h"
 #include "object.h"
 
-namespace qmodel
+namespace logic
 {
     class queue : public object
 	{
@@ -22,7 +22,7 @@ namespace qmodel
 		//adding request to the queue
 		void add(request req);
 		//get number of elemets in the queue
-		int get_size() const { return static_cast<int>(requests_in_queue.size()); }
+        ull_t get_size() const { return static_cast<ull_t>(requests_in_queue.size()); }
 
 		//getting next request
 		request get_first();
@@ -30,11 +30,8 @@ namespace qmodel
 		request get_last();
 
 		//if the queue has a request
-		bool has_request() { 
-			//std::lock_guard<std::mutex> lk(queue_mutex);
-			return having_request_flag;
-		}
-		
+        bool has_request() { return having_request_flag; }
+
 		virtual void clean() { }
 
 	private:
@@ -45,6 +42,6 @@ namespace qmodel
 		
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 
 #endif // !H_QUEUE

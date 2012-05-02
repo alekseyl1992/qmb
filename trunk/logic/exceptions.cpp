@@ -1,6 +1,6 @@
 #include "exceptions.h"
 
-namespace qmodel
+namespace logic
 {
 
-} //end namespace qmodel
+} //end namespace logic

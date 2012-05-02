@@ -8,12 +8,12 @@
 #include "exceptions.h"
 #include "object.h"
 
-namespace qmodel
+namespace logic
 {
     class generator : public object
 	{
 	public:
-		generator(int period = 0, unsigned long long num_requests = 0);
+        generator(int period = 0, ull_t num_requests = 0);
 		generator(const generator& gen);
 		generator& operator=(const generator& gen);
 
@@ -34,9 +34,9 @@ namespace qmodel
 		bool is_generated() const { return is_generated_flag; }
 
 		//gets number of required requests
-		unsigned long long get_num_requests() const { return number_of_requests_to_generate; }
+        ull_t get_num_requests() const { return number_of_requests_to_generate; }
 		//sets number of required requests
-		void set_num_requests(unsigned long long num) { number_of_requests_to_generate = num; }
+        void set_num_requests(ull_t num) { number_of_requests_to_generate = num; }
 
 		bool is_finished() const {
 			return cur_req_id >= number_of_requests_to_generate;
@@ -48,14 +48,14 @@ namespace qmodel
 		//Fields
 		request* new_req;
 		int generating_period;
-		unsigned long long number_of_requests_to_generate;
+        ull_t number_of_requests_to_generate;
 
 		bool is_generated_flag;
 
 		static int cur_id; //<- генератор
-		int cur_req_id; //<- запрос
+        ull_t cur_req_id; //<- запрос
 	};
 
-} //end namespace qmodel
+} //end namespace logic
 
 #endif // !H_GENERATOR

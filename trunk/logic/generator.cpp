@@ -1,12 +1,12 @@
 #include "generator.h"
 
 
-namespace qmodel
+namespace logic
 {
 	int generator::cur_id = 0;
 
 	//Constructors
-	generator::generator(int period, unsigned long long num_requests): 
+    generator::generator(int period, ull_t num_requests):
             object(++cur_id), new_req(NULL), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
 		cur_req_id = 0; 
 	}
@@ -55,4 +55,4 @@ namespace qmodel
 		return res;
 	}
 
-} //end namespace qmodel
+} //end namespace logic
