@@ -1,4 +1,4 @@
-#include "homewidget.h"
+#include "interface/homewidget.h"
 #include "ui_homewidget.h"
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QRegExp>
-#include "lsfss.h"
+#include "utility/lsfss.h"
 
 HomeWidget::HomeWidget(QWidget *parent) :
     QDialog(parent),

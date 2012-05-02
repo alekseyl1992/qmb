@@ -1,10 +1,10 @@
-#include "document.h"
+#include "interface/document.h"
 #include "ui_document.h"
-#include "xmlhighlighter.h"
-#include "simulationlog.h"
-#include "elementpropwindow.h"
-#include "common.h"
-#include "lsfss.h"
+#include "utility/xmlhighlighter.h"
+#include "utility/simulationlog.h"
+#include "interface/elementpropwindow.h"
+#include "utility/common.h"
+#include "utility/lsfss.h"
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>

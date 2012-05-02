@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "document.h"
+#include "interface/document.h"
 #include <QMainWindow>
 #include <QMdiSubWindow>
 #include <functional>

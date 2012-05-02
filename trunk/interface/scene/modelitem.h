@@ -45,8 +45,8 @@
 #include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QMap>
-#include "common.h"
-#include "itemshadow.h"
+#include "utility/common.h"
+#include "interface/scene/itemshadow.h"
 
 QT_BEGIN_NAMESPACE
 class QPixmap;

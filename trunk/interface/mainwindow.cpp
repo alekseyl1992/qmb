@@ -1,9 +1,8 @@
-#include "mainwindow.h"
+#include "interface/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qmodel/modelstorage.h"
-#include "simulationlog.h"
-#include "elementpropwindow.h"
-#include "homewidget.h"
+#include "utility/modelstorage.h"
+#include "utility/simulationlog.h"
+#include "interface/homewidget.h"
 #include <QUrl>
 #include <QMessageBox>
 #include <QTextCodec>
@@ -18,11 +17,11 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "qmodel\generator.h"
-#include "qmodel\queue.h"
-#include "qmodel\handler.h"
-#include "qmodel\model.h"
-#include "lsfss.h"
+#include "logic/generator.h"
+#include "logic/queue.h"
+#include "logic/handler.h"
+#include "logic/model.h"
+#include "utility/lsfss.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
