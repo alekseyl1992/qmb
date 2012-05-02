@@ -16,10 +16,10 @@ namespace logic
             myModel->handlers.push_back(logic::handler(800));
 
             myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[0], &myModel->queues[0]));
-           // myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[1], &myModel->queues[0]));
+           // myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
 
             myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[0], &myModel->handlers[0]));
-            //myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[0], &myModel->handlers[1]));
+            //myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[1]));
         }
 
         return myModel;
@@ -47,73 +47,98 @@ namespace logic
     {
         switch (type)
         {
-        case ItemType::Generator:
-        {
-            //если элементов данного типо не было до данного момента
-            //создаем раздел элементов данного типа
-            if (gens.parentNode()==curDoc->toElement())
-                gens = curDoc->createElement(ItemNames[(int)ItemType::Generator]+"s");
+            case ItemType::Generator:
+            {
+                //если элементов данного типо не было до данного момента
+                //создаем раздел элементов данного типа
+                if (gens.parentNode()==curDoc->toElement())
+                    gens = curDoc->createElement(ItemNames[(int)ItemType::Generator]+"s");
 
-            QDomElement newgen;
-            newgen = curDoc->createElement(ItemNames[(int)ItemType::Generator]);
-            newgen.setAttribute("id",id);
-            newgen.setAttribute("time",500);
-            newgen.setAttribute("x",pos.x());
-            newgen.setAttribute("y",pos.y());
-            gens.appendChild(newgen);
-            root.appendChild(gens);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Queue:
-        {
-            if (queues.parentNode()==curDoc->toElement())
-                queues = curDoc->createElement(ItemNames[(int)ItemType::Queue]+"s");
-            QDomElement newqueue;
-            newqueue = curDoc->createElement(ItemNames[(int)ItemType::Queue]);
-            newqueue.setAttribute("id",id);
-            newqueue.setAttribute("x",pos.x());
-            newqueue.setAttribute("y",pos.y());
-            queues.appendChild(newqueue);
-            root.appendChild(queues);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Handler:
-        {
-            if (handlers.parentNode()==curDoc->toElement())
-                handlers = curDoc->createElement(ItemNames[(int)ItemType::Handler]+"s");
-            QDomElement newhandler;
-            newhandler = curDoc->createElement(ItemNames[(int)ItemType::Handler]);
-            newhandler.setAttribute("id",id);
-            newhandler.setAttribute("time",500);
-            newhandler.setAttribute("x",pos.x());
-            newhandler.setAttribute("y",pos.y());
-            handlers.appendChild(newhandler);
-            root.appendChild(handlers);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Terminator:
-        {
-            if (terms.parentNode()==curDoc->toElement())
-                terms = curDoc->createElement(ItemNames[(int)ItemType::Terminator]+"s");
-            QDomElement newterm;
-            newterm = curDoc->createElement(ItemNames[(int)ItemType::Terminator]);
-            newterm.setAttribute("id",id);
-            newterm.setAttribute("x",pos.x());
-            newterm.setAttribute("y",pos.y());
-            terms.appendChild(newterm);
-            root.appendChild(terms);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
+                QDomElement newgen;
+                newgen = curDoc->createElement(ItemNames[(int)ItemType::Generator]);
+                newgen.setAttribute("id",id);
+                newgen.setAttribute("time",500);
+                newgen.setAttribute("x",pos.x());
+                newgen.setAttribute("y",pos.y());
+                gens.appendChild(newgen);
+                root.appendChild(gens);
+                qDebug() << curDoc->toString() << endl;
+                break;
+            }
+            case ItemType::Queue:
+            {
+                if (queues.parentNode()==curDoc->toElement())
+                    queues = curDoc->createElement(ItemNames[(int)ItemType::Queue]+"s");
+                QDomElement newqueue;
+                newqueue = curDoc->createElement(ItemNames[(int)ItemType::Queue]);
+                newqueue.setAttribute("id",id);
+                newqueue.setAttribute("x",pos.x());
+                newqueue.setAttribute("y",pos.y());
+                queues.appendChild(newqueue);
+                root.appendChild(queues);
+                qDebug() << curDoc->toString() << endl;
+                break;
+            }
+            case ItemType::Handler:
+            {
+                if (handlers.parentNode()==curDoc->toElement())
+                    handlers = curDoc->createElement(ItemNames[(int)ItemType::Handler]+"s");
+                QDomElement newhandler;
+                newhandler = curDoc->createElement(ItemNames[(int)ItemType::Handler]);
+                newhandler.setAttribute("id",id);
+                newhandler.setAttribute("time",500);
+                newhandler.setAttribute("x",pos.x());
+                newhandler.setAttribute("y",pos.y());
+                handlers.appendChild(newhandler);
+                root.appendChild(handlers);
+                qDebug() << curDoc->toString() << endl;
+                break;
+            }
+            case ItemType::Terminator:
+            {
+                if (terms.parentNode()==curDoc->toElement())
+                    terms = curDoc->createElement(ItemNames[(int)ItemType::Terminator]+"s");
+                QDomElement newterm;
+                newterm = curDoc->createElement(ItemNames[(int)ItemType::Terminator]);
+                newterm.setAttribute("id",id);
+                newterm.setAttribute("x",pos.x());
+                newterm.setAttribute("y",pos.y());
+                terms.appendChild(newterm);
+                root.appendChild(terms);
+                qDebug() << curDoc->toString() << endl;
+                break;
+            }
         };
+    }
+
+    void ModelStorage::MoveItem(QDomElement& item, int& id, QPoint& pos)
+    {
+        while (QString(item.attribute("id")).toInt()!=id)
+            item=item.nextSiblingElement();
+        item.setAttribute("x",pos.x());
+        item.setAttribute("y",pos.y());
     }
 
     void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
     {
-        qDebug() << "onItemMoved";
+        QDomElement elemtomove;
+        switch (type)
+        {
+            case ItemType::Generator:
+                elemtomove=gens.firstChildElement();
+                break;
+            case ItemType::Queue:
+                elemtomove=queues.firstChildElement();
+                break;
+            case ItemType::Handler:
+                elemtomove=handlers.firstChildElement();
+                break;
+            case ItemType::Terminator:
+                elemtomove=terms.firstChildElement();
+                break;
+        };
+        MoveItem(elemtomove,id,pos);
+        qDebug() << "moved\n" << curDoc->toString();
     }
 
     void ModelStorage::onItemRemoved(ItemType type, int id)
@@ -186,4 +211,4 @@ namespace logic
         }
 
     }
-}
+} //end namespace logic

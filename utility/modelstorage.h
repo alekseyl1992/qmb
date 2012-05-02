@@ -28,13 +28,16 @@ private:
 
     //функции для добавления линков и итемов в модель.
     //убрал их в private
+
     void AddItem(model *curModel, QString elemType, QString param);
     void AddLink(model *curModel, std::vector<QString> params);
+
+    void MoveItem(QDomElement &item, int &id, QPoint &pos);
 
 public:
     ModelStorage(QString name) : myModel(nullptr)
     {
-        curDoc = new QDomDocument("logic");
+        curDoc = new QDomDocument("qmodel");
 
         //формирование "подписи" xml файла (первая строка - тип xml)
         root = curDoc->createElement(name);
@@ -62,9 +65,9 @@ public:
         if (xmlfile.open(QFile::WriteOnly | QFile::Truncate))
         {
             QTextStream out(&xmlfile);
-            QDomDocument xmldoc("logic");
+            QDomDocument xmldoc("qmodel");
 
-            QDomElement root = xmldoc.createElement("logic");
+            QDomElement root = xmldoc.createElement("qmodel");
             xmldoc.appendChild(root);
 
             //если использовать какой-нить список из разных типов объектов
@@ -167,7 +170,7 @@ public:
         }
     }
 
-    // преобразует xml файл, в QDomDocument и затем в logic
+    // преобразует xml файл, в QDomDocument и затем в QModel
     model *LoadQModel(QString xmlFileName)
     {
         model *loadedModel;
@@ -183,7 +186,7 @@ public:
                 // корневой пункт
                 QDomElement root = xmldoc.documentElement();
                 // если xml не для нашей программы, выходим
-                if (root.tagName() != "logic")
+                if (root.tagName() != "qmodel")
                     return NULL;
                 else
                 {
