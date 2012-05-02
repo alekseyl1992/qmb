@@ -24,21 +24,15 @@ public slots:
 
     void on_saveModel_triggered();
 
-    void on_startSimulation_triggered();
-
-    void on_stopSimulation_triggered();
-
     void on_about_triggered();
 
     void on_closeModel_triggered();
 
-    void on_deleteElement_triggered();
-
-    void on_elementProperties_triggered();
-
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
     void openModel(QString path);
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow *ui;

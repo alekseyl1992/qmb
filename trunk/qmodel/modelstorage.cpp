@@ -15,7 +15,7 @@ namespace qmodel
             myModel->handlers.push_back(qmodel::handler(800));
 
             myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[0], &myModel->queues[0]));
-            //myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
+           // myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
 
             myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[0]));
             //myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[1]));

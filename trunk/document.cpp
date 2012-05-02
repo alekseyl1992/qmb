@@ -2,6 +2,7 @@
 #include "ui_document.h"
 #include "xmlhighlighter.h"
 #include "simulationlog.h"
+#include "elementpropwindow.h"
 #include "common.h"
 #include "lsfss.h"
 #include <QMenu>
@@ -14,7 +15,7 @@
 #include <QProgressBar>
 #include <QtOpenGL/QGLWidget>
 
-Document::Document(QWidget *parent, QMenu *menu, QString name) :
+Document::Document(QWidget *parent, QString name) :
     QDialog(parent), bSimulating(false), ui(new Ui::Document)
 {
     ui->setupUi(this);
@@ -26,7 +27,26 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
     ui->graphicsView->setViewport(new QGLWidget(this));
 
     new XmlHighlighter(ui->textEdit);
-    Scene = new ModelScene(menu, ui->graphicsView);
+    QMenu *itemMenu = new QMenu(this);
+    itemMenu->addAction("Свойства", new connect_functor_helper(this, [this]
+    {
+        ElementPropWindow *propWindow =  new ElementPropWindow(this);
+        propWindow->show();
+    }), SLOT(signaled()));
+
+    itemMenu->addAction("Удалить", new connect_functor_helper(this, [this]
+    {
+        foreach (QGraphicsItem *item, Scene->selectedItems())
+        {
+            if (item->type() == ModelItem::Type)
+            {
+                qgraphicsitem_cast<ModelItem *>(item)->removeArrows();
+            }
+            Scene->removeItem(item);
+        }
+    }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
+
+    Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
     Storage = new qmodel::ModelStorage(name);
 
@@ -47,10 +67,7 @@ Document::Document(QWidget *parent, QMenu *menu, QString name) :
 
     //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
     connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
-    ::connect(&sLog, SIGNAL(cleared()), [this]
-    {
-        ui->simulationLog->clear();
-    });
+    connect(&sLog, SIGNAL(cleared()), ui->simulationLog, SLOT(clear()));
 
     //убираем заголовок палитры
     QWidget *nullHeader = new QWidget(this);
@@ -156,6 +173,7 @@ void Document::setActiveTab(Document::Tabs Tab)
 
 void Document::startSimulation()
 {
+    ui->simulationLog->clear();
     showLog();
     ui->progressBar->show();
     ui->startButton->hide();

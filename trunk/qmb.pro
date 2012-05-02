@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     qmodel/request_id.cpp \
     qmodel/request.cpp \
     qmodel/object.cpp \
-    homewidget.cpp
+    homewidget.cpp \
+    qmodel/modelstorage.cpp
 
 HEADERS  += mainwindow.h \
     document.h \

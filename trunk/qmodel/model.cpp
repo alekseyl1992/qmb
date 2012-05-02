@@ -40,7 +40,6 @@ namespace qmodel
 				{
                     if (!simulate_flag || !is_simulating()) //if the user switched simulating off
                     {
-                        emit simulationFinished();
 						break;
                     }
 					link.lhs->generate_new_request();

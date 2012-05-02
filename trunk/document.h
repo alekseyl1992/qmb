@@ -22,7 +22,7 @@ class Document : public QDialog
 public:
     enum Tabs {Model, Code, Simulation};
 
-    explicit Document(QWidget *parent, QMenu *menu, QString name);
+    explicit Document(QWidget *parent, QString name);
 
     ~Document();
 
