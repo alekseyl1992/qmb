@@ -239,7 +239,7 @@ public:
     model *getModel(bool create = false);
 
     //получения поля name, item'а по его id для отображения на сцене
-    QString getItemName(int id); // ? не понял
+    QString getItemName(int id); // ? не понял //читай коммент в реализации
     bool saveModel(QString path);
     bool loadModel(QString path);
     void fillModel(IFillableModel *iModel);

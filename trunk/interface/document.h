@@ -34,6 +34,9 @@ public:
 
     void startSimulation();
     void stopSimulation();
+    bool isModified() const;
+    void setModified(bool m);
+
 public slots:
     void logChanged(QString line);
     void on_logButton_toggled(bool checked);
@@ -54,6 +57,7 @@ private:
     ModelScene *Scene;
     logic::ModelStorage *Storage;
     bool bSimulating;
+    bool bDirty;
 };
 
 #endif // DOCUMENT_H

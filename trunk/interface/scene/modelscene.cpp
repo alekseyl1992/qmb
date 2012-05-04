@@ -47,6 +47,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     : QGraphicsScene(parent)
 {
     myScale = 1;
+    bModified = false;
     myItemMenu = itemMenu;
     myMode = MoveItem;
     myItemType = ItemType::Generator;
@@ -186,6 +187,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             QGraphicsScene::addItem(arrow);
             arrow->scaleShadow(myScale);
             arrow->updatePosition();
+            bModified = true;
 
             emit linkInserted(startItem->itemType(), startItem->id(),
                            endItem->itemType(), endItem->id());
@@ -194,9 +196,21 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
     else if(myMode == MoveItem)
     {
-        ModelItem *item = qgraphicsitem_cast<ModelItem *>(this->itemAt(mouseEvent->scenePos()));
-        if(item != nullptr)
-            emit itemMoved(item->itemType(), item->id(), item->pos().toPoint());
+        //проход по всем на случай, если была премещена сразу группа элементов
+
+        foreach(QGraphicsItem *qItem, items())
+        {
+            if(qItem)
+            {
+                ModelItem *item = qgraphicsitem_cast<ModelItem *>(qItem);
+                if(item && item->isModified())
+                {
+                    emit itemMoved(item->itemType(), item->id(), item->pos().toPoint());
+                    bModified = true;
+                    item->setModified(false);
+                }
+            }
+        }
     }
 
     myMode = MoveItem;
@@ -268,6 +282,7 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     item->setPos(event->scenePos());
     emit itemInserted(myItemType, item->id(), item->pos().toPoint());
     myMode = Mode::MoveItem;
+    bModified = true;
 
     event->accept();
 }
@@ -354,5 +369,6 @@ void ModelScene::removeSelectedItems()
             emit itemRemoved(mItem->itemType(), mItem->id());
         }
         removeItem(item);
+        bModified = true;
     }
 }

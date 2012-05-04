@@ -73,6 +73,12 @@ public:
     void addLink(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
     void removeSelectedItems();
+
+    //модель изменена?
+    bool isModified()
+    { return bModified; }
+    void setModified(bool m)
+    { bModified = m;}
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);
@@ -109,7 +115,7 @@ private:
     QColor myTextColor;
     QColor myItemColor;
     QColor myLineColor;
-
+    bool bModified;
 
     void resizeToPoint(QPointF pos);
     int getFreeId(ItemType itemType); //находит ближайщий пустой id

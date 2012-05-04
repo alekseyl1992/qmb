@@ -201,6 +201,17 @@ void Document::stopSimulation()
     }
 }
 
+bool Document::isModified() const
+{
+    //TODO проверка на смену настроек симул€ции
+    return Scene->isModified();
+}
+
+void Document::setModified(bool m)
+{
+    Scene->setModified(m);
+}
+
 void Document::logChanged(QString line)
 {
     //лучше переделать замену текста, на добавление
@@ -226,14 +237,17 @@ void Document::closeEvent(QCloseEvent *event)
             return event->ignore();
     }
 
-    int id = QMessageBox::question(this, "«акрытие модели", "—охранить модель перед закрытием?",
-                              QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+    if(isModified())
+    {
+        int id = QMessageBox::question(this, "«акрытие модели", "—охранить модель перед закрытием?",
+                                  QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
 
-    //TODO сохранение модели
-    if(id == QMessageBox::Yes)
-        Storage->saveModel(QString());
-    else if(id == QMessageBox::Cancel)
-        event->ignore();
+        //TODO сохранение модели
+        if(id == QMessageBox::Yes)
+            Storage->saveModel(QString());
+        else if(id == QMessageBox::Cancel)
+            event->ignore();
+    }
 }
 
 void Document::keyPressEvent(QKeyEvent *event)

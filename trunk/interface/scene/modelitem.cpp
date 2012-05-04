@@ -54,6 +54,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
     QPen iPen = pen();
     iPen.setWidth(2);
     setPen(iPen);
+    bModified = false;
 
     QPainterPath path;
     QRectF itemRect(0, 0, 200, 100);
@@ -199,6 +200,7 @@ QVariant ModelItem::itemChange(GraphicsItemChange change,
         foreach (Arrow *arrow, myArrows) {
             arrow->updatePosition();
         }
+        bModified = true;
     }
 
     return value;
