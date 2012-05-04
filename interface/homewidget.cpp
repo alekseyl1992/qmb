@@ -2,11 +2,11 @@
 #include "ui_homewidget.h"
 #include <QDesktopServices>
 #include <QMessageBox>
-#include <QTextStream>
 #include <QFile>
 #include <QDir>
 #include <QDebug>
 #include <QRegExp>
+//#include <QCleanlooksStyle>
 #include "utility/lsfss.h"
 
 HomeWidget::HomeWidget(QWidget *parent) :
@@ -33,6 +33,7 @@ HomeWidget::HomeWidget(QWidget *parent) :
             button->setText(path.section(QRegExp("[\\\\,/]"), -1, -1));
             button->setDescription(path);
             button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            //button->setStyle(new QCleanlooksStyle());
 
             ::connect(button, SIGNAL(clicked()), [this, path]
             {

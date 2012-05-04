@@ -66,6 +66,7 @@ class Arrow;
 
 class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 {
+
 public:
     enum { Type = UserType + 15 };
 
@@ -90,6 +91,10 @@ public:
         { return myId;}
     const QList<Arrow *>& arrows()
     { return myArrows;}
+    bool isModified() const
+    { return bModified; }
+    void setModified(bool m)
+    { bModified = m; }
 
     QString typeAsString();
 
@@ -104,6 +109,7 @@ private:
     QMenu *myContextMenu;
     QList<Arrow *> myArrows;
     int myId;
+    bool bModified;
 };
 
 #endif

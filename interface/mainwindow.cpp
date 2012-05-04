@@ -7,11 +7,7 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QMdiSubWindow>
-#include <QButtonGroup>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <QFileDialog>
-#include <QDataStream>
 #include <QToolButton>
 #include <QFont>
 #include <QMenu>
@@ -163,7 +159,7 @@ void MainWindow::createMenuButton()
 {
     //добавляем меню перед списком табов
     QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
-    QToolButton *menuButton = new QToolButton(ui->mdiArea);
+    QToolButton *menuButton = new QToolButton(tabBar);
     menuButton->setGeometry(1, 1, 48, 26);
     menuButton->setText("QMB");
     menuButton->setCheckable(true);
@@ -179,7 +175,7 @@ void MainWindow::createMenuButton()
     mainMenu->addSeparator();
     mainMenu->addAction("Выход", this, SLOT(close()));
 
-    //отжимаем кнопку меню через dt -> 0, чтобы меню не лоткрылось при повторном нажатии на кнопку
+    //отжимаем кнопку меню через dt -> 0, чтобы меню не открылось при повторном нажатии на кнопку
     ::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
     {
          QTimer::singleShot(200, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
@@ -187,12 +183,12 @@ void MainWindow::createMenuButton()
 
     std::function<void()> onClick = [mainMenu, menuButton]
     {
-        if(menuButton->isChecked())
+        if(menuButton->isChecked() && mainMenu->isHidden())
         {
             mainMenu->exec(menuButton->mapToGlobal(QPoint(0, 26)));
         }
     };
-    ::connect(menuButton, SIGNAL(clicked()), onClick);
+    ::connect(menuButton, SIGNAL(pressed()), onClick);
 
     tabBar->setStyleSheet(R"(
         QTabBar::tab
@@ -205,6 +201,7 @@ void MainWindow::createMenuButton()
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
             min-width: 8ex;
+            height: 21;
             padding: 2px;
         }
         QTabBar::tab:selected, QTabBar::tab:hover
@@ -217,12 +214,12 @@ void MainWindow::createMenuButton()
         QTabBar::tab:selected
         {
             border-color: #9B9B9B;
-            border-bottom-color: #C2C7CB; /* same as pane color */
+            border-bottom-color: #C2C7CB;
         }
 
         QTabBar::tab:!selected
         {
-            margin-top: 2px;
+            /*margin-top: 2px;*/
         }
 
         QTabBar::tab:first, QTabBar::tab:only-one

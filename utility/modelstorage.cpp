@@ -41,6 +41,7 @@ namespace logic
     QString ModelStorage::getItemName(int id)
     {
         return QString(); //stub
+        //находишь в QDomDocument item с соотв. id, возвращаешь его поле name
     }
 
     bool ModelStorage::saveModel(QString path)
