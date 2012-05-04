@@ -16,7 +16,7 @@ namespace logic
     class generator : public object
 	{
 	public:
-        generator(model* parent, int period = 0, ull_t num_requests = 0);
+        generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0);
 		generator(const generator& gen);
 		generator& operator=(const generator& gen);
 
@@ -46,8 +46,6 @@ namespace logic
 		}
 
 		virtual void clean() { }
-
-        static int cur_id; //<- генератор
 
 	private:
         //Fields

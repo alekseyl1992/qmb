@@ -3,11 +3,9 @@
 
 namespace logic
 {
-    int handler::cur_id = 0;
-
 	//Constructor
-    handler::handler(model* parent, int _handlePeriod):
-        object(parent, ++cur_id), cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true)
+    handler::handler(model* parent, int id, int _handlePeriod):
+        object(parent, id), cur_req(nullptr), handling_period(_handlePeriod), freedom_flag(true)
 	{ }
 
 	handler::handler(const handler& h) : 
@@ -50,7 +48,6 @@ namespace logic
         std::stringstream ss;
         ss << "----Request[" << cur_req->get_id() << "] finished handling in handler " << get_id();
         sLog.writeLine(ss.str());
-        qDebug() << cur_req->get_id().__req_id << " finished handling" << endl;
 
         delete cur_req;
 	}

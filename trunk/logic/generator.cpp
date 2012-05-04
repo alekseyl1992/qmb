@@ -4,11 +4,9 @@
 
 namespace logic
 {
-int generator::cur_id = 0;
-
 	//Constructors
-    generator::generator(model* parent, int period, ull_t num_requests):
-            object(parent, ++cur_id), new_req(NULL), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
+    generator::generator(model* parent, int id, int period, ull_t num_requests):
+            object(parent, id), new_req(NULL), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
 		cur_req_id = 0; 
 	}
 

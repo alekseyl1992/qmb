@@ -3,20 +3,16 @@
 
 namespace logic
 {
-    int queue::cur_id = 0;
-
 	//constructors
-    queue::queue(model* parent):
-        object(parent, ++cur_id), having_request_flag(false)
+    queue::queue(model* parent, int id):
+        object(parent, id), having_request_flag(false)
 	{ }
 
     queue::queue(const queue &q) :
         object(q), requests_in_queue(q.requests_in_queue), having_request_flag(q.having_request_flag)
 	{ }
 
-	queue::~queue() {
-        //queue_mutex.native_handle();
-	}
+    queue::~queue() { }
 
 	//assignment
 	queue& queue::operator=(const queue& q) {

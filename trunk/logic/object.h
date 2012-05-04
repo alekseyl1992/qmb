@@ -16,8 +16,7 @@ namespace logic
         Q_OBJECT
 
 	public:
-        object(model* p);
-        object(model* p, int cur_id);
+        object(model* p, int id);
         object(const object& obj);
         virtual ~object();
 
