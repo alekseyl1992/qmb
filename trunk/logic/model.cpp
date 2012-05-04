@@ -2,8 +2,6 @@
 
 namespace logic
 {
-    int model::cur_id = 0;
-
     bool model::are_all_generated() {
         bool all_completed = true;
        /* for (link <generator*, queue*>& link : link_generators_queues)
@@ -26,26 +24,34 @@ namespace logic
 
     bool model::are_queues_clear() {
         bool all_completed = true;
-       /* for (link <generator*, queue*>& link : link_generators_queues)
-        {
-            if (!link.lhs->is_finished())
-            {
-                all_completed = false;
-                break;
-            }
-        }*/
-
         std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
 			if (link.lhs->get_size() != 0)
 			{
                 all_completed = false;
 			}
         });
+    return all_completed;
+    }
+
+    bool model::are_all_handlers_finished_handling()
+    {
+        bool all_completed = true;
+        std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
+            if (!link.rhs->is_free())
+            {
+                all_completed = false;
+            }
+        });
         return all_completed;
     }
 
+
+
     bool model::is_simulating_finished() {
-        return are_all_generated() && are_queues_clear();
+        bool c1 = are_all_generated(),
+             c2 = are_queues_clear(),
+             c3 = are_all_handlers_finished_handling();
+        return c1 && c2 && c3;
 	}
 
 	void model::generator_queue_link_th() {
@@ -92,14 +98,27 @@ namespace logic
 	void model::simulation_start() {
 		//starts simulating
 		simulate_flag = true;
+
+        std::stringstream ss;
+        ss << "Simulation started.";
+        sLog.writeLine(ss.str());
+
 		generator_queue_link_th();
 		handler_queue_link_th();
+
+
         std::thread([this]()
         {
+            std::mutex m;
             for(; ; )
             {
+                std::lock_guard<std::mutex> lk(m);
                 if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
                 {
+                    qDebug() << "--------simulation finished" << endl;
+                    std::stringstream ss;
+                    ss << "Simulation finished.";
+                    sLog.writeLine(ss.str());
                     emit simulationFinished();
                     break;
                 }
@@ -109,7 +128,8 @@ namespace logic
 
 	void model::simulation_stop() {
 		//stops simulating
-		simulate_flag = false;
-	}
+        simulate_flag = false;
+    }
+
 
 } //end namespace logic

@@ -2,22 +2,25 @@
 #define H_GENERATOR
 
 #include <thread>
-
+#include "object.h"
 
 #include "request.h"
 #include "exceptions.h"
-#include "object.h"
 
 namespace logic
 {
+
+    class object;
+    class model;
+
     class generator : public object
 	{
 	public:
-        generator(int period = 0, ull_t num_requests = 0);
+        generator(model* parent, int period = 0, ull_t num_requests = 0);
 		generator(const generator& gen);
 		generator& operator=(const generator& gen);
 
-		~generator() { }
+        ~generator();
 
 
 		//generating new request
@@ -45,8 +48,9 @@ namespace logic
 		virtual void clean() { }
 
         static int cur_id; //<- генератор
+
 	private:
-		//Fields
+        //Fields
 		request* new_req;
 		int generating_period;
         ull_t number_of_requests_to_generate;

@@ -9,22 +9,24 @@
 
 namespace logic
 {
+    class model;
+
     class object : public QObject
 	{
         Q_OBJECT
 
 	public:
-        object() { }
-        object(int cur_id) : id(cur_id) { }
-        object(int cur_id, char* _name): id(cur_id), name(_name) { }
+        object(model* p);
+        object(model* p, int cur_id);
+        object(const object& obj);
+        virtual ~object();
 
-		int get_id() const { return id; }
+        int get_id() const { return id; }
 		virtual void clean() = 0;
-	protected:
-		int id;
 
-		//global properties
-		std::string name;
+	protected:
+        model* parent;
+        int id;
 	};
 
 }

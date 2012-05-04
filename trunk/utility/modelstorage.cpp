@@ -8,12 +8,12 @@ namespace logic
         if(create) //создание модели
         {
             myModel = new model();
-            myModel->generators.push_back(logic::generator(500, 10));
-            myModel->generators.push_back(logic::generator(700, 5));
-            myModel->queues.push_back(logic::queue());
-            myModel->queues.push_back(logic::queue());
-            myModel->handlers.push_back(logic::handler(600));
-            myModel->handlers.push_back(logic::handler(800));
+            myModel->generators.push_back(logic::generator(myModel, 100, 8));
+            myModel->generators.push_back(logic::generator(myModel, 700, 5));
+            myModel->queues.push_back(logic::queue(myModel));
+            myModel->queues.push_back(logic::queue(myModel));
+            myModel->handlers.push_back(logic::handler(myModel, 500));
+            myModel->handlers.push_back(logic::handler(myModel, 800));
 
             myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[0], &myModel->queues[0]));
            // myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
@@ -189,15 +189,15 @@ namespace logic
         switch (entries[elemType])
         {
             case ItemType::Generator:
-                newgen = new generator(param.toInt());
+                newgen = new generator(curModel, param.toInt());
                 curModel->generators.push_back(*newgen);
                 break;
             case ItemType::Queue:
-                newqueue = new queue();
+                newqueue = new queue(curModel);
                 curModel->queues.push_back(*newqueue);
                 break;
             case ItemType::Handler:
-                newhnd = new handler(param.toInt());
+                newhnd = new handler(curModel, param.toInt());
                 curModel->handlers.push_back(*newhnd);
                 break;
             case ItemType::Terminator:
