@@ -4,17 +4,21 @@
 #include <deque>
 #include <mutex>
 
-#include "request.h"
 #include "object.h"
+#include "request.h"
+
 
 namespace logic
 {
+    class object;
+    class model;
+
     class queue : public object
 	{
         std::mutex queue_mutex;
     public:
-		queue();
-		queue(const queue& q);
+        queue(model* parent);
+        queue(const queue& q);
 		queue& operator=(const queue& q);
 
 		~queue();
@@ -35,6 +39,7 @@ namespace logic
 		virtual void clean() { }
 
         static int cur_id;
+
 	private:
 		std::deque<request> requests_in_queue;
 		bool having_request_flag;

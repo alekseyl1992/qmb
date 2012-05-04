@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <QDebug>
+
 enum class ItemType : int
 {
     Generator,

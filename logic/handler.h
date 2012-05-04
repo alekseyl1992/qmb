@@ -10,11 +10,14 @@
 
 namespace logic
 {
+    class object;
+    class model;
+
     class handler : public object
 	{
-		std::mutex handler_mutex;
+        std::mutex handler_mutex;
 	public:
-		handler(int _handlePeriod = 0);
+        handler(model* parent, int _handlePeriod = 0);
 		handler(const handler& h);
 		handler& operator=(const handler& h);
 
@@ -34,6 +37,7 @@ namespace logic
 		virtual void clean() { }
 
         static int cur_id;
+
 	private:
 		
 		//finish the request
