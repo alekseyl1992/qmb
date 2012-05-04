@@ -27,6 +27,9 @@ namespace logic
 	protected:
         model* parent;
         int id;
+
+        //attributes
+        std::string name;
 	};
 
 }
