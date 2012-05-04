@@ -17,7 +17,7 @@ namespace logic
 	{
         std::mutex queue_mutex;
     public:
-        queue(model* parent);
+        queue(model* parent, int id=0);
         queue(const queue& q);
 		queue& operator=(const queue& q);
 
@@ -37,8 +37,6 @@ namespace logic
         bool has_request() { return having_request_flag; }
 
 		virtual void clean() { }
-
-        static int cur_id;
 
 	private:
 		std::deque<request> requests_in_queue;

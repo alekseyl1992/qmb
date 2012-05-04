@@ -17,7 +17,7 @@ namespace logic
 	{
         std::mutex handler_mutex;
 	public:
-        handler(model* parent, int _handlePeriod = 0);
+        handler(model* parent, int id=0, int _handlePeriod = 0);
 		handler(const handler& h);
 		handler& operator=(const handler& h);
 
@@ -35,8 +35,6 @@ namespace logic
 
 
 		virtual void clean() { }
-
-        static int cur_id;
 
 	private:
 		

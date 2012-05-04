@@ -8,22 +8,22 @@ namespace logic
         if(create) //создание модели
         {
             myModel = new model();
-            myModel->generators.push_back(logic::generator(myModel, 100, 8));
-            myModel->generators.push_back(logic::generator(myModel, 700, 5));
-            myModel->queues.push_back(logic::queue(myModel));
-            myModel->queues.push_back(logic::queue(myModel));
-            myModel->handlers.push_back(logic::handler(myModel, 500));
-            myModel->handlers.push_back(logic::handler(myModel, 800));
+            myModel->generators.push_back(logic::generator(myModel, 1, 100, 8));
+            myModel->generators.push_back(logic::generator(myModel, 2, 700, 5));
+            myModel->queues.push_back(logic::queue(myModel, 1));
+            myModel->queues.push_back(logic::queue(myModel, 2));
+            myModel->handlers.push_back(logic::handler(myModel, 1, 500));
+            myModel->handlers.push_back(logic::handler(myModel, 2, 800));
 
             myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[0], &myModel->queues[0]));
-           // myModel->link_generators_queues.push_back(qmodel::link<qmodel::generator*, qmodel::queue* >(&myModel->generators[1], &myModel->queues[0]));
+            myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[1], &myModel->queues[1]));
 
             myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[0], &myModel->handlers[0]));
-            //myModel->link_queues_handlers.push_back(qmodel::link<qmodel::queue*, qmodel::handler* >(&myModel->queues[0], &myModel->handlers[1]));
+            myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[1], &myModel->handlers[0]));
         }
 
         return myModel;
-    };
+    }
 
 /*    void ModelStorage::SceneToXML(ModelScene *scene, QString FileName)
     {

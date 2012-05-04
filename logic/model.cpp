@@ -109,10 +109,9 @@ namespace logic
 
         std::thread([this]()
         {
-            std::mutex m;
             for(; ; )
             {
-                std::lock_guard<std::mutex> lk(m);
+                std::lock_guard<std::mutex> lk(model_mutex);
                 if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
                 {
                     qDebug() << "--------simulation finished" << endl;
