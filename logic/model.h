@@ -30,6 +30,7 @@ namespace logic
         friend class generator;
         friend class queue;
         friend class handler;
+
 	public:
         model() { }
 		model(const model& ) { }
@@ -40,11 +41,23 @@ namespace logic
         bool are_queues_clear(); //checks if all queues are clear
         bool are_all_handlers_finished_handling(); //it's obvious :)
         bool is_simulating_finished(); //checks the sumulation
+        void generator_queue_link_th(); //links generators and queues
+        void handler_queue_link_th(); //links queues and handlers
 
-		virtual void clean() { }
-
-		void simulation_start();
+        void simulation_start();
 		void simulation_stop();
+
+        void add_generator(const generator& gen);
+        void add_queue(const queue& q);
+        void add_handler(const handler& h);
+        void add_link_generator_queue(const link <generator*, queue*>& link);
+        void add_link_queue_handler(const link<queue *, handler *> &link);
+
+        generator* get_generator_by_id(int id);
+        queue* get_queue_by_id(int id);
+        handler* get_handler_by_id(int id);
+        link <generator*, queue*>* get_link_generator_queue_by_ids(int id_left, int id_right);
+        link <queue*, handler*>* get_link_queues_handlers_by_ids(int id_left, int id_right);
 
     signals:
         void simulationFinished();
@@ -53,12 +66,7 @@ namespace logic
         void reqBeganHandling(const int& hID, const request_id& reqID);
         void reqFinishedHandling(const int& hID, const request_id& reqID);
 
-	private:
-		void generator_queue_link_th();
-		void handler_queue_link_th();
-
-
-	public: //members <- TODO: make private
+    private: //members
 		std::vector<generator> generators; //all generators are kept here
 		std::vector<queue> queues; //all queues are kept here
 		std::vector<handler> handlers; //all handlers are kept here
@@ -68,8 +76,6 @@ namespace logic
 		std::vector< link <queue*, handler*> > link_queues_handlers;
 
 		bool simulate_flag;
-
-
 	};
 
 } //end namespace logic

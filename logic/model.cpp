@@ -114,7 +114,6 @@ namespace logic
                 std::lock_guard<std::mutex> lk(model_mutex);
                 if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
                 {
-                    qDebug() << "--------simulation finished" << endl;
                     std::stringstream ss;
                     ss << "Simulation finished.";
                     sLog.writeLine(ss.str());
@@ -128,6 +127,64 @@ namespace logic
 	void model::simulation_stop() {
 		//stops simulating
         simulate_flag = false;
+    }
+
+    void model::add_generator(const generator &gen)
+    {
+        generators.push_back(gen);
+    }
+
+    void model::add_queue(const queue &q)
+    {
+        queues.push_back(q);
+    }
+
+    void model::add_handler(const handler &h)
+    {
+        handlers.push_back(h);
+    }
+
+    void model::add_link_generator_queue(const link<generator *, queue *> &link)
+    {
+        link_generators_queues.push_back(link);
+    }
+
+    void model::add_link_queue_handler(const link<queue *, handler *> &link)
+    {
+        link_queues_handlers.push_back(link);
+    }
+
+    generator *model::get_generator_by_id(int id)
+    {
+        std::vector<generator>::iterator iter;
+        for(auto it = generators.begin(); it != generators.end(); ++it)
+        {
+            if (it->get_id() == id)
+                iter = it;
+        }
+        return &(*iter);
+    }
+
+    queue *model::get_queue_by_id(int id)
+    {
+        std::vector<queue>::iterator iter;
+        for(auto it = queues.begin(); it != queues.end(); ++it)
+        {
+            if (it->get_id() == id)
+                iter = it;
+        }
+        return &(*iter);
+    }
+
+    handler *model::get_handler_by_id(int id)
+    {
+        std::vector<handler>::iterator iter;
+        for(auto it = handlers.begin(); it != handlers.end(); ++it)
+        {
+            if (it->get_id() == id)
+                iter = it;
+        }
+        return &(*iter);
     }
 
 
