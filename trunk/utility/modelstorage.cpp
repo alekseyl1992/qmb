@@ -8,18 +8,26 @@ namespace logic
         if(create) //создание модели
         {
             myModel = new model();
-            myModel->generators.push_back(logic::generator(myModel, 1, 100, 8));
-            myModel->generators.push_back(logic::generator(myModel, 2, 700, 5));
-            myModel->queues.push_back(logic::queue(myModel, 1));
-            myModel->queues.push_back(logic::queue(myModel, 2));
-            myModel->handlers.push_back(logic::handler(myModel, 1, 500));
-            myModel->handlers.push_back(logic::handler(myModel, 2, 800));
+            myModel->add_generator(logic::generator(myModel, 1, 100, 8));
+            myModel->add_generator(logic::generator(myModel, 2, 700, 5));
+            myModel->add_queue(logic::queue(myModel, 1));
+            myModel->add_queue(logic::queue(myModel, 2));
+            myModel->add_handler(logic::handler(myModel, 1, 500));
+            myModel->add_handler(logic::handler(myModel, 2, 800));
 
-            myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[0], &myModel->queues[0]));
-            myModel->link_generators_queues.push_back(logic::link<logic::generator*, logic::queue* >(&myModel->generators[1], &myModel->queues[1]));
+            logic::generator* g1 = myModel->get_generator_by_id(1);
+            logic::generator* g2 = myModel->get_generator_by_id(2);
+            logic::queue* q1 = myModel->get_queue_by_id(1);
+            //logic::queue* q2 = myModel->get_queue_by_id(2);
+            logic::handler* h1 = myModel->get_handler_by_id(1);
+            logic::handler* h2 = myModel->get_handler_by_id(2);
 
-            myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[0], &myModel->handlers[0]));
-            myModel->link_queues_handlers.push_back(logic::link<logic::queue*, logic::handler* >(&myModel->queues[1], &myModel->handlers[0]));
+
+            myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q1));
+            myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g2, q1));
+
+            myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h1));
+            myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h2));
         }
 
         return myModel;
@@ -191,15 +199,15 @@ namespace logic
         {
             case ItemType::Generator:
                 newgen = new generator(curModel, param.toInt());
-                curModel->generators.push_back(*newgen);
+                curModel->add_generator(*newgen);
                 break;
             case ItemType::Queue:
                 newqueue = new queue(curModel);
-                curModel->queues.push_back(*newqueue);
+                curModel->add_queue(*newqueue);
                 break;
             case ItemType::Handler:
                 newhnd = new handler(curModel, param.toInt());
-                curModel->handlers.push_back(*newhnd);
+                curModel->add_handler(*newhnd);
                 break;
             case ItemType::Terminator:
                 break;
@@ -219,14 +227,14 @@ namespace logic
         switch (entries[params[0]])
         {
             case 0:     link_gen_que = new link<generator*,queue*>
-                                                (&curModel->generators[params[1].toInt()],
-                                                &curModel->queues[params[2].toInt()]);
-                        curModel->link_generators_queues.push_back(*link_gen_que);
+                                                (curModel->get_generator_by_id(params[1].toInt() + 1),
+                                                 curModel->get_queue_by_id(params[2].toInt() + 1));
+                        curModel->add_link_generator_queue(*link_gen_que);
                         break;
             case 1:     link_que_hnd = new link<queue*,handler*>
-                                                (&curModel->queues[params[1].toInt()],
-                                                &curModel->handlers[params[2].toInt()]);
-                        curModel->link_queues_handlers.push_back(*link_que_hnd);
+                                                (curModel->get_queue_by_id(params[1].toInt() + 1),
+                                                curModel->get_handler_by_id(params[2].toInt() + 1));
+                        curModel->add_link_queue_handler(*link_que_hnd);
             default:    break;
         }
 
