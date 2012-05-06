@@ -172,7 +172,7 @@ QToolButton
          <string>Стоп</string>
         </property>
         <property name="icon">
-         <iconset resource="resources.qrc">
+         <iconset resource="../resources.qrc">
           <normaloff>:/icons/stop</normaloff>:/icons/stop</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -189,7 +189,7 @@ QToolButton
          <string>Старт</string>
         </property>
         <property name="icon">
-         <iconset resource="resources.qrc">
+         <iconset resource="../resources.qrc">
           <normaloff>:/icons/start</normaloff>:/icons/start</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -457,7 +457,7 @@ QTreeView::item:!enabled {
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QTextEdit" name="textEdit"/>
+         <widget class="QTextEdit" name="codeEdit"/>
         </item>
        </layout>
       </widget>
@@ -543,7 +543,7 @@ QTreeView::item:!enabled {
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -26,8 +26,8 @@ public:
 
     ~Document();
 
-    ModelScene *scene();
-    QTextEdit *code();
+    ModelScene *scene() const;
+    QTextEdit *code() const;
 
     void showLog(bool show = true);
     void setActiveTab(Tabs Tab);
@@ -36,7 +36,6 @@ public:
     void stopSimulation();
     bool isModified() const;
     void setModified(bool m);
-
 public slots:
     void logChanged(QString line);
     void on_logButton_toggled(bool checked);
@@ -51,13 +50,17 @@ private slots:
 
     void on_stopButton_clicked();
 
+    void on_tabWidget_currentChanged(int index);
+
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
-    logic::ModelStorage *Storage;
+    ModelStorage *Storage;
     bool bSimulating;
     bool bDirty;
+
+    bool tryApplyCode();
 };
 
 #endif // DOCUMENT_H

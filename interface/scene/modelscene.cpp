@@ -96,8 +96,14 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
         arrow->updatePosition();
     }
     else
-        QMessageBox::critical((QWidget *)parent(), "Ошибка",
-                              QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4").arg((QString)((int)fromType), (QString)idFrom, (QString)((int)toType), (QString)idTo));
+        QMessageBox::critical(
+                    (QWidget *)parent(),
+                    "Ошибка",
+                    QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4")
+                        .arg((int)fromType)
+                        .arg(idFrom)
+                        .arg((int)toType)
+                        .arg(idTo));
 }
 
 void ModelScene::setMode(Mode mode)
