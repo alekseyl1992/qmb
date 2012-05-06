@@ -273,6 +273,7 @@ void Document::onSimulationFinished()
     ui->startButton->show();
     ui->stopButton->hide();
     ui->graphicsView->setEnabled(true);
+    Storage->freeModel();
 
     int id = QMessageBox::question(
                 this, windowTitle(),

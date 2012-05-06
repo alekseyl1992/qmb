@@ -129,29 +129,29 @@ namespace logic
         simulate_flag = false;
     }
 
-    void model::add_generator(const generator &gen)
+    void model::add_generator(const generator &&gen)
     {
-        generators.push_back(gen);
+        generators.emplace_back(gen);
     }
 
-    void model::add_queue(const queue &q)
+    void model::add_queue(const queue &&q)
     {
-        queues.push_back(q);
+        queues.emplace_back(q);
     }
 
-    void model::add_handler(const handler &h)
+    void model::add_handler(const handler &&h)
     {
-        handlers.push_back(h);
+        handlers.emplace_back(h);
     }
 
-    void model::add_link_generator_queue(const link<generator *, queue *> &link)
+    void model::add_link_generator_queue(const link<generator *, queue *> &&link)
     {
-        link_generators_queues.push_back(link);
+        link_generators_queues.emplace_back(link);
     }
 
-    void model::add_link_queue_handler(const link<queue *, handler *> &link)
+    void model::add_link_queue_handler(const link<queue *, handler *> &&link)
     {
-        link_queues_handlers.push_back(link);
+        link_queues_handlers.emplace_back(link);
     }
 
     generator *model::get_generator_by_id(int id)
