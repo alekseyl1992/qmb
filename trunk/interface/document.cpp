@@ -23,10 +23,10 @@ Document::Document(QWidget *parent, QString name) :
     ui->progressBar->hide();
     ui->stopButton->hide();
 
-    //ахалай-махалай, OpenGL acceleration подключай
+    //OpenGL acceleration
     ui->graphicsView->setViewport(new QGLWidget(this));
 
-    new XmlHighlighter(ui->textEdit);
+    new XmlHighlighter(ui->codeEdit);
     QMenu *itemMenu = new QMenu(this);
     itemMenu->addAction("Свойства", new connect_functor_helper(this, [this]
     {
@@ -41,7 +41,7 @@ Document::Document(QWidget *parent, QString name) :
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
-    Storage = new logic::ModelStorage(name);
+    Storage = new ModelStorage(name);
 
     //связываяем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
@@ -145,14 +145,15 @@ Document::~Document()
     delete ui;
 }
 
-ModelScene *Document::scene()
+ModelScene *Document::scene() const
 {
     return Scene;
 }
 
-QTextEdit *Document::code()
+//DEPRECATED
+QTextEdit *Document::code() const
 {
-    return ui->textEdit;
+    return ui->codeEdit;
 }
 
 void Document::showLog(bool show)
@@ -204,7 +205,7 @@ void Document::stopSimulation()
 bool Document::isModified() const
 {
     //TODO проверка на смену настроек симуляции
-    return Scene->isModified();
+    return Scene->isModified() || code()->document()->isModified();
 }
 
 void Document::setModified(bool m)
@@ -244,7 +245,16 @@ void Document::closeEvent(QCloseEvent *event)
 
         //TODO сохранение модели
         if(id == QMessageBox::Yes)
-            Storage->saveModel(QString());
+        {
+            //если код изменён
+            if(code()->document()->isModified())
+            {
+                if(tryApplyCode())
+                    Storage->saveModel(QString());
+            }
+            else
+                Storage->saveModel(QString());
+        }
         else if(id == QMessageBox::Cancel)
             event->ignore();
     }
@@ -284,10 +294,48 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
 
 void Document::on_startButton_clicked()
 {
-    startSimulation();
+    if(ui->codeEdit->document()->isModified())
+    {
+        if(tryApplyCode())
+            startSimulation();
+    }
+    else
+        startSimulation();
 }
 
 void Document::on_stopButton_clicked()
 {
     stopSimulation();
+}
+
+void Document::on_tabWidget_currentChanged(int index)
+{
+    //при переключении на вкладку Code, подгружаем код
+    if(index == Tabs::Code)
+    {
+        ui->codeEdit->clear();
+        ui->codeEdit->insertPlainText(Storage->getCodeString());
+    }
+    else //ушли с вкладки с кодом
+    {
+        if(ui->codeEdit->document()->isModified())
+            if(tryApplyCode())
+                Storage->fillModel(Scene);
+    }
+}
+
+bool Document::tryApplyCode()
+{
+    try
+    {
+        Storage->setCodeString(ui->codeEdit->document()->toPlainText());
+        code()->document()->setModified(false);
+        return true;
+    }
+    catch(const ModelStorage::ParseException& e)
+    {
+        QMessageBox::critical(this, windowTitle(),
+                              QString("Возникли ошибки при парсе кода:\n\tСтрока: %1\n\tОшибка: %2").arg(e.stringNum()).arg(e.text()));
+        return false;
+    }
 }

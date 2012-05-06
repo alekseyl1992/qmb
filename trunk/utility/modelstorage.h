@@ -10,19 +10,17 @@
 #include <QFile>
 #include <QPoint>
 
-namespace logic
-{
-
+//зачем7
 //константы символьные. выношу как и обещал
 const QString ItemNames[] = {"Generator","Queue",
                             "Handler","Terminator"};
 
-class ModelStorage : public QObject //для connect
+class ModelStorage : public QObject
 {
     Q_OBJECT
 
 private:
-    model* myModel;
+    logic::model* myModel;
     QDomDocument* curDoc;
 // пока
     QDomElement root, gens, queues, handlers, terms;
@@ -30,12 +28,13 @@ private:
     //функции для добавления линков и итемов в модель.
     //убрал их в private
 
-    void AddItem(model *curModel, QString elemType, QString param);
-    void AddLink(model *curModel, std::vector<QString> params);
+    void AddItem(logic::model *curModel, QString elemType, QString param);
+    void AddLink(logic::model *curModel, std::vector<QString> params);
 
     void MoveItem(QDomElement &item, int &id, QPoint &pos);
 
 public:
+    //TODO перенести реализации в cpp
     ModelStorage(QString name) : myModel(nullptr)
     {
         curDoc = new QDomDocument("qmodel");
@@ -47,6 +46,8 @@ public:
         qDebug() << curDoc->toString() << endl;
     }
 
+    QString getCodeString(); //возвращает строку с XML-кодом сцены
+    bool setCodeString(QString code); //парсинг строки в документ //вызывается при ручном изсменении кода
     //DEPRECATED
     /*void SaveQModel(model *curModel, QString xmlFileName)
     {
@@ -236,7 +237,7 @@ public:
     }*/
 
     //TODO form model here (instead of using LoadQModel)
-    model *getModel(bool create = false);
+    logic::model *getModel(bool create = false);
 
     //получения поля name, item'а по его id для отображения на сцене
     QString getItemName(int id); // ? не понял //читай коммент в реализации
@@ -247,7 +248,7 @@ public:
     //TODO здесь будут метода для получения и записи полного списка параметров
     //просто пока ещё не продуман формат хранения этих самывх форматов
 
-public slots:  
+public slots:
 
     void onItemInserted(ItemType type, int id, QPoint pos);
     void onItemMoved(ItemType type, int id, QPoint pos);
@@ -255,8 +256,23 @@ public slots:
     void onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
-}; //class
+public:
+    class ParseException
+    {
+    private:
+     QString errorText;
+     int strNum;
 
-} //namespace logic
+    public:
+     ParseException(QString text, int strNumber)
+         : errorText(text), strNum(strNumber) {}
+
+     QString text() const
+     { return errorText; }
+     int stringNum() const
+     { return strNum; }
+    };
+
+}; //class
 
 #endif // MODELSTORAGE_H
