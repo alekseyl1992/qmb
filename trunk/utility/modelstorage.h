@@ -238,12 +238,13 @@ public:
 
     //TODO form model here (instead of using LoadQModel)
     logic::model *getModel(bool create = false);
+    void freeModel();
 
     //получения поля name, item'а по его id для отображения на сцене
     QString getItemName(int id); // ? не понял //читай коммент в реализации
     bool saveModel(QString path);
     bool loadModel(QString path);
-    void fillModel(IFillableModel *iModel);
+    void fillModel(IFillableModel *iModel) const;
 
     //TODO здесь будут метода для получения и записи полного списка параметров
     //просто пока ещё не продуман формат хранения этих самывх форматов
@@ -272,7 +273,6 @@ public:
      int stringNum() const
      { return strNum; }
     };
-
 }; //class
 
 #endif // MODELSTORAGE_H

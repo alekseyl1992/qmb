@@ -47,11 +47,11 @@ namespace logic
         void simulation_start();
 		void simulation_stop();
 
-        void add_generator(const generator& gen);
-        void add_queue(const queue& q);
-        void add_handler(const handler& h);
-        void add_link_generator_queue(const link <generator*, queue*>& link);
-        void add_link_queue_handler(const link<queue *, handler *> &link);
+        void add_generator(const generator &&gen);
+        void add_queue(const queue &&q);
+        void add_handler(const handler &&h);
+        void add_link_generator_queue(const link <generator*, queue*> &&link);
+        void add_link_queue_handler(const link<queue *, handler *> &&link);
 
         generator* get_generator_by_id(int id);
         queue* get_queue_by_id(int id);

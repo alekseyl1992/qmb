@@ -31,6 +31,12 @@ logic::model* ModelStorage::getModel(bool create)
     return myModel;
 }
 
+void ModelStorage::freeModel()
+{
+    delete myModel;
+    myModel = nullptr;
+}
+
 /*    void ModelStorage::SceneToXML(ModelScene *scene, QString FileName)
 {
     foreach(QGraphicsItem *it, scene->items())
@@ -60,7 +66,7 @@ bool ModelStorage::loadModel(QString path)
     return true;
 }
 
-void ModelStorage::fillModel(IFillableModel *iModel)
+void ModelStorage::fillModel(IFillableModel *iModel) const
 {
 
 }
