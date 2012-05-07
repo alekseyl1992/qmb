@@ -60,7 +60,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
 
 void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
 {
-    ModelItem *item = new ModelItem(itemType, id, myItemMenu);
+    ModelItem *item = new ModelItem(itemType, id);
     item->setPos(pos);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
@@ -116,14 +116,26 @@ void ModelScene::setItemType(ItemType type)
     myItemType = type;
 }
 
+void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if(keyEvent->key() == Qt::Key_Delete)
+        removeSelectedItems();
+}
+
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    //Выделение ПКМ только если ничего не выбрано
-    if(mouseEvent->button() == Qt::RightButton && selectedItems().empty())
+    //Выделение по ПКМ
+    if(mouseEvent->button() == Qt::RightButton)
     {
         QGraphicsItem *item = itemAt(mouseEvent->scenePos());
         if(item)
+        {
+            //если нажали на невыделенном элементе
+            if(!item->isSelected())
+                clearSelection();
+
             item->setSelected(true);
+        }
     }
 
     if(mouseEvent->button() != Qt::LeftButton)
@@ -144,7 +156,8 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
     //если что-то выбрано и мышь находиться над выбранным элементом
-    if(!selectedItems().empty() && itemAt(contextMenuEvent->scenePos()))
+    QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos());
+    if(!selectedItems().empty() && qItem && qItem->isSelected())
         myItemMenu->popup(contextMenuEvent->screenPos());
 }
 
@@ -281,7 +294,7 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     //ресайз сцены при добавлении элемента
     resizeToPoint(event->scenePos());
 
-    ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType), myItemMenu);
+    ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType));
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
     QGraphicsScene::addItem(item);
@@ -373,6 +386,12 @@ void ModelScene::removeSelectedItems()
             ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
             mItem->removeArrows();
             emit itemRemoved(mItem->itemType(), mItem->id());
+        }
+        else if(item->type() == Arrow::Type)
+        {
+            Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
+            emit linkRemoved(arrow->startItem()->itemType(), arrow->startItem()->id(),
+                             arrow->endItem()->itemType(), arrow->endItem()->id());
         }
         removeItem(item);
         bModified = true;

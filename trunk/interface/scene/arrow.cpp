@@ -73,8 +73,11 @@ QRectF Arrow::boundingRect() const
 
 QPainterPath Arrow::shape() const
 {
-    QPainterPath path = QGraphicsLineItem::shape();
+    /*QPainterPath path = QGraphicsLineItem::shape();
     path.addPolygon(arrowHead);
+    return path;*/
+    QPainterPath path;
+    path.addRect(boundingRect());
     return path;
 }
 
@@ -87,8 +90,8 @@ void Arrow::updatePosition()
 void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
           QWidget *)
 {
-    if (myStartItem->collidesWithItem(myEndItem))
-        return;
+    //if (myStartItem->collidesWithItem(myEndItem))
+    //    return;
 
     QPen myPen = pen();
     myPen.setColor(myColor);
@@ -102,13 +105,14 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     QPointF p2;
     QPointF intersectPoint;
     QLineF polyLine;
-    for (int i = 1; i < endPolygon.count(); ++i) {
-    p2 = endPolygon.at(i) + myEndItem->pos();
-    polyLine = QLineF(p1, p2);
-    QLineF::IntersectType intersectType =
-        polyLine.intersect(centerLine, &intersectPoint);
-    if (intersectType == QLineF::BoundedIntersection)
-        break;
+    for (int i = 1; i < endPolygon.count(); ++i)
+    {
+        p2 = endPolygon.at(i) + myEndItem->pos();
+        polyLine = QLineF(p1, p2);
+        QLineF::IntersectType intersectType =
+            polyLine.intersect(centerLine, &intersectPoint);
+        if (intersectType == QLineF::BoundedIntersection)
+            break;
         p1 = p2;
     }
 
@@ -118,22 +122,23 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     if (line().dy() >= 0)
         angle = (Pi * 2) - angle;
 
-        QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize,
-                                        cos(angle + Pi / 3) * arrowSize);
-        QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
-                                        cos(angle + Pi - Pi / 3) * arrowSize);
+    QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize,
+                                    cos(angle + Pi / 3) * arrowSize);
+    QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
+                                    cos(angle + Pi - Pi / 3) * arrowSize);
 
-        arrowHead.clear();
-        arrowHead << line().p1() << arrowP1 << arrowP2;
+    arrowHead.clear();
+    arrowHead << line().p1() << arrowP1 << arrowP2;
 
-        painter->drawLine(line());
-        painter->drawPolygon(arrowHead);
-        if (isSelected()) {
-            painter->setPen(QPen(myColor, 1, Qt::DashLine));
+    painter->drawLine(line());
+    painter->drawPolygon(arrowHead);
+    if (isSelected())
+    {
+        painter->setPen(QPen(myColor, 1, Qt::DashLine));
         QLineF myLine = line();
-        myLine.translate(0, 4.0);
+        myLine.translate(0, 6.0);
         painter->drawLine(myLine);
-        myLine.translate(0,-8.0);
+        myLine.translate(0,-12.0);
         painter->drawLine(myLine);
     }
 }
