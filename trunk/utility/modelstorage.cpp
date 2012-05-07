@@ -23,9 +23,9 @@ logic::model* ModelStorage::getModel(bool create)
             logic::handler* h2 = myModel->get_handler_by_id(2);
 
             myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q1));
-            myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q2));
+            //myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q2));
             myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h1));
-            myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q2, h1));
+            //myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q2, h1));
         }
 
     return myModel;
