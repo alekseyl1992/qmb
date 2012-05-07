@@ -46,7 +46,7 @@ namespace logic
         void set_num_requests(ull_t num) { number_of_requests_to_generate = num; }
 
 		bool is_finished() const {
-			return cur_req_id >= number_of_requests_to_generate;
+            return cur_req_id >= number_of_requests_to_generate;
 		}
 
 		virtual void clean() { }

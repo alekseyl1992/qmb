@@ -53,7 +53,8 @@ namespace logic
 			{
                 for(; ; )
 				{
-                    if (!simulate_flag || is_simulating_finished() || link.lhs->get_current_num_requests() > link.lhs->get_num_requests())
+                    if (!simulate_flag || is_simulating_finished()
+                            || link.lhs->is_finished())
                     {
                         //if the user switched simulating off or all requests are generated
 						break;
