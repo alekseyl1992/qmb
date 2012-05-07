@@ -2,6 +2,7 @@
 #define H_GENERATOR
 
 #include <thread>
+#include <mutex>
 #include "object.h"
 
 #include "request.h"
@@ -15,6 +16,7 @@ namespace logic
 
     class generator : public object
 	{
+        std::mutex gen_mutex;
 	public:
         generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0);
 		generator(const generator& gen);
@@ -38,6 +40,8 @@ namespace logic
 
 		//gets number of required requests
         ull_t get_num_requests() const { return number_of_requests_to_generate; }
+        //gets number of requests
+        ull_t get_current_num_requests() const { return cur_req_id; }
 		//sets number of required requests
         void set_num_requests(ull_t num) { number_of_requests_to_generate = num; }
 

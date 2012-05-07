@@ -3,16 +3,7 @@
 namespace logic
 {
     bool model::are_all_generated() {
-        bool all_completed = true;
-       /* for (link <generator*, queue*>& link : link_generators_queues)
-        {
-            if (!link.lhs->is_finished())
-            {
-                all_completed = false;
-                break;
-            }
-        }*/
-
+        bool all_completed = true;        
         std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
 			if (!link.lhs->is_finished())
 			{
@@ -60,17 +51,22 @@ namespace logic
 		{
 			std::thread([&link, this]()
 			{
-                for(ull_t i = 1; i <= link.lhs->get_num_requests(); i++)
+                for(; ; )
 				{
-                    if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
+                    if (!simulate_flag || is_simulating_finished() || link.lhs->get_current_num_requests() > link.lhs->get_num_requests())
                     {
+                        //if the user switched simulating off or all requests are generated
 						break;
                     }
-					link.lhs->generate_new_request();
-					link.rhs->add(link.lhs->get_request());
+                    std::unique_lock<std::mutex> lk(model_mutex2);
+                    if (!link.lhs->is_generated())
+                    {
+                        link.lhs->generate_new_request();
+                        link.rhs->add(link.lhs->get_request());
+                    }
 				}
 			}).detach();
-		});
+        });
 	}
 
 	void model::handler_queue_link_th() {

@@ -37,6 +37,8 @@ namespace logic
 
 	//generating new request
 	void generator::generate_new_request() {
+        std::lock_guard<std::mutex> lk(gen_mutex);
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
 		new_req = new request(id, ++cur_req_id);
 		is_generated_flag = true;
@@ -46,13 +48,16 @@ namespace logic
         //теперь выглядит громоздко,
         //но было необходимо сделать запись в лог через 1 вызов ф-ции,
         //а не через последовательность вызовов
-        std::stringstream ss;
+        /*std::stringstream ss;
         ss << "Request[" << new_req->get_id() << "] generated";
-        sLog.writeLine(ss.str());
+        sLog.writeLine(ss.str());*/
+        qDebug() << new_req->get_id().__req_gen_id << "-" << new_req->get_id().__req_id << " generated";
 	}
 
 	//gets next request 
 	request generator::get_request() {
+        std::lock_guard<std::mutex> lk(gen_mutex);
+
 		request res = *new_req;
 		delete new_req;
 		new_req = nullptr;

@@ -38,9 +38,10 @@ namespace logic
 
         emit parent->reqQueued(id, req.get_id());
 
-        std::stringstream ss;
+        /*std::stringstream ss;
         ss << "-Request[" << req.get_id() << "] was put to the queue " << get_id();
-        sLog.writeLine(ss.str());
+        sLog.writeLine(ss.str());*/
+        qDebug() << req.get_id().__req_gen_id << "-" << req.get_id().__req_id << " was put to the queue " << get_id();
 	}
 
 	//getting next request
