@@ -14,6 +14,8 @@
 #include <QMessageBox>
 #include <QProgressBar>
 #include <QtOpenGL/QGLWidget>
+#include <QClipboard>
+#include <QListWidgetItem>
 
 Document::Document(QWidget *parent, QString name) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
@@ -27,6 +29,8 @@ Document::Document(QWidget *parent, QString name) :
     ui->graphicsView->setViewport(new QGLWidget(this));
 
     new XmlHighlighter(ui->codeEdit);
+
+    //создаем меню для элементов
     QMenu *itemMenu = new QMenu(this);
     itemMenu->addAction("Свойства", new connect_functor_helper(this, [this]
     {
@@ -39,11 +43,36 @@ Document::Document(QWidget *parent, QString name) :
         Scene->removeSelectedItems();
     }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
 
+    //создаём меню для лога
+    logMenu = new QMenu(this);
+    logMenu->addAction("Копировать выделенные", new connect_functor_helper(this, [this]
+    {
+        QClipboard *clipboard = QApplication::clipboard();
+        QString strings;
+        foreach(QListWidgetItem *item, ui->simulationLog->selectedItems())
+        strings += item->text() + "\n";
+        clipboard->setText(strings);
+    }), SLOT(signaled()));
+
+    logMenu->addAction("Копировать всё", new connect_functor_helper(this, [this]
+    {
+        QClipboard *clipboard = QApplication::clipboard();
+        QString strings;
+        foreach(QListWidgetItem *item, ui->simulationLog->findItems("*", Qt::MatchWildcard))
+            strings += item->text() + "\n";
+        clipboard->setText(strings);
+    }), SLOT(signaled()));
+
+    logMenu->addAction("Очистить", new connect_functor_helper(this, [this]
+    {
+        ui->simulationLog->clear();
+    }), SLOT(signaled()));
+
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
     Storage = new ModelStorage(name);
 
-    //связываяем сцену с хранилищем
+    //связываем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
             Storage, SLOT(onItemInserted(ItemType, int, QPoint)));
     connect(Scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
@@ -86,7 +115,7 @@ Document::Document(QWidget *parent, QString name) :
     head->setLayout(layout);
     ui->logDock->setTitleBarWidget(head);*/
 
-     //добавляем инструменты
+    //добавляем инструменты
     QStandardItemModel *model = new QStandardItemModel(ui->toolsView);
     QStandardItem *parentItem = model->invisibleRootItem();
 
@@ -150,7 +179,6 @@ ModelScene *Document::scene() const
     return Scene;
 }
 
-//DEPRECATED
 QTextEdit *Document::code() const
 {
     return ui->codeEdit;
@@ -215,7 +243,6 @@ void Document::setModified(bool m)
 
 void Document::logChanged(QString line)
 {
-    //лучше переделать замену текста, на добавление
     ui->simulationLog->addItem(line);
     ui->simulationLog->scrollToBottom();
 }
@@ -339,4 +366,9 @@ bool Document::tryApplyCode()
                               QString("Возникли ошибки при парсе кода:\n\tСтрока: %1\n\tОшибка: %2").arg(e.stringNum()).arg(e.text()));
         return false;
     }
+}
+
+void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
+{
+    logMenu->exec(ui->simulationLog->mapToGlobal(pos));
 }

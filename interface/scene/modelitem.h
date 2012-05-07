@@ -70,7 +70,7 @@ class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 public:
     enum { Type = UserType + 15 };
 
-    ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
+    ModelItem(ItemType itemType, int itemId,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~ModelItem();
 
@@ -99,7 +99,6 @@ public:
     QString typeAsString();
 
 protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 

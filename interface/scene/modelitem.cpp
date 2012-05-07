@@ -44,12 +44,11 @@
 #include "arrow.h"
 #include "modelscene.h"
 
-ModelItem::ModelItem(ItemType itemType, int itemId, QMenu *contextMenu,
-             QGraphicsItem *parent, QGraphicsScene *scene)
+ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
+             QGraphicsScene *scene)
     : QGraphicsPolygonItem(parent, scene), ItemShadow(this)
 {
     myItemType = itemType;
-    myContextMenu = contextMenu;
     myId = itemId;
     QPen iPen = pen();
     iPen.setWidth(2);
@@ -148,6 +147,7 @@ void ModelItem::removeArrows()
         arrow->endItem()->removeArrow(arrow);
         scene()->removeItem(arrow);
         delete arrow;
+        arrow = nullptr;
     }
 }
 
@@ -184,13 +184,6 @@ QString ModelItem::typeAsString()
     default:
         return "Нечто";
     }
-}
-
-void ModelItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
-{
-    scene()->clearSelection();
-    setSelected(true);
-    myContextMenu->exec(event->screenPos());
 }
 
 QVariant ModelItem::itemChange(GraphicsItemChange change,

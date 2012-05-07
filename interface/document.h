@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
+#include <QMenu>
 
 namespace Ui {
 class Document;
@@ -52,11 +53,14 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void on_simulationLog_customContextMenuRequested(const QPoint &pos);
+
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
     ModelStorage *Storage;
+    QMenu *logMenu;
     bool bSimulating;
     bool bDirty;
 

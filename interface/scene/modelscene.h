@@ -92,6 +92,7 @@ signals:
     void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
 
 protected:
+    void keyPressEvent(QKeyEvent *keyEvent);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
