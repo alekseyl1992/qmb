@@ -26,7 +26,7 @@ namespace logic
 	{
         Q_OBJECT
 
-        std::mutex model_mutex;
+        std::mutex model_mutex, model_mutex2;
         friend class generator;
         friend class queue;
         friend class handler;

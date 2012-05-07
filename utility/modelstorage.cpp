@@ -6,30 +6,31 @@ logic::model* ModelStorage::getModel(bool create)
 {
     if(create) //создание модели
     {
-        myModel = new logic::model();
-        myModel->add_generator(logic::generator(myModel, 1, 100, 8));
-        myModel->add_generator(logic::generator(myModel, 2, 700, 5));
-        myModel->add_queue(logic::queue(myModel, 1));
-        myModel->add_queue(logic::queue(myModel, 2));
-        myModel->add_handler(logic::handler(myModel, 1, 500));
-        myModel->add_handler(logic::handler(myModel, 2, 800));
+            myModel = new logic::model();
+            myModel->add_generator(logic::generator(myModel, 1, 100, 5));
+            myModel->add_generator(logic::generator(myModel, 2, 300, 7));
+            myModel->add_queue(logic::queue(myModel, 1));
+            myModel->add_queue(logic::queue(myModel, 2));
+            myModel->add_handler(logic::handler(myModel, 1, 300));
+            myModel->add_handler(logic::handler(myModel, 2, 350));
 
-        logic::generator* g1 = myModel->get_generator_by_id(1);
-        logic::generator* g2 = myModel->get_generator_by_id(2);
-        logic::queue* q1 = myModel->get_queue_by_id(1);
-        //logic::queue* q2 = myModel->get_queue_by_id(2);
-        logic::handler* h1 = myModel->get_handler_by_id(1);
-        logic::handler* h2 = myModel->get_handler_by_id(2);
 
-        myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q1));
-        myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g2, q1));
+            logic::generator* g1 = myModel->get_generator_by_id(1);
+            logic::generator* g2 = myModel->get_generator_by_id(2);
+            logic::queue* q1 = myModel->get_queue_by_id(1);
+            logic::queue* q2 = myModel->get_queue_by_id(2);
+            logic::handler* h1 = myModel->get_handler_by_id(1);
+            logic::handler* h2 = myModel->get_handler_by_id(2);
 
-        myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h1));
-        myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h2));
-    }
+            myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q1));
+            myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q2));
+            myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h1));
+            myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q2, h1));
+        }
 
     return myModel;
 }
+
 
 void ModelStorage::freeModel()
 {

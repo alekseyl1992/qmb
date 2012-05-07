@@ -26,15 +26,16 @@ namespace logic
 	//Send request to handler
     void handler::handle(request req) {
 		std::lock_guard<std::mutex> lk(handler_mutex);
-        emit parent->reqBeganHandling(id, req.get_id());
 
 		freedom_flag = false;
 		cur_req = new request(req);
 
-        std::stringstream ss;
+        emit parent->reqBeganHandling(id, req.get_id());
+        /*std::stringstream ss;
         ss << "---Request[" << req.get_id() << "] was put to the handler " << get_id();
         sLog.writeLine(ss.str());
-
+*/
+        qDebug() << cur_req->get_id().__req_gen_id << "-" << cur_req->get_id().__req_id << " was put to the handler " << get_id();
 		std::this_thread::sleep_for(std::chrono::milliseconds(handling_period));
         finish_handling();
 	}
@@ -45,10 +46,10 @@ namespace logic
 
         emit parent->reqFinishedHandling(id, cur_req->get_id());
 
-        std::stringstream ss;
+       /* std::stringstream ss;
         ss << "----Request[" << cur_req->get_id() << "] finished handling in handler " << get_id();
-        sLog.writeLine(ss.str());
-
+        sLog.writeLine(ss.str());*/
+        qDebug() << cur_req->get_id().__req_gen_id << "-" << cur_req->get_id().__req_id << " finished handling in handler " << get_id();
         delete cur_req;
 	}
 
