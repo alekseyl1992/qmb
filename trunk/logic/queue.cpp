@@ -27,7 +27,7 @@ namespace logic
 	}
 
 	//adding request to the queue
-	void queue::add(request req) {
+    void queue::add(const request& req) {
         std::lock_guard<std::mutex> lk(queue_mutex);
 
         requests_in_queue.push_back(req);

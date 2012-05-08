@@ -1,10 +1,9 @@
 #ifndef H_GENERATOR
 #define H_GENERATOR
 
-#include <thread>
-#include <mutex>
-#include "object.h"
 
+
+#include "object.h"
 #include "request.h"
 #include "exceptions.h"
 
