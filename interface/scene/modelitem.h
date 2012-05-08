@@ -96,7 +96,8 @@ public:
     void setModified(bool m)
     { bModified = m; }
 
-    QString typeAsString();
+    QString typeAsString() const;
+    bool closeByHotStop(const QPointF& pt) const; //близка ли точка к одному из hs
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -107,6 +108,7 @@ private:
     QPolygonF myPolygon;
     QMenu *myContextMenu;
     QList<Arrow *> myArrows;
+    QVector<QPointF> hotSpots; //точки крепления стрелок
     int myId;
     bool bModified;
 };

@@ -159,7 +159,7 @@ Document::Document(QWidget *parent, QString name) :
         groupItem->appendRow(item);
     }
 
-    //Прочее
+    /*//Прочее
     groupItem = new QStandardItem("Прочее");
     groupItem->setSelectable(false);
     //groupItem->setEnabled(false);
@@ -175,7 +175,7 @@ Document::Document(QWidget *parent, QString name) :
         item->setDragEnabled(false);
         item->setSelectable(true);
         groupItem->appendRow(item);
-    }
+    }*/
 
     ui->toolsView->setModel(model);
     ui->toolsView->expandAll();
