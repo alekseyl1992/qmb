@@ -17,7 +17,7 @@ namespace logic
 	{
         std::mutex gen_mutex;
 	public:
-        generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0);
+        generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0, bool is_infinite = false);
 		generator(const generator& gen);
 		generator& operator=(const generator& gen);
 
@@ -43,6 +43,8 @@ namespace logic
         ull_t get_current_num_requests() const { return cur_req_id; }
 		//sets number of required requests
         void set_num_requests(ull_t num) { number_of_requests_to_generate = num; }
+        //if the generator has to generate requests infinetly
+        bool is_infinite() const { return infinite_generating; }
 
 		bool is_finished() const {
             return cur_req_id >= number_of_requests_to_generate;
@@ -54,10 +56,10 @@ namespace logic
         //Fields
 		request* new_req;
 		int generating_period;
+        bool infinite_generating;
+
         ull_t number_of_requests_to_generate;
-
 		bool is_generated_flag;
-
         ull_t cur_req_id; //<- запрос
 	};
 
