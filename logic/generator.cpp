@@ -6,7 +6,7 @@ namespace logic
 {
 	//Constructors
     generator::generator(model* parent, int id, int period, ull_t num_requests):
-            object(parent, id), new_req(NULL), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
+            object(parent, id), new_req(nullptr), generating_period(period), number_of_requests_to_generate(num_requests), is_generated_flag(false) {
 		cur_req_id = 0; 
 	}
 
@@ -39,7 +39,7 @@ namespace logic
 	void generator::generate_new_request() {
         std::lock_guard<std::mutex> lk(gen_mutex);
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
+        std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
 		new_req = new request(id, ++cur_req_id);
 		is_generated_flag = true;
 		

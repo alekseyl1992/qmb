@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     logic/queue.cpp \
     logic/handler.cpp \
     logic/model.cpp \
-    utility/lsfss.cpp
+    utility/lsfss.cpp \
+    logic/terminator.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/simulationlog.h \
@@ -54,7 +55,8 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/generator.h \
     logic/queue.h \
     logic/handler.h \
-    logic/model.h
+    logic/model.h \
+    logic/terminator.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \

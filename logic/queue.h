@@ -2,7 +2,6 @@
 #define H_QUEUE
 
 #include <deque>
-#include <mutex>
 
 #include "object.h"
 #include "request.h"
@@ -24,7 +23,7 @@ namespace logic
 		~queue();
 		
 		//adding request to the queue
-		void add(request req);
+        void add(const request& req);
 		//get number of elemets in the queue
         ull_t get_size() const { return static_cast<ull_t>(requests_in_queue.size()); }
 

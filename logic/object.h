@@ -1,11 +1,13 @@
 #ifndef H_OBJECT
 #define H_OBJECT
 
-#include "../utility/common.h"
-
+#include <thread>
+#include <mutex>
 #include <string>
 #include <QObject>
 #include <sstream>
+
+#include "../utility/common.h"
 
 namespace logic
 {
