@@ -159,6 +159,24 @@ Document::Document(QWidget *parent, QString name) :
         groupItem->appendRow(item);
     }
 
+    //Прочее
+    groupItem = new QStandardItem("Прочее");
+    groupItem->setSelectable(false);
+    //groupItem->setEnabled(false);
+    groupItem->setTextAlignment(Qt::AlignCenter);
+    groupItem->setEnabled(false);
+    parentItem->appendRow(groupItem);
+    //связь
+    {
+        QStandardItem *item = new QStandardItem("Связь");
+        //item->setData(int(ItemType::Generator));
+        item->setIcon(QIcon(":/icons/arrow"));
+        //item->setSizeHint(QSize(32, 32));
+        item->setDragEnabled(false);
+        item->setSelectable(true);
+        groupItem->appendRow(item);
+    }
+
     ui->toolsView->setModel(model);
     ui->toolsView->expandAll();
     //выбираем генератор

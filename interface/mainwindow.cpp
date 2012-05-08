@@ -176,16 +176,17 @@ void MainWindow::createMenuButton()
     mainMenu->addAction("Выход", this, SLOT(close()));
 
     //отжимаем кнопку меню через dt -> 0, чтобы меню не открылось при повторном нажатии на кнопку
-    ::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
+    /*::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
     {
-         QTimer::singleShot(200, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
-    });
+         QTimer::singleShot(100, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
+    });*/
 
     std::function<void()> onClick = [mainMenu, menuButton]
     {
-        if(menuButton->isChecked() && mainMenu->isHidden())
+        if(!menuButton->isChecked())
         {
             mainMenu->exec(menuButton->mapToGlobal(QPoint(0, 26)));
+            menuButton->setChecked(false);
         }
     };
     ::connect(menuButton, SIGNAL(pressed()), onClick);

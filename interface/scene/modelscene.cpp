@@ -157,6 +157,9 @@ void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEve
 {
     //если что-то выбрано и мышь находиться над выбранным элементом
     QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos());
+    qDebug() << !selectedItems().empty();
+    qDebug() << qItem;
+    qDebug() << qItem->isSelected();
     if(!selectedItems().empty() && qItem && qItem->isSelected())
         myItemMenu->popup(contextMenuEvent->screenPos());
 }
