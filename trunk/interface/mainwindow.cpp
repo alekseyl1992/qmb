@@ -95,7 +95,8 @@ void MainWindow::on_openModel_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Открыть",
                                                     "", "QMB XML Model (*.qxml)");
-    openModel(fileName);
+    if(fileName != "")
+        openModel(fileName);
 }
 
 void MainWindow::openModel(QString path)
@@ -112,10 +113,10 @@ void MainWindow::saveModel(QString path)
 
 void MainWindow::on_saveModel_triggered()
 {
-    QString FileName =  QFileDialog::getSaveFileName(this, "Сохранить",
+    QString fileName =  QFileDialog::getSaveFileName(this, "Сохранить",
                                                     "", "QMB XML Model (*.qm)");
-
-    saveModel(FileName);
+    if(fileName != "")
+        saveModel(fileName);
 }
 
 void MainWindow::on_closeModel_triggered()

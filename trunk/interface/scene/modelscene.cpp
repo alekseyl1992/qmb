@@ -138,16 +138,19 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         }
     }
 
-    if(mouseEvent->button() != Qt::LeftButton)
-        myMode = InsertLine;
-
-
-    if(myMode == InsertLine)
+    if(mouseEvent->button() == Qt::LeftButton)
     {
-        line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
-                                    mouseEvent->scenePos()));
-        line->setPen(QPen(myLineColor, 2));
-        QGraphicsScene::addItem(line);
+        QGraphicsItem *qItem = itemAt(mouseEvent->scenePos());
+        ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
+        if(mItem && mItem->closeByHotStop(mouseEvent->scenePos()))
+        {
+            myMode = InsertLine;
+
+            line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
+                                        mouseEvent->scenePos()));
+            line->setPen(QPen(myLineColor, 2));
+            QGraphicsScene::addItem(line);
+        }
     }
 
     QGraphicsScene::mousePressEvent(mouseEvent);
@@ -157,10 +160,12 @@ void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEve
 {
     //если что-то выбрано и мышь находиться над выбранным элементом
     QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos());
-    qDebug() << !selectedItems().empty();
+    /*qDebug() << !selectedItems().empty();
     qDebug() << qItem;
-    qDebug() << qItem->isSelected();
-    if(!selectedItems().empty() && qItem && qItem->isSelected())
+    if(qItem)
+        qDebug() << qItem->isSelected();*/
+
+    if(qItem && qItem->isSelected() && qItem->type() == ModelItem::Type)
         myItemMenu->popup(contextMenuEvent->screenPos());
 }
 

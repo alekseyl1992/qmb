@@ -62,20 +62,30 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
             path.addRect(itemRect);
             path.addPolygon(QPolygonF() << QPointF(200, 0) << QPointF(230, 50) << QPointF(200, 100));
             path = path.simplified();
+            hotSpots << QPoint(230, 50);
             break;
 
         case ItemType::Queue:
             path.addRect(itemRect);
+            hotSpots << QPoint(itemRect.left(),
+                                (itemRect.bottom()-itemRect.top())/2);
+            hotSpots << QPoint(itemRect.right(),
+                                (itemRect.bottom()-itemRect.top())/2);
             break;
 
         case ItemType::Handler:
             path.addRoundedRect(itemRect, 25, 25);
+            hotSpots << QPoint(itemRect.left(),
+                                (itemRect.bottom()-itemRect.top())/2);
+            hotSpots << QPoint(itemRect.right(),
+                                (itemRect.bottom()-itemRect.top())/2);
             break;
 
         case ItemType::Terminator:
             path.addRect(itemRect.translated(30, 0));
             path.addPolygon(QPolygonF() << QPointF(30, 0) << QPointF(0, 50) << QPointF(30, 100));
             path = path.simplified();
+            hotSpots << QPoint(0, 50);
             break;
     }
 
@@ -88,6 +98,14 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
     if(itemId != -1)
         for(QPointF &pnt : myPolygon)
             pnt /= 2;
+
+    //перемещаем hotSpot'ы
+    //for(auto it = hotSpots.begin(); it!= hotSpots.end(); ++it)
+    for(QPointF &pnt : hotSpots)
+    {
+        pnt += QPointF(-itemRect.width()/2, -itemRect.height()/2);
+        pnt /= 2;
+    }
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -130,6 +148,10 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(pen());
     painter->setBrush(Qt::NoBrush);
     painter->drawPolygon(polygon(), fillRule());
+
+    //hotSpots
+    for(QPointF &pt: hotSpots)
+        painter->drawEllipse(pt, 2, 2);
 }
 
 void ModelItem::removeArrow(Arrow *arrow)
@@ -168,7 +190,7 @@ QPixmap ModelItem::image() const
     return pixmap;
 }
 
-QString ModelItem::typeAsString()
+QString ModelItem::typeAsString() const
 {
     switch(myItemType)
     {
@@ -184,6 +206,16 @@ QString ModelItem::typeAsString()
     default:
         return "Нечто";
     }
+}
+
+bool ModelItem::closeByHotStop(const QPointF &pt) const
+{
+    QPointF pos = mapFromScene(pt);
+    foreach(QPointF hotSpot, hotSpots)
+        if(abs(pos.x() - hotSpot.x()) < 8 &&
+           abs(pos.y() - hotSpot.y()) < 8)
+            return true;
+    return false;
 }
 
 QVariant ModelItem::itemChange(GraphicsItemChange change,
