@@ -12,6 +12,7 @@ logic::model* ModelStorage::getModel(bool create)
         entries[ItemNames[3]] = int(ItemType::Terminator);
         entries[ItemNames[4]] = 4;
 
+        delete myModel;
         myModel = new logic::model();
 
         QDomElement ProcessingItem = root.firstChildElement();
@@ -64,11 +65,9 @@ logic::model* ModelStorage::getModel(bool create)
                 AddLink(myModel,linkType,fromID,toID);
                 break;
             }
-
-           ProcessingItem = ProcessingItem.nextSiblingElement();
+            ProcessingItem = ProcessingItem.nextSiblingElement();
         }
-   }
-
+    }
     return myModel;
 }
 
@@ -128,9 +127,27 @@ QString ModelStorage::getCodeString()
 
 bool ModelStorage::setCodeString(QString code)
 {
+//    qDebug() << "entering the setCodeString!";
+    QDomDocument tempDoc;
+    if (tempDoc.setContent(code))
+    {
+        delete curDoc;
+        curDoc = new QDomDocument("qmodel");
+        curDoc->setContent(code);
+        root = curDoc->firstChildElement();
+        return true;
+    }
+    else
+    {
+        qDebug() << "SetCodeString::Error!";
+        return false;
+    }
     //при возникновении ошибки:
     //throw ParseException("some text", stringNumber);
-    return true;
+
+    //QDom технология считывает и строит все дерево сразу
+    //QSax обрабатывает текст построчно... поэтому реализация исключений
+    //с возвратом номера строки я думаю невозможна. нужно что-нибудь другое.
 }
 
 // реализация слотов //
@@ -148,10 +165,10 @@ void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
         case ItemType::Queue:
             break;
         case ItemType::Handler:
-            InsertedItem.setAttribute("period",500);
+            InsertedItem.setAttribute("period",600);
             break;
         case ItemType::Terminator:
-            InsertedItem.setAttribute("period",500);
+            InsertedItem.setAttribute("period",0);
             break;
     };
     InsertedItem.setAttribute("x",pos.x());
