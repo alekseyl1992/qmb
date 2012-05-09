@@ -3,6 +3,8 @@
 
 logic::model* ModelStorage::getModel(bool create)
 {  
+    const int Link = 4;
+
     if(create) //создание модели
     {
         QMap<QString, int> entries;
@@ -10,7 +12,7 @@ logic::model* ModelStorage::getModel(bool create)
         entries[ItemNames[1]] = int(ItemType::Queue);
         entries[ItemNames[2]] = int(ItemType::Handler);
         entries[ItemNames[3]] = int(ItemType::Terminator);
-        entries[ItemNames[4]] = 4;
+        entries[ItemNames[4]] = Link;
 
         delete myModel;
         myModel = new logic::model();
@@ -47,7 +49,7 @@ logic::model* ModelStorage::getModel(bool create)
                 myModel->add_terminator(logic::terminator(myModel,id,period));
                 break;
 
-                case 4: // 4 is Link
+                case Link: // 4 is Link
                 LinkType linkType;
 
                 if (fromType==ItemNames[int(ItemType::Generator)]
@@ -117,7 +119,46 @@ bool ModelStorage::loadModel(QString path)
 
 void ModelStorage::fillModel(IFillableModel *iModel) const
 {
+    const int Link = 4;
+    QMap<QString, int> entries;
+    entries[ItemNames[0]] = int(ItemType::Generator);
+    entries[ItemNames[1]] = int(ItemType::Queue);
+    entries[ItemNames[2]] = int(ItemType::Handler);
+    entries[ItemNames[3]] = int(ItemType::Terminator);
+    entries[ItemNames[4]] = Link;
 
+    QDomElement ProcessingItem = root.firstChildElement();
+
+    while (!ProcessingItem.isNull())
+    {
+        int id, fromID, toID;
+        QString fromType, toType;
+
+        int itemType = entries[ProcessingItem.nodeName()];
+        QPoint pos;
+        pos.setX(ProcessingItem.attribute("x").toInt());
+        pos.setY(ProcessingItem.attribute("y").toInt());
+
+        switch((int)itemType)
+        {
+            case (int)ItemType::Generator:
+            case (int)ItemType::Queue:
+            case (int)ItemType::Handler:
+            case (int)ItemType::Terminator:
+            id = ProcessingItem.attribute("id").toInt();
+            iModel->addItem(ItemType(itemType),ItemNames[(int)itemType],id,pos);
+            break;
+
+            case Link: // 4 is Link
+            fromID = ProcessingItem.attribute("fromID").toInt();
+            toID = ProcessingItem.attribute("toID").toInt();
+            fromType = ProcessingItem.attribute("from");
+            toType = ProcessingItem.attribute("to");
+            iModel->addLink(ItemType(entries[fromType]),fromID,ItemType(entries[toType]),toID);
+            break;
+        }
+        ProcessingItem = ProcessingItem.nextSiblingElement();
+    }
 }
 
 QString ModelStorage::getCodeString()
