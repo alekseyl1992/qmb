@@ -1,43 +1,76 @@
 #include "modelstorage.h"
 #include <QPoint>
 
-
 logic::model* ModelStorage::getModel(bool create)
-{
+{  
     if(create) //создание модели
     {
+        QMap<QString, int> entries;
+        entries[ItemNames[0]] = int(ItemType::Generator);
+        entries[ItemNames[1]] = int(ItemType::Queue);
+        entries[ItemNames[2]] = int(ItemType::Handler);
+        entries[ItemNames[3]] = int(ItemType::Terminator);
+        entries[ItemNames[4]] = 4;
+
         myModel = new logic::model();
-        myModel->add_generator(logic::generator(myModel, 1, 100, 0, true));
-        myModel->add_generator(logic::generator(myModel, 2, 300, 7));
-        myModel->add_queue(logic::queue(myModel, 1));
-        myModel->add_queue(logic::queue(myModel, 2));
-        myModel->add_handler(logic::handler(myModel, 1, 200));
-        myModel->add_handler(logic::handler(myModel, 2, 300));
-        myModel->add_terminator(logic::terminator(myModel, 1));
-        myModel->add_terminator(logic::terminator(myModel, 2));
 
-        logic::generator* g1 = myModel->get_generator_by_id(1);
-        logic::generator* g2 = myModel->get_generator_by_id(2);
-        logic::queue* q1 = myModel->get_queue_by_id(1);
-        logic::queue* q2 = myModel->get_queue_by_id(2);
-        logic::handler* h1 = myModel->get_handler_by_id(1);
-        logic::handler* h2 = myModel->get_handler_by_id(2);
-        logic::terminator* t1 = myModel->get_terminator_by_id(1);
-        logic::terminator* t2 = myModel->get_terminator_by_id(2);
+        QDomElement ProcessingItem = root.firstChildElement();
 
-        myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g1, q1));
-       // myModel->add_link_generator_queue(logic::link<logic::generator*, logic::queue* >(g2, q2));
+        while (!ProcessingItem.isNull())
+        {
+            int period, id, fromID, toID, num_of_reqs;
+            QString fromType, toType;
+            period = ProcessingItem.attribute("period").toInt();
+            id = ProcessingItem.attribute("id").toInt();
+            fromID = ProcessingItem.attribute("fromID").toInt();
+            toID = ProcessingItem.attribute("toID").toInt();
+            fromType = ProcessingItem.attribute("from");
+            toType = ProcessingItem.attribute("to");
+            num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
 
-        myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q1, h1));
-       // myModel->add_link_queue_handler(logic::link<logic::queue*, logic::handler* >(q2, h2));
+            switch(entries[ProcessingItem.nodeName()])
+            {
+                case int(ItemType::Generator):
+                myModel->add_generator(logic::generator(myModel,id,period,num_of_reqs));
+                break;
 
-        myModel->add_link_handler_terminator(logic::link<logic::handler*, logic::terminator* >(h1, t1));
-       // myModel->add_link_handler_terminator(logic::link<logic::handler*, logic::terminator* >(h2, t2));
-    }
+                case int(ItemType::Queue):
+                myModel->add_queue(logic::queue(myModel,id));
+                break;
+
+                case int(ItemType::Handler):
+                myModel->add_handler(logic::handler(myModel,id,period));
+                break;
+
+                case int(ItemType::Terminator):
+                myModel->add_terminator(logic::terminator(myModel,id,period));
+                break;
+
+                case 4: // 4 is Link
+                LinkType linkType;
+
+                if (fromType==ItemNames[int(ItemType::Generator)]
+                        && toType==ItemNames[int(ItemType::Queue)])
+                    linkType = LinkType::GeneratorToQueue;
+
+                if (fromType==ItemNames[int(ItemType::Queue)]
+                        && toType==ItemNames[int(ItemType::Handler)])
+                    linkType = LinkType::QueueToHandler;
+
+                if (fromType==ItemNames[int(ItemType::Handler)]
+                        && toType==ItemNames[int(ItemType::Terminator)])
+                    linkType = LinkType::HandlerToTerminator;
+
+                AddLink(myModel,linkType,fromID,toID);
+                break;
+            }
+
+           ProcessingItem = ProcessingItem.nextSiblingElement();
+        }
+   }
 
     return myModel;
 }
-
 
 void ModelStorage::freeModel()
 {
@@ -45,32 +78,41 @@ void ModelStorage::freeModel()
     myModel = nullptr;
 }
 
-/*    void ModelStorage::SceneToXML(ModelScene *scene, QString FileName)
-{
-    foreach(QGraphicsItem *it, scene->items())
-    {
-        ModelItem *element = qgraphicsitem_cast<ModelItem *>(it);
-        //нужно сохранять
-        //element->id()
-        //element->pos()
-        //связи:
-        //element->arrows()
-    }
-}*/
-
 QString ModelStorage::getItemName(int id)
 {
     return QString(); //stub
     //находишь в QDomDocument item с соотв. id, возвращаешь его поле name
+
+    // если у каждого элемента будет какое-то собственное уникальное имя
+    // то смысл ясен, если нет то ?
 }
 
 bool ModelStorage::saveModel(QString path)
 {
+    QFile xmlFile(path);
+    if(xmlFile.open(QIODevice::WriteOnly))
+    {
+        QTextStream(&xmlFile) << curDoc->toString(3);
+        xmlFile.close();
+    }
+    else return false;
     return true;
 }
 
 bool ModelStorage::loadModel(QString path)
 {
+    QFile xmlFile(path);
+    //считываем данные из xml файла в QDomDocument
+    if (xmlFile.open(QIODevice::ReadOnly))
+    {
+        delete curDoc;
+        curDoc = new QDomDocument("qmodel");
+        if (curDoc->setContent(&xmlFile))
+            root = curDoc->firstChildElement();
+        else return false;
+        xmlFile.close();
+    }
+    else return false;
     return true;
 }
 
@@ -79,86 +121,9 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
 
 }
 
-
-void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
-{
-    switch (type)
-    {
-        case ItemType::Generator:
-        {
-            //если элементов данного типо не было до данного момента
-            //создаем раздел элементов данного типа
-            if (gens.parentNode()==curDoc->toElement())
-                gens = curDoc->createElement(ItemNames[(int)ItemType::Generator]+"s");
-
-            QDomElement newgen;
-            newgen = curDoc->createElement(ItemNames[(int)ItemType::Generator]);
-            newgen.setAttribute("id",id);
-            newgen.setAttribute("time",500);
-            newgen.setAttribute("x",pos.x());
-            newgen.setAttribute("y",pos.y());
-            gens.appendChild(newgen);
-            root.appendChild(gens);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Queue:
-        {
-            if (queues.parentNode()==curDoc->toElement())
-                queues = curDoc->createElement(ItemNames[(int)ItemType::Queue]+"s");
-            QDomElement newqueue;
-            newqueue = curDoc->createElement(ItemNames[(int)ItemType::Queue]);
-            newqueue.setAttribute("id",id);
-            newqueue.setAttribute("x",pos.x());
-            newqueue.setAttribute("y",pos.y());
-            queues.appendChild(newqueue);
-            root.appendChild(queues);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Handler:
-        {
-            if (handlers.parentNode()==curDoc->toElement())
-                handlers = curDoc->createElement(ItemNames[(int)ItemType::Handler]+"s");
-            QDomElement newhandler;
-            newhandler = curDoc->createElement(ItemNames[(int)ItemType::Handler]);
-            newhandler.setAttribute("id",id);
-            newhandler.setAttribute("time",500);
-            newhandler.setAttribute("x",pos.x());
-            newhandler.setAttribute("y",pos.y());
-            handlers.appendChild(newhandler);
-            root.appendChild(handlers);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-        case ItemType::Terminator:
-        {
-            if (terms.parentNode()==curDoc->toElement())
-                terms = curDoc->createElement(ItemNames[(int)ItemType::Terminator]+"s");
-            QDomElement newterm;
-            newterm = curDoc->createElement(ItemNames[(int)ItemType::Terminator]);
-            newterm.setAttribute("id",id);
-            newterm.setAttribute("x",pos.x());
-            newterm.setAttribute("y",pos.y());
-            terms.appendChild(newterm);
-            root.appendChild(terms);
-            qDebug() << curDoc->toString() << endl;
-            break;
-        }
-    };
-}
-
-void ModelStorage::MoveItem(QDomElement& item, int& id, QPoint& pos)
-{
-    while (QString(item.attribute("id")).toInt()!=id)
-        item=item.nextSiblingElement();
-    item.setAttribute("x",pos.x());
-    item.setAttribute("y",pos.y());
-}
-
 QString ModelStorage::getCodeString()
 {
-    return curDoc->toString();
+    return curDoc->toString(3);
 }
 
 bool ModelStorage::setCodeString(QString code)
@@ -168,92 +133,127 @@ bool ModelStorage::setCodeString(QString code)
     return true;
 }
 
-void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
+// реализация слотов //
+void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
 {
-    QDomElement elemtomove;
+    QDomElement InsertedItem;
+    InsertedItem = curDoc->createElement(ItemNames[(int)type]);
+    InsertedItem.setAttribute("id",id);
     switch (type)
     {
         case ItemType::Generator:
-            elemtomove=gens.firstChildElement();
+            InsertedItem.setAttribute("period",500);
+            InsertedItem.setAttribute("num_of_reqs",10);
             break;
         case ItemType::Queue:
-            elemtomove=queues.firstChildElement();
             break;
         case ItemType::Handler:
-            elemtomove=handlers.firstChildElement();
+            InsertedItem.setAttribute("period",500);
             break;
         case ItemType::Terminator:
-            elemtomove=terms.firstChildElement();
+            InsertedItem.setAttribute("period",500);
             break;
     };
-    MoveItem(elemtomove,id,pos);
-    qDebug() << "moved\n" << curDoc->toString();
+    InsertedItem.setAttribute("x",pos.x());
+    InsertedItem.setAttribute("y",pos.y());
+    root.appendChild(InsertedItem);
+}
+
+void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
+{
+    QDomElement MovedItem = root.firstChildElement();
+
+    while (!MovedItem.isNull())
+    {
+        if ( (MovedItem.nodeName()==ItemNames[(int)type]) &&
+        (MovedItem.attribute("id").toInt()==id) )
+        {
+            MovedItem.setAttribute("x",pos.x());
+            MovedItem.setAttribute("y",pos.y());
+        }
+        MovedItem = MovedItem.nextSiblingElement();
+    }
 }
 
 void ModelStorage::onItemRemoved(ItemType type, int id)
 {
-    qDebug() << "onItemRemoved";
+    QDomElement RemovedItem = root.firstChildElement();
+    QDomElement ExistedLink = root.firstChildElement();
+
+    while (!RemovedItem.isNull())
+    {
+        if ( (RemovedItem.nodeName()==ItemNames[(int)type]) &&
+        (RemovedItem.attribute("id").toInt()==id) )
+        {
+            while (!ExistedLink.isNull())
+            {
+                if ( ( ExistedLink.attribute("from")==ItemNames[int(type)] &&
+                     ExistedLink.attribute("fromID").toInt()==id ) ||
+                     ( ExistedLink.attribute("to")==ItemNames[int(type)] &&
+                     ExistedLink.attribute("toID").toInt()==id ) )
+                    root.removeChild(ExistedLink);
+                ExistedLink = ExistedLink.nextSiblingElement();
+            }
+            root.removeChild(RemovedItem);
+        }
+        RemovedItem = RemovedItem.nextSiblingElement();
+    }
 }
 
 void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
-    qDebug() << "onLinkInserted";
+    QDomElement InsertedLink;
+    InsertedLink = curDoc->createElement(ItemNames[4]); // 4 is Link
+    InsertedLink.setAttribute("from",ItemNames[int(fromType)]);
+    InsertedLink.setAttribute("fromID",idFrom);
+    InsertedLink.setAttribute("to",ItemNames[int(toType)]);
+    InsertedLink.setAttribute("toID",idTo);
+    root.appendChild(InsertedLink);
 }
 
 void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
-    qDebug() << "onLinkRemoved";
-}
-
-//добавляет генератор, очередь или хендлер в модель
-void ModelStorage::AddItem(logic::model *curModel, QString elemType, QString param)
-{
-    QMap<QString, ItemType> entries;
-    entries[ItemNames[0]] = ItemType::Generator;
-    entries[ItemNames[1]] = ItemType::Queue;
-    entries[ItemNames[2]] = ItemType::Handler;
-    entries[ItemNames[3]] = ItemType::Terminator;
-
-    //TODO добавить Terminator
-    using namespace logic;
-    switch (entries[elemType])
+    QDomElement RemovedLink = root.firstChildElement();
+    while (!RemovedLink.isNull())
     {
-        case ItemType::Generator:
-            curModel->add_generator(
-                        generator(curModel, param.toInt()));
-            break;
-        case ItemType::Queue:
-            curModel->add_queue(
-                        queue(curModel));
-            break;
-        case ItemType::Handler:
-            curModel->add_handler(
-                        handler(curModel, param.toInt()));
-            break;
-        case ItemType::Terminator:
-            break;
+        if ( RemovedLink.nodeName()==ItemNames[4] ) // 4 is Link
+            if ( RemovedLink.attribute("from")==ItemNames[int(fromType)] &&
+                 RemovedLink.attribute("fromID").toInt()==idFrom &&
+                 RemovedLink.attribute("to")==ItemNames[int(toType)] &&
+                 RemovedLink.attribute("toID").toInt()==idTo )
+                root.removeChild(RemovedLink);
+        RemovedLink = RemovedLink.nextSiblingElement();
     }
 }
+// end реализация слотов //
 
-void ModelStorage::AddLink(logic::model *curModel, std::vector<QString> params)
+void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID)
 {
-    QMap<QString,int> entries;
-    //TODO сделать по аналогии с AddItem
-    entries["link_generator_queue"]=0;
-    entries["link_queue_handler"]=1;
-
-
     using namespace logic;
-
-    switch (entries[params[0]])
+    switch(linkType)
     {
-        case 0:     curModel->add_link_generator_queue(link<generator*,queue*>
-                                            (curModel->get_generator_by_id(params[1].toInt() + 1),
-                                             curModel->get_queue_by_id(params[2].toInt() + 1)));
-                    break;
-        case 1:     curModel->add_link_queue_handler(link<queue*,handler*>
-                                            (curModel->get_queue_by_id(params[1].toInt() + 1),
-                                            curModel->get_handler_by_id(params[2].toInt() + 1)));
-        default:    break;
+        case LinkType::GeneratorToQueue:
+        {
+            generator* gen = curModel->get_generator_by_id(fromID);
+            queue* que = curModel->get_queue_by_id(toID);
+            curModel->add_link_generator_queue(link<generator*,queue*>(gen,que));
+            break;
+        }
+
+        case LinkType::QueueToHandler:
+        {
+            queue* que = curModel->get_queue_by_id(fromID);
+            handler* hnd = curModel->get_handler_by_id(toID);
+            curModel->add_link_queue_handler(link<queue*, handler*>(que,hnd));
+            break;
+        }
+
+        case LinkType::HandlerToTerminator:
+        {
+            handler* hnd = curModel->get_handler_by_id(fromID);
+            terminator* ter = curModel->get_terminator_by_id(toID);
+            curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
+            break;
+        }
     }
 }
