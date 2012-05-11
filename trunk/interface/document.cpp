@@ -423,7 +423,10 @@ void Document::on_tabWidget_currentChanged(int index)
     {
         if(ui->codeEdit->document()->isModified())
             if(tryApplyCode())
+            {
+                Scene->clear();
                 Storage->fillModel(Scene);
+            }
     }
 }
 
