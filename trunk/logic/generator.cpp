@@ -49,7 +49,7 @@ namespace logic
 		new_req = new request(id, ++cur_req_id);
 		is_generated_flag = true;
 		
-        emit parent->reqGenerated(new_req->get_id()); //indicates that the new request is generated
+        emit parent->reqGenerated(new_req->get_id(), clock() - parent->start_time); //indicates that the new request is generated
 
         //теперь выглядит громоздко,
         //но было необходимо сделать запись в лог через 1 вызов ф-ции,

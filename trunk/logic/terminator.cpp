@@ -36,7 +36,7 @@ namespace logic
         std::this_thread::sleep_for(std::chrono::milliseconds(terminating_period));
         ++count_of_terminated_requests;
 
-        emit parent->reqTerminated(id, cur_req->get_id());
+        emit parent->reqTerminated(id, cur_req->get_id(), clock() - parent->start_time);
         qDebug() << cur_req->get_id().__req_gen_id << "-" << cur_req->get_id().__req_id << " terminated in Terminator " << get_id();
 
         delete cur_req;

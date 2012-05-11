@@ -57,11 +57,11 @@ private slots:
 
     void on_simulationLog_customContextMenuRequested(const QPoint &pos);
 
-    void onReqGenerated(const logic::request_id& reqID);
-    void onReqQueued(const int& qID, const logic::request_id& reqID);
-    void onReqBeganHandling(const int& hID, const logic::request_id& reqID);
-    void onReqFinishedHandling(const int& hID, const logic::request_id& reqID);
-    void onReqTerminated(const int& tID, const logic::request_id& reqID);
+    void onReqGenerated(const logic::request_id& reqID, clock_t event_time);
+    void onReqQueued(const int& qID, const logic::request_id& reqID, clock_t event_time);
+    void onReqBeganHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
+    void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
+    void onReqTerminated(const int& tID, const logic::request_id& reqID, clock_t event_time);
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;

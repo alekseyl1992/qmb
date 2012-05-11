@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     a.installTranslator(qtTranslator);
 
     MainWindow w;
-    w.showMaximized();
+    w.show();
 
     return a.exec();
 }

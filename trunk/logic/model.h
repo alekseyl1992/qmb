@@ -7,6 +7,7 @@
 #include <mutex>
 #include <sstream>
 #include <QObject>
+#include <ctime>
 
 #include "request.h"
 #include "generator.h"
@@ -67,11 +68,11 @@ namespace logic
 
     signals:
         void simulationFinished();
-        void reqGenerated(const logic::request_id& reqID);
-        void reqQueued(const int& qID, const logic::request_id& reqID);
-        void reqBeganHandling(const int& hID, const logic::request_id& reqID);
-        void reqFinishedHandling(const int& hID, const logic::request_id& reqID);
-        void reqTerminated(const int& tID, const logic::request_id& reqID);
+        void reqGenerated(const logic::request_id& reqID, clock_t time);
+        void reqQueued(const int& qID, const logic::request_id& reqID, clock_t time);
+        void reqBeganHandling(const int& hID, const logic::request_id& reqID, clock_t time);
+        void reqFinishedHandling(const int& hID, const logic::request_id& reqID, clock_t time);
+        void reqTerminated(const int& tID, const logic::request_id& reqID, clock_t time);
 
     private: //members
 		std::vector<generator> generators; //all generators are kept here
@@ -85,6 +86,7 @@ namespace logic
         std::vector< link <handler*, terminator*> > link_handlers_terminators;
 
 		bool simulate_flag;
+        clock_t start_time;
 	};
 
 } //end namespace logic

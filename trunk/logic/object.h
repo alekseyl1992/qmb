@@ -6,6 +6,7 @@
 #include <string>
 #include <QObject>
 #include <sstream>
+#include <ctime>
 
 #include "../utility/common.h"
 
