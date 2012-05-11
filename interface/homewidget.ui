@@ -59,7 +59,7 @@
           <bool>true</bool>
          </property>
          <property name="description">
-          <string>Создать новый *.qxml файл</string>
+          <string>Создать новый *.qm файл</string>
          </property>
         </widget>
        </item>
@@ -81,7 +81,7 @@
           <string>Открыть модель</string>
          </property>
          <property name="description">
-          <string>Выбрать *.qxml файл модели</string>
+          <string>Выбрать *.qm файл модели</string>
          </property>
         </widget>
        </item>

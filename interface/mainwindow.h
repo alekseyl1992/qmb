@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void createDocument(QString name, QString path);
 public slots:
     void on_createModel_triggered();
 
@@ -30,7 +32,7 @@ public slots:
 
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
-    void openModel(QString path);
+    void openModel(const QString& name, const QString& path);
 
     void saveModel(QString path);
 

@@ -60,6 +60,8 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
 
 void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
 {
+    resizeToPoint(pos);
+
     ModelItem *item = new ModelItem(itemType, id);
     item->setPos(pos);
     item->scaleShadow(myScale);
