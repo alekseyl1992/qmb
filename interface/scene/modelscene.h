@@ -42,6 +42,7 @@
 
 #include <QGraphicsScene>
 #include <QWheelEvent>
+#include <map>
 #include "interface/scene/modelitem.h"
 #include "utility/ifillablemodel.h"
 #include "utility/common.h"
@@ -90,6 +91,7 @@ signals:
     void itemRemoved(ItemType type, int id);
     void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void wrongLink(ItemType fromType, ItemType toType);
 
 protected:
     void keyPressEvent(QKeyEvent *keyEvent);
@@ -117,6 +119,8 @@ private:
     QColor myItemColor;
     QColor myLineColor;
     bool bModified;
+    typedef std::pair<ItemType, ItemType> link;
+    std::vector<link> supportedLinks;
 
     void resizeToPoint(QPointF pos);
     int getFreeId(ItemType itemType); //находит ближайщий пустой id

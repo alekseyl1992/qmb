@@ -229,5 +229,17 @@ namespace logic
         return &(*iter);
     }
 
+    std::vector<std::pair<ItemType, ItemType>> model::supportedLinks()
+    {
+        typedef std::pair<ItemType, ItemType> pair;
+        std::vector<pair> links;
+
+        links.emplace_back(pair(ItemType::Generator, ItemType::Queue));
+        links.emplace_back(pair(ItemType::Queue, ItemType::Handler));
+        links.emplace_back(pair(ItemType::Handler, ItemType::Terminator));
+
+        return links;
+    }
+
 
 } //end namespace logic

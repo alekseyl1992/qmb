@@ -33,20 +33,20 @@ Document::Document(QWidget *parent, QString name, QString path) :
 
     //создаем меню для элементов
     QMenu *itemMenu = new QMenu(this);
-    itemMenu->addAction("Свойства", new connect_functor_helper(this, [this]
+    itemMenu->addAction("Свойства", new connector(this, [this]
     {
         ElementPropWindow *propWindow =  new ElementPropWindow(this);
         propWindow->show();
     }), SLOT(signaled()));
 
-    itemMenu->addAction("Удалить", new connect_functor_helper(this, [this]
+    itemMenu->addAction("Удалить", new connector(this, [this]
     {
         Scene->removeSelectedItems();
     }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
 
     //создаём меню для лога
     logMenu = new QMenu(this);
-    logMenu->addAction("Копировать выделенные", new connect_functor_helper(this, [this]
+    logMenu->addAction("Копировать выделенные", new connector(this, [this]
     {
         QClipboard *clipboard = QApplication::clipboard();
         QString strings;
@@ -58,7 +58,7 @@ Document::Document(QWidget *parent, QString name, QString path) :
         clipboard->setText(strings);
     }), SLOT(signaled()));
 
-    logMenu->addAction("Копировать всё", new connect_functor_helper(this, [this]
+    logMenu->addAction("Копировать всё", new connector(this, [this]
     {
         QClipboard *clipboard = QApplication::clipboard();
         QString strings;
@@ -70,7 +70,7 @@ Document::Document(QWidget *parent, QString name, QString path) :
         clipboard->setText(strings);
     }), SLOT(signaled()));
 
-    logMenu->addAction("Очистить", new connect_functor_helper(this, [this]
+    logMenu->addAction("Очистить", new connector(this, [this]
     {
         logModel->removeRows(0, logModel->rowCount());
     }), SLOT(signaled()));
@@ -96,6 +96,8 @@ Document::Document(QWidget *parent, QString name, QString path) :
             Storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
     connect(Scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
             Storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
+    connect(Scene, SIGNAL(wrongLink(ItemType,ItemType)),
+            this, SLOT(onWrongLink(ItemType,ItemType)));
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -448,15 +450,15 @@ void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
 
 void Document::onReqGenerated(const logic::request_id &reqID, clock_t event_time)
 {
-    const int time_size = 6;
+    /*const int time_size = 6;
     char buf[time_size];
     struct tm * timeinfo;
     time ( &event_time );
     timeinfo = localtime ( &event_time );
-    strftime (buf,time_size - 1,"%M:%S",timeinfo);
+    strftime (buf,time_size - 1,"%M:%S",timeinfo);*/
 
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString(buf))
+                        << new QStandardItem(QString("0:00"))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -507,4 +509,10 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, c
                                              .arg(reqID.__req_id))
                         << new QStandardItem("изничтожен"));
     ui->simulationLog->scrollToBottom();
+}
+
+void Document::onWrongLink(ItemType fromType, ItemType toType)
+{
+    //TODO какие эти?
+    QMessageBox::critical(this, "Ошибка", "Не возможно соединить эти элементы");
 }

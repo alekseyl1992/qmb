@@ -42,6 +42,7 @@
 
 #include "modelscene.h"
 #include "arrow.h"
+#include "logic/model.h" //TODO только из-за supportedLinks()
 
 ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     : QGraphicsScene(parent)
@@ -56,6 +57,8 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myItemColor = Qt::white;
     myTextColor = Qt::black;
     myLineColor = Qt::black;
+
+    supportedLinks = logic::model::supportedLinks();
 }
 
 void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
@@ -97,7 +100,7 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
         arrow->scaleShadow(myScale);
         arrow->updatePosition();
     }
-    else
+    /*else
         QMessageBox::critical(
                     (QWidget *)parent(),
                     "Ошибка",
@@ -105,7 +108,7 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
                         .arg((int)fromType)
                         .arg(idFrom)
                         .arg((int)toType)
-                        .arg(idTo));
+                        .arg(idTo));*/
 }
 
 void ModelScene::setMode(Mode mode)
@@ -203,23 +206,32 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         if (startItems.count() > 0 && endItems.count() > 0 &&
             startItems.first()->type() == ModelItem::Type &&
             endItems.first()->type() == ModelItem::Type &&
-            startItems.first() != endItems.first()) {
+            startItems.first() != endItems.first())
+        {
             ModelItem *startItem =
                 qgraphicsitem_cast<ModelItem *>(startItems.first());
             ModelItem *endItem =
                 qgraphicsitem_cast<ModelItem *>(endItems.first());
-            Arrow *arrow = new Arrow(startItem, endItem);
-            arrow->setColor(myLineColor);
-            startItem->addArrow(arrow);
-            endItem->addArrow(arrow);
-            arrow->setZValue(-1000.0);
-            QGraphicsScene::addItem(arrow);
-            arrow->scaleShadow(myScale);
-            arrow->updatePosition();
-            bModified = true;
+            //проверка связи на валидность
+            if(count(supportedLinks.begin(),
+                    supportedLinks.end(),
+                    link(startItem->itemType(), endItem->itemType())))
+            {
+                Arrow *arrow = new Arrow(startItem, endItem);
+                arrow->setColor(myLineColor);
+                startItem->addArrow(arrow);
+                endItem->addArrow(arrow);
+                arrow->setZValue(-1000.0);
+                QGraphicsScene::addItem(arrow);
+                arrow->scaleShadow(myScale);
+                arrow->updatePosition();
+                bModified = true;
 
-            emit linkInserted(startItem->itemType(), startItem->id(),
-                           endItem->itemType(), endItem->id());
+                emit linkInserted(startItem->itemType(), startItem->id(),
+                               endItem->itemType(), endItem->id());
+            }
+            else
+                emit wrongLink(startItem->itemType(), endItem->itemType());
         }
 
     }

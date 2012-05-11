@@ -6,9 +6,11 @@
 #include <thread>
 #include <mutex>
 #include <sstream>
+#include <vector>
 #include <QObject>
 #include <ctime>
 
+#include "utility/common.h"
 #include "request.h"
 #include "generator.h"
 #include "queue.h"
@@ -34,6 +36,7 @@ namespace logic
 	public:
         model() { }
 		model(const model& ) { }
+        static std::vector<std::pair<ItemType, ItemType>> supportedLinks();
 
 		~model() { }
 

@@ -62,6 +62,7 @@ private slots:
     void onReqBeganHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
     void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
     void onReqTerminated(const int& tID, const logic::request_id& reqID, clock_t event_time);
+    void onWrongLink(ItemType fromType, ItemType toType);
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
