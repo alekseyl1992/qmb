@@ -29,15 +29,17 @@ HomeWidget::HomeWidget(QWidget *parent) :
         while(!stream.atEnd())
         {
             QString path = stream.readLine();
+            QString name = path.section(QRegExp("[\\\\,/]"), -1, -1);
+
             QCommandLinkButton *button = new QCommandLinkButton(ui->lastModels);
-            button->setText(path.section(QRegExp("[\\\\,/]"), -1, -1));
+            button->setText(name);
             button->setDescription(path);
             button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             //button->setStyle(new QCleanlooksStyle());
 
-            ::connect(button, SIGNAL(clicked()), [this, path]
+            ::connect(button, SIGNAL(clicked()), [this, name, path]
             {
-                emit openModelByPath(path);
+                emit openModelByPath(name, path);
             });
 
             layout->addWidget(button);

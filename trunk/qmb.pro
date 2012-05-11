@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     logic/handler.cpp \
     logic/model.cpp \
     utility/lsfss.cpp \
-    logic/terminator.cpp
+    logic/terminator.cpp \
+    interface/createmodeldialog.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/simulationlog.h \
@@ -56,12 +57,14 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/queue.h \
     logic/handler.h \
     logic/model.h \
-    logic/terminator.h
+    logic/terminator.h \
+    interface/createmodeldialog.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
     interface/elementpropwindow.ui \
-    interface/homewidget.ui
+    interface/homewidget.ui \
+    interface/createmodeldialog.ui
 
 OTHER_FILES += \
     TODO.txt

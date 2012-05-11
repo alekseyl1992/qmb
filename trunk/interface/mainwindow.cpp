@@ -3,6 +3,7 @@
 #include "utility/modelstorage.h"
 #include "utility/simulationlog.h"
 #include "interface/homewidget.h"
+#include "interface/createmodeldialog.h"
 #include <QUrl>
 #include <QMessageBox>
 #include <QTextCodec>
@@ -13,10 +14,6 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "logic/generator.h"
-#include "logic/queue.h"
-#include "logic/handler.h"
-#include "logic/model.h"
 #include "utility/lsfss.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -41,9 +38,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_createModel_triggered()
 {
-    //здесь будет запрос на ввод имени проекта и места сохранения
+    CreateModelDialog *dialog = new CreateModelDialog(this);
+    if(dialog->exec() == QDialog::Accepted)
+        createDocument(dialog->name(), dialog->path());
+}
 
-    //формируем имя документа
+void MainWindow::createDocument(QString name, QString path)
+{
+    Document *newDoc = new Document(this, name, path);
+    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
+    subWindow->showMaximized();
+
+
+    /*//формируем имя документа
     QSet<QString> modelTitles;
     for(QMdiSubWindow *wnd :  ui->mdiArea->subWindowList())
         modelTitles << wnd->windowTitle();
@@ -68,7 +75,7 @@ void MainWindow::on_createModel_triggered()
         ui->mdiArea->setActiveSubWindow(subWindow);
 
         //добавляем кнопку старта симуляции в заголовку вкладки
-        /*QTabBar *tabBar = subWindow->findChild<QTabBar *>();
+        /QTabBar *tabBar = subWindow->findChild<QTabBar *>();
         //QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
         QToolButton *startButton = new QToolButton(tabBar);
         startButton->setIcon(QIcon(":/icons/start"));
@@ -79,7 +86,7 @@ void MainWindow::on_createModel_triggered()
         font.setBold(true);
         //tabBar->setFont(font);
         startButton->setAutoRaise(true);
-        tabBar->setTabButton(modelId-1, QTabBar::LeftSide, startButton);*/
+        tabBar->setTabButton(modelId-1, QTabBar::LeftSide, startButton);/
 
         Doc = newDoc;
     }
@@ -88,21 +95,24 @@ void MainWindow::on_createModel_triggered()
         QMessageBox::warning(this, "Ошибка",
                      "Открыто слишком много моделей!\n"
                      "Закройте хотя бы одну перед созданием новой.");
-    }
+    }*/
 }
 
 void MainWindow::on_openModel_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "Открыть",
-                                                    "", "QMB XML Model (*.qxml)");
-    if(fileName != "")
-        openModel(fileName);
+    QString path = QFileDialog::getOpenFileName(this, "Открыть",
+                                                    "", "QMB XML Model (*.qm)");
+    if(path != "")
+    {
+        QString name = path.section(QRegExp("[\\\\,/]"), -1, -1);
+        name.chop(3); //- .qm
+        openModel(name, path);
+    }
 }
 
-void MainWindow::openModel(QString path)
+void MainWindow::openModel(const QString &name, const QString &path)
 {
-    //TODO: подгрузка модели
-    QMessageBox::information(this, "Загрузка модели...", path);
+    createDocument(name, path);
 }
 
 void MainWindow::saveModel(QString path)
@@ -152,7 +162,7 @@ void MainWindow::createHomeWidget()
 
     connect(homeWidget, SIGNAL(createModel()), this, SLOT(on_createModel_triggered()));
     connect(homeWidget, SIGNAL(openModel()), this, SLOT(on_openModel_triggered()));
-    connect(homeWidget, SIGNAL(openModelByPath(const QString &)), this, SLOT(openModel(const QString &)));
+    connect(homeWidget, SIGNAL(openModelByPath(QString,QString)), this, SLOT(openModel(QString,QString)));
     connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(on_about_triggered()));
     connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
 }

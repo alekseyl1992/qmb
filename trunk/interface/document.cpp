@@ -16,7 +16,7 @@
 #include <QListWidgetItem>
 #include <QStandardItem>
 
-Document::Document(QWidget *parent, QString name) :
+Document::Document(QWidget *parent, QString name, QString path) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
 {
     ui->setupUi(this);
@@ -77,6 +77,12 @@ Document::Document(QWidget *parent, QString name) :
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
     Storage = new ModelStorage(name);
+    qDebug() << "path: " << path;
+    qDebug() << "name: " << name;
+    if(Storage->loadModel(path))
+        Storage->fillModel(Scene);
+    else
+        QMessageBox::critical(this, "Ошибка", "Возникла ошибка при попытке загрузить модель из файла");
 
     //связываем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
