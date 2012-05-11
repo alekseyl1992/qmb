@@ -36,7 +36,7 @@ namespace logic
         else
             having_request_flag = true;
 
-        emit parent->reqQueued(id, req.get_id());
+        emit parent->reqQueued(id, req.get_id(), clock() - parent->start_time);
 
         /*std::stringstream ss;
         ss << "-Request[" << req.get_id() << "] was put to the queue " << get_id();

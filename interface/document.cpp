@@ -24,6 +24,7 @@ Document::Document(QWidget *parent, QString name, QString path) :
     ui->progressBar->hide();
     ui->stopButton->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
+    qRegisterMetaType<clock_t>("clock_t");
 
     //OpenGL acceleration
     ui->graphicsView->setViewport(new QGLWidget(this));
@@ -247,11 +248,11 @@ void Document::startSimulation()
 
     logic::model *model = Storage->getModel(true);
     connect(model, SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
-    connect(model, SIGNAL(reqGenerated(logic::request_id)), this, SLOT(onReqGenerated(logic::request_id)));
-    connect(model, SIGNAL(reqQueued(int,logic::request_id)), this, SLOT(onReqQueued(int,logic::request_id)));
-    connect(model, SIGNAL(reqBeganHandling(int,logic::request_id)), this, SLOT(onReqBeganHandling(int,logic::request_id)));
-    connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id)), this, SLOT(onReqFinishedHandling(int,logic::request_id)));
-    connect(model, SIGNAL(reqTerminated(int,logic::request_id)), this, SLOT(onReqTerminated(int,logic::request_id)));
+    connect(model, SIGNAL(reqGenerated(logic::request_id, clock_t)), this, SLOT(onReqGenerated(logic::request_id, clock_t)));
+    connect(model, SIGNAL(reqQueued(int,logic::request_id, clock_t)), this, SLOT(onReqQueued(int,logic::request_id, clock_t)));
+    connect(model, SIGNAL(reqBeganHandling(int,logic::request_id, clock_t)), this, SLOT(onReqBeganHandling(int,logic::request_id, clock_t)));
+    connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id, clock_t)), this, SLOT(onReqFinishedHandling(int,logic::request_id, clock_t)));
+    connect(model, SIGNAL(reqTerminated(int,logic::request_id, clock_t)), this, SLOT(onReqTerminated(int,logic::request_id, clock_t)));
 
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("0:00")
@@ -445,17 +446,24 @@ void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
     logMenu->exec(ui->simulationLog->mapToGlobal(pos));
 }
 
-void Document::onReqGenerated(const logic::request_id &reqID)
+void Document::onReqGenerated(const logic::request_id &reqID, clock_t event_time)
 {
+    const int time_size = 6;
+    char buf[time_size];
+    struct tm * timeinfo;
+    time ( &event_time );
+    timeinfo = localtime ( &event_time );
+    strftime (buf,time_size - 1,"%M:%S",timeinfo);
+
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString(buf))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
                         << new QStandardItem("сгенерирован"));
 }
 
-void Document::onReqQueued(const int &qID, const logic::request_id &reqID)
+void Document::onReqQueued(const int &qID, const logic::request_id &reqID, clock_t event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("0:00")
@@ -467,7 +475,7 @@ void Document::onReqQueued(const int &qID, const logic::request_id &reqID)
     ui->simulationLog->scrollToBottom();
 }
 
-void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID)
+void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID, clock_t event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("0:00")
@@ -479,7 +487,7 @@ void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID
     ui->simulationLog->scrollToBottom();
 }
 
-void Document::onReqFinishedHandling(const int &hID, const logic::request_id &reqID)
+void Document::onReqFinishedHandling(const int &hID, const logic::request_id &reqID, clock_t event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("0:00")
@@ -490,7 +498,7 @@ void Document::onReqFinishedHandling(const int &hID, const logic::request_id &re
     ui->simulationLog->scrollToBottom();
 }
 
-void Document::onReqTerminated(const int &tID, const logic::request_id &reqID)
+void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, clock_t event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("0:00")

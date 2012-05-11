@@ -117,10 +117,11 @@ namespace logic
 	void model::simulation_start() {
 		//starts simulating
 		simulate_flag = true;
+        start_time = clock();
 
-        std::stringstream ss;
+        /*std::stringstream ss;
         ss << "Simulation started.";
-        sLog.writeLine(ss.str());
+        sLog.writeLine(ss.str());*/
 
 		generator_queue_link_th();
         queue_handler_link_th();
@@ -131,7 +132,7 @@ namespace logic
         {
             for(; ; )
             {
-                std::lock_guard<std::mutex> lk(model_mutex2);
+                //std::lock_guard<std::mutex> lk(model_mutex2);
                 if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
                 {
                     std::stringstream ss;

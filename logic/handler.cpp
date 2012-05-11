@@ -35,7 +35,7 @@ namespace logic
 
 		cur_req = new request(req);
 
-        emit parent->reqBeganHandling(id, req.get_id());
+        emit parent->reqBeganHandling(id, req.get_id(), clock() - parent->start_time);
         /*std::stringstream ss;
         ss << "---Request[" << req.get_id() << "] was put to the handler " << get_id();
         sLog.writeLine(ss.str());
@@ -46,7 +46,7 @@ namespace logic
         ++counter_of_handled_requests; //handled
         handled_flag = true;
 
-        emit parent->reqFinishedHandling(id, cur_req->get_id());
+        emit parent->reqFinishedHandling(id, cur_req->get_id(), clock() - parent->start_time);
 
        /* std::stringstream ss;
         ss << "----Request[" << cur_req->get_id() << "] finished handling in handler " << get_id();
