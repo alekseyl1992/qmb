@@ -67,11 +67,11 @@ namespace logic
 
     signals:
         void simulationFinished();
-        void reqGenerated(const request_id& reqID);
-        void reqQueued(const int& qID, const request_id& reqID);
-        void reqBeganHandling(const int& hID, const request_id& reqID);
-        void reqFinishedHandling(const int& hID, const request_id& reqID);
-        void reqTerminated(const int& tID, const request_id& reqID);
+        void reqGenerated(const logic::request_id& reqID);
+        void reqQueued(const int& qID, const logic::request_id& reqID);
+        void reqBeganHandling(const int& hID, const logic::request_id& reqID);
+        void reqFinishedHandling(const int& hID, const logic::request_id& reqID);
+        void reqTerminated(const int& tID, const logic::request_id& reqID);
 
     private: //members
 		std::vector<generator> generators; //all generators are kept here

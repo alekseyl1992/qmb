@@ -553,7 +553,7 @@ QTreeView::item:!enabled {
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QListWidget" name="simulationLog">
+         <widget class="QTreeView" name="simulationLog">
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
@@ -563,8 +563,11 @@ QTreeView::item:!enabled {
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="itemsExpandable">
+           <bool>false</bool>
           </property>
          </widget>
         </item>

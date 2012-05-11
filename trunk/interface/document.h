@@ -4,11 +4,13 @@
 #include "interface/scene/modelscene.h"
 #include "utility/modelstorage.h"
 #include "logic/model.h"
+#include "logic/request_id.h"
 #include <QDialog>
 #include <QTextEdit>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
 #include <QMenu>
+#include <QStandardItemModel>
 
 namespace Ui {
 class Document;
@@ -55,14 +57,20 @@ private slots:
 
     void on_simulationLog_customContextMenuRequested(const QPoint &pos);
 
+    void onReqGenerated(const logic::request_id& reqID);
+    void onReqQueued(const int& qID, const logic::request_id& reqID);
+    void onReqBeganHandling(const int& hID, const logic::request_id& reqID);
+    void onReqFinishedHandling(const int& hID, const logic::request_id& reqID);
+    void onReqTerminated(const int& tID, const logic::request_id& reqID);
+
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
     ModelScene *Scene;
     ModelStorage *Storage;
     QMenu *logMenu;
+    QStandardItemModel *logModel;
     bool bSimulating;
-    bool bDirty;
 
     bool tryApplyCode();
 };

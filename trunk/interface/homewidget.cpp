@@ -67,5 +67,5 @@ void HomeWidget::on_aboutButton_clicked()
 
 void HomeWidget::on_exitButton_clicked()
 {
-    QApplication::exit();
+    emit exitClick();
 }
