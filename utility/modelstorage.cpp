@@ -97,6 +97,7 @@ bool ModelStorage::saveModel(QString path)
         xmlFile.close();
     }
     else return false;
+    currentPath = path;
     return true;
 }
 
@@ -114,11 +115,13 @@ bool ModelStorage::loadModel(QString path)
         xmlFile.close();
     }
     else return false;
+    currentPath = path;
     return true;
 }
 
 void ModelStorage::fillModel(IFillableModel *iModel) const
 {
+    //нужно очищать сцену перед новым заполнением!
     const int Link = 4;
     QMap<QString, int> entries;
     entries[ItemNames[0]] = int(ItemType::Generator);
@@ -166,9 +169,13 @@ QString ModelStorage::getCodeString()
     return curDoc->toString(3);
 }
 
+QString ModelStorage::getCurrentPath()
+{
+    return currentPath;
+}
+
 bool ModelStorage::setCodeString(QString code)
 {
-//    qDebug() << "entering the setCodeString!";
     QDomDocument tempDoc;
     if (tempDoc.setContent(code))
     {

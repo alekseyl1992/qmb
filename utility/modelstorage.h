@@ -1,3 +1,16 @@
+/* На всякий случай "ExampleModel.qm"
+<!DOCTYPE qmodel>
+<model name="ExampleModel">
+   <Generator x="-334" y="-89" period="500" num_of_reqs="10" id="1"/>
+   <Queue x="-144" y="-89" id="1"/>
+   <Handler x="54" y="-89" period="600" id="1"/>
+   <Terminator x="253" y="-87" period="0" id="1"/>
+   <Link fromID="1" toID="1" from="Generator" to="Queue"/>
+   <Link fromID="1" toID="1" from="Queue" to="Handler"/>
+   <Link fromID="1" toID="1" from="Handler" to="Terminator"/>
+</model>
+*/ //////////////////////////////////////////
+
 #ifndef MODELSTORAGE_H
 #define MODELSTORAGE_H
 
@@ -11,7 +24,6 @@
 #include <QPoint>
 #include <QMap>
 
-//зачем7
 //константы символьные. выношу как и обещал
 const QString ItemNames[] = {"Generator","Queue",
                              "Handler","Terminator","Link"};
@@ -25,15 +37,14 @@ private:
     QDomDocument* curDoc; //хранилище структуры xml
     QDomElement root; //корневой элемент (ех: модель №х )
 
+    QString currentPath;
+
     enum class LinkType : int
     {
         GeneratorToQueue,
         QueueToHandler,
         HandlerToTerminator,
     };
-
-    //функции для добавления линков и итемов в модель.
-    //убрал их в private
 
     void AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID);
 
@@ -49,18 +60,22 @@ public:
         name.remove(" ");
         for (char c='А'; c<='я'; c++)
             name.remove(c);
-        name="model_"+name;
+
         //вообще, наверное лучше сделать так, чтобы
         //сразу попадал корректный нейм
 
-        root = curDoc->createElement(name);
+        root = curDoc->createElement("model");
+        root.setAttribute("name",name);
+
         curDoc->appendChild(root);
 
-//        qDebug() << loadModel("D:/work/example.qxml");
+        //как базовое имя
+        currentPath = "models/untitled.qm";
     }
 
     QString getCodeString(); //возвращает строку с XML-кодом сцены
     bool setCodeString(QString code); //парсинг строки в документ //вызывается при ручном изсменении кода
+    QString getCurrentPath(); //возвращает текущий путь к файлу документа
 
     //TODO form model here (instead of using LoadQModel)
     logic::model *getModel(bool create = false);
