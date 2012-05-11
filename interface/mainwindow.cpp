@@ -154,6 +154,7 @@ void MainWindow::createHomeWidget()
     connect(homeWidget, SIGNAL(openModel()), this, SLOT(on_openModel_triggered()));
     connect(homeWidget, SIGNAL(openModelByPath(const QString &)), this, SLOT(openModel(const QString &)));
     connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(on_about_triggered()));
+    connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
 }
 
 void MainWindow::createMenuButton()

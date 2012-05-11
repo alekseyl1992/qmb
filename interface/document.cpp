@@ -1,7 +1,6 @@
 #include "interface/document.h"
 #include "ui_document.h"
 #include "utility/xmlhighlighter.h"
-#include "utility/simulationlog.h"
 #include "interface/elementpropwindow.h"
 #include "utility/common.h"
 #include "utility/lsfss.h"
@@ -10,12 +9,12 @@
 #include <QGraphicsOpacityEffect>
 #include <QPushButton>
 #include <QLabel>
-#include <QStandardItemModel>
 #include <QMessageBox>
 #include <QProgressBar>
 #include <QtOpenGL/QGLWidget>
 #include <QClipboard>
 #include <QListWidgetItem>
+#include <QStandardItem>
 
 Document::Document(QWidget *parent, QString name) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
@@ -24,6 +23,7 @@ Document::Document(QWidget *parent, QString name) :
     setWindowTitle(name);
     ui->progressBar->hide();
     ui->stopButton->hide();
+    qRegisterMetaType<logic::request_id>("logic::request_id");
 
     //OpenGL acceleration
     ui->graphicsView->setViewport(new QGLWidget(this));
@@ -49,8 +49,11 @@ Document::Document(QWidget *parent, QString name) :
     {
         QClipboard *clipboard = QApplication::clipboard();
         QString strings;
-        foreach(QListWidgetItem *item, ui->simulationLog->selectedItems())
-        strings += item->text() + "\n";
+        foreach(QModelIndex index, ui->simulationLog->selectionModel()->selectedRows())
+            strings += logModel->item(index.row(), 0)->text().append(" | ")
+                    += logModel->item(index.row(), 1)->text().append(" | ")
+                    += logModel->item(index.row(), 2)->text().append("\n");
+
         clipboard->setText(strings);
     }), SLOT(signaled()));
 
@@ -58,14 +61,17 @@ Document::Document(QWidget *parent, QString name) :
     {
         QClipboard *clipboard = QApplication::clipboard();
         QString strings;
-        foreach(QListWidgetItem *item, ui->simulationLog->findItems("*", Qt::MatchWildcard))
-            strings += item->text() + "\n";
+        for(int i=0; i<logModel->rowCount(); i++)
+            strings += logModel->item(i, 0)->text().append(" | ")
+                    += logModel->item(i, 1)->text().append(" | ")
+                    += logModel->item(i, 2)->text().append("\n");
+
         clipboard->setText(strings);
     }), SLOT(signaled()));
 
     logMenu->addAction("ќчистить", new connect_functor_helper(this, [this]
     {
-        ui->simulationLog->clear();
+        logModel->removeRows(0, logModel->rowCount());
     }), SLOT(signaled()));
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
@@ -92,8 +98,9 @@ Document::Document(QWidget *parent, QString name) :
 //    box->setGraphicsEffect(effect);
 
     //синхронизаци€ записи в объект sLog и соответсвующее поле в интерфейсе
-    connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
-    connect(&sLog, SIGNAL(cleared()), ui->simulationLog, SLOT(clear()));
+    //DEPRECATED
+    //connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
+    //connect(&sLog, SIGNAL(cleared()), ui->simulationLog, SLOT(clear()));
 
     //убираем заголовок палитры
     QWidget *nullHeader = new QWidget(this);
@@ -182,7 +189,15 @@ Document::Document(QWidget *parent, QString name) :
     //выбираем генератор
     ui->toolsView->setCurrentIndex(generatorIndex);
 
-    ui->logDock->resize(0, 30);
+    //формируем лог симул€ции
+    logModel = new QStandardItemModel(0, 3, this);
+    logModel->setHeaderData(0, Qt::Horizontal, "¬рем€");
+    logModel->setHeaderData(1, Qt::Horizontal, "«апрос");
+    logModel->setHeaderData(2, Qt::Horizontal, "—татус");
+    ui->simulationLog->setModel(logModel);
+    //connect(logModel, SIGNAL(rowsInserted(const QModelIndex &parent, int start, int end)), this, SLOT(scrollLog(const QModelIndex &parent, int start, int end)));
+
+    ui->logDock->resize(0, 360);
 }
 
 Document::~Document()
@@ -217,7 +232,7 @@ void Document::setActiveTab(Document::Tabs Tab)
 
 void Document::startSimulation()
 {
-    ui->simulationLog->clear();
+    //logModel->clear();
     showLog();    
     ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
@@ -226,6 +241,18 @@ void Document::startSimulation()
 
     logic::model *model = Storage->getModel(true);
     connect(model, SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
+    connect(model, SIGNAL(reqGenerated(logic::request_id)), this, SLOT(onReqGenerated(logic::request_id)));
+    connect(model, SIGNAL(reqQueued(int,logic::request_id)), this, SLOT(onReqQueued(int,logic::request_id)));
+    connect(model, SIGNAL(reqBeganHandling(int,logic::request_id)), this, SLOT(onReqBeganHandling(int,logic::request_id)));
+    connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id)), this, SLOT(onReqFinishedHandling(int,logic::request_id)));
+    connect(model, SIGNAL(reqTerminated(int,logic::request_id)), this, SLOT(onReqTerminated(int,logic::request_id)));
+
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem("")
+                        << new QStandardItem("симул€ци€ начата"));
+    ui->simulationLog->scrollToBottom();
+
     model->simulation_start();
     bSimulating = true;
 }
@@ -237,6 +264,7 @@ void Document::stopSimulation()
                 "¬ы действительно хотите прервать симул€цию?",
                 QMessageBox::Yes, QMessageBox::No);
 
+    //TODO повтор€ющийс€ код
     if(id == QMessageBox::Yes)
     {
         bSimulating = false;
@@ -245,6 +273,16 @@ void Document::stopSimulation()
         ui->progressBar->hide();
         ui->startButton->show();
         ui->stopButton->hide();
+
+        logModel->appendRow(QList<QStandardItem *>()
+                            << new QStandardItem("0:00")
+                            << new QStandardItem("")
+                            << new QStandardItem("симул€ци€ прервана"));
+        ui->simulationLog->scrollToBottom();
+
+        //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
+        //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
+        Storage->freeModel();
     }
 }
 
@@ -259,9 +297,10 @@ void Document::setModified(bool m)
     Scene->setModified(m);
 }
 
+//DEPRECATED
 void Document::logChanged(QString line)
 {
-    ui->simulationLog->addItem(line);
+    //ui->simulationLog->addItem(line);
     ui->simulationLog->scrollToBottom();
 }
 
@@ -318,6 +357,15 @@ void Document::onSimulationFinished()
     ui->startButton->show();
     ui->stopButton->hide();
     ui->graphicsView->setEnabled(true);
+
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem("")
+                        << new QStandardItem("симул€ци€ завершена успешно"));
+    ui->simulationLog->scrollToBottom();
+
+    //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
+    //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
     Storage->freeModel();
 
     int id = QMessageBox::question(
@@ -389,4 +437,60 @@ bool Document::tryApplyCode()
 void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
 {
     logMenu->exec(ui->simulationLog->mapToGlobal(pos));
+}
+
+void Document::onReqGenerated(const logic::request_id &reqID)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString("%0:%1")
+                                             .arg(reqID.__req_gen_id)
+                                             .arg(reqID.__req_id))
+                        << new QStandardItem("сгенерирован"));
+}
+
+void Document::onReqQueued(const int &qID, const logic::request_id &reqID)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString("%0:%1")
+                                             .arg(reqID.__req_gen_id)
+                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("добавлен в очередь %0")
+                                             .arg(qID)));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString("%0:%1")
+                                             .arg(reqID.__req_gen_id)
+                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("попал в обработчик %0")
+                                             .arg(hID)));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onReqFinishedHandling(const int &hID, const logic::request_id &reqID)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString("%0:%1")
+                                             .arg(reqID.__req_gen_id)
+                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("обработка завершена")));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onReqTerminated(const int &tID, const logic::request_id &reqID)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("0:00")
+                        << new QStandardItem(QString("%0:%1")
+                                             .arg(reqID.__req_gen_id)
+                                             .arg(reqID.__req_id))
+                        << new QStandardItem("изничтожен"));
+    ui->simulationLog->scrollToBottom();
 }

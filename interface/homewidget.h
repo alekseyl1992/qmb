@@ -30,6 +30,7 @@ signals:
     void openModel();
     void openModelByPath(QString path);
     void aboutClick();
+    void exitClick();
 
 private:
     Ui::HomeWidget *ui;
