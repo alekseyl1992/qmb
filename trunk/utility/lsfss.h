@@ -4,10 +4,10 @@
 #include <QObject>
 #include <functional>
 
-class connect_functor_helper : public QObject {
+class connector : public QObject {
     Q_OBJECT
 public:
-    connect_functor_helper(QObject *parent, const std::function<void()> &f) : QObject(parent), function_(f) {
+    connector(QObject *parent, const std::function<void()> &f) : QObject(parent), function_(f) {
     }
 
 public Q_SLOTS:
