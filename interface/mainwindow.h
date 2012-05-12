@@ -20,19 +20,19 @@ public:
 
     void createDocument(QString name, QString path);
 public slots:
-    void on_createModel_triggered();
+    void onCreateModel();
 
-    void on_openModel_triggered();
+    void onOpenModel();
 
-    void on_saveModel_triggered();
+    void onSaveModel();
 
-    void on_about_triggered();
+    void onSaveModelAs();
 
-    void on_closeModel_triggered();
+    void onAbout();
 
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
-    void openModel(const QString& name, const QString& path);
+    void openModel(const QString& path);
 
     void saveModel(QString path);
 
