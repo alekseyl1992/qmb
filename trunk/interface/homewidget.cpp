@@ -37,9 +37,9 @@ HomeWidget::HomeWidget(QWidget *parent) :
             button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             //button->setStyle(new QCleanlooksStyle());
 
-            ::connect(button, SIGNAL(clicked()), [this, name, path]
+            ::connect(button, SIGNAL(clicked()), [this, path]
             {
-                emit openModelByPath(name, path);
+                emit openModelByPath(path);
             });
 
             layout->addWidget(button);

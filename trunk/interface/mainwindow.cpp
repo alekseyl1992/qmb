@@ -36,19 +36,30 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_createModel_triggered()
+void MainWindow::onCreateModel()
 {
     CreateModelDialog *dialog = new CreateModelDialog(this);
     if(dialog->exec() == QDialog::Accepted)
-        createDocument(dialog->name(), dialog->path());
+    {
+        Document *newDoc = new Document(this);
+        if(newDoc->createModel(dialog->name(), dialog->path()))
+        {
+            QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
+            subWindow->showMaximized();
+        }
+        else //TODO а может обработку ошибок лучше в Document?
+            QMessageBox::critical(this,
+                "Ошибка",
+                "Возникла ошибка при попытке создать модель");
+    }
 }
 
+//DEPRECATED
 void MainWindow::createDocument(QString name, QString path)
 {
-    Document *newDoc = new Document(this, name, path);
-    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
-    subWindow->showMaximized();
-
+    QMessageBox::critical(this,
+        "Ошибка",
+        "DEPRECATED");
 
     /*//формируем имя документа
     QSet<QString> modelTitles;
@@ -98,21 +109,27 @@ void MainWindow::createDocument(QString name, QString path)
     }*/
 }
 
-void MainWindow::on_openModel_triggered()
+void MainWindow::onOpenModel()
 {
     QString path = QFileDialog::getOpenFileName(this, "Открыть",
                                                     "", "QMB XML Model (*.qm)");
     if(path != "")
-    {
-        QString name = path.section(QRegExp("[\\\\,/]"), -1, -1);
-        name.chop(3); //- .qm
-        openModel(name, path);
-    }
+        openModel(path);
 }
 
-void MainWindow::openModel(const QString &name, const QString &path)
+void MainWindow::openModel(const QString &path)
 {
-    createDocument(name, path);
+    Document *newDoc = new Document(this);
+    if(newDoc->openModel(path))
+    {
+        QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
+        subWindow->showMaximized();
+    }
+    else //TODO а может обработку ошибок лучше в Document?
+        QMessageBox::critical(this,
+            "Ошибка",
+            QString("Возникла ошибка при попытке открыть модель\nПуть: %0")
+                              .arg(path));
 }
 
 void MainWindow::saveModel(QString path)
@@ -121,22 +138,43 @@ void MainWindow::saveModel(QString path)
     QMessageBox::information(this, "Сохранение модели...", path);
 }
 
-void MainWindow::on_saveModel_triggered()
+void MainWindow::onSaveModel()
 {
-    QString fileName =  QFileDialog::getSaveFileName(this, "Сохранить",
-                                                    "", "QMB XML Model (*.qm)");
-    if(fileName != "")
-        saveModel(fileName);
+    QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
+    if(curTab)
+    {
+        Document *curDoc = dynamic_cast<Document *>(curTab->widget());
+        if(curDoc)
+        {
+            if(!curDoc->saveModel())
+                QMessageBox::critical(this,
+                    "Ошибка",
+                    "Возникла ошибка при попытке сохранить модель");
+        }
+    }
 }
 
-void MainWindow::on_closeModel_triggered()
+void MainWindow::onSaveModelAs()
 {
-    //костыль, иначе окно созданное сразу при запуске программы нельзя закрыть
-    if(!ui->mdiArea->subWindowList().empty())
-        ui->mdiArea->subWindowList(QMdiArea::ActivationHistoryOrder).back()->close();
+    CreateModelDialog *dialog = new CreateModelDialog(this);
+    if(dialog->exec() == QDialog::Accepted)
+    {
+        QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
+        if(curTab)
+        {
+            Document *curDoc = dynamic_cast<Document *>(curTab->widget());
+            if(curDoc)
+            {
+                if(!curDoc->saveModelAs(dialog->name(), dialog->path()))
+                    QMessageBox::critical(this,
+                        "Ошибка",
+                        "Возникла ошибка при попытке сохранить модель");
+            }
+        }
+    }
 }
 
-void MainWindow::on_about_triggered()
+void MainWindow::onAbout()
 {
     QMessageBox::information(this, "О программе",
                              "Queueing Model Builder v0.1\n\n"
@@ -160,10 +198,10 @@ void MainWindow::createHomeWidget()
     subWindow->setWindowTitle("Добро пожаловать");
     subWindow->showMaximized();
 
-    connect(homeWidget, SIGNAL(createModel()), this, SLOT(on_createModel_triggered()));
-    connect(homeWidget, SIGNAL(openModel()), this, SLOT(on_openModel_triggered()));
-    connect(homeWidget, SIGNAL(openModelByPath(QString,QString)), this, SLOT(openModel(QString,QString)));
-    connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(on_about_triggered()));
+    connect(homeWidget, SIGNAL(createModel()), this, SLOT(onCreateModel()));
+    connect(homeWidget, SIGNAL(openModel()), this, SLOT(onOpenModel()));
+    connect(homeWidget, SIGNAL(openModelByPath(QString)), this, SLOT(openModel(QString)));
+    connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(onAbout()));
     connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
 }
 
@@ -180,10 +218,13 @@ void MainWindow::createMenuButton()
     font.setBold(true);
     menuButton->setFont(font);
     QMenu *mainMenu = new QMenu(this);
-    mainMenu->addAction("Создать модель", this, SLOT(on_createModel_triggered()));
-    mainMenu->addAction("Открыть модель", this, SLOT(on_openModel_triggered()));
+    mainMenu->addAction("Создать модель", this, SLOT(onCreateModel()));
+    mainMenu->addAction("Открыть модель", this, SLOT(onOpenModel()));
     mainMenu->addSeparator();
-    mainMenu->addAction("О программе", this, SLOT(on_about_triggered()));
+    mainMenu->addAction("Сохранить модель", this, SLOT(onSaveModel()));
+    mainMenu->addAction("Сохранить модель как...", this, SLOT(onSaveModelAs()));
+    mainMenu->addSeparator();
+    mainMenu->addAction("О программе", this, SLOT(onAbout()));
     mainMenu->addSeparator();
     mainMenu->addAction("Выход", this, SLOT(close()));
 

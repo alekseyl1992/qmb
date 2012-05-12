@@ -25,7 +25,7 @@ class Document : public QDialog
 public:
     enum Tabs {Model, Code, Simulation};
 
-    explicit Document(QWidget *parent, QString name, QString path);
+    explicit Document(QWidget *parent);
 
     ~Document();
 
@@ -39,8 +39,13 @@ public:
     void stopSimulation();
     bool isModified() const;
     void setModified(bool m);
+
+    bool createModel(const QString& name, const QString& path);
+    bool openModel(const QString& path);
+    bool saveModel();
+    bool saveModelAs(const QString& name, const QString &path);
+
 public slots:
-    void logChanged(QString line);
     void on_logButton_toggled(bool checked);
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);

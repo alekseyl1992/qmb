@@ -50,14 +50,15 @@ private:
 
 public:
     //TODO перенести реализации в cpp
-    ModelStorage(QString name) : myModel(nullptr)
+    ModelStorage() : myModel(nullptr)
     {
         curDoc = new QDomDocument("qmodel");
 
+        //TODO всё это придётся перенести в load/crate
         //формирование "подписи" xml файла (первая строка - тип xml)
         //!!! Название модели не должно содержать пробел и кириллицы
         //!!! Иначе мы потом эту модель не загрузим. потому делаем чек.
-        name.remove(" ");
+        /*name.remove(" ");
         for (char c='А'; c<='я'; c++)
             name.remove(c);
 
@@ -70,7 +71,7 @@ public:
         curDoc->appendChild(root);
 
         //как базовое имя
-        currentPath = "models/untitled.qm";
+        currentPath = "models/untitled.qm";*/
     }
 
     QString getCodeString(); //возвращает строку с XML-кодом сцены
@@ -82,9 +83,12 @@ public:
     void freeModel();
 
     //получения поля name, item'а по его id для отображения на сцене
-    QString getItemName(int id);
-    bool saveModel(QString path);
-    bool loadModel(QString path);
+    QString getItemName(int id) const;
+    QString getModelName() const;
+    bool createModel(const QString& name, const QString& path);
+    bool openModel(const QString& path);
+    bool saveModel();
+    bool saveModelAs(const QString& name, const QString &path);
     void fillModel(IFillableModel *iModel) const;
 
     //TODO здесь будут метода для получения и записи полного списка параметров

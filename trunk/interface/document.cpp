@@ -16,11 +16,10 @@
 #include <QListWidgetItem>
 #include <QStandardItem>
 
-Document::Document(QWidget *parent, QString name, QString path) :
+Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
 {
     ui->setupUi(this);
-    setWindowTitle(name);
     ui->progressBar->hide();
     ui->stopButton->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
@@ -77,13 +76,7 @@ Document::Document(QWidget *parent, QString name, QString path) :
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
-    Storage = new ModelStorage(name);
-    qDebug() << "path: " << path;
-    qDebug() << "name: " << name;
-    if(Storage->loadModel(path))
-        Storage->fillModel(Scene);
-    else
-        QMessageBox::critical(this, "Ошибка", "Возникла ошибка при попытке загрузить модель из файла");
+    Storage = new ModelStorage();
 
     //связываем сцену с хранилищем
     connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
@@ -306,11 +299,37 @@ void Document::setModified(bool m)
     Scene->setModified(m);
 }
 
-//DEPRECATED
-void Document::logChanged(QString line)
+bool Document::createModel(const QString &name, const QString &path)
 {
-    //ui->simulationLog->addItem(line);
-    ui->simulationLog->scrollToBottom();
+    bool ret = Storage->createModel(name, path);
+    if(ret)
+    {
+        setWindowTitle(Storage->getModelName());
+    }
+
+    return ret;
+}
+
+bool Document::openModel(const QString &path)
+{
+    bool ret = Storage->openModel(path);
+    if(ret)
+    {
+        Storage->fillModel(Scene);
+        setWindowTitle(Storage->getModelName());
+    }
+
+    return ret;
+}
+
+bool Document::saveModel()
+{
+    return Storage->saveModel();
+}
+
+bool Document::saveModelAs(const QString& name, const QString &path)
+{
+    return Storage->saveModelAs(name, path);
 }
 
 void Document::on_logButton_toggled(bool checked)
@@ -343,10 +362,10 @@ void Document::closeEvent(QCloseEvent *event)
             if(code()->document()->isModified())
             {
                 if(tryApplyCode())
-                    Storage->saveModel(QString());
+                    Storage->saveModel();
             }
             else
-                Storage->saveModel(QString());
+                Storage->saveModel();
         }
         else if(id == QMessageBox::Cancel)
             event->ignore();
@@ -453,12 +472,12 @@ void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
 
 void Document::onReqGenerated(const logic::request_id &reqID, clock_t event_time)
 {
-    /*const int time_size = 6;
+    const int time_size = 6;
     char buf[time_size];
     struct tm * timeinfo;
-    time ( &event_time );
+    time(&event_time);
     timeinfo = localtime ( &event_time );
-    strftime (buf,time_size - 1,"%M:%S",timeinfo);*/
+    strftime (buf,time_size - 1,"%M:%S",timeinfo);
 
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(QString("0:00"))

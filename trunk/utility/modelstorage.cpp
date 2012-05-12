@@ -79,7 +79,7 @@ void ModelStorage::freeModel()
     myModel = nullptr;
 }
 
-QString ModelStorage::getItemName(int id)
+QString ModelStorage::getItemName(int id) const
 {
     return QString(); //stub
     //находишь в QDomDocument item с соотв. id, возвращаешь его поле name
@@ -88,20 +88,18 @@ QString ModelStorage::getItemName(int id)
     // то смысл ясен, если нет то ?
 }
 
-bool ModelStorage::saveModel(QString path)
+QString ModelStorage::getModelName() const
 {
-    QFile xmlFile(path);
-    if(xmlFile.open(QIODevice::WriteOnly))
-    {
-        QTextStream(&xmlFile) << curDoc->toString(3);
-        xmlFile.close();
-    }
-    else return false;
-    currentPath = path;
-    return true;
+    return "Модель 1"; //TODO возвращать имя модели (из поля xml)
 }
 
-bool ModelStorage::loadModel(QString path)
+bool ModelStorage::createModel(const QString &name, const QString &path)
+{
+    //TODO здесь меняем имя документа на name!
+    currentPath = path;
+}
+
+bool ModelStorage::openModel(const QString& path)
 {
     QFile xmlFile(path);
     //считываем данные из xml файла в QDomDocument
@@ -116,6 +114,35 @@ bool ModelStorage::loadModel(QString path)
     }
     else return false;
     currentPath = path;
+    return true;
+}
+
+bool ModelStorage::saveModel()
+{
+    QFile xmlFile(currentPath);
+    if(xmlFile.open(QIODevice::WriteOnly))
+    {
+        QTextStream(&xmlFile) << curDoc->toString(3);
+        xmlFile.close();
+    }
+    else
+        return false;
+}
+
+bool ModelStorage::saveModelAs(const QString& name, const QString &path)
+{
+    //TODO здесь меняем имя документа на name!
+    QFile xmlFile(path);
+    if(xmlFile.open(QIODevice::WriteOnly))
+    {
+        QTextStream(&xmlFile) << curDoc->toString(3);
+        xmlFile.close();
+    }
+    else
+        return false;
+
+    currentPath = path;
+
     return true;
 }
 
