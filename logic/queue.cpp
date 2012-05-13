@@ -31,16 +31,10 @@ namespace logic
         std::lock_guard<std::mutex> lk(queue_mutex);
 
         requests_in_queue.push_back(req);
-        if(requests_in_queue.size() == 0)
-            having_request_flag = false;
-        else
-            having_request_flag = true;
 
-        emit parent->reqQueued(id, req.get_id(), clock() - parent->start_time);
+        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
 
-        /*std::stringstream ss;
-        ss << "-Request[" << req.get_id() << "] was put to the queue " << get_id();
-        sLog.writeLine(ss.str());*/
+        emit parent->reqQueued(id, req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
         qDebug() << req.get_id().__req_gen_id << "-" << req.get_id().__req_id << " was put to the queue " << get_id();
 	}
 
@@ -49,10 +43,9 @@ namespace logic
         std::lock_guard<std::mutex> lk(queue_mutex);
 		request res = *(requests_in_queue.begin());
 		requests_in_queue.pop_front();
-		if(requests_in_queue.size() == 0)
-			having_request_flag = false;
-		else
-			having_request_flag = true;
+
+        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
+
 		return res;
 	}
 
@@ -61,10 +54,9 @@ namespace logic
         std::lock_guard<std::mutex> lk(queue_mutex);
 		request res = *(requests_in_queue.end() - 1);
 		requests_in_queue.pop_back();
-		if(requests_in_queue.size() == 0)
-			having_request_flag = false;
-		else
-			having_request_flag = true;
+
+        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
+
 		return res;
 	}
 

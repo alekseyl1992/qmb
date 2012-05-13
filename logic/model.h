@@ -36,16 +36,18 @@ namespace logic
 	public:
         model() { }
 		model(const model& ) { }
-        static std::vector<std::pair<ItemType, ItemType>> supportedLinks();
+        static std::vector< std::pair<ItemType, ItemType> > supportedLinks();
 
 		~model() { }
 
     private:
         bool are_all_generated(); //checks if all generators finished their work
-        bool are_all_queues_and_handlers_finished_handling(); //it's obvious :)
+        bool are_all_queues_clear(); //it's obvious :)
+        bool are_all_handlers_finished_handling();
         bool are_all_terminators_finished_terminating();
         bool is_simulating_finished(); //checks the sumulation
-        void generator_queue_link_th(); //links generators and queues
+        void generating_th(); //links generators and queues
+        void queueing_th();
         void queue_handler_link_th(); //links queues and handlers
         void handler_terminator_link_th(); //links queues and handlers
 
@@ -70,12 +72,12 @@ namespace logic
         link <queue*, handler*>* get_link_queues_handlers_by_ids(int id_left, int id_right);
 
     signals:
-        void simulationFinished();
-        void reqGenerated(const logic::request_id& reqID, clock_t time);
-        void reqQueued(const int& qID, const logic::request_id& reqID, clock_t time);
-        void reqBeganHandling(const int& hID, const logic::request_id& reqID, clock_t time);
-        void reqFinishedHandling(const int& hID, const logic::request_id& reqID, clock_t time);
-        void reqTerminated(const int& tID, const logic::request_id& reqID, clock_t time);
+        void simulationFinished(int time);
+        void reqGenerated(const logic::request_id& reqID, int time);
+        void reqQueued(const int& qID, const logic::request_id& reqID, int time);
+        void reqBeganHandling(const int& hID, const logic::request_id& reqID, int time);
+        void reqFinishedHandling(const int& hID, const logic::request_id& reqID, int time);
+        void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private: //members
 		std::vector<generator> generators; //all generators are kept here
@@ -89,7 +91,7 @@ namespace logic
         std::vector< link <handler*, terminator*> > link_handlers_terminators;
 
 		bool simulate_flag;
-        clock_t start_time;
+        ull_t start_time;
 	};
 
 } //end namespace logic

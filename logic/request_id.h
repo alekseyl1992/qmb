@@ -11,17 +11,13 @@ namespace logic
 {
 	struct request_id
 	{
-		request_id(): __req_gen_id(0), __req_id(0) { }
-        request_id(ull_t req_gen_id, ull_t req_id): __req_gen_id(req_gen_id), __req_id(req_id) { }
-        request_id(const request_id& req_id): __req_gen_id(req_id.__req_gen_id), __req_id(req_id.__req_id) { }
+        request_id();
+        request_id(ull_t req_gen_id, ull_t req_id);
+        request_id(const request_id& req_id);
 
-        request_id& operator= (const request_id& req_id) {
-            if (this == &req_id)
-                return *this;
-            __req_gen_id = req_id.__req_gen_id;
-            __req_id = req_id.__req_id;
-			return *this;
-		}
+        request_id& operator= (const request_id& req_id);
+
+        const char* txt_reqID() const;
 
         ull_t __req_gen_id;
         ull_t __req_id;

@@ -3,71 +3,129 @@
 namespace logic
 {
     bool model::are_all_generated() {
-        bool all_completed = true;        
-        std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
+        bool all_completed = true;
+        for (auto it = generators.begin(); it != generators.end(); ++it)
+        {
+            if (!it->is_finished())
+            {
+                all_completed = false;
+                break;
+            }
+        }
+        /*std::for_each(link_generators_queues.begin(), link_generators_queues.end(), [&all_completed](link <generator*, queue*>& link) {
 			if (!link.lhs->is_finished())
 			{
                 all_completed = false;
 			}
-        });
+        });*/
         return all_completed;
 	}
 
-    bool model::are_all_queues_and_handlers_finished_handling()
+    bool model::are_all_queues_clear()
     {
         bool all_completed = true;
-        std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
-            if (link.lhs->get_size() != 0 || !link.rhs->is_free())
+        for (auto it = queues.begin(); it != queues.end(); ++it)
+        {
+            if (it->get_size() != 0)
+            {
+                all_completed = false;
+                break;
+            }
+        }
+        /*std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
+            if (link.lhs->get_size() != 0)
             {
                 all_completed = false;
             }
-        });
+        });*/
+        return all_completed;
+    }
+
+    bool model::are_all_handlers_finished_handling()
+    {
+        bool all_completed = true;
+        for (auto it = handlers.begin(); it != handlers.end(); ++it)
+        {
+            if (!it->is_free())
+            {
+                all_completed = false;
+                break;
+            }
+        }
+        /*std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), [&all_completed](link <queue*, handler*>& link) {
+            if (!link.rhs->is_free())
+            {
+                all_completed = false;
+            }
+        });*/
         return all_completed;
     }
 
     bool model::are_all_terminators_finished_terminating()
     {
         bool all_completed = true;
-        std::for_each(link_handlers_terminators.begin(), link_handlers_terminators.end(), [&all_completed](link <handler*, terminator*>& link) {
+        for (auto it = terminators.begin(); it != terminators.end(); ++it)
+        {
+            if (!it->is_free())
+            {
+                all_completed = false;
+                break;
+            }
+        }
+        /*std::for_each(link_handlers_terminators.begin(), link_handlers_terminators.end(), [&all_completed](link <handler*, terminator*>& link) {
             if (!link.rhs->is_free())
             {
                 all_completed = false;
             }
-        });
+        });*/
         return all_completed;
     }
 
     bool model::is_simulating_finished() {
         bool c1 = are_all_generated(),
-             c2 = are_all_queues_and_handlers_finished_handling(),
-             c3 = are_all_terminators_finished_terminating();
-        return c1 && c2 && c3;
+             c2 = are_all_queues_clear(),
+             c3 = are_all_handlers_finished_handling(),
+             c4 = are_all_terminators_finished_terminating();
+        return c1 && c2 && c3 && c4;
 	}
 
-	void model::generator_queue_link_th() {
-		std::for_each(link_generators_queues.begin(), link_generators_queues.end(), 
-			[&](link<generator*, queue*>& link) 
+    void model::generating_th() {
+        std::for_each(generators.begin(), generators.end(),
+            [&](generator& gen)
 		{
-			std::thread([&link, this]()
+            std::thread([&gen, this]()
 			{
-                for(; ; )
+                for(;simulate_flag /*&& !is_simulating_finished()*/ && !gen.is_finished(); )
 				{
-                    if (!simulate_flag || is_simulating_finished()
-                            || link.lhs->is_finished())
+                    //std::unique_lock<std::mutex> lk(model_mutex);
+                    if (!gen.is_generated())
                     {
-                        //if the user switched simulating off or all requests are generated
-						break;
-                    }
-                    std::unique_lock<std::mutex> lk(model_mutex);
-                    if (!link.lhs->is_generated())
-                    {
-                        link.lhs->generate_new_request();
-                        link.rhs->add(link.lhs->get_request());
+                        gen.generate_new_request();
                     }
 				}
 			}).detach();
         });
-	}
+    }
+
+    void model::queueing_th()
+    {
+        std::for_each(link_generators_queues.begin(), link_generators_queues.end(),
+            [&](link<generator*, queue*>& link)
+        {
+            std::thread([&link, this]()
+            {
+                for(;simulate_flag && !is_simulating_finished(); )
+                {
+                    //std::unique_lock<std::mutex> lk(model_mutex);
+                    if (link.lhs->is_generated())
+                    {
+                        link.rhs->add(link.lhs->get_request());
+                    }
+                }
+            }).detach();
+        });
+    }
+
 
     void model::queue_handler_link_th() {
 		std::for_each(link_queues_handlers.begin(), link_queues_handlers.end(), 
@@ -75,17 +133,13 @@ namespace logic
 		{
 			std::thread([&link, this]()
 			{
-                for(; ; )
+                for(;simulate_flag && !is_simulating_finished(); )
 				{
-                    if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
+                    //std::unique_lock<std::mutex> lk(model_mutex);
+                    if (link.lhs->has_request() && link.rhs->is_free())
                     {
-                        break;
+                        link.rhs->handle(link.lhs->get_first());
                     }
-                    std::unique_lock<std::mutex> lk(model_mutex2);
-					if (link.lhs->has_request() && link.rhs->is_free())
-					{
-						link.rhs->handle(link.lhs->get_first());
-					}
 				}
 			}).detach();
     });
@@ -98,13 +152,9 @@ namespace logic
         {
             std::thread([&link, this]()
             {
-                for(; ; )
+                for(;simulate_flag && !is_simulating_finished(); )
                 {
-                    if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
-                    {
-                        break;
-                    }
-                    std::unique_lock<std::mutex> lk(model_mutex3);
+                    //std::unique_lock<std::mutex> lk(model_mutex);
                     if (link.lhs->is_handled() && link.rhs->is_free())
                     {
                         link.rhs->terminate(link.lhs->get_current_request());
@@ -117,13 +167,11 @@ namespace logic
 	void model::simulation_start() {
 		//starts simulating
 		simulate_flag = true;
-        start_time = clock();
 
-        /*std::stringstream ss;
-        ss << "Simulation started.";
-        sLog.writeLine(ss.str());*/
+        start_time = get_now_time();
 
-		generator_queue_link_th();
+        generating_th();
+        queueing_th();
         queue_handler_link_th();
         handler_terminator_link_th();
 
@@ -132,13 +180,10 @@ namespace logic
         {
             for(; ; )
             {
-                //std::lock_guard<std::mutex> lk(model_mutex2);
                 if (!simulate_flag || is_simulating_finished()) //if the user switched simulating off
                 {
-                    std::stringstream ss;
-                    ss << "Simulation finished.";
-                    sLog.writeLine(ss.str());
-                    emit simulationFinished();
+                    simulate_flag = false;
+                    emit simulationFinished(static_cast<int>(get_now_time() - start_time));
                     break;
                 }
             }
@@ -229,7 +274,7 @@ namespace logic
         return &(*iter);
     }
 
-    std::vector<std::pair<ItemType, ItemType>> model::supportedLinks()
+    std::vector< std::pair<ItemType, ItemType> > model::supportedLinks()
     {
         typedef std::pair<ItemType, ItemType> pair;
         std::vector<pair> links;

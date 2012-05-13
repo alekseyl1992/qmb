@@ -47,7 +47,7 @@ namespace logic
         bool is_infinite() const { return infinite_generating; }
 
 		bool is_finished() const {
-            return cur_req_id >= number_of_requests_to_generate;
+            return cur_req_id >= number_of_requests_to_generate && new_req == nullptr;
 		}
 
 		virtual void clean() { }

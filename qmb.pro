@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     logic/model.cpp \
     utility/lsfss.cpp \
     logic/terminator.cpp \
-    interface/createmodeldialog.cpp
+    interface/createmodeldialog.cpp \
+    utility/common.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/simulationlog.h \
