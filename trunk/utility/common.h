@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <QDebug>
+#include <chrono>
 
 enum class ItemType : int
 {
@@ -12,5 +13,7 @@ enum class ItemType : int
 };
 
 typedef unsigned long long ull_t;
+
+ull_t get_now_time();
 
 #endif // COMMON_H

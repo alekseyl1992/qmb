@@ -6,7 +6,7 @@ namespace logic
 {
 
     terminator::terminator(model *parent, int id, int period) :
-        object(parent, id), cur_req(nullptr), terminating_period(period), freedom_flag(true), count_of_terminated_requests(0)
+        object(parent, id), cur_req(), terminating_period(period), freedom_flag(true), count_of_terminated_requests(0)
     { }
 
     terminator::terminator(const terminator &t) :
@@ -28,18 +28,18 @@ namespace logic
 
     void terminator::terminate(const request &req)
     {
-        freedom_flag = false;
         std::lock_guard<std::mutex> lk(terminator_mutex);
 
-        cur_req = new request(req);
+        freedom_flag = false;
+        cur_req = req;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(terminating_period));
         ++count_of_terminated_requests;
 
-        emit parent->reqTerminated(id, cur_req->get_id(), clock() - parent->start_time);
-        qDebug() << cur_req->get_id().__req_gen_id << "-" << cur_req->get_id().__req_id << " terminated in Terminator " << get_id();
+        emit parent->reqTerminated(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
+        qDebug() << cur_req.get_id().__req_gen_id << "-" << cur_req.get_id().__req_id << " terminated in Terminator " << get_id();
 
-        delete cur_req;
+        //delete cur_req;
         freedom_flag = true;
     }
 }

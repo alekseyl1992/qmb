@@ -13,7 +13,7 @@ namespace logic
 	class request
 	{
 	public:
-		request(int gen_id, int _id);
+        request(int gen_id = 0, int _id = 0);
 		request(const request& req);
 		request& operator=(const request& r);
 		~request() { }

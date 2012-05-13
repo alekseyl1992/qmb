@@ -49,7 +49,7 @@ public slots:
     void on_logButton_toggled(bool checked);
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    void onSimulationFinished();
+    void onSimulationFinished(int event_time);
 
 private slots:
     void on_toolsView_pressed(const QModelIndex &index);
@@ -62,11 +62,11 @@ private slots:
 
     void on_simulationLog_customContextMenuRequested(const QPoint &pos);
 
-    void onReqGenerated(const logic::request_id& reqID, clock_t event_time);
-    void onReqQueued(const int& qID, const logic::request_id& reqID, clock_t event_time);
-    void onReqBeganHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
-    void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, clock_t event_time);
-    void onReqTerminated(const int& tID, const logic::request_id& reqID, clock_t event_time);
+    void onReqGenerated(const logic::request_id& reqID, int event_time);
+    void onReqQueued(const int& qID, const logic::request_id& reqID, int event_time);
+    void onReqBeganHandling(const int& hID, const logic::request_id& reqID, int event_time);
+    void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, int event_time);
+    void onReqTerminated(const int& tID, const logic::request_id& reqID, int event_time);
     void onWrongLink(ItemType fromType, ItemType toType);
 
 private:

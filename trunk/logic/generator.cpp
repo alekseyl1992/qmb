@@ -37,6 +37,8 @@ namespace logic
 
     generator::~generator()
     {
+        delete new_req;
+        new_req = nullptr;
     }
 
 	//generating new request
@@ -48,15 +50,8 @@ namespace logic
             ++number_of_requests_to_generate;
 		new_req = new request(id, ++cur_req_id);
 		is_generated_flag = true;
-		
-        emit parent->reqGenerated(new_req->get_id(), clock() - parent->start_time); //indicates that the new request is generated
 
-        //теперь выглядит громоздко,
-        //но было необходимо сделать запись в лог через 1 вызов ф-ции,
-        //а не через последовательность вызовов
-        /*std::stringstream ss;
-        ss << "Request[" << new_req->get_id() << "] generated";
-        sLog.writeLine(ss.str());*/
+        emit parent->reqGenerated(new_req->get_id(), static_cast<int>(get_now_time() - parent->start_time)); //indicates that the new request is generated
         qDebug() << new_req->get_id().__req_gen_id << "-" << new_req->get_id().__req_id << " generated";
 	}
 
@@ -65,8 +60,8 @@ namespace logic
         std::lock_guard<std::mutex> lk(gen_mutex);
 
 		request res = *new_req;
-		delete new_req;
-		new_req = nullptr;
+        //delete new_req;
+        new_req = nullptr;
 		is_generated_flag = false;
 		return res;
 	}

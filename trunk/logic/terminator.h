@@ -18,6 +18,8 @@ namespace logic
         terminator(model* parent, int id=0, int period = 0);
         terminator(const terminator& t);
         terminator& operator= (const terminator& t);
+        ~terminator() {
+        }
 
         void terminate(const request& req);
 
@@ -27,7 +29,7 @@ namespace logic
         virtual void clean() { }
 
     private:
-        request* cur_req;
+        request cur_req;
         int terminating_period;
         bool freedom_flag;
         ull_t count_of_terminated_requests;

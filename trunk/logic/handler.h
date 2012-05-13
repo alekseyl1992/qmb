@@ -22,7 +22,8 @@ namespace logic
 		handler(const handler& h);
 		handler& operator=(const handler& h);
 
-		~handler() { }
+        ~handler() {
+        }
 
 		//gets generating period
 		int get_handling_period() const { return handling_period; }
@@ -44,7 +45,7 @@ namespace logic
 	private:
 
 		//fields
-		request* cur_req;
+        request cur_req;
 		int handling_period;
 		bool freedom_flag;
         bool handled_flag;
