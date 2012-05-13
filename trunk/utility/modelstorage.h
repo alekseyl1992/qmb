@@ -54,7 +54,7 @@ public:
     {
         curDoc = new QDomDocument("qmodel");
 
-        //TODO всё это придётся перенести в load/crate
+        //TODO всё это придётся перенести в load/create
         //формирование "подписи" xml файла (первая строка - тип xml)
         //!!! Название модели не должно содержать пробел и кириллицы
         //!!! Иначе мы потом эту модель не загрузим. потому делаем чек.
@@ -70,8 +70,15 @@ public:
 
         curDoc->appendChild(root);
 
-        //как базовое имя
-        currentPath = "models/untitled.qm";*/
+        //как базовое имя //просьба оставить его пустой строкой
+        //это будет использоваться как признак того, что модель ещё ниразу не сохранялась
+        */
+        /*
+        можно вместо этого конечно завести флаг типа bSaved,
+        но его имя весьма неочевидно, речь идёт не о том сохранён ли,
+        а о том - сохранялся ли вообще
+        */
+        currentPath = "";
     }
 
     QString getCodeString(); //возвращает строку с XML-кодом сцены
@@ -83,12 +90,12 @@ public:
     void freeModel();
 
     //получения поля name, item'а по его id для отображения на сцене
-    QString getItemName(int id) const;
     QString getModelName() const;
-    bool createModel(const QString& name, const QString& path);
-    bool openModel(const QString& path);
+    void setModelName(const QString &name);
+    bool createModel(const QString &name);
+    bool openModel(const QString &path);
     bool saveModel();
-    bool saveModelAs(const QString& name, const QString &path);
+    bool saveModelAs(const QString &path);
     void fillModel(IFillableModel *iModel) const;
 
     //TODO здесь будут метода для получения и записи полного списка параметров
