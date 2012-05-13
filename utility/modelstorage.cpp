@@ -1,6 +1,15 @@
 #include "modelstorage.h"
 #include <QPoint>
 
+ModelStorage::ModelStorage() : myModel(nullptr)
+{
+    curDoc = new QDomDocument("qmodel");
+    //необходимо для правильного чтения кириллицы из xml
+    QDomNode DocType = curDoc->createProcessingInstruction("xml", "version=\"1.0\" encoding=\"Windows-1251\"");
+    curDoc->appendChild(DocType);
+    currentPath = "";
+}
+
 logic::model* ModelStorage::getModel(bool create)
 {  
     const int Link = 4;
@@ -81,16 +90,24 @@ void ModelStorage::freeModel()
 
 QString ModelStorage::getModelName() const
 {
-    return "Модель 1"; //TODO возвращать имя модели (из поля xml)
+    if (root.hasAttribute("name"))
+        return root.attribute("name");
+    else return "<некорректное название>";
 }
 
 void ModelStorage::setModelName(const QString &name)
 {
+    if (root.hasAttribute("name"))
+        root.setAttribute("name",name);
 }
 
 bool ModelStorage::createModel(const QString &name)
 {
-    //TODO здесь меняем имя документа на name!
+    // здесь exception бы какой-нить
+    root = curDoc->createElement("model");
+    root.setAttribute("name",name);
+    curDoc->appendChild(root);
+    return true;
 }
 
 bool ModelStorage::openModel(const QString& path)
@@ -119,8 +136,8 @@ bool ModelStorage::saveModel()
         QTextStream(&xmlFile) << curDoc->toString(3);
         xmlFile.close();
     }
-    else
-        return false;
+    else return false;
+    return true;
 }
 
 bool ModelStorage::saveModelAs(const QString &path)
@@ -131,17 +148,13 @@ bool ModelStorage::saveModelAs(const QString &path)
         QTextStream(&xmlFile) << curDoc->toString(3);
         xmlFile.close();
     }
-    else
-        return false;
-
+    else return false;
     currentPath = path;
-
     return true;
 }
 
 void ModelStorage::fillModel(IFillableModel *iModel) const
 {
-    //нужно очищать сцену перед новым заполнением!
     const int Link = 4;
     QMap<QString, int> entries;
     entries[ItemNames[0]] = int(ItemType::Generator);
@@ -184,12 +197,12 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     }
 }
 
-QString ModelStorage::getCodeString()
+QString ModelStorage::getCodeString() const
 {
     return curDoc->toString(3);
 }
 
-QString ModelStorage::getCurrentPath()
+QString ModelStorage::getCurrentPath() const
 {
     return currentPath;
 }

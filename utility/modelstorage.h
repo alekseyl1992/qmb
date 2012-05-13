@@ -1,10 +1,11 @@
 /* На всякий случай "ExampleModel.qm"
+<?xml version='1.0' encoding='Windows-1251'?>
 <!DOCTYPE qmodel>
-<model name="ExampleModel">
-   <Generator x="-334" y="-89" period="500" num_of_reqs="10" id="1"/>
-   <Queue x="-144" y="-89" id="1"/>
-   <Handler x="54" y="-89" period="600" id="1"/>
-   <Terminator x="253" y="-87" period="0" id="1"/>
+<model name="Пример модели">
+   <Generator x="-314" y="-130" period="500" num_of_reqs="10" id="1"/>
+   <Queue x="-136" y="-130" id="1"/>
+   <Handler x="56" y="-127" period="600" id="1"/>
+   <Terminator x="247" y="-128" period="0" id="1"/>
    <Link fromID="1" toID="1" from="Generator" to="Queue"/>
    <Link fromID="1" toID="1" from="Queue" to="Handler"/>
    <Link fromID="1" toID="1" from="Handler" to="Terminator"/>
@@ -36,7 +37,6 @@ private:
     logic::model* myModel;
     QDomDocument* curDoc; //хранилище структуры xml
     QDomElement root; //корневой элемент (ех: модель №х )
-
     QString currentPath;
 
     enum class LinkType : int
@@ -49,43 +49,12 @@ private:
     void AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID);
 
 public:
-    //TODO перенести реализации в cpp
-    ModelStorage() : myModel(nullptr)
-    {
-        curDoc = new QDomDocument("qmodel");
+    ModelStorage();
 
-        //TODO всё это придётся перенести в load/create
-        //формирование "подписи" xml файла (первая строка - тип xml)
-        //!!! Название модели не должно содержать пробел и кириллицы
-        //!!! Иначе мы потом эту модель не загрузим. потому делаем чек.
-        /*name.remove(" ");
-        for (char c='А'; c<='я'; c++)
-            name.remove(c);
-
-        //вообще, наверное лучше сделать так, чтобы
-        //сразу попадал корректный нейм
-
-        root = curDoc->createElement("model");
-        root.setAttribute("name",name);
-
-        curDoc->appendChild(root);
-
-        //как базовое имя //просьба оставить его пустой строкой
-        //это будет использоваться как признак того, что модель ещё ниразу не сохранялась
-        */
-        /*
-        можно вместо этого конечно завести флаг типа bSaved,
-        но его имя весьма неочевидно, речь идёт не о том сохранён ли,
-        а о том - сохранялся ли вообще
-        */
-        currentPath = "";
-    }
-
-    QString getCodeString(); //возвращает строку с XML-кодом сцены
+    QString getCodeString() const; //возвращает строку с XML-кодом сцены
     bool setCodeString(QString code); //парсинг строки в документ //вызывается при ручном изсменении кода
-    QString getCurrentPath(); //возвращает текущий путь к файлу документа
+    QString getCurrentPath() const; //возвращает текущий путь к файлу документа
 
-    //TODO form model here (instead of using LoadQModel)
     logic::model *getModel(bool create = false);
     void freeModel();
 
