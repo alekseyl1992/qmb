@@ -286,9 +286,9 @@ void Document::setModified(bool m)
     Scene->setModified(m);
 }
 
-bool Document::createModel(const QString &name, const QString &path)
+bool Document::createModel(const QString &name)
 {
-    bool ret = Storage->createModel(name, path);
+    bool ret = Storage->createModel(name);
     if(ret)
     {
         setWindowTitle(Storage->getModelName());
@@ -314,9 +314,14 @@ bool Document::saveModel()
     return Storage->saveModel();
 }
 
-bool Document::saveModelAs(const QString& name, const QString &path)
+bool Document::saveModelAs(const QString &path)
 {
-    return Storage->saveModelAs(name, path);
+    return Storage->saveModelAs(path);
+}
+
+bool Document::isSavable() const
+{
+    return Storage->getCurrentPath() != "";
 }
 
 void Document::on_logButton_toggled(bool checked)

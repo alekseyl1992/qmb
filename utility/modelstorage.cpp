@@ -79,24 +79,18 @@ void ModelStorage::freeModel()
     myModel = nullptr;
 }
 
-QString ModelStorage::getItemName(int id) const
-{
-    return QString(); //stub
-    //находишь в QDomDocument item с соотв. id, возвращаешь его поле name
-
-    // если у каждого элемента будет какое-то собственное уникальное имя
-    // то смысл ясен, если нет то ?
-}
-
 QString ModelStorage::getModelName() const
 {
     return "Модель 1"; //TODO возвращать имя модели (из поля xml)
 }
 
-bool ModelStorage::createModel(const QString &name, const QString &path)
+void ModelStorage::setModelName(const QString &name)
+{
+}
+
+bool ModelStorage::createModel(const QString &name)
 {
     //TODO здесь меняем имя документа на name!
-    currentPath = path;
 }
 
 bool ModelStorage::openModel(const QString& path)
@@ -129,9 +123,8 @@ bool ModelStorage::saveModel()
         return false;
 }
 
-bool ModelStorage::saveModelAs(const QString& name, const QString &path)
+bool ModelStorage::saveModelAs(const QString &path)
 {
-    //TODO здесь меняем имя документа на name!
     QFile xmlFile(path);
     if(xmlFile.open(QIODevice::WriteOnly))
     {

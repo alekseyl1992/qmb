@@ -42,7 +42,7 @@ void MainWindow::onCreateModel()
     if(dialog->exec() == QDialog::Accepted)
     {
         Document *newDoc = new Document(this);
-        if(newDoc->createModel(dialog->name(), dialog->path()))
+        if(newDoc->createModel(dialog->name()))
         {
             QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
             subWindow->showMaximized();
@@ -113,8 +113,9 @@ void MainWindow::createDocument(QString name, QString path)
 
 void MainWindow::onOpenModel()
 {
-    QString path = QFileDialog::getOpenFileName(this, "Открыть",
-                                                    "", "QMB XML Model (*.qm)");
+    QString path = QFileDialog::getOpenFileName(this, "Открыть модель",
+                                                QApplication::applicationDirPath() + "/models/",
+                                                "QMB XML Model (*.qm)");
     if(path != "")
         openModel(path);
 }
@@ -160,8 +161,10 @@ void MainWindow::onSaveModel()
 
 void MainWindow::onSaveModelAs()
 {
-    CreateModelDialog *dialog = new CreateModelDialog(this);
-    if(dialog->exec() == QDialog::Accepted)
+    QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
+                                 QApplication::applicationDirPath() + "/models/",
+                                 "QMB XML Model (*.qm)");
+    if(path != "")
     {
         QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
         if(curTab)
@@ -169,7 +172,7 @@ void MainWindow::onSaveModelAs()
             Document *curDoc = dynamic_cast<Document *>(curTab->widget());
             if(curDoc)
             {
-                if(!curDoc->saveModelAs(dialog->name(), dialog->path()))
+                if(!curDoc->saveModelAs(path))
                     QMessageBox::critical(this,
                         "Ошибка",
                         "Возникла ошибка при попытке сохранить модель");
@@ -199,11 +202,23 @@ void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
 
     if(arg1)
     {
+        //управление пунктами сохранить/сохранить как..
+        bool save, saveAs;
+
         //если домашняя страничка
-        bool enable = dynamic_cast<HomeWidget *>(arg1->widget());
+        if(dynamic_cast<HomeWidget *>(arg1->widget()))
+            save = saveAs = false;
+        else if(Document *curDoc = dynamic_cast<Document *>(arg1->widget()))
+        {
+            saveAs = true;
+            save = curDoc->isSavable();
+        }
+
         foreach(QAction *act, mainMenu->actions())
-                if(act->objectName() == "saveAction" || act->objectName() == "saveAsAction")
-                    act->setEnabled(!enable);
+            if(act->objectName() == "saveAction")
+                act->setEnabled(save);
+            else if(act->objectName() == "saveAsAction")
+               act->setEnabled(saveAs);
     }
 }
 
