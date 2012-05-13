@@ -67,11 +67,7 @@ Document::Document(QWidget *parent) :
 
         clipboard->setText(strings);
     }), SLOT(signaled()));
-
-    logMenu->addAction("ќчистить", new connector(this, [this]
-    {
-        logModel->removeRows(0, logModel->rowCount());
-    }), SLOT(signaled()));
+    logMenu->addAction("ќчистить", this, SLOT(clearLog()));
 
     Scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(Scene);
@@ -233,7 +229,7 @@ void Document::setActiveTab(Document::Tabs Tab)
 
 void Document::startSimulation()
 {
-    //logModel->clear();
+    clearLog();
     showLog();    
     ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
@@ -249,7 +245,7 @@ void Document::startSimulation()
     connect(model, SIGNAL(reqTerminated(int,logic::request_id, int)), this, SLOT(onReqTerminated(int,logic::request_id, int)));
 
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem("0:00")
+                        << new QStandardItem("00:00.000")
                         << new QStandardItem("")
                         << new QStandardItem("симул€ци€ начата"));
     ui->simulationLog->scrollToBottom();
@@ -260,31 +256,23 @@ void Document::startSimulation()
 
 void Document::stopSimulation()
 {
-    int id = QMessageBox::question(
-                this, windowTitle(),
-                "¬ы действительно хотите прервать симул€цию?",
-                QMessageBox::Yes, QMessageBox::No);
-
     //TODO повтор€ющийс€ код
-    if(id == QMessageBox::Yes)
-    {
-        bSimulating = false;
-        Storage->getModel()->simulation_stop();
-        ui->graphicsView->setEnabled(true);
-        ui->progressBar->hide();
-        ui->startButton->show();
-        ui->stopButton->hide();
+    bSimulating = false;
+    int time = Storage->getModel()->simulation_stop();
+    ui->graphicsView->setEnabled(true);
+    ui->progressBar->hide();
+    ui->startButton->show();
+    ui->stopButton->hide();
 
-        logModel->appendRow(QList<QStandardItem *>()
-                            << new QStandardItem("0:00")
-                            << new QStandardItem("")
-                            << new QStandardItem("симул€ци€ прервана"));
-        ui->simulationLog->scrollToBottom();
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("симул€ци€ прервана"));
+    ui->simulationLog->scrollToBottom();
 
-        //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
-        //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
-        Storage->freeModel();
-    }
+    //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
+    //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
+    Storage->freeModel();
 }
 
 bool Document::isModified() const
@@ -348,8 +336,7 @@ void Document::closeEvent(QCloseEvent *event)
         else
             return event->ignore();
     }
-
-    if(isModified())
+    else if(isModified())
     {
         int id = QMessageBox::question(this, "«акрытие модели", "—охранить модель перед закрытием?",
                                   QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
@@ -386,8 +373,7 @@ void Document::onSimulationFinished(int event_time)
     ui->graphicsView->setEnabled(true);
 
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem("")
                         << new QStandardItem("симул€ци€ завершена успешно"));
     ui->simulationLog->scrollToBottom();
@@ -404,6 +390,11 @@ void Document::onSimulationFinished(int event_time)
 
     if(id == QMessageBox::Yes)
         QMessageBox::information(this, windowTitle(), "«десь будет отображено окно с собранной статистикой.");
+}
+
+void Document::clearLog()
+{
+    logModel->removeRows(0, logModel->rowCount());
 }
 
 void Document::on_toolsView_pressed(const QModelIndex &index)
@@ -427,7 +418,11 @@ void Document::on_startButton_clicked()
 
 void Document::on_stopButton_clicked()
 {
-    stopSimulation();
+    if(QMessageBox::question(
+                this, windowTitle(),
+                "¬ы действительно хотите прервать симул€цию?",
+                QMessageBox::Yes, QMessageBox::No))
+        stopSimulation();
 }
 
 void Document::on_tabWidget_currentChanged(int index)
@@ -473,8 +468,7 @@ void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)
 void Document::onReqGenerated(const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -484,8 +478,7 @@ void Document::onReqGenerated(const logic::request_id &reqID, int event_time)
 void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -497,8 +490,7 @@ void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int e
 void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -510,8 +502,7 @@ void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID
 void Document::onReqFinishedHandling(const int &hID, const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -522,8 +513,7 @@ void Document::onReqFinishedHandling(const int &hID, const logic::request_id &re
 void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(QString("0:%0")
-                                             .arg(event_time))
+                        << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
@@ -535,4 +525,23 @@ void Document::onWrongLink(ItemType fromType, ItemType toType)
 {
     //TODO какие эти?
     QMessageBox::critical(this, "ќшибка", "Ќе возможно соединить эти элементы");
+}
+
+QString Document::timeToString(int time)
+{
+    QString str;
+    int msec = 0,
+        sec  = 0,
+        min  = 0;
+
+    msec = time;
+    sec = msec/1000;
+    min = sec/60;
+
+    msec -= sec*1000;
+    sec -= min*60;
+
+    str.sprintf("%02d:%02d.%03d", min, sec, msec);
+
+    return str;
 }

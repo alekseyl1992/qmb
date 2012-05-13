@@ -50,6 +50,7 @@ public slots:
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void onSimulationFinished(int event_time);
+    void clearLog();
 
 private slots:
     void on_toolsView_pressed(const QModelIndex &index);
@@ -79,6 +80,7 @@ private:
     bool bSimulating;
 
     bool tryApplyCode();
+    QString timeToString(int time);
 };
 
 #endif // DOCUMENT_H

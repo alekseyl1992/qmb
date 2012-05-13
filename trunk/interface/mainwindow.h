@@ -36,16 +36,18 @@ public slots:
 
     void saveModel(QString path);
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event);    
+
+    void createHomeWidget();
 
 private:
     Ui::MainWindow *ui;
     Document *Doc;
-
-    static const int maxOpenedModels = 128;
+    QMenu *mainMenu;
+    QMdiSubWindow *homeTab;
+    //static const int maxOpenedModels = 128;
 
     void createMenuButton();
-    void createHomeWidget();
 };
 
 #endif // MAINWINDOW_H

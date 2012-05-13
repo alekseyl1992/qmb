@@ -190,9 +190,10 @@ namespace logic
         }).detach();
 	}
 
-	void model::simulation_stop() {
+    int model::simulation_stop() {
 		//stops simulating
         simulate_flag = false;
+        return get_now_time() - start_time;
     }
 
     void model::add_generator(const generator &&gen)

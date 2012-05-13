@@ -18,7 +18,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow), homeTab(nullptr)
 {
     //TODO опционально оставить весь текст на английском, затем перевети лингвистом
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("CP1251"));
@@ -46,6 +46,8 @@ void MainWindow::onCreateModel()
         {
             QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
             subWindow->showMaximized();
+            delete homeTab;
+            homeTab = nullptr;
         }
         else //TODO а может обработку ошибок лучше в Document?
             QMessageBox::critical(this,
@@ -123,7 +125,9 @@ void MainWindow::openModel(const QString &path)
     if(newDoc->openModel(path))
     {
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
-        subWindow->showMaximized();
+        subWindow->showMaximized();        
+        delete homeTab;
+        homeTab = nullptr;
     }
     else //TODO а может обработку ошибок лучше в Document?
         QMessageBox::critical(this,
@@ -188,21 +192,36 @@ void MainWindow::onAbout()
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
 {
     if(!arg1 && ui->mdiArea->subWindowList().empty())
+    {
+        homeTab = nullptr;
         createHomeWidget();
+    }
+
+    if(arg1)
+    {
+        //если домашняя страничка
+        bool enable = dynamic_cast<HomeWidget *>(arg1->widget());
+        foreach(QAction *act, mainMenu->actions())
+                if(act->objectName() == "saveAction" || act->objectName() == "saveAsAction")
+                    act->setEnabled(!enable);
+    }
 }
 
 void MainWindow::createHomeWidget()
 {
-    HomeWidget *homeWidget = new HomeWidget(this);
-    QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(homeWidget);
-    subWindow->setWindowTitle("Добро пожаловать");
-    subWindow->showMaximized();
+    if(!homeTab)
+    {
+        HomeWidget *homeWidget = new HomeWidget(this);
+        homeTab = ui->mdiArea->addSubWindow(homeWidget);
+        homeTab->setWindowTitle("Добро пожаловать");
+        homeTab->showMaximized();
 
-    connect(homeWidget, SIGNAL(createModel()), this, SLOT(onCreateModel()));
-    connect(homeWidget, SIGNAL(openModel()), this, SLOT(onOpenModel()));
-    connect(homeWidget, SIGNAL(openModelByPath(QString)), this, SLOT(openModel(QString)));
-    connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(onAbout()));
-    connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
+        connect(homeWidget, SIGNAL(createModel()), this, SLOT(onCreateModel()));
+        connect(homeWidget, SIGNAL(openModel()), this, SLOT(onOpenModel()));
+        connect(homeWidget, SIGNAL(openModelByPath(QString)), this, SLOT(openModel(QString)));
+        connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(onAbout()));
+        connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
+    }
 }
 
 void MainWindow::createMenuButton()
@@ -210,39 +229,29 @@ void MainWindow::createMenuButton()
     //добавляем меню перед списком табов
     QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
     QToolButton *menuButton = new QToolButton(tabBar);
-    menuButton->setGeometry(1, 1, 48, 26);
+    menuButton->setGeometry(1, 1, 58, 26);
     menuButton->setText("QMB");
-    menuButton->setCheckable(true);
     menuButton->setChecked(false);
     QFont font = menuButton->font();
     font.setBold(true);
     menuButton->setFont(font);
-    QMenu *mainMenu = new QMenu(this);
+    mainMenu = new QMenu(this);
     mainMenu->addAction("Создать модель", this, SLOT(onCreateModel()));
     mainMenu->addAction("Открыть модель", this, SLOT(onOpenModel()));
     mainMenu->addSeparator();
-    mainMenu->addAction("Сохранить модель", this, SLOT(onSaveModel()));
-    mainMenu->addAction("Сохранить модель как...", this, SLOT(onSaveModelAs()));
+    QAction *saveAction = mainMenu->addAction("Сохранить модель", this, SLOT(onSaveModel()));
+    saveAction->setObjectName("saveAction");
+    saveAction->setEnabled(false);
+    QAction *saveAsAction = mainMenu->addAction("Сохранить модель как...", this, SLOT(onSaveModelAs()));
+    saveAsAction->setObjectName("saveAsAction");
+    saveAsAction->setEnabled(false);
     mainMenu->addSeparator();
     mainMenu->addAction("О программе", this, SLOT(onAbout()));
     mainMenu->addSeparator();
     mainMenu->addAction("Выход", this, SLOT(close()));
-
-    //отжимаем кнопку меню через dt -> 0, чтобы меню не открылось при повторном нажатии на кнопку
-    /*::connect(mainMenu, SIGNAL(aboutToHide()), [menuButton]
-    {
-         QTimer::singleShot(100, new connect_functor_helper(menuButton, [menuButton]{ menuButton->setChecked(false); }), SLOT(signaled()));
-    });*/
-
-    std::function<void()> onClick = [mainMenu, menuButton]
-    {
-        if(!menuButton->isChecked())
-        {
-            mainMenu->exec(menuButton->mapToGlobal(QPoint(0, 26)));
-            menuButton->setChecked(false);
-        }
-    };
-    ::connect(menuButton, SIGNAL(pressed()), onClick);
+    menuButton->setPopupMode(QToolButton::MenuButtonPopup);
+    menuButton->setMenu(mainMenu);
+    connect(menuButton, SIGNAL(clicked()), this, SLOT(createHomeWidget()));
 
     tabBar->setStyleSheet(R"(
         QTabBar::tab
@@ -278,7 +287,7 @@ void MainWindow::createMenuButton()
 
         QTabBar::tab:first, QTabBar::tab:only-one
         {
-            margin-left: 50;
+            margin-left: 60;
         }
     )");
 }

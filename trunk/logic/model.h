@@ -53,7 +53,7 @@ namespace logic
 
     public:
         void simulation_start();
-		void simulation_stop();
+        int simulation_stop();
 
         void add_generator(const generator &&gen);
         void add_queue(const queue &&q);
