@@ -18,6 +18,9 @@ public:
     QString name() const;
     QString path() const;
     
+private slots:
+    void on_pathButton_clicked();
+
 private:
     Ui::CreateModelDialog *ui;
 };
