@@ -172,7 +172,14 @@ void MainWindow::onSaveModelAs()
             Document *curDoc = dynamic_cast<Document *>(curTab->widget());
             if(curDoc)
             {
-                if(!curDoc->saveModelAs(path))
+                if(curDoc->saveModelAs(path))
+                {
+                    //включаем пункт Сохранить
+                    foreach(QAction *act, mainMenu->actions())
+                        if(act->objectName() == "saveAction")
+                            act->setEnabled(true);
+                }
+                else
                     QMessageBox::critical(this,
                         "Ошибка",
                         "Возникла ошибка при попытке сохранить модель");
@@ -184,11 +191,11 @@ void MainWindow::onSaveModelAs()
 void MainWindow::onAbout()
 {
     QMessageBox::information(this, "О программе",
-                             "Queueing Model Builder v0.1\n\n"
+                             "Queueing Model Builder v0.1 beta\n\n"
                              "Разработчики:\n"
-                             "Леонтьев Алексей\n"
-                             "Латкин Игорь\n"
-                             "Назаров Константин\n\n"
+                             " Леонтьев Алексей\n"
+                             " Латкин Игорь\n"
+                             " Назаров Константин\n\n"
                              "\t\t\t\t2012 г.");
 }
 

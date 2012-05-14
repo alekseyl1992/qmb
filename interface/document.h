@@ -29,9 +29,6 @@ public:
 
     ~Document();
 
-    ModelScene *scene() const;
-    QTextEdit *code() const;
-
     void showLog(bool show = true);
     void setActiveTab(Tabs Tab);
 
@@ -74,8 +71,9 @@ private slots:
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;
-    ModelScene *Scene;
-    ModelStorage *Storage;
+    ModelScene *scene;
+    ModelStorage *storage;
+    QTextEdit *code;
     QMenu *logMenu;
     QStandardItemModel *logModel;
     bool bSimulating;
