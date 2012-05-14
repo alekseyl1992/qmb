@@ -39,7 +39,7 @@ Document::Document(QWidget *parent) :
 
     itemMenu->addAction("”далить", new connector(this, [this]
     {
-        Scene->removeSelectedItems();
+        scene->removeSelectedItems();
     }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
 
     //создаЄм меню дл€ лога
@@ -69,22 +69,23 @@ Document::Document(QWidget *parent) :
     }), SLOT(signaled()));
     logMenu->addAction("ќчистить", this, SLOT(clearLog()));
 
-    Scene = new ModelScene(itemMenu, ui->graphicsView);
-    ui->graphicsView->setScene(Scene);
-    Storage = new ModelStorage();
+    scene = new ModelScene(itemMenu, ui->graphicsView);
+    ui->graphicsView->setScene(scene);
+    storage = new ModelStorage();
+    code = ui->codeEdit;
 
     //св€зываем сцену с хранилищем
-    connect(Scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
-            Storage, SLOT(onItemInserted(ItemType, int, QPoint)));
-    connect(Scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
-            Storage, SLOT(onItemMoved(ItemType, int, QPoint)));
-    connect(Scene, SIGNAL(itemRemoved(ItemType, int)),
-            Storage, SLOT(onItemRemoved(ItemType, int)));
-    connect(Scene, SIGNAL(linkInserted(ItemType,int,ItemType,int)),
-            Storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
-    connect(Scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
-            Storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
-    connect(Scene, SIGNAL(wrongLink(ItemType,ItemType)),
+    connect(scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
+            storage, SLOT(onItemInserted(ItemType, int, QPoint)));
+    connect(scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
+            storage, SLOT(onItemMoved(ItemType, int, QPoint)));
+    connect(scene, SIGNAL(itemRemoved(ItemType, int)),
+            storage, SLOT(onItemRemoved(ItemType, int)));
+    connect(scene, SIGNAL(linkInserted(ItemType,int,ItemType,int)),
+            storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
+    connect(scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
+            storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
+    connect(scene, SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
 
     //создаЄм окошко дл€ отображени€ масштаба модели
@@ -200,18 +201,8 @@ Document::Document(QWidget *parent) :
 Document::~Document()
 {
     //релиз в пор€дке обратном иниту
-    delete Storage;
+    delete storage;
     delete ui;
-}
-
-ModelScene *Document::scene() const
-{
-    return Scene;
-}
-
-QTextEdit *Document::code() const
-{
-    return ui->codeEdit;
 }
 
 void Document::showLog(bool show)
@@ -236,7 +227,7 @@ void Document::startSimulation()
     ui->startButton->hide();
     ui->stopButton->show();
 
-    logic::model *model = Storage->getModel(true);
+    logic::model *model = storage->getModel(true);
     connect(model, SIGNAL(simulationFinished(int event_time)), this, SLOT(onSimulationFinished(int event_time)));
     connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
     connect(model, SIGNAL(reqQueued(int,logic::request_id, int)), this, SLOT(onReqQueued(int,logic::request_id, int)));
@@ -258,7 +249,7 @@ void Document::stopSimulation()
 {
     //TODO повтор€ющийс€ код
     bSimulating = false;
-    int time = Storage->getModel()->simulation_stop();
+    int time = storage->getModel()->simulation_stop();
     ui->graphicsView->setEnabled(true);
     ui->progressBar->hide();
     ui->startButton->show();
@@ -272,26 +263,26 @@ void Document::stopSimulation()
 
     //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
     //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
-    Storage->freeModel();
+    storage->freeModel();
 }
 
 bool Document::isModified() const
 {
     //TODO проверка на смену настроек симул€ции
-    return Scene->isModified() || code()->document()->isModified();
+    return scene->isModified() || code->document()->isModified();
 }
 
 void Document::setModified(bool m)
 {
-    Scene->setModified(m);
+    scene->setModified(m);
 }
 
 bool Document::createModel(const QString &name)
 {
-    bool ret = Storage->createModel(name);
+    bool ret = storage->createModel(name);
     if(ret)
     {
-        setWindowTitle(Storage->getModelName());
+        setWindowTitle(storage->getModelName());
     }
 
     return ret;
@@ -299,11 +290,11 @@ bool Document::createModel(const QString &name)
 
 bool Document::openModel(const QString &path)
 {
-    bool ret = Storage->openModel(path);
+    bool ret = storage->openModel(path);
     if(ret)
     {
-        Storage->fillModel(Scene);
-        setWindowTitle(Storage->getModelName());
+        storage->fillModel(scene);
+        setWindowTitle(storage->getModelName());
     }
 
     return ret;
@@ -311,17 +302,17 @@ bool Document::openModel(const QString &path)
 
 bool Document::saveModel()
 {
-    return Storage->saveModel();
+    return storage->saveModel();
 }
 
 bool Document::saveModelAs(const QString &path)
 {
-    return Storage->saveModelAs(path);
+    return storage->saveModelAs(path);
 }
 
 bool Document::isSavable() const
 {
-    return Storage->getCurrentPath() != "";
+    return storage->getCurrentPath() != "";
 }
 
 void Document::on_logButton_toggled(bool checked)
@@ -350,13 +341,13 @@ void Document::closeEvent(QCloseEvent *event)
         if(id == QMessageBox::Yes)
         {
             //если код изменЄн
-            if(code()->document()->isModified())
+            if(code->document()->isModified())
             {
                 if(tryApplyCode())
-                    Storage->saveModel();
+                    storage->saveModel();
             }
             else
-                Storage->saveModel();
+                storage->saveModel();
         }
         else if(id == QMessageBox::Cancel)
             event->ignore();
@@ -385,7 +376,7 @@ void Document::onSimulationFinished(int event_time)
 
     //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
     //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
-    Storage->freeModel();
+    storage->freeModel();
 
     int id = QMessageBox::question(
                 this, windowTitle(),
@@ -406,8 +397,8 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
 {
     //смена текущего инструмента
     ItemType itemType = (ItemType)index.data(ItemTypeRole).toInt();
-    Scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
-    Scene->setItemType(itemType);
+    scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
+    scene->setItemType(itemType);
 }
 
 void Document::on_startButton_clicked()
@@ -436,15 +427,15 @@ void Document::on_tabWidget_currentChanged(int index)
     if(index == Tabs::Code)
     {
         ui->codeEdit->clear();
-        ui->codeEdit->insertPlainText(Storage->getCodeString());
+        ui->codeEdit->insertPlainText(storage->getCodeString());
     }
     else //ушли с вкладки с кодом
     {
         if(ui->codeEdit->document()->isModified())
             if(tryApplyCode())
             {
-                Scene->clear();
-                Storage->fillModel(Scene);
+                scene->clear();
+                storage->fillModel(scene);
             }
     }
 }
@@ -453,8 +444,8 @@ bool Document::tryApplyCode()
 {
     try
     {
-        Storage->setCodeString(ui->codeEdit->document()->toPlainText());
-        code()->document()->setModified(false);
+        storage->setCodeString(ui->codeEdit->document()->toPlainText());
+        code->document()->setModified(false);
         return true;
     }
     catch(const ModelStorage::ParseException& e)
