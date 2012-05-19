@@ -2,6 +2,8 @@
 
 *QMB* - Queueing Model Builder, программа, предназначенная для создания, редактирования, симуляции и сбора статистики систем массового обслуживания (СМО).
 
+https://qmb.googlecode.com/svn/trunk/help/screenshots/sm/preview.png
+
 * Содержание *
 <wiki:toc max_depth="3" />
 
