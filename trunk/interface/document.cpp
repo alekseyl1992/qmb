@@ -513,7 +513,7 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, i
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem("изничтожен"));
+                        << new QStandardItem("уничтожен"));
     ui->simulationLog->scrollToBottom();
 }
 
