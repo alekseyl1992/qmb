@@ -91,6 +91,7 @@ https://qmb.googlecode.com/svn/trunk/help/screenshots/sm/options.png
   ** Qt Designer
   * C++ ISO/IEC 14882:2011
   * MinGW 4.7.0
+  * Visual Studio 11 Beta
   * XML
   * SVN (subversion)
 
