@@ -7,6 +7,10 @@ namespace Ui {
 class CreateModelDialog;
 }
 
+/*!
+ * Класс окна с запросом ввода имени модели
+ */
+
 class CreateModelDialog : public QDialog
 {
     Q_OBJECT

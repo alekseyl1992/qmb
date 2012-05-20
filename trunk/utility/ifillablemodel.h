@@ -3,7 +3,7 @@
 #include "utility/common.h"
 #include <QPoint>
 
-//интерфейс для заполнения модели из ModelStorage
+//! интерфейс для заполнения модели из ModelStorage
 class IFillableModel
 {
 public:

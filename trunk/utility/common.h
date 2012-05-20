@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <chrono>
 
+/*!
+ * ѕеречисление составл€ющий модели
+ */
 enum class ItemType : int
 {
     Generator,

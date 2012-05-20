@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "../utility/simulationlog.h"
 #include "../utility/common.h"
 
 namespace logic

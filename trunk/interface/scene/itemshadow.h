@@ -3,6 +3,9 @@
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsItem>
 
+/*!
+ * Интерфейс. Если наследоваться от этого класса, то у наследника появиться тень
+ */
 class ItemShadow
 {
 public:

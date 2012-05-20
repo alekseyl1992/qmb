@@ -36,7 +36,6 @@ SOURCES += main.cpp \
     utility/common.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
-    utility/simulationlog.h \
     utility/modelstorage.h \
     utility/common.h \
     utility/ifillablemodel.h \

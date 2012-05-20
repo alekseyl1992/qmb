@@ -8,6 +8,9 @@ namespace Ui {
 class HomeWidget;
 }
 
+/*!
+ * Класс вкладки Домашняя страница
+ */
 class HomeWidget : public QDialog
 {
     Q_OBJECT

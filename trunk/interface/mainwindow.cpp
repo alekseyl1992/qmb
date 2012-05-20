@@ -1,7 +1,6 @@
 #include "interface/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utility/modelstorage.h"
-#include "utility/simulationlog.h"
 #include "interface/homewidget.h"
 #include "interface/createmodeldialog.h"
 #include <QUrl>

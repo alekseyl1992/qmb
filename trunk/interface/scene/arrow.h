@@ -55,6 +55,9 @@ class QGraphicsSceneMouseEvent;
 class QPainterPath;
 QT_END_NAMESPACE
 
+/*!
+ * Класс связи, которая соединяет различные элементы на Сцене.
+ */
 class Arrow : public QGraphicsLineItem, public ItemShadow
 {
 public:
