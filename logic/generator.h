@@ -9,7 +9,6 @@
 
 namespace logic
 {
-
     class object;
     class model;
 
@@ -20,7 +19,7 @@ namespace logic
      * выходов, распределение запросов по связям распределяется случайным образом.
      */
     class generator : public object
-	{
+    {
         std::mutex gen_mutex;
 	public:
         generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0, bool is_infinite = false);

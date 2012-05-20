@@ -17,7 +17,6 @@ namespace logic
      * Представляет собой объект, испольуемый для обработки сообщений (запросов) в
      * модели logic::model. Обработка происходит по абсолютному времени (периоду).
      */
-
     class handler : public object
 	{
         friend class terminator;

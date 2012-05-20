@@ -11,7 +11,6 @@
 namespace logic
 {
     //! Класс сообщения (запроса).
-
 	class request
 	{
 	public:

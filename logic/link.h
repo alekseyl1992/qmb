@@ -3,7 +3,10 @@
 
 namespace logic
 {
-    //! Шаблонная структура связи. Служит для связывания двух объектов модели logic::model
+    //! Шаблонная структура связи
+    /*!
+     * Служит для связывания двух объектов модели logic::model
+     */
 	template<typename LHS_T, typename RHS_T>
 	struct link
 	{
