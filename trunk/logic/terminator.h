@@ -16,7 +16,6 @@ namespace logic
      * Представляет собой объект, испольуемый для удаления сообщений (запросов) из
      * модели logic::model. Завершают "жизнь" сообщения в модели.
      */
-
     class terminator : public object
     {
         std::mutex terminator_mutex;

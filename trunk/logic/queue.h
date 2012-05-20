@@ -17,7 +17,6 @@ namespace logic
      * Представляет собой объект, испольуемый для хранения сообщений (запросов)
      * модели logic::model и дальнейшей передачи сообщений в другие элемнты модели.
      */
-
     class queue : public object
 	{
         std::mutex queue_mutex;
