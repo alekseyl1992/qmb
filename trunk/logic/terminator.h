@@ -11,6 +11,12 @@ namespace logic
     class object;
     class model;
 
+    //! Класс терминатора. Является элементом logic::model.
+    /*!
+     * Представляет собой объект, испольуемый для удаления сообщений (запросов) из
+     * модели logic::model. Завершают "жизнь" сообщения в модели.
+     */
+
     class terminator : public object
     {
         std::mutex terminator_mutex;

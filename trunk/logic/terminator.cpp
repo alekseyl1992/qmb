@@ -36,10 +36,11 @@ namespace logic
         std::this_thread::sleep_for(std::chrono::milliseconds(terminating_period));
         ++count_of_terminated_requests;
 
+        freedom_flag = true;
+
         emit parent->reqTerminated(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
         qDebug() << cur_req.get_id().__req_gen_id << "-" << cur_req.get_id().__req_id << " terminated in Terminator " << get_id();
 
-        //delete cur_req;
-        freedom_flag = true;
+
     }
 }
