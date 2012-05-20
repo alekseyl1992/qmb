@@ -95,10 +95,10 @@ https://qmb.googlecode.com/svn/trunk/help/screenshots/sm/simulation.png
 
 = Техническая информация =
 При разработке QMB использованы следующие технологии и программные средства:
-  * Qt
-  ** Qt SDK 4.8.0
-  ** Qt Creator 
-  ** Qt Designer
+  * Qt 4.8.0
+    * Qt SDK 2.4.1
+    * Qt Creator 
+    * Qt Designer
   * C++ ISO/IEC 14882:2011
   * MinGW 4.7.0
   * Visual Studio 11 Beta
