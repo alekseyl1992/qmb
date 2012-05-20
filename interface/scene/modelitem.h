@@ -64,6 +64,10 @@ QT_END_NAMESPACE
 
 class Arrow;
 
+/*!
+ *  ласс элемента —цены (класс ModelScene).
+ */
+
 class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 {
 

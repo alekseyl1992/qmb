@@ -7,6 +7,9 @@ namespace Ui {
 class ElementPropWindow;
 }
 
+/*!
+ * Класс окна свойств
+ */
 class ElementPropWindow : public QDialog
 {
     Q_OBJECT

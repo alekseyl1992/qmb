@@ -18,6 +18,11 @@ class Document;
 
 //class ModelStorage; //forward declaration
 
+/*!
+ *  ласс окна, которое создаЄтс€ на каждой вкладке.
+ * «десь находитьс€ больша€ часть интерфейса, в том числе —цена и список Ёлементов.
+ */
+
 class Document : public QDialog
 {
     Q_OBJECT

@@ -57,6 +57,11 @@ class QGraphicsTextItem;
 class QColor;
 QT_END_NAMESPACE
 
+//! Класс Сцены
+/*!
+ * Представляет собой основную рабочую поверхность интерфейса программы.
+ * На неё могут быть добавлены объекты классов ModelItem и Arrow
+ */
 class ModelScene : public QGraphicsScene, public IFillableModel
 {
     Q_OBJECT

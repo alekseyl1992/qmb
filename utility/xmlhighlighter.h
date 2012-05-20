@@ -20,6 +20,10 @@
 #include <QTextCharFormat>
 #include <QColor>
 
+
+/*!
+ * Класс реализует подсветку синтаксиса XML на вкладке Код
+ */
 class XmlHighlighter : public QSyntaxHighlighter
 {
 public:
