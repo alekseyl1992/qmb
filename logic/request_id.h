@@ -9,6 +9,7 @@
 
 namespace logic
 {
+    //! Структура идентификатора сообщения (запроса).
 	struct request_id
 	{
         request_id();
@@ -17,7 +18,7 @@ namespace logic
 
         request_id& operator= (const request_id& req_id);
 
-        const char* txt_reqID() const;
+        std::string txt_reqID() const;
 
         ull_t __req_gen_id;
         ull_t __req_id;

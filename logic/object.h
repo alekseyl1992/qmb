@@ -14,6 +14,7 @@ namespace logic
 {
     class model;
 
+    //! Базовый абстрактный класс для элемента модели
     class object : public QObject
 	{
         Q_OBJECT

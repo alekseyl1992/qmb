@@ -15,11 +15,11 @@ namespace logic
         return *this;
     }
 
-    const char *request_id::txt_reqID() const
+    std::string request_id::txt_reqID() const
     {
         std::stringstream ss;
         ss << __req_gen_id << ":" << __req_id;
-        return ss.str().c_str();
+        return ss.str();
     }
 } //end namespace logic
 
