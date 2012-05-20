@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>QMB: Класс logic::model</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">QMB
+   &#160;<span id="projectnumber">0.1 beta</span>
+   </div>
+   <div id="projectbrief">Queueing Model Builder</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Титульная&#160;страница</span></a></li>
+      <li><a href="namespaces.html"><span>Пространства&#160;имен</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Классы</span></a></li>
+      <li><a href="files.html"><span>Файлы</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Поиск" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Классы</span></a></li>
+      <li><a href="classes.html"><span>Алфавитный&#160;указатель&#160;классов</span></a></li>
+      <li><a href="hierarchy.html"><span>Иерархия&#160;классов</span></a></li>
+      <li><a href="functions.html"><span>Члены&#160;классов</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('classlogic_1_1model.html','');});
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Указатель</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Классы</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Пространства имен</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Файлы</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Функции</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Переменные</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Определения типов</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Перечисления</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Элементы перечислений</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Друзья</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Страницы</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#signals">Сигналы</a> &#124;
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pub-static-methods">Открытые статические члены</a> &#124;
+<a href="#friends">Друзья</a>  </div>
+  <div class="headertitle">
+<div class="title">Класс logic::model</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="model_8h_source.html">logic/model.h</a>&gt;</code></p>
+
+<p><a href="classlogic_1_1model-members.html">Полный список членов класса</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="signals"></a>
+Сигналы</h2></td></tr>
+<tr class="memitem:a2aad7c22080ad365f946fe4fb7c7b69a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a2aad7c22080ad365f946fe4fb7c7b69a">simulationFinished</a> (int time)</td></tr>
+<tr class="memitem:acef26e8032cbc3559c257618844158c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#acef26e8032cbc3559c257618844158c1">reqGenerated</a> (const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;reqID, int time)</td></tr>
+<tr class="memitem:a3109e3d9f1725e9c42a7d9c5dbc2f14b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a3109e3d9f1725e9c42a7d9c5dbc2f14b">reqQueued</a> (const int &amp;qID, const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;reqID, int time)</td></tr>
+<tr class="memitem:a3085247e28a36f55c5ee2ceda1f5fa65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a3085247e28a36f55c5ee2ceda1f5fa65">reqBeganHandling</a> (const int &amp;hID, const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;reqID, int time)</td></tr>
+<tr class="memitem:aa788c2f3eccfaa96123b50b51a0d0ac4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#aa788c2f3eccfaa96123b50b51a0d0ac4">reqFinishedHandling</a> (const int &amp;hID, const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;reqID, int time)</td></tr>
+<tr class="memitem:a485fde5d730b4bd11e512c26b14abe83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a485fde5d730b4bd11e512c26b14abe83">reqTerminated</a> (const int &amp;tID, const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;reqID, int time)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a3a86e9dc327e3153589c30f8295e25b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a3a86e9dc327e3153589c30f8295e25b2">model</a> ()</td></tr>
+<tr class="memitem:aed725889eed5e326b1d0dcde96593e24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#aed725889eed5e326b1d0dcde96593e24">model</a> (const <a class="el" href="classlogic_1_1model.html">model</a> &amp;)</td></tr>
+<tr class="memitem:a465477a5c1d2bd2cf122d47b7d3deb15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a465477a5c1d2bd2cf122d47b7d3deb15">~model</a> ()</td></tr>
+<tr class="memitem:ab0508b69b497b05d0096a954a7fe63f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ab0508b69b497b05d0096a954a7fe63f3">simulation_start</a> ()</td></tr>
+<tr class="memitem:ab37599d938e419057a3a600206484165"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ab37599d938e419057a3a600206484165">simulation_stop</a> ()</td></tr>
+<tr class="memitem:afbde407ef050843335b818704ed91d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#afbde407ef050843335b818704ed91d07">add_generator</a> (const <a class="el" href="classlogic_1_1generator.html">generator</a> &amp;&amp;gen)</td></tr>
+<tr class="memitem:ae70ec78c97f0f70d41696302085da3c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ae70ec78c97f0f70d41696302085da3c5">add_queue</a> (const <a class="el" href="classlogic_1_1queue.html">queue</a> &amp;&amp;q)</td></tr>
+<tr class="memitem:a20a83d01bc15d3aac291d2831090f155"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a20a83d01bc15d3aac291d2831090f155">add_handler</a> (const <a class="el" href="classlogic_1_1handler.html">handler</a> &amp;&amp;h)</td></tr>
+<tr class="memitem:a3dca667c8421d1cffff739e1c36beb27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a3dca667c8421d1cffff739e1c36beb27">add_terminator</a> (const <a class="el" href="classlogic_1_1terminator.html">terminator</a> &amp;&amp;t)</td></tr>
+<tr class="memitem:a9bb8fa56f45e15ff14b62b45b9f10285"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a9bb8fa56f45e15ff14b62b45b9f10285">add_link_generator_queue</a> (const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1generator.html">generator</a> *, <a class="el" href="classlogic_1_1queue.html">queue</a> * &gt; &amp;&amp;<a class="el" href="structlogic_1_1link.html">link</a>)</td></tr>
+<tr class="memitem:a910ae99fc902f94e43c627c995e4dcfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a910ae99fc902f94e43c627c995e4dcfd">add_link_queue_handler</a> (const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1queue.html">queue</a> *, <a class="el" href="classlogic_1_1handler.html">handler</a> * &gt; &amp;&amp;<a class="el" href="structlogic_1_1link.html">link</a>)</td></tr>
+<tr class="memitem:a2bc987ba4e7d6a01da77212c76338857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a2bc987ba4e7d6a01da77212c76338857">add_link_handler_terminator</a> (const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1handler.html">handler</a> *, <a class="el" href="classlogic_1_1terminator.html">terminator</a> * &gt; &amp;&amp;<a class="el" href="structlogic_1_1link.html">link</a>)</td></tr>
+<tr class="memitem:ad704d5e7a8bf2b4d0dc80b541b1349c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlogic_1_1generator.html">generator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ad704d5e7a8bf2b4d0dc80b541b1349c8">get_generator_by_id</a> (int id)</td></tr>
+<tr class="memitem:a8a8a38c92bbf2cae2b35579ca662fd8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlogic_1_1queue.html">queue</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a8a8a38c92bbf2cae2b35579ca662fd8e">get_queue_by_id</a> (int id)</td></tr>
+<tr class="memitem:a6b09b417b0bccf2d4e3449a8718eb35c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlogic_1_1handler.html">handler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a6b09b417b0bccf2d4e3449a8718eb35c">get_handler_by_id</a> (int id)</td></tr>
+<tr class="memitem:ab8b187542d4802d329976b8f20994e1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlogic_1_1terminator.html">terminator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ab8b187542d4802d329976b8f20994e1b">get_terminator_by_id</a> (int id)</td></tr>
+<tr class="memitem:a415c02cb20ad52555fddfe96c15ac0bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1generator.html">generator</a> *, <a class="el" href="classlogic_1_1queue.html">queue</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a415c02cb20ad52555fddfe96c15ac0bf">get_link_generator_queue_by_ids</a> (int id_left, int id_right)</td></tr>
+<tr class="memitem:af23e920ac11678abea88306998745fde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1queue.html">queue</a> *, <a class="el" href="classlogic_1_1handler.html">handler</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#af23e920ac11678abea88306998745fde">get_link_queues_handlers_by_ids</a> (int id_left, int id_right)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
+Открытые статические члены</h2></td></tr>
+<tr class="memitem:ae50b24aec802e67533bcd306b05bbdaa"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::pair<br class="typebreak"/>
+&lt; <a class="el" href="common_8h.html#a443f647757dde85043b49343f5cbe66b">ItemType</a>, <a class="el" href="common_8h.html#a443f647757dde85043b49343f5cbe66b">ItemType</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ae50b24aec802e67533bcd306b05bbdaa">supportedLinks</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="friends"></a>
+Друзья</h2></td></tr>
+<tr class="memitem:ad4b9aabc98c246fa597657e56a42d80d"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ad4b9aabc98c246fa597657e56a42d80d">generator</a></td></tr>
+<tr class="memitem:ab0867b3d911833209f691474b8b2c37b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#ab0867b3d911833209f691474b8b2c37b">queue</a></td></tr>
+<tr class="memitem:a72db39b889f34257a4c691d6acd383ab"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a72db39b889f34257a4c691d6acd383ab">handler</a></td></tr>
+<tr class="memitem:a8dde3c257059e43db0e48de79ffb385b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlogic_1_1model.html#a8dde3c257059e43db0e48de79ffb385b">terminator</a></td></tr>
+</table>
+<hr/><a name="details" id="details"></a><h2>Подробное описание</h2>
+<div class="textblock"><p>����� �������� ��������� ��� ������ (����� model). </p>
+<p>������������ ����� ������, ������� �������� ������ �������� � ��������� ��� ����� ����� ��������� ������. </p>
+</div><hr/><h2>Конструктор(ы)</h2>
+<a class="anchor" id="a3a86e9dc327e3153589c30f8295e25b2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">logic::model::model </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aed725889eed5e326b1d0dcde96593e24"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">logic::model::model </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlogic_1_1model.html">model</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a465477a5c1d2bd2cf122d47b7d3deb15"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">logic::model::~model </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Методы</h2>
+<a class="anchor" id="afbde407ef050843335b818704ed91d07"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_generator </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlogic_1_1generator.html">generator</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>gen</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a20a83d01bc15d3aac291d2831090f155"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_handler </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlogic_1_1handler.html">handler</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>h</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9bb8fa56f45e15ff14b62b45b9f10285"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_link_generator_queue </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1generator.html">generator</a> *, <a class="el" href="classlogic_1_1queue.html">queue</a> * &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>link</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2bc987ba4e7d6a01da77212c76338857"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_link_handler_terminator </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1handler.html">handler</a> *, <a class="el" href="classlogic_1_1terminator.html">terminator</a> * &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>link</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a910ae99fc902f94e43c627c995e4dcfd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_link_queue_handler </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1link.html">link</a>&lt; <a class="el" href="classlogic_1_1queue.html">queue</a> *, <a class="el" href="classlogic_1_1handler.html">handler</a> * &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>link</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae70ec78c97f0f70d41696302085da3c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_queue </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlogic_1_1queue.html">queue</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>q</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3dca667c8421d1cffff739e1c36beb27"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::add_terminator </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlogic_1_1terminator.html">terminator</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad704d5e7a8bf2b4d0dc80b541b1349c8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlogic_1_1generator.html">generator</a> * logic::model::get_generator_by_id </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6b09b417b0bccf2d4e3449a8718eb35c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlogic_1_1handler.html">handler</a> * logic::model::get_handler_by_id </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a415c02cb20ad52555fddfe96c15ac0bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structlogic_1_1link.html">link</a>&lt;<a class="el" href="classlogic_1_1generator.html">generator</a>*, <a class="el" href="classlogic_1_1queue.html">queue</a>*&gt;* logic::model::get_link_generator_queue_by_ids </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af23e920ac11678abea88306998745fde"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structlogic_1_1link.html">link</a>&lt;<a class="el" href="classlogic_1_1queue.html">queue</a>*, <a class="el" href="classlogic_1_1handler.html">handler</a>*&gt;* logic::model::get_link_queues_handlers_by_ids </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id_right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8a8a38c92bbf2cae2b35579ca662fd8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlogic_1_1queue.html">queue</a> * logic::model::get_queue_by_id </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab8b187542d4802d329976b8f20994e1b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlogic_1_1terminator.html">terminator</a> * logic::model::get_terminator_by_id </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3085247e28a36f55c5ee2ceda1f5fa65"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::reqBeganHandling </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>hID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;&#160;</td>
+          <td class="paramname"><em>reqID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa788c2f3eccfaa96123b50b51a0d0ac4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::reqFinishedHandling </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>hID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;&#160;</td>
+          <td class="paramname"><em>reqID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acef26e8032cbc3559c257618844158c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::reqGenerated </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;&#160;</td>
+          <td class="paramname"><em>reqID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3109e3d9f1725e9c42a7d9c5dbc2f14b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::reqQueued </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>qID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;&#160;</td>
+          <td class="paramname"><em>reqID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a485fde5d730b4bd11e512c26b14abe83"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::reqTerminated </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>tID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlogic_1_1request__id.html">logic::request_id</a> &amp;&#160;</td>
+          <td class="paramname"><em>reqID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab0508b69b497b05d0096a954a7fe63f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::simulation_start </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab37599d938e419057a3a600206484165"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int logic::model::simulation_stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2aad7c22080ad365f946fe4fb7c7b69a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void logic::model::simulationFinished </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae50b24aec802e67533bcd306b05bbdaa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::pair&lt; <a class="el" href="common_8h.html#a443f647757dde85043b49343f5cbe66b">ItemType</a>, <a class="el" href="common_8h.html#a443f647757dde85043b49343f5cbe66b">ItemType</a> &gt; &gt; logic::model::supportedLinks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Документация по друзьям класса и функциям, отноносящимся к классу</h2>
+<a class="anchor" id="ad4b9aabc98c246fa597657e56a42d80d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classlogic_1_1generator.html">generator</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a72db39b889f34257a4c691d6acd383ab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classlogic_1_1handler.html">handler</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab0867b3d911833209f691474b8b2c37b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classlogic_1_1queue.html">queue</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8dde3c257059e43db0e48de79ffb385b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classlogic_1_1terminator.html">terminator</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
+<li>logic/<a class="el" href="model_8h_source.html">model.h</a></li>
+<li>logic/<a class="el" href="model_8cpp.html">model.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacelogic.html">logic</a></li><li class="navelem"><a class="el" href="classlogic_1_1model.html">model</a></li>
+    <li class="footer">Документация по QMB. Последние изменения: Вс 20 Май 2012 19:02:15. Создано системой
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1 </li>
+  </ul>
+</div>
+</body>
+</html>
