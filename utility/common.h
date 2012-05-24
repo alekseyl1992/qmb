@@ -4,9 +4,7 @@
 #include <QDebug>
 #include <chrono>
 
-/*!
- * ѕеречисление составл€ющий модели
- */
+//! ѕеречисление составл€ющих модели
 enum class ItemType : int
 {
     Generator,
@@ -14,6 +12,9 @@ enum class ItemType : int
     Handler,
     Terminator
 };
+
+//! ѕреобразует тип элемента в строковое представление
+QString itemTypeToString(ItemType type);
 
 typedef unsigned long long ull_t;
 

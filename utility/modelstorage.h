@@ -71,10 +71,11 @@ public:
     bool openModel(const QString &path);
     bool saveModel();
     bool saveModelAs(const QString &path);
-    void fillModel(IFillableModel *iModel) const;
+    bool undoModel(); //!< откат модели на один шаг назад
+    void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
     //TODO здесь будут метода для получения и записи полного списка параметров
-    //просто пока ещё не продуман формат хранения этих самывх форматов
+    //просто пока ещё не продуман формат хранения этих самых параметров
 
 public slots:
 
