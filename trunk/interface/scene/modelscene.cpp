@@ -111,6 +111,11 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
                         .arg(idTo));*/
 }
 
+void ModelScene::clear()
+{
+    QGraphicsScene::clear();
+}
+
 void ModelScene::setMode(Mode mode)
 {
     myMode = mode;
@@ -125,6 +130,8 @@ void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
 {
     if(keyEvent->key() == Qt::Key_Delete)
         removeSelectedItems();
+    if(keyEvent->key() == Qt::Key_Z && keyEvent->modifiers().testFlag(Qt::ControlModifier))
+        emit undoRequested();
 }
 
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

@@ -77,6 +77,7 @@ public:
 
     void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint());
     void addLink(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void clear();
 
     void removeSelectedItems();
 
@@ -97,6 +98,7 @@ signals:
     void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void wrongLink(ItemType fromType, ItemType toType);
+    void undoRequested();
 
 protected:
     void keyPressEvent(QKeyEvent *keyEvent);

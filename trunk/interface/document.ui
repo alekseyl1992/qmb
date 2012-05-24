@@ -569,6 +569,9 @@ QTreeView::item:!enabled {
           <property name="itemsExpandable">
            <bool>false</bool>
           </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>

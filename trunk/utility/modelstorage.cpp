@@ -153,6 +153,11 @@ bool ModelStorage::saveModelAs(const QString &path)
     return true;
 }
 
+bool ModelStorage::undoModel()
+{
+    return true; //если откат произведён
+}
+
 void ModelStorage::fillModel(IFillableModel *iModel) const
 {
     const int Link = 4;
@@ -164,6 +169,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     entries[ItemNames[4]] = Link;
 
     QDomElement ProcessingItem = root.firstChildElement();
+    iModel->clear();
 
     while (!ProcessingItem.isNull())
     {

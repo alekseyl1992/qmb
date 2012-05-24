@@ -87,6 +87,12 @@ Document::Document(QWidget *parent) :
             storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
     connect(scene, SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
+    ::connect(scene, SIGNAL(undoRequested()),
+            [scene, storage]
+            {
+                if(storage->undoModel())
+                    storage->fillModel(scene);
+            });
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -433,10 +439,7 @@ void Document::on_tabWidget_currentChanged(int index)
     {
         if(ui->codeEdit->document()->isModified())
             if(tryApplyCode())
-            {
-                scene->clear();
                 storage->fillModel(scene);
-            }
     }
 }
 
@@ -519,8 +522,9 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, i
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)
 {
-    //TODO какие эти?
-    QMessageBox::critical(this, "Ошибка", "Не возможно соединить эти элементы");
+    QMessageBox::critical(this, "Ошибка", QString("Не возможно соединить %0 и %1.")
+                          .arg(itemTypeToString(fromType))
+                          .arg(itemTypeToString(toType)));
 }
 
 QString Document::timeToString(int time)
