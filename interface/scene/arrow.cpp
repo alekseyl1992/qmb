@@ -83,7 +83,8 @@ QPainterPath Arrow::shape() const
 
 void Arrow::updatePosition()
 {
-    QLineF line(mapFromItem(myStartItem, 0, 0), mapFromItem(myEndItem, 0, 0));
+    QLineF line(myEndItem->closestHotSpot(myStartItem->scenePos()),
+                myStartItem->closestHotSpot(myEndItem->scenePos()));
     setLine(line);
 }
 
@@ -106,7 +107,7 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     QPointF p2;
     QPointF intersectPoint;
     QLineF polyLine;
-    for (int i = 1; i < endPolygon.count(); ++i)
+    /*for (int i = 1; i < endPolygon.count(); ++i)
     {
         p2 = endPolygon.at(i) + myEndItem->pos();
         polyLine = QLineF(p1, p2);
@@ -115,9 +116,12 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         if (intersectType == QLineF::BoundedIntersection)
             break;
         p1 = p2;
-    }
+    }*/
+    /*p1 = mapFromItem(myStartItem, myEndItem->closestHotSpot(myStartItem->scenePos()));
+    p2 = mapFromItem(myEndItem, myStartItem->closestHotSpot(myEndItem->scenePos()));
+    setLine(QLineF(p1, p2));*/
 
-    setLine(QLineF(intersectPoint, myStartItem->pos()));
+    //setLine(QLineF(intersectPoint, myStartItem->pos()));
 
     double angle = ::acos(line().dx() / line().length());
     if (line().dy() >= 0)

@@ -140,16 +140,23 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawPolygon(polygon().intersected(rect), fillRule());
     }
 
+    //рамочка
+    painter->drawPolygon(polygon(), fillRule());
+
+    //текст
+    painter->setPen(QPen(Qt::black));
+    painter->setBrush(QBrush(Qt::black));
     painter->drawText(polygon().boundingRect(),
                       typeAsString() + QString(" %0").arg(myId),
                       QTextOption(Qt::AlignCenter));
 
-    //рамочка
-    painter->setPen(pen());
-    painter->setBrush(Qt::NoBrush);
-    painter->drawPolygon(polygon(), fillRule());
-
     //hotSpots
+    QPen hsPen;
+    hsPen.setWidth(1);
+    QBrush hsBrush(Qt::white);
+
+    painter->setPen(hsPen);
+    painter->setBrush(hsBrush);
     for(QPointF &pt: hotSpots)
         painter->drawEllipse(pt, 2, 2);
 }
@@ -216,6 +223,24 @@ bool ModelItem::closeByHotStop(const QPointF &pt) const
            abs(pos.y() - hotSpot.y()) < 8)
             return true;
     return false;
+}
+
+QPointF ModelItem::closestHotSpot(QPointF pos) const
+{
+    QPointF closest;
+    qreal minDistance = -1;
+    foreach(QPointF hs, hotSpots)
+    {
+        hs = mapToScene(hs);
+        qreal curDistance = distance(pos, hs);
+        if(curDistance < minDistance || minDistance==-1)
+        {
+            minDistance = curDistance;
+            closest = hs;
+        }
+    }
+
+    return closest;
 }
 
 QVariant ModelItem::itemChange(GraphicsItemChange change,
