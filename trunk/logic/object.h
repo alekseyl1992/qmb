@@ -5,6 +5,7 @@
 #include <mutex>
 #include <string>
 #include <QObject>
+#include <QDebug>
 #include <sstream>
 #include <ctime>
 

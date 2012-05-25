@@ -64,10 +64,7 @@ QT_END_NAMESPACE
 
 class Arrow;
 
-/*!
- *  ласс элемента —цены (класс ModelScene).
- */
-
+//!  ласс элемента —цены (ModelScene).
 class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 {
 
@@ -101,7 +98,8 @@ public:
     { bModified = m; }
 
     QString typeAsString() const;
-    bool closeByHotStop(const QPointF& pt) const; //близка ли точка к одному из hs
+    bool closeByHotStop(const QPointF& pt) const; //! < близка ли точка к одному из hs
+    QPointF closestHotSpot(QPointF pos) const; //! < возвращает позицию ближайшего hs
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
