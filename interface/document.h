@@ -16,11 +16,9 @@ namespace Ui {
 class Document;
 }
 
-//class ModelStorage; //forward declaration
-
+//!  ласс окна, которое создаЄтс€ на каждой вкладке.
 /*!
- *  ласс окна, которое создаЄтс€ на каждой вкладке.
- * «десь находитьс€ больша€ часть интерфейса, в том числе —цена и список Ёлементов.
+ * ¬ этом окне находитьс€ больша€ часть интерфейса, в том числе —цена и список Ёлементов.
  */
 
 class Document : public QDialog
@@ -28,7 +26,7 @@ class Document : public QDialog
     Q_OBJECT
     
 public:
-    enum Tabs {Model, Code, Simulation};
+    enum Tabs {Model, Code, Options}; //!< перечисление вкладок
 
     explicit Document(QWidget *parent);
 
@@ -46,6 +44,8 @@ public:
     bool openModel(const QString& path);
     bool saveModel();
     bool saveModelAs(const QString& path);
+
+    //! сохран€лась ли когда-либо модель
     bool isSavable() const;
 
 public slots:
@@ -56,16 +56,19 @@ public slots:
     void clearLog();
 
 private slots:
+    //! срабатывает при начале перетаскивани€ элемента с палитры на —цену
     void on_toolsView_pressed(const QModelIndex &index);
 
     void on_startButton_clicked();
 
     void on_stopButton_clicked();
 
+    //! срабатывает при смене текущей вкладки Tabs
     void on_tabWidget_currentChanged(int index);
 
     void on_simulationLog_customContextMenuRequested(const QPoint &pos);
 
+    //слоты дл€ св€зи с model
     void onReqGenerated(const logic::request_id& reqID, int event_time);
     void onReqQueued(const int& qID, const logic::request_id& reqID, int event_time);
     void onReqBeganHandling(const int& hID, const logic::request_id& reqID, int event_time);

@@ -7,10 +7,7 @@ namespace Ui {
 class CreateModelDialog;
 }
 
-/*!
- * Класс окна с запросом ввода имени модели
- */
-
+//! Класс окна с запросом ввода имени модели
 class CreateModelDialog : public QDialog
 {
     Q_OBJECT
@@ -19,6 +16,7 @@ public:
     explicit CreateModelDialog(QWidget *parent = 0);
     ~CreateModelDialog();
 
+    //! @return Имя модели
     QString name() const;
     
 private slots:
