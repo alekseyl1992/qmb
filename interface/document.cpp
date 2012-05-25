@@ -15,6 +15,7 @@
 #include <QClipboard>
 #include <QListWidgetItem>
 #include <QStandardItem>
+#include <QShortcut>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
@@ -44,17 +45,24 @@ Document::Document(QWidget *parent) :
 
     //создаём меню для лога
     logMenu = new QMenu(this);
-    logMenu->addAction("Копировать выделенные", new connector(this, [this]
-    {
-        QClipboard *clipboard = QApplication::clipboard();
-        QString strings;
-        foreach(QModelIndex index, ui->simulationLog->selectionModel()->selectedRows())
-            strings += logModel->item(index.row(), 0)->text().append(" | ")
-                    += logModel->item(index.row(), 1)->text().append(" | ")
-                    += logModel->item(index.row(), 2)->text().append("\n");
+    std::function<void(void)> copyLog =
+        [this]
+        {
+            QClipboard *clipboard = QApplication::clipboard();
+            QString strings;
+            foreach(QModelIndex index, ui->simulationLog->selectionModel()->selectedRows())
+                strings += logModel->item(index.row(), 0)->text().append(" | ")
+                        += logModel->item(index.row(), 1)->text().append(" | ")
+                        += logModel->item(index.row(), 2)->text().append("\n");
 
-        clipboard->setText(strings);
-    }), SLOT(signaled()));
+            clipboard->setText(strings);
+        };
+
+    logMenu->addAction("Копировать выделенные", new connector(this, copyLog), SLOT(signaled()));
+    QShortcut *copy = new QShortcut(QKeySequence(tr("Ctrl+C", "Log|Copy")),
+                              ui->simulationLog);
+    ::connect(copy, SIGNAL(activated()), copyLog);
+
 
     logMenu->addAction("Копировать всё", new connector(this, [this]
     {
@@ -199,7 +207,7 @@ Document::Document(QWidget *parent) :
     logModel->setHeaderData(1, Qt::Horizontal, "Запрос");
     logModel->setHeaderData(2, Qt::Horizontal, "Статус");
     ui->simulationLog->setModel(logModel);
-    //connect(logModel, SIGNAL(rowsInserted(const QModelIndex &parent, int start, int end)), this, SLOT(scrollLog(const QModelIndex &parent, int start, int end)));
+
 
     ui->logDock->resize(0, 360);
 }
