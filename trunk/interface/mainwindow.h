@@ -10,10 +10,7 @@ namespace Ui {
 class MainWindow;
 }
 
-/*!
- * Класс главного окна
- */
-
+//! Класс главного окна
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +31,7 @@ public slots:
 
     void onAbout();
 
+    //! срабатывает при переключении на вкладку с другой моделью и при создании новой
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
     void openModel(const QString& path);
@@ -42,6 +40,7 @@ public slots:
 
     void closeEvent(QCloseEvent *event);    
 
+    //! Создаёт вкладку с Домашней страницей
     void createHomeWidget();
 
 private:
@@ -49,8 +48,8 @@ private:
     Document *Doc;
     QMenu *mainMenu;
     QMdiSubWindow *homeTab;
-    //static const int maxOpenedModels = 128;
 
+    //! Создаёт кнопку QMB и её меню
     void createMenuButton();
 };
 

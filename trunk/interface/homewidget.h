@@ -4,13 +4,12 @@
 #include <QDialog>
 #include <QDebug>
 
+//! Пространство окон интерфейса
 namespace Ui {
 class HomeWidget;
 }
 
-/*!
- * Класс вкладки Домашняя страница
- */
+//! Класс вкладки Домашняя страница
 class HomeWidget : public QDialog
 {
     Q_OBJECT
