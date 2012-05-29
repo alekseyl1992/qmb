@@ -42,6 +42,7 @@ class ModelStorage : public QObject
 private:
     logic::model* myModel;
     QDomDocument* curDoc; //хранилище структуры xml
+    QDomElement backuproot; //хранилище undo
     QDomElement root; //корневой элемент (ех: модель №х )
     QString currentPath;
 
