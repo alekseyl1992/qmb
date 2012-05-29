@@ -1,4 +1,4 @@
-#ifndef H_OBJECT
+п»ї#ifndef H_OBJECT
 #define H_OBJECT
 
 #include <thread>
@@ -15,7 +15,7 @@ namespace logic
 {
     class model;
 
-    //! Базовый абстрактный класс для элемента модели
+    //! Р‘Р°Р·РѕРІС‹Р№ Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ СЌР»РµРјРµРЅС‚Р° РјРѕРґРµР»Рё
     class object : public QObject
 	{
         Q_OBJECT

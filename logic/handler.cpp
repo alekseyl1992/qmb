@@ -1,4 +1,4 @@
-#include "handler.h"
+﻿#include "handler.h"
 #include "model.h"
 #include "terminator.h"
 

@@ -1,4 +1,4 @@
-#include "itemshadow.h"
+﻿#include "itemshadow.h"
 
 ItemShadow::ItemShadow(QGraphicsItem *item)
     : offset(5), blurRadius(10)

@@ -1,4 +1,4 @@
-/****************************************************************************
+п»ї/****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
@@ -64,7 +64,7 @@ QT_END_NAMESPACE
 
 class Arrow;
 
-//! Класс элемента Сцены (ModelScene).
+//! РљР»Р°СЃСЃ СЌР»РµРјРµРЅС‚Р° РЎС†РµРЅС‹ (ModelScene).
 class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 {
 
@@ -98,8 +98,8 @@ public:
     { bModified = m; }
 
     QString typeAsString() const;
-    bool closeByHotStop(const QPointF& pt) const; //! < близка ли точка к одному из hs
-    QPointF closestHotSpot(QPointF pos) const; //! < возвращает позицию ближайшего hs
+    bool closeByHotStop(const QPointF& pt) const; //! < Р±Р»РёР·РєР° Р»Рё С‚РѕС‡РєР° Рє РѕРґРЅРѕРјСѓ РёР· hs
+    QPointF closestHotSpot(QPointF pos) const; //! < РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ Р±Р»РёР¶Р°Р№С€РµРіРѕ hs
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -110,7 +110,7 @@ private:
     QPolygonF myPolygon;
     QMenu *myContextMenu;
     QList<Arrow *> myArrows;
-    QVector<QPointF> hotSpots; //точки крепления стрелок
+    QVector<QPointF> hotSpots; //С‚РѕС‡РєРё РєСЂРµРїР»РµРЅРёСЏ СЃС‚СЂРµР»РѕРє
     int myId;
     bool bModified;
 };

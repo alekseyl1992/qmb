@@ -1,4 +1,4 @@
-/****************************************************************************
+п»ї/****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
@@ -94,12 +94,12 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
     myPolygon = path.toFillPolygon();
     setPolygon(myPolygon);
 
-    //уменьшаем, если не для палитры
+    //СѓРјРµРЅСЊС€Р°РµРј, РµСЃР»Рё РЅРµ РґР»СЏ РїР°Р»РёС‚СЂС‹
     if(itemId != -1)
         for(QPointF &pnt : myPolygon)
             pnt /= 2;
 
-    //перемещаем hotSpot'ы
+    //РїРµСЂРµРјРµС‰Р°РµРј hotSpot'С‹
     //for(auto it = hotSpots.begin(); it!= hotSpots.end(); ++it)
     for(QPointF &pnt : hotSpots)
     {
@@ -119,7 +119,7 @@ ModelItem::~ModelItem()
 
 void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //устанавливаем градиентную заливку
+    //СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РіСЂР°РґРёРµРЅС‚РЅСѓСЋ Р·Р°Р»РёРІРєСѓ
     QLinearGradient linearGrad(QPointF(0, 0),
                                QPointF(0, boundingRect().height()));
     linearGrad.setColorAt(0, QColor(250, 250, 230));
@@ -140,10 +140,10 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         painter->drawPolygon(polygon().intersected(rect), fillRule());
     }
 
-    //рамочка
+    //СЂР°РјРѕС‡РєР°
     painter->drawPolygon(polygon(), fillRule());
 
-    //текст
+    //С‚РµРєСЃС‚
     painter->setPen(QPen(Qt::black));
     painter->setBrush(QBrush(Qt::black));
     painter->drawText(polygon().boundingRect(),
@@ -202,16 +202,16 @@ QString ModelItem::typeAsString() const
     switch(myItemType)
     {
     case ItemType::Generator:
-        return "Генератор";
+        return "Р“РµРЅРµСЂР°С‚РѕСЂ";
     case ItemType::Queue:
-        return "Очередь";
+        return "РћС‡РµСЂРµРґСЊ";
     case ItemType::Handler:
-        return "Обработчик";
+        return "РћР±СЂР°Р±РѕС‚С‡РёРє";
     case ItemType::Terminator:
-        return "Терминатор";
+        return "РўРµСЂРјРёРЅР°С‚РѕСЂ";
 
     default:
-        return "Нечто";
+        return "РќРµС‡С‚Рѕ";
     }
 }
 

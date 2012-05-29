@@ -900,7 +900,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES (the default) Doxygen will 
 # generate HTML output.
 
-GENERATE_HTML          = NO
+GENERATE_HTML          = YES
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
@@ -1258,7 +1258,7 @@ SERVER_BASED_SEARCH    = NO
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will 
 # generate Latex output.
 
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
@@ -1284,7 +1284,7 @@ MAKEINDEX_CMD_NAME     = makeindex
 # LaTeX documents. This may be useful for small projects and may help to 
 # save some trees in general.
 
-COMPACT_LATEX          = NO
+COMPACT_LATEX          = YES
 
 # The PAPER_TYPE tag can be used to set the paper type that is used 
 # by the printer. Possible values are: a4, letter, legal and 
@@ -1335,7 +1335,7 @@ LATEX_BATCHMODE        = NO
 # include the index chapters (such as File Index, Compound Index, etc.) 
 # in the output.
 
-LATEX_HIDE_INDICES     = NO
+LATEX_HIDE_INDICES     = YES
 
 # If LATEX_SOURCE_CODE is set to YES then doxygen will include 
 # source code with syntax highlighting in the LaTeX output. 
@@ -1358,7 +1358,7 @@ LATEX_BIB_STYLE        = plain
 # The RTF output is optimized for Word 97 and may not look very pretty with 
 # other RTF readers or editors.
 
-GENERATE_RTF           = YES
+GENERATE_RTF           = NO
 
 # The RTF_OUTPUT tag is used to specify where the RTF docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 

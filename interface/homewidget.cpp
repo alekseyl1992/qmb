@@ -1,4 +1,4 @@
-#include "interface/homewidget.h"
+п»ї#include "interface/homewidget.h"
 #include "ui_homewidget.h"
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -19,7 +19,7 @@ HomeWidget::HomeWidget(QWidget *parent) :
     ui->lastModels->setLayout(layout);
     //layout->setContentsMargins(0, 0, 0, 0);
 
-    //формируем список недавних проектов
+    //С„РѕСЂРјРёСЂСѓРµРј СЃРїРёСЃРѕРє РЅРµРґР°РІРЅРёС… РїСЂРѕРµРєС‚РѕРІ
     QFile lastModelsFile(QApplication::applicationDirPath() + "/lastModels.dat");
     lastModelsFile.open(QIODevice::ReadOnly);
     QTextStream stream(&lastModelsFile);

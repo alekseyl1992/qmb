@@ -1,4 +1,4 @@
-#include "queue.h"
+﻿#include "queue.h"
 #include "model.h"
 
 namespace logic

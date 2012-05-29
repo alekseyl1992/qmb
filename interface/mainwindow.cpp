@@ -1,4 +1,4 @@
-#include "interface/mainwindow.h"
+п»ї#include "interface/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utility/modelstorage.h"
 #include "interface/homewidget.h"
@@ -19,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow), homeTab(nullptr)
 {
-    //TODO опционально оставить весь текст на английском, затем перевети лингвистом
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("CP1251"));
+    //TODO РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ РѕСЃС‚Р°РІРёС‚СЊ РІРµСЃСЊ С‚РµРєСЃС‚ РЅР° Р°РЅРіР»РёР№СЃРєРѕРј, Р·Р°С‚РµРј РїРµСЂРµРІРµС‚Рё Р»РёРЅРіРІРёСЃС‚РѕРј
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     ui->setupUi(this);
 
     ui->mdiArea->setTabsClosable(true);
@@ -48,10 +48,10 @@ void MainWindow::onCreateModel()
             delete homeTab;
             homeTab = nullptr;
         }
-        else //TODO а может обработку ошибок лучше в Document?
+        else //TODO Р° РјРѕР¶РµС‚ РѕР±СЂР°Р±РѕС‚РєСѓ РѕС€РёР±РѕРє Р»СѓС‡С€Рµ РІ Document?
             QMessageBox::critical(this,
-                "Ошибка",
-                "Возникла ошибка при попытке создать модель");
+                "РћС€РёР±РєР°",
+                "Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕР·РґР°С‚СЊ РјРѕРґРµР»СЊ");
     }
 }
 
@@ -59,17 +59,17 @@ void MainWindow::onCreateModel()
 void MainWindow::createDocument(QString name, QString path)
 {
     QMessageBox::critical(this,
-        "Ошибка",
+        "РћС€РёР±РєР°",
         "DEPRECATED");
 
-    /*//формируем имя документа
+    /*//С„РѕСЂРјРёСЂСѓРµРј РёРјСЏ РґРѕРєСѓРјРµРЅС‚Р°
     QSet<QString> modelTitles;
     for(QMdiSubWindow *wnd :  ui->mdiArea->subWindowList())
         modelTitles << wnd->windowTitle();
 
     int modelId = -1;
     for(int i=1; i<maxOpenedModels; i++)
-        if(!modelTitles.contains(QString("Модель %0").arg(i)))
+        if(!modelTitles.contains(QString("РњРѕРґРµР»СЊ %0").arg(i)))
         {
               modelId = i;
               break;
@@ -77,8 +77,8 @@ void MainWindow::createDocument(QString name, QString path)
 
     if(modelId != -1)
     {
-        QString Name = QString("Модель %0").arg(modelId);
-        //TODO вернуть меню
+        QString Name = QString("РњРѕРґРµР»СЊ %0").arg(modelId);
+        //TODO РІРµСЂРЅСѓС‚СЊ РјРµРЅСЋ
         Document *newDoc = new Document(this, Name);
         newDoc->scene()->setMode(ModelScene::Mode::InsertItem);
 
@@ -86,13 +86,13 @@ void MainWindow::createDocument(QString name, QString path)
         subWindow->showMaximized();
         ui->mdiArea->setActiveSubWindow(subWindow);
 
-        //добавляем кнопку старта симуляции в заголовку вкладки
+        //РґРѕР±Р°РІР»СЏРµРј РєРЅРѕРїРєСѓ СЃС‚Р°СЂС‚Р° СЃРёРјСѓР»СЏС†РёРё РІ Р·Р°РіРѕР»РѕРІРєСѓ РІРєР»Р°РґРєРё
         /QTabBar *tabBar = subWindow->findChild<QTabBar *>();
         //QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
         QToolButton *startButton = new QToolButton(tabBar);
         startButton->setIcon(QIcon(":/icons/start"));
         startButton->setGeometry(0, 0, 20, 20);
-        //startButton->setText("Старт");
+        //startButton->setText("РЎС‚Р°СЂС‚");
         //startButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         QFont font = tabBar->font();
         font.setBold(true);
@@ -104,15 +104,15 @@ void MainWindow::createDocument(QString name, QString path)
     }
     else
     {
-        QMessageBox::warning(this, "Ошибка",
-                     "Открыто слишком много моделей!\n"
-                     "Закройте хотя бы одну перед созданием новой.");
+        QMessageBox::warning(this, "РћС€РёР±РєР°",
+                     "РћС‚РєСЂС‹С‚Рѕ СЃР»РёС€РєРѕРј РјРЅРѕРіРѕ РјРѕРґРµР»РµР№!\n"
+                     "Р—Р°РєСЂРѕР№С‚Рµ С…РѕС‚СЏ Р±С‹ РѕРґРЅСѓ РїРµСЂРµРґ СЃРѕР·РґР°РЅРёРµРј РЅРѕРІРѕР№.");
     }*/
 }
 
 void MainWindow::onOpenModel()
 {
-    QString path = QFileDialog::getOpenFileName(this, "Открыть модель",
+    QString path = QFileDialog::getOpenFileName(this, "РћС‚РєСЂС‹С‚СЊ РјРѕРґРµР»СЊ",
                                                 QApplication::applicationDirPath() + "/models/",
                                                 "QMB XML Model (*.qm)");
     if(path != "")
@@ -129,17 +129,17 @@ void MainWindow::openModel(const QString &path)
         delete homeTab;
         homeTab = nullptr;
     }
-    else //TODO а может обработку ошибок лучше в Document?
+    else //TODO Р° РјРѕР¶РµС‚ РѕР±СЂР°Р±РѕС‚РєСѓ РѕС€РёР±РѕРє Р»СѓС‡С€Рµ РІ Document?
         QMessageBox::critical(this,
-            "Ошибка",
-            QString("Возникла ошибка при попытке открыть модель\nПуть: %0")
+            "РћС€РёР±РєР°",
+            QString("Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РѕС‚РєСЂС‹С‚СЊ РјРѕРґРµР»СЊ\nРџСѓС‚СЊ: %0")
                               .arg(path));
 }
 
 void MainWindow::saveModel(QString path)
 {
-    //TODO: сохранение модели
-    QMessageBox::information(this, "Сохранение модели...", path);
+    //TODO: СЃРѕС…СЂР°РЅРµРЅРёРµ РјРѕРґРµР»Рё
+    QMessageBox::information(this, "РЎРѕС…СЂР°РЅРµРЅРёРµ РјРѕРґРµР»Рё...", path);
 }
 
 void MainWindow::onSaveModel()
@@ -152,15 +152,15 @@ void MainWindow::onSaveModel()
         {
             if(!curDoc->saveModel())
                 QMessageBox::critical(this,
-                    "Ошибка",
-                    "Возникла ошибка при попытке сохранить модель");
+                    "РћС€РёР±РєР°",
+                    "Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕС…СЂР°РЅРёС‚СЊ РјРѕРґРµР»СЊ");
         }
     }
 }
 
 void MainWindow::onSaveModelAs()
 {
-    QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
+    QString path = QFileDialog::getSaveFileName(this, "РЎРѕС…СЂР°РЅРµРЅРёРµ РјРѕРґРµР»Рё",
                                  QApplication::applicationDirPath() + "/models/",
                                  "QMB XML Model (*.qm)");
     if(path != "")
@@ -173,15 +173,15 @@ void MainWindow::onSaveModelAs()
             {
                 if(curDoc->saveModelAs(path))
                 {
-                    //включаем пункт Сохранить
+                    //РІРєР»СЋС‡Р°РµРј РїСѓРЅРєС‚ РЎРѕС…СЂР°РЅРёС‚СЊ
                     foreach(QAction *act, mainMenu->actions())
                         if(act->objectName() == "saveAction")
                             act->setEnabled(true);
                 }
                 else
                     QMessageBox::critical(this,
-                        "Ошибка",
-                        "Возникла ошибка при попытке сохранить модель");
+                        "РћС€РёР±РєР°",
+                        "Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕС…СЂР°РЅРёС‚СЊ РјРѕРґРµР»СЊ");
             }
         }
     }
@@ -189,13 +189,13 @@ void MainWindow::onSaveModelAs()
 
 void MainWindow::onAbout()
 {
-    QMessageBox::information(this, "О программе",
+    QMessageBox::information(this, "Рћ РїСЂРѕРіСЂР°РјРјРµ",
                              "Queueing Model Builder v0.1 beta\n\n"
-                             "Разработчики:\n"
-                             " Леонтьев Алексей\n"
-                             " Латкин Игорь\n"
-                             " Назаров Константин\n\n"
-                             "\t\t\t\t2012 г.");
+                             "Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё:\n"
+                             " Р›РµРѕРЅС‚СЊРµРІ РђР»РµРєСЃРµР№\n"
+                             " Р›Р°С‚РєРёРЅ РРіРѕСЂСЊ\n"
+                             " РќР°Р·Р°СЂРѕРІ РљРѕРЅСЃС‚Р°РЅС‚РёРЅ\n\n"
+                             "\t\t\t\t2012 Рі.");
 }
 
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
@@ -208,10 +208,10 @@ void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
 
     if(arg1)
     {
-        //управление пунктами сохранить/сохранить как..
+        //СѓРїСЂР°РІР»РµРЅРёРµ РїСѓРЅРєС‚Р°РјРё СЃРѕС…СЂР°РЅРёС‚СЊ/СЃРѕС…СЂР°РЅРёС‚СЊ РєР°Рє..
         bool save, saveAs;
 
-        //если домашняя страничка
+        //РµСЃР»Рё РґРѕРјР°С€РЅСЏСЏ СЃС‚СЂР°РЅРёС‡РєР°
         if(dynamic_cast<HomeWidget *>(arg1->widget()))
             save = saveAs = false;
         else if(Document *curDoc = dynamic_cast<Document *>(arg1->widget()))
@@ -234,7 +234,7 @@ void MainWindow::createHomeWidget()
     {
         HomeWidget *homeWidget = new HomeWidget(this);
         homeTab = ui->mdiArea->addSubWindow(homeWidget);
-        homeTab->setWindowTitle("Добро пожаловать");
+        homeTab->setWindowTitle("Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ");
         homeTab->showMaximized();
 
         connect(homeWidget, SIGNAL(createModel()), this, SLOT(onCreateModel()));
@@ -247,7 +247,7 @@ void MainWindow::createHomeWidget()
 
 void MainWindow::createMenuButton()
 {
-    //добавляем меню перед списком табов
+    //РґРѕР±Р°РІР»СЏРµРј РјРµРЅСЋ РїРµСЂРµРґ СЃРїРёСЃРєРѕРј С‚Р°Р±РѕРІ
     QTabBar *tabBar = ui->mdiArea->findChild<QTabBar *>();
     QToolButton *menuButton = new QToolButton(tabBar);
     menuButton->setGeometry(1, 1, 58, 26);
@@ -257,19 +257,19 @@ void MainWindow::createMenuButton()
     font.setBold(true);
     menuButton->setFont(font);
     mainMenu = new QMenu(this);
-    mainMenu->addAction("Создать модель", this, SLOT(onCreateModel()));
-    mainMenu->addAction("Открыть модель", this, SLOT(onOpenModel()));
+    mainMenu->addAction("РЎРѕР·РґР°С‚СЊ РјРѕРґРµР»СЊ", this, SLOT(onCreateModel()));
+    mainMenu->addAction("РћС‚РєСЂС‹С‚СЊ РјРѕРґРµР»СЊ", this, SLOT(onOpenModel()));
     mainMenu->addSeparator();
-    QAction *saveAction = mainMenu->addAction("Сохранить модель", this, SLOT(onSaveModel()));
+    QAction *saveAction = mainMenu->addAction("РЎРѕС…СЂР°РЅРёС‚СЊ РјРѕРґРµР»СЊ", this, SLOT(onSaveModel()));
     saveAction->setObjectName("saveAction");
     saveAction->setEnabled(false);
-    QAction *saveAsAction = mainMenu->addAction("Сохранить модель как...", this, SLOT(onSaveModelAs()));
+    QAction *saveAsAction = mainMenu->addAction("РЎРѕС…СЂР°РЅРёС‚СЊ РјРѕРґРµР»СЊ РєР°Рє...", this, SLOT(onSaveModelAs()));
     saveAsAction->setObjectName("saveAsAction");
     saveAsAction->setEnabled(false);
     mainMenu->addSeparator();
-    mainMenu->addAction("О программе", this, SLOT(onAbout()));
+    mainMenu->addAction("Рћ РїСЂРѕРіСЂР°РјРјРµ", this, SLOT(onAbout()));
     mainMenu->addSeparator();
-    mainMenu->addAction("Выход", this, SLOT(close()));
+    mainMenu->addAction("Р’С‹С…РѕРґ", this, SLOT(close()));
     menuButton->setPopupMode(QToolButton::MenuButtonPopup);
     menuButton->setMenu(mainMenu);
     connect(menuButton, SIGNAL(clicked()), this, SLOT(createHomeWidget()));

@@ -1,4 +1,4 @@
-#ifndef DOCUMENT_H
+п»ї#ifndef DOCUMENT_H
 #define DOCUMENT_H
 
 #include "interface/scene/modelscene.h"
@@ -16,9 +16,9 @@ namespace Ui {
 class Document;
 }
 
-//! Класс окна, которое создаётся на каждой вкладке.
+//! РљР»Р°СЃСЃ РѕРєРЅР°, РєРѕС‚РѕСЂРѕРµ СЃРѕР·РґР°С‘С‚СЃСЏ РЅР° РєР°Р¶РґРѕР№ РІРєР»Р°РґРєРµ.
 /*!
- * В этом окне находиться большая часть интерфейса, в том числе Сцена и список Элементов.
+ * Р’ СЌС‚РѕРј РѕРєРЅРµ РЅР°С…РѕРґРёС‚СЊСЃСЏ Р±РѕР»СЊС€Р°СЏ С‡Р°СЃС‚СЊ РёРЅС‚РµСЂС„РµР№СЃР°, РІ С‚РѕРј С‡РёСЃР»Рµ РЎС†РµРЅР° Рё СЃРїРёСЃРѕРє Р­Р»РµРјРµРЅС‚РѕРІ.
  */
 
 class Document : public QDialog
@@ -26,7 +26,7 @@ class Document : public QDialog
     Q_OBJECT
     
 public:
-    enum Tabs {Model, Code, Options}; //!< перечисление вкладок
+    enum Tabs {Model, Code, Options}; //!< РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РІРєР»Р°РґРѕРє
 
     explicit Document(QWidget *parent);
 
@@ -45,7 +45,7 @@ public:
     bool saveModel();
     bool saveModelAs(const QString& path);
 
-    //! сохранялась ли когда-либо модель
+    //! СЃРѕС…СЂР°РЅСЏР»Р°СЃСЊ Р»Рё РєРѕРіРґР°-Р»РёР±Рѕ РјРѕРґРµР»СЊ
     bool isSavable() const;
 
 public slots:
@@ -56,19 +56,19 @@ public slots:
     void clearLog();
 
 private slots:
-    //! срабатывает при начале перетаскивания элемента с палитры на Сцену
+    //! СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РїСЂРё РЅР°С‡Р°Р»Рµ РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёСЏ СЌР»РµРјРµРЅС‚Р° СЃ РїР°Р»РёС‚СЂС‹ РЅР° РЎС†РµРЅСѓ
     void on_toolsView_pressed(const QModelIndex &index);
 
     void on_startButton_clicked();
 
     void on_stopButton_clicked();
 
-    //! срабатывает при смене текущей вкладки Tabs
+    //! СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РїСЂРё СЃРјРµРЅРµ С‚РµРєСѓС‰РµР№ РІРєР»Р°РґРєРё Tabs
     void on_tabWidget_currentChanged(int index);
 
     void on_simulationLog_customContextMenuRequested(const QPoint &pos);
 
-    //слоты для связи с model
+    //СЃР»РѕС‚С‹ РґР»СЏ СЃРІСЏР·Рё СЃ model
     void onReqGenerated(const logic::request_id& reqID, int event_time);
     void onReqQueued(const int& qID, const logic::request_id& reqID, int event_time);
     void onReqBeganHandling(const int& hID, const logic::request_id& reqID, int event_time);

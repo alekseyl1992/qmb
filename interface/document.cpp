@@ -1,4 +1,4 @@
-#include "interface/document.h"
+п»ї#include "interface/document.h"
 #include "ui_document.h"
 #include "utility/xmlhighlighter.h"
 #include "interface/elementpropwindow.h"
@@ -30,20 +30,20 @@ Document::Document(QWidget *parent) :
 
     new XmlHighlighter(ui->codeEdit);
 
-    //создаем меню для элементов
+    //СЃРѕР·РґР°РµРј РјРµРЅСЋ РґР»СЏ СЌР»РµРјРµРЅС‚РѕРІ
     QMenu *itemMenu = new QMenu(this);
-    itemMenu->addAction("Свойства", new connector(this, [this]
+    itemMenu->addAction("РЎРІРѕР№СЃС‚РІР°", new connector(this, [this]
     {
         ElementPropWindow *propWindow =  new ElementPropWindow(this);
         propWindow->show();
     }), SLOT(signaled()));
 
-    itemMenu->addAction("Удалить", new connector(this, [this]
+    itemMenu->addAction("РЈРґР°Р»РёС‚СЊ", new connector(this, [this]
     {
         scene->removeSelectedItems();
     }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
 
-    //создаём меню для лога
+    //СЃРѕР·РґР°С‘Рј РјРµРЅСЋ РґР»СЏ Р»РѕРіР°
     logMenu = new QMenu(this);
     std::function<void(void)> copyLog =
         [this]
@@ -58,13 +58,13 @@ Document::Document(QWidget *parent) :
             clipboard->setText(strings);
         };
 
-    logMenu->addAction("Копировать выделенные", new connector(this, copyLog), SLOT(signaled()));
+    logMenu->addAction("РљРѕРїРёСЂРѕРІР°С‚СЊ РІС‹РґРµР»РµРЅРЅС‹Рµ", new connector(this, copyLog), SLOT(signaled()));
     QShortcut *copy = new QShortcut(QKeySequence(tr("Ctrl+C", "Log|Copy")),
                               ui->simulationLog);
     ::connect(copy, SIGNAL(activated()), copyLog);
 
 
-    logMenu->addAction("Копировать всё", new connector(this, [this]
+    logMenu->addAction("РљРѕРїРёСЂРѕРІР°С‚СЊ РІСЃС‘", new connector(this, [this]
     {
         QClipboard *clipboard = QApplication::clipboard();
         QString strings;
@@ -75,14 +75,14 @@ Document::Document(QWidget *parent) :
 
         clipboard->setText(strings);
     }), SLOT(signaled()));
-    logMenu->addAction("Очистить", this, SLOT(clearLog()));
+    logMenu->addAction("РћС‡РёСЃС‚РёС‚СЊ", this, SLOT(clearLog()));
 
     scene = new ModelScene(itemMenu, ui->graphicsView);
     ui->graphicsView->setScene(scene);
     storage = new ModelStorage();
     code = ui->codeEdit;
 
-    //связываем сцену с хранилищем
+    //СЃРІСЏР·С‹РІР°РµРј СЃС†РµРЅСѓ СЃ С…СЂР°РЅРёР»РёС‰РµРј
     connect(scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
             storage, SLOT(onItemInserted(ItemType, int, QPoint)));
     connect(scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
@@ -102,25 +102,25 @@ Document::Document(QWidget *parent) :
                     storage->fillModel(scene);
             });
 
-    //создаём окошко для отображения масштаба модели
+    //СЃРѕР·РґР°С‘Рј РѕРєРѕС€РєРѕ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РјР°СЃС€С‚Р°Р±Р° РјРѕРґРµР»Рё
 //    QComboBox *box = new QComboBox(ui->graphicsView);
 //    box->addItem(QIcon(), "100%");
 //    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
 //    effect->setOpacity(0.5);
 //    box->setGraphicsEffect(effect);
 
-    //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
+    //СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ Р·Р°РїРёСЃРё РІ РѕР±СЉРµРєС‚ sLog Рё СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµРµ РїРѕР»Рµ РІ РёРЅС‚РµСЂС„РµР№СЃРµ
     //DEPRECATED
     //connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
     //connect(&sLog, SIGNAL(cleared()), ui->simulationLog, SLOT(clear()));
 
-    //убираем заголовок палитры
+    //СѓР±РёСЂР°РµРј Р·Р°РіРѕР»РѕРІРѕРє РїР°Р»РёС‚СЂС‹
     QWidget *nullHeader = new QWidget(this);
     ui->toolsDock->setTitleBarWidget(nullHeader);
 
-    //меняем вид заголовка лога
+    //РјРµРЅСЏРµРј РІРёРґ Р·Р°РіРѕР»РѕРІРєР° Р»РѕРіР°
     /*QWidget *head = new QWidget(ui->logDock);
-    QLabel *label = new QLabel("Лог симуляции");
+    QLabel *label = new QLabel("Р›РѕРі СЃРёРјСѓР»СЏС†РёРё");
     QPushButton *button = new QPushButton("_");
     QRect geometry = button->geometry();
     geometry.setWidth(geometry.height());
@@ -134,60 +134,60 @@ Document::Document(QWidget *parent) :
     head->setLayout(layout);
     ui->logDock->setTitleBarWidget(head);*/
 
-    //добавляем инструменты
+    //РґРѕР±Р°РІР»СЏРµРј РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹
     QStandardItemModel *model = new QStandardItemModel(ui->toolsView);
     QStandardItem *parentItem = model->invisibleRootItem();
 
-    //основные
-    QStandardItem *groupItem = new QStandardItem("Элементы");
+    //РѕСЃРЅРѕРІРЅС‹Рµ
+    QStandardItem *groupItem = new QStandardItem("Р­Р»РµРјРµРЅС‚С‹");
     groupItem->setSelectable(false);
     //groupItem->setEnabled(false);
     groupItem->setTextAlignment(Qt::AlignCenter);
     groupItem->setEnabled(false);
     parentItem->appendRow(groupItem);
 
-    //генератор
+    //РіРµРЅРµСЂР°С‚РѕСЂ
     QModelIndex generatorIndex;
     {
-        QStandardItem *item = new QStandardItem("Генератор");
+        QStandardItem *item = new QStandardItem("Р“РµРЅРµСЂР°С‚РѕСЂ");
         item->setData(int(ItemType::Generator));
         item->setIcon(QIcon(ModelItem(ItemType::Generator, -1, nullptr).image()));
         //item->setSizeHint(QSize(32, 32));
         groupItem->appendRow(item);
         generatorIndex = item->index();
     }
-    //очередь
+    //РѕС‡РµСЂРµРґСЊ
     {
-        QStandardItem *item = new QStandardItem("Очередь");
+        QStandardItem *item = new QStandardItem("РћС‡РµСЂРµРґСЊ");
         item->setData(int(ItemType::Queue));
         item->setIcon(QIcon(ModelItem(ItemType::Queue, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
-    //обработчик
+    //РѕР±СЂР°Р±РѕС‚С‡РёРє
     {
-        QStandardItem *item = new QStandardItem("Обработчик");
+        QStandardItem *item = new QStandardItem("РћР±СЂР°Р±РѕС‚С‡РёРє");
         item->setData(int(ItemType::Handler));
         item->setIcon(QIcon(ModelItem(ItemType::Handler, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
-    //терминатор
+    //С‚РµСЂРјРёРЅР°С‚РѕСЂ
     {
-        QStandardItem *item = new QStandardItem("Терминатор");
+        QStandardItem *item = new QStandardItem("РўРµСЂРјРёРЅР°С‚РѕСЂ");
         item->setData(int(ItemType::Terminator));
         item->setIcon(QIcon(ModelItem(ItemType::Terminator, -1, nullptr).image()));
         groupItem->appendRow(item);
     }
 
-    /*//Прочее
-    groupItem = new QStandardItem("Прочее");
+    /*//РџСЂРѕС‡РµРµ
+    groupItem = new QStandardItem("РџСЂРѕС‡РµРµ");
     groupItem->setSelectable(false);
     //groupItem->setEnabled(false);
     groupItem->setTextAlignment(Qt::AlignCenter);
     groupItem->setEnabled(false);
     parentItem->appendRow(groupItem);
-    //связь
+    //СЃРІСЏР·СЊ
     {
-        QStandardItem *item = new QStandardItem("Связь");
+        QStandardItem *item = new QStandardItem("РЎРІСЏР·СЊ");
         //item->setData(int(ItemType::Generator));
         item->setIcon(QIcon(":/icons/arrow"));
         //item->setSizeHint(QSize(32, 32));
@@ -198,14 +198,14 @@ Document::Document(QWidget *parent) :
 
     ui->toolsView->setModel(model);
     ui->toolsView->expandAll();
-    //выбираем генератор
+    //РІС‹Р±РёСЂР°РµРј РіРµРЅРµСЂР°С‚РѕСЂ
     ui->toolsView->setCurrentIndex(generatorIndex);
 
-    //формируем лог симуляции
+    //С„РѕСЂРјРёСЂСѓРµРј Р»РѕРі СЃРёРјСѓР»СЏС†РёРё
     logModel = new QStandardItemModel(0, 3, this);
-    logModel->setHeaderData(0, Qt::Horizontal, "Время");
-    logModel->setHeaderData(1, Qt::Horizontal, "Запрос");
-    logModel->setHeaderData(2, Qt::Horizontal, "Статус");
+    logModel->setHeaderData(0, Qt::Horizontal, "Р’СЂРµРјСЏ");
+    logModel->setHeaderData(1, Qt::Horizontal, "Р—Р°РїСЂРѕСЃ");
+    logModel->setHeaderData(2, Qt::Horizontal, "РЎС‚Р°С‚СѓСЃ");
     ui->simulationLog->setModel(logModel);
 
 
@@ -214,7 +214,7 @@ Document::Document(QWidget *parent) :
 
 Document::~Document()
 {
-    //релиз в порядке обратном иниту
+    //СЂРµР»РёР· РІ РїРѕСЂСЏРґРєРµ РѕР±СЂР°С‚РЅРѕРј РёРЅРёС‚Сѓ
     delete storage;
     delete ui;
 }
@@ -252,7 +252,7 @@ void Document::startSimulation()
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem("00:00.000")
                         << new QStandardItem("")
-                        << new QStandardItem("симуляция начата"));
+                        << new QStandardItem("СЃРёРјСѓР»СЏС†РёСЏ РЅР°С‡Р°С‚Р°"));
     ui->simulationLog->scrollToBottom();
 
     model->simulation_start();
@@ -261,7 +261,7 @@ void Document::startSimulation()
 
 void Document::stopSimulation()
 {
-    //TODO повторяющийся код
+    //TODO РїРѕРІС‚РѕСЂСЏСЋС‰РёР№СЃСЏ РєРѕРґ
     bSimulating = false;
     int time = storage->getModel()->simulation_stop();
     ui->graphicsView->setEnabled(true);
@@ -272,7 +272,7 @@ void Document::stopSimulation()
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(time))
                         << new QStandardItem("")
-                        << new QStandardItem("симуляция прервана"));
+                        << new QStandardItem("СЃРёРјСѓР»СЏС†РёСЏ РїСЂРµСЂРІР°РЅР°"));
     ui->simulationLog->scrollToBottom();
 
     //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
@@ -282,7 +282,7 @@ void Document::stopSimulation()
 
 bool Document::isModified() const
 {
-    //TODO проверка на смену настроек симуляции
+    //TODO РїСЂРѕРІРµСЂРєР° РЅР° СЃРјРµРЅСѓ РЅР°СЃС‚СЂРѕРµРє СЃРёРјСѓР»СЏС†РёРё
     return scene->isModified() || code->document()->isModified();
 }
 
@@ -338,8 +338,8 @@ void Document::closeEvent(QCloseEvent *event)
 {
     if(bSimulating)
     {
-        int id = QMessageBox::question(this, "Закрытие модели",
-                                       "Симуляция не завершена, вы действительно хотите закрыть модель?",
+        int id = QMessageBox::question(this, "Р—Р°РєСЂС‹С‚РёРµ РјРѕРґРµР»Рё",
+                                       "РЎРёРјСѓР»СЏС†РёСЏ РЅРµ Р·Р°РІРµСЂС€РµРЅР°, РІС‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ Р·Р°РєСЂС‹С‚СЊ РјРѕРґРµР»СЊ?",
                                        QMessageBox::Yes, QMessageBox::No);
         if(id == QMessageBox::Yes)
             stopSimulation();
@@ -348,13 +348,13 @@ void Document::closeEvent(QCloseEvent *event)
     }
     else if(isModified())
     {
-        int id = QMessageBox::question(this, "Закрытие модели", "Сохранить модель перед закрытием?",
+        int id = QMessageBox::question(this, "Р—Р°РєСЂС‹С‚РёРµ РјРѕРґРµР»Рё", "РЎРѕС…СЂР°РЅРёС‚СЊ РјРѕРґРµР»СЊ РїРµСЂРµРґ Р·Р°РєСЂС‹С‚РёРµРј?",
                                   QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
 
-        //TODO сохранение модели
+        //TODO СЃРѕС…СЂР°РЅРµРЅРёРµ РјРѕРґРµР»Рё
         if(id == QMessageBox::Yes)
         {
-            //если код изменён
+            //РµСЃР»Рё РєРѕРґ РёР·РјРµРЅС‘РЅ
             if(code->document()->isModified())
             {
                 if(tryApplyCode())
@@ -385,7 +385,7 @@ void Document::onSimulationFinished(int event_time)
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem("")
-                        << new QStandardItem("симуляция завершена успешно"));
+                        << new QStandardItem("СЃРёРјСѓР»СЏС†РёСЏ Р·Р°РІРµСЂС€РµРЅР° СѓСЃРїРµС€РЅРѕ"));
     ui->simulationLog->scrollToBottom();
 
     //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
@@ -394,12 +394,12 @@ void Document::onSimulationFinished(int event_time)
 
     int id = QMessageBox::question(
                 this, windowTitle(),
-                "Симуляция завершена успешно!\nПоказать статистику?",
+                "РЎРёРјСѓР»СЏС†РёСЏ Р·Р°РІРµСЂС€РµРЅР° СѓСЃРїРµС€РЅРѕ!\nРџРѕРєР°Р·Р°С‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ?",
                 QMessageBox::Yes, QMessageBox::No);
 
 
     if(id == QMessageBox::Yes)
-        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+        QMessageBox::information(this, windowTitle(), "Р—РґРµСЃСЊ Р±СѓРґРµС‚ РѕС‚РѕР±СЂР°Р¶РµРЅРѕ РѕРєРЅРѕ СЃ СЃРѕР±СЂР°РЅРЅРѕР№ СЃС‚Р°С‚РёСЃС‚РёРєРѕР№.");
 }
 
 void Document::clearLog()
@@ -409,7 +409,7 @@ void Document::clearLog()
 
 void Document::on_toolsView_pressed(const QModelIndex &index)
 {
-    //смена текущего инструмента
+    //СЃРјРµРЅР° С‚РµРєСѓС‰РµРіРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°
     ItemType itemType = (ItemType)index.data(ItemTypeRole).toInt();
     scene->setMode(ModelScene::Mode::InsertItem); //TODO ?
     scene->setItemType(itemType);
@@ -430,20 +430,20 @@ void Document::on_stopButton_clicked()
 {
     if(QMessageBox::question(
                 this, windowTitle(),
-                "Вы действительно хотите прервать симуляцию?",
+                "Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ РїСЂРµСЂРІР°С‚СЊ СЃРёРјСѓР»СЏС†РёСЋ?",
                 QMessageBox::Yes, QMessageBox::No))
         stopSimulation();
 }
 
 void Document::on_tabWidget_currentChanged(int index)
 {
-    //при переключении на вкладку Code, подгружаем код
+    //РїСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё РЅР° РІРєР»Р°РґРєСѓ Code, РїРѕРґРіСЂСѓР¶Р°РµРј РєРѕРґ
     if(index == Tabs::Code)
     {
         ui->codeEdit->clear();
         ui->codeEdit->insertPlainText(storage->getCodeString());
     }
-    else //ушли с вкладки с кодом
+    else //СѓС€Р»Рё СЃ РІРєР»Р°РґРєРё СЃ РєРѕРґРѕРј
     {
         if(ui->codeEdit->document()->isModified())
             if(tryApplyCode())
@@ -462,7 +462,7 @@ bool Document::tryApplyCode()
     catch(const ModelStorage::ParseException& e)
     {
         QMessageBox::critical(this, windowTitle(),
-                              QString("Возникли ошибки при парсе кода:\n\tСтрока: %1\n\tОшибка: %2").arg(e.stringNum()).arg(e.text()));
+                              QString("Р’РѕР·РЅРёРєР»Рё РѕС€РёР±РєРё РїСЂРё РїР°СЂСЃРµ РєРѕРґР°:\n\tРЎС‚СЂРѕРєР°: %1\n\tРћС€РёР±РєР°: %2").arg(e.stringNum()).arg(e.text()));
         return false;
     }
 }
@@ -479,7 +479,7 @@ void Document::onReqGenerated(const logic::request_id &reqID, int event_time)
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem("сгенерирован"));
+                        << new QStandardItem("СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅ"));
 }
 
 void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int event_time)
@@ -489,7 +489,7 @@ void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int e
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem(QString("добавлен в очередь %0")
+                        << new QStandardItem(QString("РґРѕР±Р°РІР»РµРЅ РІ РѕС‡РµСЂРµРґСЊ %0")
                                              .arg(qID)));
     ui->simulationLog->scrollToBottom();
 }
@@ -501,7 +501,7 @@ void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem(QString("попал в обработчик %0")
+                        << new QStandardItem(QString("РїРѕРїР°Р» РІ РѕР±СЂР°Р±РѕС‚С‡РёРє %0")
                                              .arg(hID)));
     ui->simulationLog->scrollToBottom();
 }
@@ -513,7 +513,7 @@ void Document::onReqFinishedHandling(const int &hID, const logic::request_id &re
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem(QString("обработка завершена")));
+                        << new QStandardItem(QString("РѕР±СЂР°Р±РѕС‚РєР° Р·Р°РІРµСЂС€РµРЅР°")));
     ui->simulationLog->scrollToBottom();
 }
 
@@ -524,13 +524,13 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, i
                         << new QStandardItem(QString("%0:%1")
                                              .arg(reqID.__req_gen_id)
                                              .arg(reqID.__req_id))
-                        << new QStandardItem("уничтожен"));
+                        << new QStandardItem("СѓРЅРёС‡С‚РѕР¶РµРЅ"));
     ui->simulationLog->scrollToBottom();
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)
 {
-    QMessageBox::critical(this, "Ошибка", QString("Не возможно соединить %0 и %1.")
+    QMessageBox::critical(this, "РћС€РёР±РєР°", QString("РќРµ РІРѕР·РјРѕР¶РЅРѕ СЃРѕРµРґРёРЅРёС‚СЊ %0 Рё %1.")
                           .arg(itemTypeToString(fromType))
                           .arg(itemTypeToString(toType)));
 }

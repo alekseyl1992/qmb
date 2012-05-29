@@ -1,15 +1,15 @@
-#ifndef HOMEWIDGET_H
+п»ї#ifndef HOMEWIDGET_H
 #define HOMEWIDGET_H
 
 #include <QDialog>
 #include <QDebug>
 
-//! Пространство окон интерфейса
+//! РџСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ РѕРєРѕРЅ РёРЅС‚РµСЂС„РµР№СЃР°
 namespace Ui {
 class HomeWidget;
 }
 
-//! Класс вкладки Домашняя страница
+//! РљР»Р°СЃСЃ РІРєР»Р°РґРєРё Р”РѕРјР°С€РЅСЏСЏ СЃС‚СЂР°РЅРёС†Р°
 class HomeWidget : public QDialog
 {
     Q_OBJECT

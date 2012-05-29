@@ -1,4 +1,4 @@
-#ifndef H_REQUEST_ID
+п»ї#ifndef H_REQUEST_ID
 #define H_REQUEST_ID
 
 #include <iostream>
@@ -8,7 +8,7 @@
 
 namespace logic
 {
-    //! Структура идентификатора сообщения (запроса).
+    //! РЎС‚СЂСѓРєС‚СѓСЂР° РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° СЃРѕРѕР±С‰РµРЅРёСЏ (Р·Р°РїСЂРѕСЃР°).
 	struct request_id
 	{
         request_id();
