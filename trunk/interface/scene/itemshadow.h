@@ -1,10 +1,10 @@
-#ifndef ITEMSHADOW_H
+п»ї#ifndef ITEMSHADOW_H
 #define ITEMSHADOW_H
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsItem>
 
 /*!
- * Интерфейс. Если наследоваться от этого класса, то у наследника появиться тень
+ * РРЅС‚РµСЂС„РµР№СЃ. Р•СЃР»Рё РЅР°СЃР»РµРґРѕРІР°С‚СЊСЃСЏ РѕС‚ СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°, С‚Рѕ Сѓ РЅР°СЃР»РµРґРЅРёРєР° РїРѕСЏРІРёС‚СЊСЃСЏ С‚РµРЅСЊ
  */
 class ItemShadow
 {

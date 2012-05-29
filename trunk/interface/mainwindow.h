@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+п»ї#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include "interface/document.h"
@@ -10,7 +10,7 @@ namespace Ui {
 class MainWindow;
 }
 
-//! Класс главного окна
+//! РљР»Р°СЃСЃ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР°
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -31,7 +31,7 @@ public slots:
 
     void onAbout();
 
-    //! срабатывает при переключении на вкладку с другой моделью и при создании новой
+    //! СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РїСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё РЅР° РІРєР»Р°РґРєСѓ СЃ РґСЂСѓРіРѕР№ РјРѕРґРµР»СЊСЋ Рё РїСЂРё СЃРѕР·РґР°РЅРёРё РЅРѕРІРѕР№
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
     void openModel(const QString& path);
@@ -40,7 +40,7 @@ public slots:
 
     void closeEvent(QCloseEvent *event);    
 
-    //! Создаёт вкладку с Домашней страницей
+    //! РЎРѕР·РґР°С‘С‚ РІРєР»Р°РґРєСѓ СЃ Р”РѕРјР°С€РЅРµР№ СЃС‚СЂР°РЅРёС†РµР№
     void createHomeWidget();
 
 private:
@@ -49,7 +49,7 @@ private:
     QMenu *mainMenu;
     QMdiSubWindow *homeTab;
 
-    //! Создаёт кнопку QMB и её меню
+    //! РЎРѕР·РґР°С‘С‚ РєРЅРѕРїРєСѓ QMB Рё РµС‘ РјРµРЅСЋ
     void createMenuButton();
 };
 

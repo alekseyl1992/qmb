@@ -1,4 +1,4 @@
-/****************************************************************************
+п»ї/****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
@@ -42,7 +42,7 @@
 
 #include "modelscene.h"
 #include "arrow.h"
-#include "logic/model.h" //TODO только из-за supportedLinks()
+#include "logic/model.h" //TODO С‚РѕР»СЊРєРѕ РёР·-Р·Р° supportedLinks()
 
 ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     : QGraphicsScene(parent)
@@ -76,7 +76,7 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
 {
     ModelItem *startItem = nullptr;
     ModelItem *endItem = nullptr;
-    //ищем item'ы по их id
+    //РёС‰РµРј item'С‹ РїРѕ РёС… id
     foreach(QGraphicsItem *qItem, items())
     {
         ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
@@ -103,8 +103,8 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
     /*else
         QMessageBox::critical(
                     (QWidget *)parent(),
-                    "Ошибка",
-                    QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4")
+                    "РћС€РёР±РєР°",
+                    QString("РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё СЃРІСЏР·Рё РЅР° СЃС†РµРЅСѓ:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4")
                         .arg((int)fromType)
                         .arg(idFrom)
                         .arg((int)toType)
@@ -136,13 +136,13 @@ void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
 
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    //Выделение по ПКМ
+    //Р’С‹РґРµР»РµРЅРёРµ РїРѕ РџРљРњ
     if(mouseEvent->button() == Qt::RightButton)
     {
         QGraphicsItem *item = itemAt(mouseEvent->scenePos());
         if(item)
         {
-            //если нажали на невыделенном элементе
+            //РµСЃР»Рё РЅР°Р¶Р°Р»Рё РЅР° РЅРµРІС‹РґРµР»РµРЅРЅРѕРј СЌР»РµРјРµРЅС‚Рµ
             if(!item->isSelected())
                 clearSelection();
 
@@ -170,7 +170,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
-    //если что-то выбрано и мышь находиться над выбранным элементом
+    //РµСЃР»Рё С‡С‚Рѕ-С‚Рѕ РІС‹Р±СЂР°РЅРѕ Рё РјС‹С€СЊ РЅР°С…РѕРґРёС‚СЊСЃСЏ РЅР°Рґ РІС‹Р±СЂР°РЅРЅС‹Рј СЌР»РµРјРµРЅС‚РѕРј
     QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos());
     /*qDebug() << !selectedItems().empty();
     qDebug() << qItem;
@@ -191,7 +191,7 @@ void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     else if (myMode == MoveItem)
     {
         QGraphicsScene::mouseMoveEvent(mouseEvent);
-        //ресайз сцены при перемещаении элемента
+        //СЂРµСЃР°Р№Р· СЃС†РµРЅС‹ РїСЂРё РїРµСЂРµРјРµС‰Р°РµРЅРёРё СЌР»РµРјРµРЅС‚Р°
         resizeToPoint(mouseEvent->scenePos());
     }
 }
@@ -219,7 +219,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 qgraphicsitem_cast<ModelItem *>(startItems.first());
             ModelItem *endItem =
                 qgraphicsitem_cast<ModelItem *>(endItems.first());
-            //проверка связи на валидность
+            //РїСЂРѕРІРµСЂРєР° СЃРІСЏР·Рё РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ
             if(count(supportedLinks.begin(),
                     supportedLinks.end(),
                     link(startItem->itemType(), endItem->itemType())))
@@ -244,7 +244,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
     else if(myMode == MoveItem)
     {
-        //проход по всем на случай, если была премещена сразу группа элементов
+        //РїСЂРѕС…РѕРґ РїРѕ РІСЃРµРј РЅР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё Р±С‹Р»Р° РїСЂРµРјРµС‰РµРЅР° СЃСЂР°Р·Сѓ РіСЂСѓРїРїР° СЌР»РµРјРµРЅС‚РѕРІ
 
         foreach(QGraphicsItem *qItem, items())
         {
@@ -270,7 +270,7 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if(event->modifiers().testFlag(Qt::KeyboardModifier::ControlModifier))
     {
-        //мастабирование окна
+        //РјР°СЃС‚Р°Р±РёСЂРѕРІР°РЅРёРµ РѕРєРЅР°
         double scaleFactor = 1.2;
 
         if(event->delta() < 0)
@@ -302,7 +302,7 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
             }
         }
     }
-    else //прокрутка
+    else //РїСЂРѕРєСЂСѓС‚РєР°
         QGraphicsScene::wheelEvent(event);
 }
 
@@ -320,7 +320,7 @@ void ModelScene::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
 void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    //ресайз сцены при добавлении элемента
+    //СЂРµСЃР°Р№Р· СЃС†РµРЅС‹ РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё СЌР»РµРјРµРЅС‚Р°
     resizeToPoint(event->scenePos());
 
     ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType));
@@ -368,7 +368,7 @@ void ModelScene::resizeToPoint(QPointF pos)
 
 int ModelScene::getFreeId(ItemType itemType)
 {
-    //формируем список занятых id
+    //С„РѕСЂРјРёСЂСѓРµРј СЃРїРёСЃРѕРє Р·Р°РЅСЏС‚С‹С… id
     QSet<int> ids;
     int maxId = 1;
     int minId = 0;
@@ -388,21 +388,21 @@ int ModelScene::getFreeId(ItemType itemType)
         }
     }
 
-    //ищем свободный
+    //РёС‰РµРј СЃРІРѕР±РѕРґРЅС‹Р№
     if(!ids.empty())
     {
-        if(minId != 1) //если есть пропуск вначале
+        if(minId != 1) //РµСЃР»Рё РµСЃС‚СЊ РїСЂРѕРїСѓСЃРє РІРЅР°С‡Р°Р»Рµ
             return 1;
 
-        //ищем разрыв в нумерации
+        //РёС‰РµРј СЂР°Р·СЂС‹РІ РІ РЅСѓРјРµСЂР°С†РёРё
         for(auto it = ids.begin(); it != ids.end()-1; ++it)
             if((*it+1) != *(it+1))
                 return (*it+1);
 
-        //не нашли, значит max
+        //РЅРµ РЅР°С€Р»Рё, Р·РЅР°С‡РёС‚ max
         return maxId + 1;
     }
-    else //пустая сцена
+    else //РїСѓСЃС‚Р°СЏ СЃС†РµРЅР°
         return 1;
 }
 

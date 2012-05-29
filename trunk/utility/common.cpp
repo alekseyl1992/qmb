@@ -1,17 +1,17 @@
-#include "common.h"
+п»ї#include "common.h"
 
 QString itemTypeToString(ItemType type)
 {
     switch (type)
     {
         case ItemType::Generator:
-            return "Генератор";
+            return "Р“РµРЅРµСЂР°С‚РѕСЂ";
         case ItemType::Queue:
-            return "Очередь";
+            return "РћС‡РµСЂРµРґСЊ";
         case ItemType::Handler:
-            return "Обработчик";
+            return "РћР±СЂР°Р±РѕС‚С‡РёРє";
         case ItemType::Terminator:
-            return "Терминатор";
+            return "РўРµСЂРјРёРЅР°С‚РѕСЂ";
 
     default:
         return "IllegalItemType";

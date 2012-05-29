@@ -1,11 +1,11 @@
-#ifndef LSFSS_H
+п»ї#ifndef LSFSS_H
 #define LSFSS_H
 
 #include <QObject>
 #include <functional>
 
 /*!
- * Класс, позволяющий использовать lambda-exressions из C++11 в качестве аргумнта функции Qt connect()
+ * РљР»Р°СЃСЃ, РїРѕР·РІРѕР»СЏСЋС‰РёР№ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ lambda-exressions РёР· C++11 РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРЅС‚Р° С„СѓРЅРєС†РёРё Qt connect()
  */
 class connector : public QObject {
     Q_OBJECT

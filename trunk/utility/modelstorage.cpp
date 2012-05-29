@@ -1,10 +1,10 @@
-#include "modelstorage.h"
+п»ї#include "modelstorage.h"
 #include <QPoint>
 
 ModelStorage::ModelStorage() : myModel(nullptr)
 {
     curDoc = new QDomDocument("qmodel");
-    //необходимо для правильного чтения кириллицы из xml
+    //РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕРіРѕ С‡С‚РµРЅРёСЏ РєРёСЂРёР»Р»РёС†С‹ РёР· xml
     QDomNode DocType = curDoc->createProcessingInstruction("xml", "version=\"1.0\" encoding=\"Windows-1251\"");
     curDoc->appendChild(DocType);
     currentPath = "";
@@ -14,7 +14,7 @@ logic::model* ModelStorage::getModel(bool create)
 {  
     const int Link = 4;
 
-    if(create) //создание модели
+    if(create) //СЃРѕР·РґР°РЅРёРµ РјРѕРґРµР»Рё
     {
         QMap<QString, int> entries;
         entries[ItemNames[0]] = int(ItemType::Generator);
@@ -92,7 +92,7 @@ QString ModelStorage::getModelName() const
 {
     if (root.hasAttribute("name"))
         return root.attribute("name");
-    else return "<некорректное название>";
+    else return "<РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРµ РЅР°Р·РІР°РЅРёРµ>";
 }
 
 void ModelStorage::setModelName(const QString &name)
@@ -103,7 +103,7 @@ void ModelStorage::setModelName(const QString &name)
 
 bool ModelStorage::createModel(const QString &name)
 {
-    // здесь exception бы какой-нить
+    // Р·РґРµСЃСЊ exception Р±С‹ РєР°РєРѕР№-РЅРёС‚СЊ
     root = curDoc->createElement("model");
     root.setAttribute("name",name);
     curDoc->appendChild(root);
@@ -113,7 +113,7 @@ bool ModelStorage::createModel(const QString &name)
 bool ModelStorage::openModel(const QString& path)
 {
     QFile xmlFile(path);
-    //считываем данные из xml файла в QDomDocument
+    //СЃС‡РёС‚С‹РІР°РµРј РґР°РЅРЅС‹Рµ РёР· xml С„Р°Р№Р»Р° РІ QDomDocument
     if (xmlFile.open(QIODevice::ReadOnly))
     {
         delete curDoc;
@@ -155,7 +155,7 @@ bool ModelStorage::saveModelAs(const QString &path)
 
 bool ModelStorage::undoModel()
 {
-    return true; //если откат произведён
+    return true; //РµСЃР»Рё РѕС‚РєР°С‚ РїСЂРѕРёР·РІРµРґС‘РЅ
 }
 
 void ModelStorage::fillModel(IFillableModel *iModel) const
@@ -229,15 +229,15 @@ bool ModelStorage::setCodeString(QString code)
         qDebug() << "SetCodeString::Error!";
         return false;
     }
-    //при возникновении ошибки:
+    //РїСЂРё РІРѕР·РЅРёРєРЅРѕРІРµРЅРёРё РѕС€РёР±РєРё:
     //throw ParseException("some text", stringNumber);
 
-    //QDom технология считывает и строит все дерево сразу
-    //QSax обрабатывает текст построчно... поэтому реализация исключений
-    //с возвратом номера строки я думаю невозможна. нужно что-нибудь другое.
+    //QDom С‚РµС…РЅРѕР»РѕРіРёСЏ СЃС‡РёС‚С‹РІР°РµС‚ Рё СЃС‚СЂРѕРёС‚ РІСЃРµ РґРµСЂРµРІРѕ СЃСЂР°Р·Сѓ
+    //QSax РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ С‚РµРєСЃС‚ РїРѕСЃС‚СЂРѕС‡РЅРѕ... РїРѕСЌС‚РѕРјСѓ СЂРµР°Р»РёР·Р°С†РёСЏ РёСЃРєР»СЋС‡РµРЅРёР№
+    //СЃ РІРѕР·РІСЂР°С‚РѕРј РЅРѕРјРµСЂР° СЃС‚СЂРѕРєРё СЏ РґСѓРјР°СЋ РЅРµРІРѕР·РјРѕР¶РЅР°. РЅСѓР¶РЅРѕ С‡С‚Рѕ-РЅРёР±СѓРґСЊ РґСЂСѓРіРѕРµ.
 }
 
-// реализация слотов //
+// СЂРµР°Р»РёР·Р°С†РёСЏ СЃР»РѕС‚РѕРІ //
 void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
 {
     QDomElement InsertedItem;
@@ -329,7 +329,7 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
         RemovedLink = RemovedLink.nextSiblingElement();
     }
 }
-// end реализация слотов //
+// end СЂРµР°Р»РёР·Р°С†РёСЏ СЃР»РѕС‚РѕРІ //
 
 void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID)
 {

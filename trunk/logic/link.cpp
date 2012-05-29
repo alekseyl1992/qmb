@@ -1,4 +1,4 @@
-#include "link.h"
+﻿#include "link.h"
 
 namespace logic
 {

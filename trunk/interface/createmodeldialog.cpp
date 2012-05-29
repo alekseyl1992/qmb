@@ -1,4 +1,4 @@
-#include "createmodeldialog.h"
+п»ї#include "createmodeldialog.h"
 #include "ui_createmodeldialog.h"
 #include <QFileDialog>
 #include <QUrl>
@@ -9,7 +9,7 @@ CreateModelDialog::CreateModelDialog(QWidget *parent) :
     ui(new Ui::CreateModelDialog)
 {
     ui->setupUi(this);
-    ui->name->setText("Модель 1");
+    ui->name->setText("РњРѕРґРµР»СЊ 1");
 }
 
 CreateModelDialog::~CreateModelDialog()

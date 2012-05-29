@@ -1,4 +1,4 @@
-/****************************************************************************
+п»ї/****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
@@ -57,10 +57,10 @@ class QGraphicsTextItem;
 class QColor;
 QT_END_NAMESPACE
 
-//! Класс Сцены
+//! РљР»Р°СЃСЃ РЎС†РµРЅС‹
 /*!
- * Представляет собой основную рабочую поверхность интерфейса программы.
- * На неё могут быть добавлены объекты классов ModelItem и Arrow
+ * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕСЃРЅРѕРІРЅСѓСЋ СЂР°Р±РѕС‡СѓСЋ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ РёРЅС‚РµСЂС„РµР№СЃР° РїСЂРѕРіСЂР°РјРјС‹.
+ * РќР° РЅРµС‘ РјРѕРіСѓС‚ Р±С‹С‚СЊ РґРѕР±Р°РІР»РµРЅС‹ РѕР±СЉРµРєС‚С‹ РєР»Р°СЃСЃРѕРІ ModelItem Рё Arrow
  */
 class ModelScene : public QGraphicsScene, public IFillableModel
 {
@@ -81,7 +81,7 @@ public:
 
     void removeSelectedItems();
 
-    //модель изменена?
+    //РјРѕРґРµР»СЊ РёР·РјРµРЅРµРЅР°?
     bool isModified()
     { return bModified; }
     void setModified(bool m)
@@ -91,7 +91,7 @@ public slots:
     void setItemType(ItemType type);
 
 signals:
-    //сигналы для оперативного изменения XML-дерева
+    //СЃРёРіРЅР°Р»С‹ РґР»СЏ РѕРїРµСЂР°С‚РёРІРЅРѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ XML-РґРµСЂРµРІР°
     void itemInserted(ItemType type, int id, QPoint pos);
     void itemMoved(ItemType type, int id, QPoint pos);
     void itemRemoved(ItemType type, int id);
@@ -114,7 +114,7 @@ protected:
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
-    qreal myScale; //текущий масштаб сцены
+    qreal myScale; //С‚РµРєСѓС‰РёР№ РјР°СЃС€С‚Р°Р± СЃС†РµРЅС‹
     ItemType myItemType; //TODO ?
     QMenu *myItemMenu;
     Mode myMode;
@@ -130,7 +130,7 @@ private:
     std::vector<link> supportedLinks;
 
     void resizeToPoint(QPointF pos);
-    int getFreeId(ItemType itemType); //находит ближайщий пустой id
+    int getFreeId(ItemType itemType); //РЅР°С…РѕРґРёС‚ Р±Р»РёР¶Р°Р№С‰РёР№ РїСѓСЃС‚РѕР№ id
 };
 
 #endif // MODELSCENE_H

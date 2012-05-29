@@ -1,11 +1,11 @@
-#ifndef COMMON_H
+п»ї#ifndef COMMON_H
 #define COMMON_H
 
 #include <QPointF>
 #include <QString>
 #include <chrono>
 
-//! Перечисление составляющих модели
+//! РџРµСЂРµС‡РёСЃР»РµРЅРёРµ СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёС… РјРѕРґРµР»Рё
 enum class ItemType : int
 {
     Generator,
@@ -14,10 +14,10 @@ enum class ItemType : int
     Terminator
 };
 
-//! Преобразует тип элемента в строковое представление
+//! РџСЂРµРѕР±СЂР°Р·СѓРµС‚ С‚РёРї СЌР»РµРјРµРЅС‚Р° РІ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
 QString itemTypeToString(ItemType type);
 
-//! Вычисляет расстояние маежду двумя точками
+//! Р’С‹С‡РёСЃР»СЏРµС‚ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјР°РµР¶РґСѓ РґРІСѓРјСЏ С‚РѕС‡РєР°РјРё
 qreal distance(QPointF p1, QPointF p2);
 
 typedef unsigned long long ull_t;

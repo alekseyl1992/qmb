@@ -1,9 +1,9 @@
-#ifndef IFILLABLESCENE_H
+п»ї#ifndef IFILLABLESCENE_H
 #define IFILLABLESCENE_H
 #include "utility/common.h"
 #include <QPoint>
 
-//! интерфейс для заполнения модели из ModelStorage
+//! РёРЅС‚РµСЂС„РµР№СЃ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ РјРѕРґРµР»Рё РёР· ModelStorage
 class IFillableModel
 {
 public:

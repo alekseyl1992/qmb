@@ -1,4 +1,4 @@
-#ifndef H_REQUEST
+п»ї#ifndef H_REQUEST
 #define H_REQUEST
 
 #include <ostream>
@@ -10,7 +10,7 @@
 
 namespace logic
 {
-    //! Класс сообщения (запроса).
+    //! РљР»Р°СЃСЃ СЃРѕРѕР±С‰РµРЅРёСЏ (Р·Р°РїСЂРѕСЃР°).
 	class request
 	{
 	public:

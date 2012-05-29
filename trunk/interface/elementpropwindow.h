@@ -1,4 +1,4 @@
-#ifndef ELEMENTPROPWINDOW_H
+п»ї#ifndef ELEMENTPROPWINDOW_H
 #define ELEMENTPROPWINDOW_H
 
 #include <QDialog>
@@ -7,7 +7,7 @@ namespace Ui {
 class ElementPropWindow;
 }
 
-//! Класс окна свойств элемента сцены
+//! РљР»Р°СЃСЃ РѕРєРЅР° СЃРІРѕР№СЃС‚РІ СЌР»РµРјРµРЅС‚Р° СЃС†РµРЅС‹
 class ElementPropWindow : public QDialog
 {
     Q_OBJECT

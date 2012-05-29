@@ -1,4 +1,4 @@
-#include "elementpropwindow.h"
+﻿#include "elementpropwindow.h"
 #include "ui_elementpropwindow.h"
 
 ElementPropWindow::ElementPropWindow(QWidget *parent) :

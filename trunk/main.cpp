@@ -1,26 +1,30 @@
-#include <QtGui/QApplication>
+п»ї#include <QtGui/QApplication>
 #include <QTranslator>
 #include "interface/mainwindow.h"
 
-/*! \mainpage QMB. Технический отчёт
+/*! \mainpage QMB. РўРµС…РЅРёС‡РµСЃРєРёР№ РѕС‚С‡С‘С‚
  *
- * \section intro_sec Краткое описание
+ * \section intro_sec РљСЂР°С‚РєРѕРµ РѕРїРёСЃР°РЅРёРµ
  *
- * QMB - Queueing Model Builder, программа, предназначенная для создания, редактирования, симуляции и сбора статистики систем массового обслуживания (СМО).
- * @n Адрес проекта: @link http://code.google.com/p/qmb/ @endlink
- *
- * \section obtain_sec Получение исходных кодов
- * Для получения актуальной версии исходных кодов необходимо установить любой SVN-клиент.
- * Затем выполнить:
+ * QMB - Queueing Model Builder, РїСЂРѕРіСЂР°РјРјР°, РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅРЅР°СЏ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ, СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ, СЃРёРјСѓР»СЏС†РёРё Рё СЃР±РѕСЂР° СЃС‚Р°С‚РёСЃС‚РёРєРё СЃРёСЃС‚РµРј РјР°СЃСЃРѕРІРѕРіРѕ РѕР±СЃР»СѓР¶РёРІР°РЅРёСЏ (РЎРњРћ).
+ * @n РђРґСЂРµСЃ РїСЂРѕРµРєС‚Р°: <a href="http://code.google.com/p/qmb/">http://code.google.com/p/qmb/</a>
+ * @n@n Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё:
+ * - Р›РµРѕРЅС‚СЊРµРІ РђР»РµРєСЃРµР№
+ * - Р›Р°С‚РєРёРЅ РРіРѕСЂСЊ
+ * - РќР°Р·Р°СЂРѕРІ РљРѕРЅСЃС‚Р°РЅС‚РёРЅ
+ * @n@n РњР“РўРЈ РёРјРµРЅРё Рќ.Р­. Р‘Р°СѓРјР°РЅР°, 2012 РіРѕРґ
+ * \section obtain_sec РџРѕР»СѓС‡РµРЅРёРµ РёСЃС…РѕРґРЅС‹С… РєРѕРґРѕРІ
+ * Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ Р°РєС‚СѓР°Р»СЊРЅРѕР№ РІРµСЂСЃРёРё РёСЃС…РѕРґРЅС‹С… РєРѕРґРѕРІ РЅРµРѕР±С…РѕРґРёРјРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ Р»СЋР±РѕР№ SVN-РєР»РёРµРЅС‚.
+ * Р—Р°С‚РµРј РІС‹РїРѕР»РЅРёС‚СЊ:
  * <pre> svn checkout http://qmb.googlecode.com/svn/trunk/ qmb-read-only </pre>
  *
- * \section install_sec Развёртка проекта
- * - Скачать и установить Qt Creator
- * -- Ссылка: @link http://qt.nokia.com/downloads @endlink
- * - Скачать и установить MinGW 4.6.3
- * -- Ссылка: @link http://sourceforge.net/projects/mingw/files/ @endlink
- * - Подключить MinGW к Qt
- * - Открыть проект в Qt Creator
+ * \section install_sec Р Р°Р·РІС‘СЂС‚РєР° РїСЂРѕРµРєС‚Р°
+ * - РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ Qt Creator
+ *   - РЎСЃС‹Р»РєР°: <a href="http://qt.nokia.com/downloads/">http://qt.nokia.com/downloads/</a>
+ * - РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ MinGW 4.6.3
+ *   - РЎСЃС‹Р»РєР°: <a href="http://sourceforge.net/projects/mingw/files/">http://sourceforge.net/projects/mingw/files/</a>
+ * - РџРѕРґРєР»СЋС‡РёС‚СЊ MinGW Рє Qt
+ * - РћС‚РєСЂС‹С‚СЊ РїСЂРѕРµРєС‚ РІ Qt Creator
  */
 
 int main(int argc, char *argv[])
