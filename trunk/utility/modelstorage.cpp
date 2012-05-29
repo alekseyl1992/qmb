@@ -107,6 +107,8 @@ bool ModelStorage::createModel(const QString &name)
     root = curDoc->createElement("model");
     root.setAttribute("name",name);
     curDoc->appendChild(root);
+    // чтобы не было бага, при отмене, когда и отменять то нечего
+    backuproot = root.cloneNode().toElement();
     return true;
 }
 
@@ -155,6 +157,10 @@ bool ModelStorage::saveModelAs(const QString &path)
 
 bool ModelStorage::undoModel()
 {
+    curDoc->removeChild(root);
+    root = backuproot;
+    curDoc->appendChild(root);
+
     return true; //если откат произведён
 }
 
@@ -240,6 +246,8 @@ bool ModelStorage::setCodeString(QString code)
 // реализация слотов //
 void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
 {
+    backuproot = root.cloneNode().toElement();
+
     QDomElement InsertedItem;
     InsertedItem = curDoc->createElement(ItemNames[(int)type]);
     InsertedItem.setAttribute("id",id);
@@ -264,7 +272,7 @@ void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
 }
 
 void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
-{
+{   
     QDomElement MovedItem = root.firstChildElement();
 
     while (!MovedItem.isNull())
@@ -272,6 +280,12 @@ void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
         if ( (MovedItem.nodeName()==ItemNames[(int)type]) &&
         (MovedItem.attribute("id").toInt()==id) )
         {
+            if ( MovedItem.attribute("x").toInt()!=pos.x() &&
+                 MovedItem.attribute("y").toInt()!=pos.y() )
+               // если координаты действительно разные, то бекап.
+               // сделано из-за того, что событие срабатывает при нажатии на элемент
+               // необязательно сдвиге
+                 backuproot = root.cloneNode().toElement();
             MovedItem.setAttribute("x",pos.x());
             MovedItem.setAttribute("y",pos.y());
         }
@@ -281,6 +295,8 @@ void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
 
 void ModelStorage::onItemRemoved(ItemType type, int id)
 {
+    backuproot = root.cloneNode().toElement();
+
     QDomElement RemovedItem = root.firstChildElement();
     QDomElement ExistedLink = root.firstChildElement();
 
@@ -306,6 +322,8 @@ void ModelStorage::onItemRemoved(ItemType type, int id)
 
 void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
+    backuproot = root.cloneNode().toElement();
+
     QDomElement InsertedLink;
     InsertedLink = curDoc->createElement(ItemNames[4]); // 4 is Link
     InsertedLink.setAttribute("from",ItemNames[int(fromType)]);
@@ -317,6 +335,8 @@ void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType
 
 void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
+    backuproot = root.cloneNode().toElement();
+
     QDomElement RemovedLink = root.firstChildElement();
     while (!RemovedLink.isNull())
     {
