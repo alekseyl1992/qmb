@@ -69,5 +69,7 @@ FORMS    += interface/mainwindow.ui \
 OTHER_FILES += \
     TODO.txt
 
+RC_FILE = qmb.rc
+
 RESOURCES += \
     resources.qrc

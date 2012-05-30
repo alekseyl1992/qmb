@@ -1,0 +1,2 @@
+QMB распространяется под лицензией GNU LGPL:
+http://www.gnu.org/licenses/lgpl.html
