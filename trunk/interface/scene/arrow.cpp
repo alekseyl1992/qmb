@@ -96,7 +96,7 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     QPen myPen = pen();
     myPen.setColor(myColor);
-    qreal arrowSize = 20;
+    qreal arrowSize = 16;
     painter->setPen(myPen);
 
     painter->setBrush(myColor);
@@ -127,10 +127,12 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     if (line().dy() >= 0)
         angle = (Pi * 2) - angle;
 
-    QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize,
-                                    cos(angle + Pi / 3) * arrowSize);
-    QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
-                                    cos(angle + Pi - Pi / 3) * arrowSize);
+    qreal sharpness =  2.5;
+
+    QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / sharpness) * arrowSize,
+                                    cos(angle + Pi / sharpness) * arrowSize);
+    QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / sharpness) * arrowSize,
+                                    cos(angle + Pi - Pi / sharpness) * arrowSize);
 
     arrowHead.clear();
     arrowHead << line().p1() << arrowP1 << arrowP2;

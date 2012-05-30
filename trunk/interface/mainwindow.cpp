@@ -28,6 +28,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createMenuButton();
     createHomeWidget();
+
+    //запуск с параметрами
+    if(QApplication::arguments().count() > 1)
+    {
+        foreach(QString arg, QApplication::arguments())
+        {
+            if(arg.endsWith(".qm"))
+                openModel(arg);
+        }
+    }
 }
 
 MainWindow::~MainWindow()
