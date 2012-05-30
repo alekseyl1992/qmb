@@ -76,6 +76,9 @@ private slots:
     void onReqTerminated(const int& tID, const logic::request_id& reqID, int event_time);
     void onWrongLink(ItemType fromType, ItemType toType);
 
+signals:
+    void saveDialogRequest();
+
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
     Ui::Document *ui;

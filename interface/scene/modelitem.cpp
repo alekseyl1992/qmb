@@ -54,6 +54,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
     iPen.setWidth(2);
     setPen(iPen);
     bModified = false;
+    qreal dhs = 0; //отступ hotspot
 
     QPainterPath path;
     QRectF itemRect(0, 0, 200, 100);
@@ -62,22 +63,22 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
             path.addRect(itemRect);
             path.addPolygon(QPolygonF() << QPointF(200, 0) << QPointF(230, 50) << QPointF(200, 100));
             path = path.simplified();
-            hotSpots << QPoint(230, 50);
+            hotSpots << QPoint(230+dhs, 50);
             break;
 
         case ItemType::Queue:
             path.addRect(itemRect);
-            hotSpots << QPoint(itemRect.left(),
+            hotSpots << QPoint(itemRect.left()-dhs,
                                 (itemRect.bottom()-itemRect.top())/2);
-            hotSpots << QPoint(itemRect.right(),
+            hotSpots << QPoint(itemRect.right()+dhs,
                                 (itemRect.bottom()-itemRect.top())/2);
             break;
 
         case ItemType::Handler:
             path.addRoundedRect(itemRect, 25, 25);
-            hotSpots << QPoint(itemRect.left(),
+            hotSpots << QPoint(itemRect.left()-dhs,
                                 (itemRect.bottom()-itemRect.top())/2);
-            hotSpots << QPoint(itemRect.right(),
+            hotSpots << QPoint(itemRect.right()+dhs,
                                 (itemRect.bottom()-itemRect.top())/2);
             break;
 
@@ -85,7 +86,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
             path.addRect(itemRect.translated(30, 0));
             path.addPolygon(QPolygonF() << QPointF(30, 0) << QPointF(0, 50) << QPointF(30, 100));
             path = path.simplified();
-            hotSpots << QPoint(0, 50);
+            hotSpots << QPoint(0-dhs, 50);
             break;
     }
 

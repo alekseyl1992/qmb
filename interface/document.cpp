@@ -16,6 +16,7 @@
 #include <QListWidgetItem>
 #include <QStandardItem>
 #include <QShortcut>
+#include <QFileDialog>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
@@ -316,7 +317,16 @@ bool Document::openModel(const QString &path)
 
 bool Document::saveModel()
 {
-    return storage->saveModel();
+    if(isSavable()) //если уже сохраняли
+        return storage->saveModel();
+    else //только при закрытии программы
+    {
+        //диалог сохранения
+        QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
+                                     QApplication::applicationDirPath() + "/models/",
+                                     "QMB XML Model (*.qm)");
+        return storage->saveModelAs(path);
+    }
 }
 
 bool Document::saveModelAs(const QString &path)
@@ -346,7 +356,8 @@ void Document::closeEvent(QCloseEvent *event)
         else
             return event->ignore();
     }
-    else if(isModified())
+
+    if(isModified())
     {
         int id = QMessageBox::question(this, "Закрытие модели", "Сохранить модель перед закрытием?",
                                   QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
@@ -358,10 +369,10 @@ void Document::closeEvent(QCloseEvent *event)
             if(code->document()->isModified())
             {
                 if(tryApplyCode())
-                    storage->saveModel();
+                    saveModel();
             }
             else
-                storage->saveModel();
+                saveModel();
         }
         else if(id == QMessageBox::Cancel)
             event->ignore();
