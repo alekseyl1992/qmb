@@ -3,7 +3,7 @@
 #include "utility/modelstorage.h"
 #include "interface/homewidget.h"
 #include "interface/createmodeldialog.h"
-#include <QUrl>
+#include "interface/aboutdialog.h"
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QMdiSubWindow>
@@ -12,6 +12,8 @@
 #include <QFont>
 #include <QMenu>
 #include <QTimer>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "utility/lsfss.h"
 
@@ -194,13 +196,19 @@ void MainWindow::onSaveModelAs()
 
 void MainWindow::onAbout()
 {
-    QMessageBox::about(this, "О программе",
+    /*QMessageBox::about(this, "О программе",
                              "Queueing Model Builder v0.1 beta\n\n"
                              "Разработчики:\n"
                              " Леонтьев Алексей\n"
                              " Латкин Игорь\n"
                              " Назаров Константин\n\n"
-                             "\t\t\t\t2012 г.");
+                             "\t\t\t\t2012 г.");*/
+    AboutDialog(this).exec();
+}
+
+void MainWindow::openHelp()
+{
+    QDesktopServices::openUrl(QUrl("http://code.google.com/p/qmb/wiki/UserGuide"));
 }
 
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
@@ -247,6 +255,7 @@ void MainWindow::createHomeWidget()
         connect(homeWidget, SIGNAL(openModelByPath(QString)), this, SLOT(openModel(QString)));
         connect(homeWidget, SIGNAL(aboutClick()), this, SLOT(onAbout()));
         connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
+        connect(homeWidget, SIGNAL(helpClick()), this, SLOT(openHelp()));
     }
 }
 
@@ -272,6 +281,7 @@ void MainWindow::createMenuButton()
     saveAsAction->setObjectName("saveAsAction");
     saveAsAction->setEnabled(false);
     mainMenu->addSeparator();
+    mainMenu->addAction("Справка", this, SLOT(openHelp()));
     mainMenu->addAction("О программе", this, SLOT(onAbout()));
     mainMenu->addSeparator();
     mainMenu->addAction("Выход", this, SLOT(close()));

@@ -1,10 +1,5 @@
 ﻿#include "interface/homewidget.h"
 #include "ui_homewidget.h"
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QFile>
-#include <QDir>
-#include <QDebug>
 #include <QRegExp>
 #include "utility/lsfss.h"
 #include "utility/lastmodels.h"
@@ -26,6 +21,8 @@ HomeWidget::HomeWidget(QWidget *parent) :
         button->setText(name);
         button->setDescription(path);
         button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        button->setIcon(QIcon(":/icons/logo"));
+        button->setIconSize(QSize(32, 32));
 
         ::connect(button, SIGNAL(clicked()), [this, path]
         {
@@ -59,4 +56,9 @@ void HomeWidget::on_aboutButton_clicked()
 void HomeWidget::on_exitButton_clicked()
 {
     emit exitClick();
+}
+
+void HomeWidget::on_helpButton_clicked()
+{
+    emit helpClick();
 }

@@ -34,7 +34,8 @@ SOURCES += main.cpp \
     logic/terminator.cpp \
     interface/createmodeldialog.cpp \
     utility/common.cpp \
-    utility/lastmodels.cpp
+    utility/lastmodels.cpp \
+    interface/aboutdialog.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
@@ -60,18 +61,20 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/model.h \
     logic/terminator.h \
     interface/createmodeldialog.h \
-    utility/lastmodels.h
+    utility/lastmodels.h \
+    interface/aboutdialog.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
     interface/elementpropwindow.ui \
     interface/homewidget.ui \
-    interface/createmodeldialog.ui
+    interface/createmodeldialog.ui \
+    interface/aboutdialog.ui
 
 OTHER_FILES += \
     TODO.txt
 
-RC_FILE = qmb.rc
+RC_FILE = resources/qmb.rc
 
 RESOURCES += \
     resources.qrc
