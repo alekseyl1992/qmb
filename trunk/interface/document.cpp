@@ -4,6 +4,7 @@
 #include "interface/elementpropwindow.h"
 #include "utility/common.h"
 #include "utility/lsfss.h"
+#include "utility/lastmodels.h"
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>
@@ -310,6 +311,9 @@ bool Document::openModel(const QString &path)
     {
         storage->fillModel(scene);
         setWindowTitle(storage->getModelName());
+
+        //дописываем модель вверх списка последних открытых
+        LastModels::getInst().add(path);
     }
 
     return ret;
@@ -323,9 +327,12 @@ bool Document::saveModel()
     {
         //диалог сохранения
         QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
-                                     QApplication::applicationDirPath() + "/models/",
+                                     QApplication::applicationDirPath() + "/models/" + windowTitle() + ".qm",
                                      "QMB XML Model (*.qm)");
-        return storage->saveModelAs(path);
+        if(path != "")
+            return storage->saveModelAs(path);
+        else
+            return false;
     }
 }
 
@@ -399,8 +406,6 @@ void Document::onSimulationFinished(int event_time)
                         << new QStandardItem("симуляция завершена успешно"));
     ui->simulationLog->scrollToBottom();
 
-    //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
-    //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
     storage->freeModel();
 
     int id = QMessageBox::question(

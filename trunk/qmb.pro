@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     utility/lsfss.cpp \
     logic/terminator.cpp \
     interface/createmodeldialog.cpp \
-    utility/common.cpp
+    utility/common.cpp \
+    utility/lastmodels.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
@@ -58,7 +59,8 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/handler.h \
     logic/model.h \
     logic/terminator.h \
-    interface/createmodeldialog.h
+    interface/createmodeldialog.h \
+    utility/lastmodels.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
