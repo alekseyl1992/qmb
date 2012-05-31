@@ -194,7 +194,7 @@ void MainWindow::onSaveModelAs()
 
 void MainWindow::onAbout()
 {
-    QMessageBox::information(this, "О программе",
+    QMessageBox::about(this, "О программе",
                              "Queueing Model Builder v0.1 beta\n\n"
                              "Разработчики:\n"
                              " Леонтьев Алексей\n"

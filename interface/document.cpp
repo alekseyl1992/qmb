@@ -103,6 +103,12 @@ Document::Document(QWidget *parent) :
                 if(storage->undoModel())
                     storage->fillModel(scene);
             });
+    ::connect(scene, SIGNAL(redoRequested()),
+            [scene, storage]
+            {
+                if(storage->redoModel())
+                    storage->fillModel(scene);
+            });
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -329,8 +335,12 @@ bool Document::saveModel()
         QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
                                      QApplication::applicationDirPath() + "/models/" + windowTitle() + ".qm",
                                      "QMB XML Model (*.qm)");
-        if(path != "")
-            return storage->saveModelAs(path);
+        if(path != "" && storage->saveModelAs(path))
+        {
+            //дописываем модель вверх списка последних открытых
+            LastModels::getInst().add(path);
+            return true;
+        }
         else
             return false;
     }

@@ -4,7 +4,7 @@
 #include <QApplication>
 
 LastModels::LastModels()
-    : fileName("/lastOpened.dat")
+    : fileName("/lastModels.dat"), separator('\n')
 {
 }
 
@@ -12,20 +12,23 @@ QStringList LastModels::getList()
 {
     //формируем список недавних проектов
     QFile lastModelsFile(QApplication::applicationDirPath() + fileName);
-    lastModelsFile.open(QIODevice::ReadOnly);
+    lastModelsFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream stream(&lastModelsFile);
     if(stream.status() == QTextStream::Ok)
     {
-        QStringList list(stream.readAll()); //разбиваем файл на строки
+        //разбиваем файл на строки
+        QStringList list = stream.readAll()
+                .split(separator, QString::SkipEmptyParts);
         bool bListChanged = false;
 
         for(int i=0; i < list.size(); i++)
         {
-            QString path = list.at(i);
+            QString path = list.at(i).trimmed();
             if(!QFile::exists(path))
             {
                 list.removeAt(i);
-                bListChanged = true;
+                if(path != "") //пустую строку бесполезно стирать из файла
+                    bListChanged = true;
             }
         }
 
@@ -33,10 +36,10 @@ QStringList LastModels::getList()
         {
             //перезаписываем файл-список
             lastModelsFile.close();
-            lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
             QTextStream wstream(&lastModelsFile);
             foreach(QString str, list)
-                wstream << str;
+                wstream << str << separator;
         }
         return list;
     }
@@ -47,20 +50,24 @@ QStringList LastModels::getList()
 void LastModels::add(const QString &path)
 {
     QFile lastModelsFile(QApplication::applicationDirPath() + fileName);
-    lastModelsFile.open(QIODevice::ReadOnly);
+    lastModelsFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream stream(&lastModelsFile);
     if(stream.status() == QTextStream::Ok)
     {
-        QStringList list(stream.readAll()); //разбиваем файл на строки
+        //разбиваем файл на строки
+        QStringList list = stream.readAll()
+                .split(separator, QString::SkipEmptyParts);
+
         list.insert(list.begin(), path);
         list.removeDuplicates();
 
         //перезаписываем файл-список
         lastModelsFile.close();
-        lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
         QTextStream wstream(&lastModelsFile);
-        for(int i = 0; i < maxCount; i++)
-            wstream << list.at(i);
+
+        for(int i = 0; i < list.size() && i < maxCount; i++)
+            wstream << list.at(i) << separator;
     }
 }
 
