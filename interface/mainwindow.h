@@ -36,8 +36,6 @@ public slots:
 
     void openModel(const QString& path);
 
-    void saveModel(QString path);
-
     void closeEvent(QCloseEvent *event);    
 
     //! Создаёт вкладку с Домашней страницей

@@ -146,12 +146,6 @@ void MainWindow::openModel(const QString &path)
                               .arg(path));
 }
 
-void MainWindow::saveModel(QString path)
-{
-    //TODO: сохранение модели
-    QMessageBox::information(this, "Сохранение модели...", path);
-}
-
 void MainWindow::onSaveModel()
 {
     QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
@@ -170,16 +164,17 @@ void MainWindow::onSaveModel()
 
 void MainWindow::onSaveModelAs()
 {
-    QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
-                                 QApplication::applicationDirPath() + "/models/",
-                                 "QMB XML Model (*.qm)");
-    if(path != "")
+    QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
+    if(curTab)
     {
-        QMdiSubWindow *curTab = ui->mdiArea->currentSubWindow();
-        if(curTab)
+        Document *curDoc = dynamic_cast<Document *>(curTab->widget());
+        if(curDoc)
         {
-            Document *curDoc = dynamic_cast<Document *>(curTab->widget());
-            if(curDoc)
+
+            QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
+                                                        QApplication::applicationDirPath() + "/models/"+curDoc->windowTitle()+".qm",
+                                         "QMB XML Model (*.qm)");
+            if(path != "")
             {
                 if(curDoc->saveModelAs(path))
                 {

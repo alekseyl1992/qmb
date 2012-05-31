@@ -6,8 +6,8 @@
 #include <QDir>
 #include <QDebug>
 #include <QRegExp>
-//#include <QCleanlooksStyle>
 #include "utility/lsfss.h"
+#include "utility/lastmodels.h"
 
 HomeWidget::HomeWidget(QWidget *parent) :
     QDialog(parent),
@@ -17,34 +17,23 @@ HomeWidget::HomeWidget(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setAlignment(Qt::AlignTop);
     ui->lastModels->setLayout(layout);
-    //layout->setContentsMargins(0, 0, 0, 0);
 
     //формируем список недавних проектов
-    QFile lastModelsFile(QApplication::applicationDirPath() + "/lastModels.dat");
-    lastModelsFile.open(QIODevice::ReadOnly);
-    QTextStream stream(&lastModelsFile);
-
-    if(stream.status() == QTextStream::Ok)
+    foreach(QString path, LastModels::getInst().getList())
     {
-        while(!stream.atEnd())
+        QString name = path.section(QRegExp("[\\\\,/]"), -1, -1);
+        QCommandLinkButton *button = new QCommandLinkButton(ui->lastModels);
+        button->setText(name);
+        button->setDescription(path);
+        button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+        ::connect(button, SIGNAL(clicked()), [this, path]
         {
-            QString path = stream.readLine();
-            QString name = path.section(QRegExp("[\\\\,/]"), -1, -1);
+            emit openModelByPath(path);
+        });
 
-            QCommandLinkButton *button = new QCommandLinkButton(ui->lastModels);
-            button->setText(name);
-            button->setDescription(path);
-            button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            //button->setStyle(new QCleanlooksStyle());
-
-            ::connect(button, SIGNAL(clicked()), [this, path]
-            {
-                emit openModelByPath(path);
-            });
-
-            layout->addWidget(button);
-        }
-    }
+        layout->addWidget(button);
+     }
 }
 
 HomeWidget::~HomeWidget()
