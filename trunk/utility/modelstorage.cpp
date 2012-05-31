@@ -109,6 +109,9 @@ bool ModelStorage::createModel(const QString &name)
     root = curDoc->createElement("model");
     root.setAttribute("name",name);
     curDoc->appendChild(root);
+    // запоминаем начальный момент
+    history.push_front(root.cloneNode().toElement());
+
     return true;
 }
 
@@ -161,7 +164,7 @@ bool ModelStorage::redoModel()
     {
         curDoc->removeChild(root);
         --history_pos;
-        root = history.at(history_pos);
+        root = history.at(history_pos).cloneNode().toElement();
         curDoc->appendChild(root);
         return true;
     }
@@ -170,11 +173,11 @@ bool ModelStorage::redoModel()
 
 bool ModelStorage::undoModel()
 {
-    if (history.size()!=0 && history_pos < history.size())
+    if (history.size()!=0 && history_pos < history.size()-1)
     {
         curDoc->removeChild(root);
-        root = history.at(history_pos);
         ++history_pos;
+        root = history.at(history_pos).cloneNode().toElement();
         curDoc->appendChild(root);
         return true;
     }
@@ -263,16 +266,6 @@ bool ModelStorage::setCodeString(QString code)
 // реализация слотов //
 void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
 {
-    if (history_pos!=0)
-    {
-        for (int i=0; i<history_pos; i++)
-             history.removeFirst();
-        history_pos=0;
-    }
-    if (history.size()>MAX_STEPS)
-        history.removeLast();
-    history.push_front(root.cloneNode().toElement());
-
     QDomElement InsertedItem;
     InsertedItem = curDoc->createElement(ItemNames[(int)type]);
     InsertedItem.setAttribute("id",id);
@@ -294,6 +287,16 @@ void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
     InsertedItem.setAttribute("x",pos.x());
     InsertedItem.setAttribute("y",pos.y());
     root.appendChild(InsertedItem);
+
+    if (history_pos!=0)
+    {
+        for (int i=0; i<history_pos; i++)
+             history.removeFirst();
+        history_pos=0;
+    }
+    if (history.size()>MAX_STEPS)
+        history.removeLast();
+    history.push_front(root.cloneNode().toElement());
 }
 
 void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
@@ -331,16 +334,6 @@ void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
 
 void ModelStorage::onItemRemoved(ItemType type, int id)
 {
-    if (history_pos!=0)
-    {
-        for (int i=0; i<history_pos; i++)
-          history.removeFirst();
-        history_pos=0;
-    }
-    if (history.size()>MAX_STEPS)
-     history.removeLast();
-    history.push_front(root.cloneNode().toElement());
-
     QDomElement RemovedItem = root.firstChildElement();
     QDomElement ExistedLink = root.firstChildElement();
 
@@ -362,20 +355,21 @@ void ModelStorage::onItemRemoved(ItemType type, int id)
         }
         RemovedItem = RemovedItem.nextSiblingElement();
     }
+
+    if (history_pos!=0)
+    {
+        for (int i=0; i<history_pos; i++)
+             history.removeFirst();
+        history_pos=0;
+    }
+    if (history.size()>MAX_STEPS)
+        history.removeLast();
+    history.push_front(root.cloneNode().toElement());
+
 }
 
 void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
-    if (history_pos!=0)
-    {
-        for (int i=0; i<history_pos; i++)
-           history.removeFirst();
-        history_pos=0;
-    }
-    if (history.size()>MAX_STEPS)
-    history.removeLast();
-    history.push_front(root.cloneNode().toElement());
-
     QDomElement InsertedLink;
     InsertedLink = curDoc->createElement(ItemNames[4]); // 4 is Link
     InsertedLink.setAttribute("from",ItemNames[int(fromType)]);
@@ -383,20 +377,20 @@ void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType
     InsertedLink.setAttribute("to",ItemNames[int(toType)]);
     InsertedLink.setAttribute("toID",idTo);
     root.appendChild(InsertedLink);
+
+    if (history_pos!=0)
+    {
+        for (int i=0; i<history_pos; i++)
+             history.removeFirst();
+        history_pos=0;
+    }
+    if (history.size()>MAX_STEPS)
+        history.removeLast();
+    history.push_front(root.cloneNode().toElement());
 }
 
 void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
-    if (history_pos!=0)
-    {
-        for (int i=0; i<history_pos; i++)
-            history.removeFirst();
-        history_pos=0;
-    }
-    if (history.size()>MAX_STEPS)
-    history.removeLast();
-    history.push_front(root.cloneNode().toElement());
-
     QDomElement RemovedLink = root.firstChildElement();
     while (!RemovedLink.isNull())
     {
@@ -408,6 +402,16 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
                 root.removeChild(RemovedLink);
         RemovedLink = RemovedLink.nextSiblingElement();
     }
+
+    if (history_pos!=0)
+    {
+        for (int i=0; i<history_pos; i++)
+             history.removeFirst();
+        history_pos=0;
+    }
+    if (history.size()>MAX_STEPS)
+        history.removeLast();
+    history.push_front(root.cloneNode().toElement());
 }
 // end реализация слотов //
 
