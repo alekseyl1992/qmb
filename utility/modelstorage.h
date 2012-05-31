@@ -29,6 +29,9 @@
 const QString ItemNames[] = {"Generator","Queue",
                              "Handler","Terminator","Link"};
 
+//маскимальное количество щагов отката
+const int MAX_STEPS=15;
+
 //! Класс - хранилище модели
 /*!
  * Хранит текущее состояние модели при работе со Сценой или кодом.
@@ -42,7 +45,8 @@ class ModelStorage : public QObject
 private:
     logic::model* myModel;
     QDomDocument* curDoc; //хранилище структуры xml
-    QDomElement backuproot; //хранилище undo
+    QList<QDomElement> history; //хранилище undo
+    int history_pos; // позиция в истории (для redo)
     QDomElement root; //корневой элемент (ех: модель №х )
     QString currentPath;
 
@@ -73,6 +77,7 @@ public:
     bool saveModel();
     bool saveModelAs(const QString &path);
     bool undoModel(); //!< откат модели на один шаг назад
+    bool redoModel(); //!< откат модели на один шаг вперед
     void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
     //TODO здесь будут метода для получения и записи полного списка параметров
