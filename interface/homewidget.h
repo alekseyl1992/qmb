@@ -27,12 +27,15 @@ private slots:
 
     void on_exitButton_clicked();
 
+    void on_helpButton_clicked();
+
 signals:
     void createModel();
     void openModel();
     void openModelByPath(const QString& path);
     void aboutClick();
     void exitClick();
+    void helpClick();
 
 private:
     Ui::HomeWidget *ui;

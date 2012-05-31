@@ -5,5 +5,6 @@
     <qresource prefix="/icons">
         <file alias="start">resources/play.ico</file>
         <file alias="stop">resources/stopplay.ico</file>
+        <file alias="logo">resources/qmb.png</file>
     </qresource>
 </RCC>

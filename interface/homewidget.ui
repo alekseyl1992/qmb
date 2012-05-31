@@ -99,6 +99,13 @@
         </spacer>
        </item>
        <item>
+        <widget class="QCommandLinkButton" name="helpButton">
+         <property name="text">
+          <string>Справка</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCommandLinkButton" name="aboutButton">
          <property name="text">
           <string>О программе</string>

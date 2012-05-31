@@ -31,6 +31,8 @@ public slots:
 
     void onAbout();
 
+    void openHelp();
+
     //! срабатывает при переключении на вкладку с другой моделью и при создании новой
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
