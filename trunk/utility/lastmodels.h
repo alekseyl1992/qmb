@@ -3,8 +3,9 @@
 #include <QStringList>
 
 //! Класс предоставляет доступ к списку последних открытых моделей. Реализует паттерн singleton
-class LastModels
+class LastModels : public QObject
 {
+Q_OBJECT
 private:
     const QString fileName;
     static const int maxCount = 10; //максимальное кол-во записей
@@ -17,6 +18,9 @@ public:
 
     QStringList getList();
     void add(const QString& path);
+
+signals:
+    void changed();
 };
 
 #endif // LASTMODELS_H

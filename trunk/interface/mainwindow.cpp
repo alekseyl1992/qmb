@@ -138,8 +138,9 @@ void MainWindow::openModel(const QString &path)
     {
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
         subWindow->showMaximized();        
-        delete homeTab;
-        homeTab = nullptr;
+        //закрываем домашнюю страничку
+        //delete homeTab;
+        //homeTab = nullptr;
     }
     else //TODO а может обработку ошибок лучше в Document?
         QMessageBox::critical(this,
@@ -257,6 +258,8 @@ void MainWindow::createHomeWidget()
         connect(homeWidget, SIGNAL(exitClick()), this, SLOT(close()));
         connect(homeWidget, SIGNAL(helpClick()), this, SLOT(openHelp()));
     }
+    else
+        homeTab->showMaximized();
 }
 
 void MainWindow::createMenuButton()

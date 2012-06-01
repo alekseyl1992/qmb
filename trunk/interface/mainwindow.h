@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QMdiSubWindow>
 #include <functional>
+#include <QPointer>
 
 namespace Ui {
 class MainWindow;
@@ -47,7 +48,7 @@ private:
     Ui::MainWindow *ui;
     Document *Doc;
     QMenu *mainMenu;
-    QMdiSubWindow *homeTab;
+    QPointer<QMdiSubWindow> homeTab;
 
     //! Создаёт кнопку QMB и её меню
     void createMenuButton();
