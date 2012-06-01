@@ -101,13 +101,13 @@ void Arrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     painter->setBrush(myColor);
 
-    QLineF centerLine(myStartItem->pos(), myEndItem->pos());
+    /*QLineF centerLine(myStartItem->pos(), myEndItem->pos());
     QPolygonF endPolygon = myEndItem->polygon();
     QPointF p1 = endPolygon.first() + myEndItem->pos();
     QPointF p2;
     QPointF intersectPoint;
     QLineF polyLine;
-    /*for (int i = 1; i < endPolygon.count(); ++i)
+    for (int i = 1; i < endPolygon.count(); ++i)
     {
         p2 = endPolygon.at(i) + myEndItem->pos();
         polyLine = QLineF(p1, p2);

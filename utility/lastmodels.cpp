@@ -40,6 +40,8 @@ QStringList LastModels::getList()
             QTextStream wstream(&lastModelsFile);
             foreach(QString str, list)
                 wstream << str << separator;
+
+            lastModelsFile.close();
         }
         return list;
     }
@@ -68,6 +70,9 @@ void LastModels::add(const QString &path)
 
         for(int i = 0; i < list.size() && i < maxCount; i++)
             wstream << list.at(i) << separator;
+        lastModelsFile.close();
+
+        emit changed();
     }
 }
 

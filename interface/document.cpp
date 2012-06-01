@@ -250,7 +250,7 @@ void Document::startSimulation()
     ui->stopButton->show();
 
     logic::model *model = storage->getModel(true);
-    connect(model, SIGNAL(simulationFinished(int event_time)), this, SLOT(onSimulationFinished(int event_time)));
+    connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
     connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
     connect(model, SIGNAL(reqQueued(int,logic::request_id, int)), this, SLOT(onReqQueued(int,logic::request_id, int)));
     connect(model, SIGNAL(reqBeganHandling(int,logic::request_id, int)), this, SLOT(onReqBeganHandling(int,logic::request_id, int)));
@@ -297,6 +297,7 @@ bool Document::isModified() const
 void Document::setModified(bool m)
 {
     scene->setModified(m);
+    code->document()->setModified(m);
 }
 
 bool Document::createModel(const QString &name)
@@ -328,7 +329,12 @@ bool Document::openModel(const QString &path)
 bool Document::saveModel()
 {
     if(isSavable()) //если уже сохраняли
-        return storage->saveModel();
+    {
+        bool saved = storage->saveModel();
+        if(saved)
+            setModified(false);
+        return  saved;
+    }
     else //только при закрытии программы
     {
         //диалог сохранения
@@ -337,8 +343,7 @@ bool Document::saveModel()
                                      "QMB XML Model (*.qm)");
         if(path != "" && storage->saveModelAs(path))
         {
-            //дописываем модель вверх списка последних открытых
-            LastModels::getInst().add(path);
+            setModified(false);
             return true;
         }
         else
@@ -348,7 +353,17 @@ bool Document::saveModel()
 
 bool Document::saveModelAs(const QString &path)
 {
-    return storage->saveModelAs(path);
+    if(storage->saveModelAs(path))
+    {
+        setModified(false);
+
+        //дописываем модель вверх списка последних открытых
+        LastModels::getInst().add(path);
+
+        return true;
+    }
+    else
+        return false;
 }
 
 bool Document::isSavable() const
@@ -387,6 +402,8 @@ void Document::closeEvent(QCloseEvent *event)
             {
                 if(tryApplyCode())
                     saveModel();
+                else
+                    event->ignore();
             }
             else
                 saveModel();
@@ -479,18 +496,14 @@ void Document::on_tabWidget_currentChanged(int index)
 
 bool Document::tryApplyCode()
 {
-    try
-    {
-        storage->setCodeString(ui->codeEdit->document()->toPlainText());
+    bool ret = storage->setCodeString(ui->codeEdit->document()->toPlainText());
+    if(ret)
         code->document()->setModified(false);
-        return true;
-    }
-    catch(const ModelStorage::ParseException& e)
-    {
-        QMessageBox::critical(this, windowTitle(),
-                              QString("Возникли ошибки при парсе кода:\n\tСтрока: %1\n\tОшибка: %2").arg(e.stringNum()).arg(e.text()));
-        return false;
-    }
+    else
+        QMessageBox::critical(this, windowTitle(), "Возникла ошибка при разборе XML");
+
+    return ret;
+
 }
 
 void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)

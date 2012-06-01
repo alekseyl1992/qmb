@@ -58,14 +58,13 @@
       </property>
       <item>
        <widget class="QToolButton" name="logButton">
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
         <property name="styleSheet">
-         <string notr="true">QToolButton:checked
-{
-	background-color: rgb(255, 255, 255);
-}
-QToolButton
-{
-	background-color: lightgray;
+         <string notr="true">QToolButton
+{	
+	background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0.288557 rgba(200, 200, 200, 255), stop:1 rgba(245, 245, 245, 255));
 }</string>
         </property>
         <property name="text">
@@ -94,13 +93,9 @@ QToolButton
       <item>
        <widget class="QToolButton" name="toolButton">
         <property name="styleSheet">
-         <string notr="true">QToolButton:checked
-{
-	background-color: rgb(255, 255, 255);
-}
-QToolButton
-{
-	background-color: lightgray;
+         <string notr="true">QToolButton
+{	
+	background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0.288557 rgba(200, 200, 200, 255), stop:1 rgba(245, 245, 245, 255));
 }</string>
         </property>
         <property name="text">

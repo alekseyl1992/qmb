@@ -29,6 +29,8 @@ private slots:
 
     void on_helpButton_clicked();
 
+    void updateLastModelsList();
+
 signals:
     void createModel();
     void openModel();
