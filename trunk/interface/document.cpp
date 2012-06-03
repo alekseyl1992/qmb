@@ -18,19 +18,41 @@
 #include <QStandardItem>
 #include <QShortcut>
 #include <QFileDialog>
+#include <QToolBar>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
 {
     ui->setupUi(this);
     ui->progressBar->hide();
-    ui->stopButton->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
 
     //OpenGL acceleration
     ui->graphicsView->setViewport(new QGLWidget(this));
 
     new XmlHighlighter(ui->codeEdit);
+
+    //создаём панели инструментов
+    QHBoxLayout *toolLayout = new QHBoxLayout(ui->toolPanel);
+    toolLayout->setMargin(0);
+    ui->toolPanel->setLayout(toolLayout);
+    QToolBar *toolBar = new QToolBar("Симуляция", ui->toolPanel);
+    QAction *act = nullptr;
+
+    act = toolBar->addAction(QIcon(":/icons/save"), "Сохранить", this, SLOT(saveModel()));
+    toolBar->addSeparator();
+
+    act = toolBar->addAction(QIcon(":/icons/undo"), "Отмена", this, SLOT(onUndoAction()));
+    act->setShortcut(QKeySequence("Ctrl+Z"));
+    act = toolBar->addAction(QIcon(":/icons/redo"), "Повтор", this, SLOT(onRedoAction()));
+    act->setShortcut(QKeySequence("Ctrl+Y"));
+    toolBar->addSeparator();
+
+    startAction = toolBar->addAction(QIcon(":/icons/start"), "Старт", this, SLOT(onStartAction()));
+    stopAction = toolBar->addAction(QIcon(":/icons/stop"), "Стоп", this, SLOT(onStopAction()));
+    stopAction->setEnabled(false);
+
+    toolLayout->addWidget(toolBar);
 
     //создаем меню для элементов
     QMenu *itemMenu = new QMenu(this);
@@ -97,18 +119,6 @@ Document::Document(QWidget *parent) :
             storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
     connect(scene, SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
-    ::connect(scene, SIGNAL(undoRequested()),
-            [scene, storage]
-            {
-                if(storage->undoModel())
-                    storage->fillModel(scene);
-            });
-    ::connect(scene, SIGNAL(redoRequested()),
-            [scene, storage]
-            {
-                if(storage->redoModel())
-                    storage->fillModel(scene);
-            });
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -235,9 +245,9 @@ void Document::showLog(bool show)
         ui->logDock->hide();
 }
 
-void Document::setActiveTab(Document::Tabs Tab)
+void Document::setActiveTab(Tab tab)
 {
-    ui->tabWidget->setCurrentIndex(Tab);
+    ui->tabWidget->setCurrentIndex(tab);
 }
 
 void Document::startSimulation()
@@ -246,8 +256,8 @@ void Document::startSimulation()
     showLog();    
     ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
-    ui->startButton->hide();
-    ui->stopButton->show();
+    startAction->setEnabled(false);
+    stopAction->setEnabled(true);
 
     logic::model *model = storage->getModel(true);
     connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
@@ -273,9 +283,9 @@ void Document::stopSimulation()
     bSimulating = false;
     int time = storage->getModel()->simulation_stop();
     ui->graphicsView->setEnabled(true);
-    ui->progressBar->hide();
-    ui->startButton->show();
-    ui->stopButton->hide();
+    ui->progressBar->hide();    
+    startAction->setEnabled(true);
+    stopAction->setEnabled(false);
 
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(time))
@@ -422,9 +432,9 @@ void Document::keyPressEvent(QKeyEvent *event)
 void Document::onSimulationFinished(int event_time)
 {    
     bSimulating = false;
-    ui->progressBar->hide();
-    ui->startButton->show();
-    ui->stopButton->hide();
+    ui->progressBar->hide();    
+    startAction->setEnabled(true);
+    stopAction->setEnabled(false);
     ui->graphicsView->setEnabled(true);
 
     logModel->appendRow(QList<QStandardItem *>()
@@ -458,7 +468,7 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
     scene->setItemType(itemType);
 }
 
-void Document::on_startButton_clicked()
+void Document::onStartAction()
 {
     if(ui->codeEdit->document()->isModified())
     {
@@ -469,7 +479,7 @@ void Document::on_startButton_clicked()
         startSimulation();
 }
 
-void Document::on_stopButton_clicked()
+void Document::onStopAction()
 {
     if(QMessageBox::question(
                 this, windowTitle(),
@@ -478,10 +488,28 @@ void Document::on_stopButton_clicked()
         stopSimulation();
 }
 
+void Document::onUndoAction()
+{
+    if(ui->tabWidget->currentIndex() == Tab::Scene)
+    {
+        if(storage->undoModel())
+            storage->fillModel(scene);
+    }
+}
+
+void Document::onRedoAction()
+{
+    if(ui->tabWidget->currentIndex() == Tab::Scene)
+    {
+        if(storage->redoModel())
+            storage->fillModel(scene);
+    }
+}
+
 void Document::on_tabWidget_currentChanged(int index)
 {
     //при переключении на вкладку Code, подгружаем код
-    if(index == Tabs::Code)
+    if(index == Tab::Code)
     {
         ui->codeEdit->clear();
         ui->codeEdit->insertPlainText(storage->getCodeString());

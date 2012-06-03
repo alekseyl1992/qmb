@@ -98,8 +98,8 @@ signals:
     void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void wrongLink(ItemType fromType, ItemType toType);
-    void undoRequested();
-    void redoRequested();
+    //void undoRequested(); //оба перенесены в Document
+    //void redoRequested();
 
 protected:
     void keyPressEvent(QKeyEvent *keyEvent);

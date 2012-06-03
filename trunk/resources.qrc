@@ -3,8 +3,14 @@
         <file>qt_ru.qm</file>
     </qresource>
     <qresource prefix="/icons">
-        <file alias="start">resources/play.ico</file>
-        <file alias="stop">resources/stopplay.ico</file>
         <file alias="logo">resources/qmb.png</file>
+        <file alias="continue">resources/png/continue32.png</file>
+        <file alias="redo">resources/png/go-into32.png</file>
+        <file alias="pause">resources/png/pause32.png</file>
+        <file alias="start">resources/png/start32.png</file>
+        <file alias="stop">resources/png/stop-red32.png</file>
+        <file alias="undo">resources/png/undo32.png</file>
+        <file alias="saveAs">resources/blueberry/PNG/32/save_as.png</file>
+        <file alias="save">resources/blueberry/PNG/32/save_diskette_floppy_disk.png</file>
     </qresource>
 </RCC>
