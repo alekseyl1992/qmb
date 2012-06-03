@@ -26,24 +26,19 @@ class Document : public QDialog
     Q_OBJECT
     
 public:
-    enum Tabs {Model, Code, Options}; //!< перечисление вкладок
+    enum Tab {Scene, Code, Options}; //!< перечисление вкладок
 
     explicit Document(QWidget *parent);
 
     ~Document();
 
     void showLog(bool show = true);
-    void setActiveTab(Tabs Tab);
+    void setActiveTab(Tab tab);
 
     void startSimulation();
     void stopSimulation();
     bool isModified() const;
     void setModified(bool m);
-
-    bool createModel(const QString& name);
-    bool openModel(const QString& path);
-    bool saveModel();
-    bool saveModelAs(const QString& path);
 
     //! сохранялась ли когда-либо модель
     bool isSavable() const;
@@ -55,13 +50,19 @@ public slots:
     void onSimulationFinished(int event_time);
     void clearLog();
 
+    bool createModel(const QString& name);
+    bool openModel(const QString& path);
+    bool saveModel();
+    bool saveModelAs(const QString& path);
+
 private slots:
     //! срабатывает при начале перетаскивания элемента с палитры на Сцену
     void on_toolsView_pressed(const QModelIndex &index);
 
-    void on_startButton_clicked();
-
-    void on_stopButton_clicked();
+    void onStartAction();
+    void onStopAction();
+    void onUndoAction();
+    void onRedoAction();
 
     //! срабатывает при смене текущей вкладки Tabs
     void on_tabWidget_currentChanged(int index);
@@ -87,6 +88,7 @@ private:
     QTextEdit *code;
     QMenu *logMenu;
     QStandardItemModel *logModel;
+    QAction *startAction, *stopAction;
     bool bSimulating;
 
     bool tryApplyCode();

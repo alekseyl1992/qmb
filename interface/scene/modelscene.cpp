@@ -130,10 +130,10 @@ void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
 {
     if(keyEvent->key() == Qt::Key_Delete)
         removeSelectedItems();
-    if(keyEvent->key() == Qt::Key_Z && keyEvent->modifiers().testFlag(Qt::ControlModifier))
+    /*if(keyEvent->key() == Qt::Key_Z && keyEvent->modifiers().testFlag(Qt::ControlModifier))
         emit undoRequested();
     if(keyEvent->key() == Qt::Key_Y && keyEvent->modifiers().testFlag(Qt::ControlModifier))
-        emit redoRequested();
+        emit redoRequested();*/
 }
 
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
