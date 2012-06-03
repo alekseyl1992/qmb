@@ -78,7 +78,7 @@ private slots:
     void onWrongLink(ItemType fromType, ItemType toType);
 
 signals:
-    void saveDialogRequest();
+    void beganSavable();
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;

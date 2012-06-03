@@ -2,6 +2,7 @@
 #include "ui_document.h"
 #include "utility/xmlhighlighter.h"
 #include "interface/elementpropwindow.h"
+#include "interface/modeloptionsdialog.h"
 #include "utility/common.h"
 #include "utility/lsfss.h"
 #include "utility/lastmodels.h"
@@ -46,6 +47,15 @@ Document::Document(QWidget *parent) :
     act->setShortcut(QKeySequence("Ctrl+Z"));
     act = toolBar->addAction(QIcon(":/icons/redo"), "Повтор", this, SLOT(onRedoAction()));
     act->setShortcut(QKeySequence("Ctrl+Y"));
+    toolBar->addSeparator();
+
+    act = toolBar->addAction(QIcon(":/icons/modelOptions"), "Настройки симуляции", new connector(this, [this]
+    {
+        ModelOptionsDialog *dialog = new ModelOptionsDialog(this);
+        dialog->setModal(true);
+        dialog->exec();
+    }), SLOT(signaled()));
+    act->setShortcut(QKeySequence("Ctrl+O"));
     toolBar->addSeparator();
 
     startAction = toolBar->addAction(QIcon(":/icons/start"), "Старт", this, SLOT(onStartAction()));
@@ -345,7 +355,7 @@ bool Document::saveModel()
             setModified(false);
         return  saved;
     }
-    else //только при закрытии программы
+    else
     {
         //диалог сохранения
         QString path = QFileDialog::getSaveFileName(this, "Сохранение модели",
@@ -353,7 +363,11 @@ bool Document::saveModel()
                                      "QMB XML Model (*.qm)");
         if(path != "" && storage->saveModelAs(path))
         {
-            setModified(false);
+            setModified(false);            
+
+            //дописываем модель вверх списка последних открытых
+            LastModels::getInst().add(path);
+            emit beganSavable();
             return true;
         }
         else

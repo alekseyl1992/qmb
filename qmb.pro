@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     interface/createmodeldialog.cpp \
     utility/common.cpp \
     utility/lastmodels.cpp \
-    interface/aboutdialog.cpp
+    interface/aboutdialog.cpp \
+    interface/modeloptionsdialog.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
@@ -62,14 +63,16 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/terminator.h \
     interface/createmodeldialog.h \
     utility/lastmodels.h \
-    interface/aboutdialog.h
+    interface/aboutdialog.h \
+    interface/modeloptionsdialog.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
     interface/elementpropwindow.ui \
     interface/homewidget.ui \
     interface/createmodeldialog.ui \
-    interface/aboutdialog.ui
+    interface/aboutdialog.ui \
+    interface/modeloptionsdialog.ui
 
 OTHER_FILES += \
     TODO.txt

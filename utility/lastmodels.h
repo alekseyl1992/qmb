@@ -10,6 +10,8 @@ private:
     const QString fileName;
     static const int maxCount = 10; //максимальное кол-во записей
     const char separator;
+    QStringList list; //!< Список моделей (кэш)
+    bool bCashed;
 
     LastModels();
 

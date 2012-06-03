@@ -12,5 +12,6 @@
         <file alias="undo">resources/png/undo32.png</file>
         <file alias="saveAs">resources/blueberry/PNG/32/save_as.png</file>
         <file alias="save">resources/blueberry/PNG/32/save_diskette_floppy_disk.png</file>
+        <file alias="modelOptions">resources/png/options32.png</file>
     </qresource>
 </RCC>
