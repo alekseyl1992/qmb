@@ -57,8 +57,13 @@ void MainWindow::onCreateModel()
         {
             QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(newDoc);
             subWindow->showMaximized();
-            delete homeTab;
-            homeTab = nullptr;
+            ::connect(newDoc, SIGNAL(beganSavable()), [this]
+            {
+                //включаем пункт Сохранить
+                foreach(QAction *act, mainMenu->actions())
+                    if(act->objectName() == "saveAction")
+                        act->setEnabled(true);
+            });
         }
         else //TODO а может обработку ошибок лучше в Document?
             QMessageBox::critical(this,
