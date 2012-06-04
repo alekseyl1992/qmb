@@ -52,7 +52,7 @@ Document::Document(QWidget *parent) :
     act = toolBar->addAction(QIcon(":/icons/modelOptions"), "Настройки симуляции", new connector(this, [this]
     {
         ModelOptionsDialog *dialog = new ModelOptionsDialog(this);
-        dialog->setModal(true);
+        Unimplemented();
         dialog->exec();
     }), SLOT(signaled()));
     act->setShortcut(QKeySequence("Ctrl+O"));

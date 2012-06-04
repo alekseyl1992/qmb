@@ -4,6 +4,7 @@
 #include "interface/homewidget.h"
 #include "interface/createmodeldialog.h"
 #include "interface/aboutdialog.h"
+#include "interface/optionsdialog.h"
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QMdiSubWindow>
@@ -212,6 +213,13 @@ void MainWindow::onAbout()
     AboutDialog(this).exec();
 }
 
+void MainWindow::onOptions()
+{
+    OptionsDialog dialog(this);
+    Unimplemented();
+    dialog.exec();
+}
+
 void MainWindow::openHelp()
 {
     QDesktopServices::openUrl(QUrl("http://code.google.com/p/qmb/wiki/UserGuide"));
@@ -289,6 +297,7 @@ void MainWindow::createMenuButton()
     saveAsAction->setObjectName("saveAsAction");
     saveAsAction->setEnabled(false);
     mainMenu->addSeparator();
+    mainMenu->addAction("Настройки", this, SLOT(onOptions()));
     mainMenu->addAction("Справка", this, SLOT(openHelp()));
     mainMenu->addAction("О программе", this, SLOT(onAbout()));
     mainMenu->addSeparator();
