@@ -4,6 +4,9 @@
 #include <QPointF>
 #include <QString>
 #include <chrono>
+#include <QMessageBox>
+
+#define Unimplemented() QMessageBox::critical(this, "Внимание", "Данная функция не реализована")
 
 //! Перечисление составляющих модели
 enum class ItemType : int

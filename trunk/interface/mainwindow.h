@@ -32,6 +32,8 @@ public slots:
 
     void onAbout();
 
+    void onOptions();
+
     void openHelp();
 
     //! срабатывает при переключении на вкладку с другой моделью и при создании новой
