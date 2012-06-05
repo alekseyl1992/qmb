@@ -44,9 +44,9 @@
 #include "arrow.h"
 #include "modelscene.h"
 
-ModelItem::ModelItem(ItemType itemType, int itemId, QGraphicsItem *parent,
+ModelItem::ModelItem(ItemType itemType, int itemId, bool dropShadow, QGraphicsItem *parent,
              QGraphicsScene *scene)
-    : QGraphicsPolygonItem(parent, scene), ItemShadow(this)
+    : QGraphicsPolygonItem(parent, scene), ItemShadow(this, dropShadow)
 {
     myItemType = itemType;
     myId = itemId;

@@ -56,8 +56,6 @@
        </widget>
       </item>
      </layout>
-     <zorder>useOpenGL</zorder>
-     <zorder>dropShadow</zorder>
     </widget>
    </item>
    <item row="2" column="0">
@@ -83,7 +81,20 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
+       <widget class="QCheckBox" name="highLightXML">
+        <property name="text">
+         <string>Подсветка синтаксиса</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="showStringNumbers">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Показывать номера строк</string>
         </property>

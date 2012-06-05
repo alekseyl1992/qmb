@@ -44,7 +44,7 @@
 #include "arrow.h"
 #include "logic/model.h" //TODO только из-за supportedLinks()
 
-ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
+ModelScene::ModelScene(QObject *parent, QMenu *itemMenu, bool dropShadow)
     : QGraphicsScene(parent)
 {
     myScale = 1;
@@ -57,6 +57,7 @@ ModelScene::ModelScene(QMenu *itemMenu, QObject *parent)
     myItemColor = Qt::white;
     myTextColor = Qt::black;
     myLineColor = Qt::black;
+    bDropShadow = dropShadow;
 
     supportedLinks = logic::model::supportedLinks();
 }
@@ -65,7 +66,7 @@ void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
 {
     resizeToPoint(pos);
 
-    ModelItem *item = new ModelItem(itemType, id);
+    ModelItem *item = new ModelItem(itemType, id, bDropShadow);
     item->setPos(pos);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
@@ -91,7 +92,7 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
 
     if(startItem && endItem)
     {
-        Arrow *arrow = new Arrow(startItem, endItem);
+        Arrow *arrow = new Arrow(startItem, endItem, bDropShadow);
         arrow->setColor(myLineColor);
         startItem->addArrow(arrow);
         endItem->addArrow(arrow);
@@ -325,7 +326,9 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     //ресайз сцены при добавлении элемента
     resizeToPoint(event->scenePos());
 
-    ModelItem *item = new ModelItem(myItemType, getFreeId(myItemType));
+    ModelItem *item = new ModelItem(myItemType,
+                                    getFreeId(myItemType),
+                                    bDropShadow);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
     QGraphicsScene::addItem(item);

@@ -9,7 +9,7 @@
 class ItemShadow
 {
 public:
-    ItemShadow(QGraphicsItem *item);
+    ItemShadow(QGraphicsItem *item, bool drop);
     ~ItemShadow();
 
     virtual void scaleShadow(qreal factor);
