@@ -6,7 +6,10 @@
 #include <chrono>
 #include <QMessageBox>
 
+//! Используется как заглушка для нереализованного функционала
 #define Unimplemented() QMessageBox::critical(this, "Внимание", "Данная функция не реализована")
+//! Используется, чтобы сообщить приложению о необходимости перезапуска
+#define RestartCode 1000
 
 //! Перечисление составляющих модели
 enum class ItemType : int

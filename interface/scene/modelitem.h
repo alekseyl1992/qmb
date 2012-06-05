@@ -41,8 +41,6 @@
 #ifndef ModelItem_H
 #define ModelItem_H
 
-#include <QGraphicsPixmapItem>
-#include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QMap>
 #include "utility/common.h"
@@ -71,7 +69,7 @@ class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 public:
     enum { Type = UserType + 15 };
 
-    ModelItem(ItemType itemType, int itemId,
+    ModelItem(ItemType itemType, int itemId=0, bool dropShadow=false,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~ModelItem();
 

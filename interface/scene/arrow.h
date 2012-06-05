@@ -63,7 +63,7 @@ class Arrow : public QGraphicsLineItem, public ItemShadow
 public:
     enum { Type = UserType + 4 };
 
-    Arrow(ModelItem *startItem, ModelItem *endItem,
+    Arrow(ModelItem *startItem, ModelItem *endItem, bool dropShadow=false,
       QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~Arrow();
 

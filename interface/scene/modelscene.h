@@ -69,7 +69,7 @@ class ModelScene : public QGraphicsScene, public IFillableModel
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
-    ModelScene(QMenu *itemMenu, QObject *parent = 0);
+    ModelScene(QObject *parent, QMenu *itemMenu, bool dropShadow=true);
     qreal scale()
     {
         return myScale;
@@ -82,10 +82,13 @@ public:
     void removeSelectedItems();
 
     //модель изменена?
-    bool isModified()
+    bool isModified() const
     { return bModified; }
     void setModified(bool m)
-    { bModified = m;}
+    { bModified = m; }
+
+    bool isDropShadow() const
+    { return bDropShadow; }
 public slots:
     void setMode(Mode mode);
     void setItemType(ItemType type);
@@ -129,6 +132,7 @@ private:
     bool bModified;
     typedef std::pair<ItemType, ItemType> link;
     std::vector<link> supportedLinks;
+    bool bDropShadow;
 
     void resizeToPoint(QPointF pos);
     int getFreeId(ItemType itemType); //находит ближайщий пустой id

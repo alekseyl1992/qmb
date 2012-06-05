@@ -4,7 +4,6 @@
 #include "interface/document.h"
 #include <QMainWindow>
 #include <QMdiSubWindow>
-#include <functional>
 #include <QPointer>
 
 namespace Ui {
@@ -35,6 +34,9 @@ public slots:
     void onOptions();
 
     void openHelp();
+
+    void loadSettings(); //!< Загрузка настроек главного окна
+    void saveSettings();  //!< Сохранение настроек главного окна
 
     //! срабатывает при переключении на вкладку с другой моделью и при создании новой
     void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);

@@ -47,8 +47,8 @@
 const qreal Pi = 3.14;
 
 Arrow::Arrow(ModelItem *startItem, ModelItem *endItem,
-         QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsLineItem(parent, scene), ItemShadow(this)
+         bool dropShadow, QGraphicsItem *parent, QGraphicsScene *scene)
+    : QGraphicsLineItem(parent, scene), ItemShadow(this, dropShadow)
 {
     myStartItem = startItem;
     myEndItem = endItem;

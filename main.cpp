@@ -1,6 +1,8 @@
 ﻿#include <QtGui/QApplication>
 #include <QTranslator>
 #include "interface/mainwindow.h"
+#include <QTextCodec>
+#include "utility/common.h"
 
 /*! \mainpage QMB. Технический отчёт
  *
@@ -29,14 +31,27 @@
 
 int main(int argc, char *argv[])
 {
-    using namespace std;
-    QApplication a(argc, argv);
-    QTranslator *qtTranslator = new QTranslator(&a);
-    qtTranslator->load(":/translations/qt_ru.qm");
-    a.installTranslator(qtTranslator);
+    int retCode = 0;
 
-    MainWindow w;
-    w.show();
+    do
+    {
+        QApplication a(argc, argv);
+        a.setApplicationName("QMB");
+        a.setApplicationVersion("0.1 beta");
+        a.setOrganizationName("BeSoft");
 
-    return a.exec();
+        //TODO оставить весь текст на английском, затем перевети лингвистом
+        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
+        QTranslator *qtTranslator = new QTranslator(&a);
+        qtTranslator->load(":/translations/qt_ru.qm");
+        a.installTranslator(qtTranslator);
+
+        MainWindow w;
+        w.show();
+
+        retCode = a.exec();
+    } while(retCode == RestartCode);
+
+    return retCode;
 }

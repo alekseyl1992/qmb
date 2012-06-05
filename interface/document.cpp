@@ -20,6 +20,7 @@
 #include <QShortcut>
 #include <QFileDialog>
 #include <QToolBar>
+#include <QSettings>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false)
@@ -28,10 +29,14 @@ Document::Document(QWidget *parent) :
     ui->progressBar->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
 
-    //OpenGL acceleration
-    ui->graphicsView->setViewport(new QGLWidget(this));
+    QSettings set;
 
-    new XmlHighlighter(ui->codeEdit);
+    //OpenGL acceleration
+    if(set.value("Scene/OpenGL", true).toBool())
+        ui->graphicsView->setViewport(new QGLWidget(this));
+
+    if(set.value("Code/HighlightXML", true).toBool())
+        new XmlHighlighter(ui->codeEdit);
 
     //создаём панели инструментов
     QHBoxLayout *toolLayout = new QHBoxLayout(ui->toolPanel);
@@ -69,7 +74,8 @@ Document::Document(QWidget *parent) :
     itemMenu->addAction("Свойства", new connector(this, [this]
     {
         ElementPropWindow *propWindow =  new ElementPropWindow(this);
-        propWindow->show();
+        Unimplemented();
+        propWindow->exec();
     }), SLOT(signaled()));
 
     itemMenu->addAction("Удалить", new connector(this, [this]
@@ -111,10 +117,13 @@ Document::Document(QWidget *parent) :
     }), SLOT(signaled()));
     logMenu->addAction("Очистить", this, SLOT(clearLog()));
 
-    scene = new ModelScene(itemMenu, ui->graphicsView);
+    bool bDropShadow = set.value("Scene/DropShadow", true).toBool();
+    scene = new ModelScene(ui->graphicsView, itemMenu, bDropShadow);
+
     ui->graphicsView->setScene(scene);
     storage = new ModelStorage();
     code = ui->codeEdit;
+    code->setFontPointSize(set.value("Code/FontSize", 8).toInt());
 
     //связываем сцену с хранилищем
     connect(scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
@@ -188,21 +197,21 @@ Document::Document(QWidget *parent) :
     {
         QStandardItem *item = new QStandardItem("Очередь");
         item->setData(int(ItemType::Queue));
-        item->setIcon(QIcon(ModelItem(ItemType::Queue, -1, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Queue).image()));
         groupItem->appendRow(item);
     }
     //обработчик
     {
         QStandardItem *item = new QStandardItem("Обработчик");
         item->setData(int(ItemType::Handler));
-        item->setIcon(QIcon(ModelItem(ItemType::Handler, -1, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Handler).image()));
         groupItem->appendRow(item);
     }
     //терминатор
     {
         QStandardItem *item = new QStandardItem("Терминатор");
         item->setData(int(ItemType::Terminator));
-        item->setIcon(QIcon(ModelItem(ItemType::Terminator, -1, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Terminator).image()));
         groupItem->appendRow(item);
     }
 

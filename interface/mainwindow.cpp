@@ -6,15 +6,15 @@
 #include "interface/aboutdialog.h"
 #include "interface/optionsdialog.h"
 #include <QMessageBox>
-#include <QTextCodec>
 #include <QMdiSubWindow>
 #include <QFileDialog>
 #include <QToolButton>
 #include <QFont>
 #include <QMenu>
-#include <QTimer>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QSettings>
+#include <functional>
 
 #include "utility/lsfss.h"
 
@@ -22,9 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow), homeTab(nullptr)
 {
-    //TODO опционально оставить весь текст на английском, затем перевети лингвистом
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     ui->setupUi(this);
+    loadSettings();
 
     ui->mdiArea->setTabsClosable(true);
     ui->mdiArea->setTabsMovable(true);
@@ -45,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete ui;
 }
 
@@ -216,13 +216,43 @@ void MainWindow::onAbout()
 void MainWindow::onOptions()
 {
     OptionsDialog dialog(this);
-    Unimplemented();
-    dialog.exec();
+    if(dialog.exec())
+    {
+        int restart =
+                QMessageBox::question(this, "Внимание",
+                                      "Чтобы настройки вступили в силу, необхожим перезапуск программы.\nПерезапустить сейчас?",
+                                      QMessageBox::Yes, QMessageBox::No);
+        if(restart == QMessageBox::Yes)
+        {
+            QApplication::exit(RestartCode);
+        }
+    }
 }
 
 void MainWindow::openHelp()
 {
     QDesktopServices::openUrl(QUrl("http://code.google.com/p/qmb/wiki/UserGuide"));
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings set;
+    bool bMaximized = set.value("MainWindow/Maximized", true).toBool();
+    if(bMaximized)
+        setWindowState(Qt::WindowMaximized);
+    else
+    {
+        resize(set.value("MainWindow/Size", size()).toSize());
+        move(set.value("MainWindow/Pos", pos()).toPoint());
+    }
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings set;
+    set.setValue("MainWindow/Maximized", isMaximized());
+    set.setValue("MainWindow/Size", size());
+    set.setValue("MainWindow/Pos", pos());
 }
 
 void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
