@@ -1,4 +1,4 @@
-#include "optionsdialog.h"
+ï»¿#include "optionsdialog.h"
 #include "ui_optionsdialog.h"
 #include <QSettings>
 
@@ -9,7 +9,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     ui->setupUi(this);
     connect(this, SIGNAL(accepted()), this, SLOT(onAccepted()));
 
-    //çàãðóæàåì âñå íàñòðîéêè
+    //Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼ Ð²ÑÐµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸
     QSettings set;
     ui->dropShadow->setChecked(set.value("Scene/DropShadow", true).toBool());
     ui->useOpenGL->setChecked(set.value("Scene/OpenGL", true).toBool());
@@ -25,7 +25,7 @@ OptionsDialog::~OptionsDialog()
 
 void OptionsDialog::onAccepted()
 {
-    //ñîõðàíÿåì íàñòðîéêè
+    //ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸
     QSettings set;
     set.setValue("Scene/DropShadow", ui->dropShadow->isChecked());
     set.setValue("Scene/OpenGL", ui->useOpenGL->isChecked());

@@ -222,7 +222,7 @@ void MainWindow::onOptions()
                 QMessageBox::question(this, "Внимание",
                                       "Чтобы настройки вступили в силу, необхожим перезапуск программы.\nПерезапустить сейчас?",
                                       QMessageBox::Yes, QMessageBox::No);
-        if(restart == QMessageBox::Yes)
+        if(restart == QMessageBox::Yes && close())
         {
             QApplication::exit(RestartCode);
         }

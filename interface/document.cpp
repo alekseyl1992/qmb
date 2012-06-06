@@ -69,20 +69,6 @@ Document::Document(QWidget *parent) :
 
     toolLayout->addWidget(toolBar);
 
-    //создаем меню для элементов
-    QMenu *itemMenu = new QMenu(this);
-    itemMenu->addAction("Свойства", new connector(this, [this]
-    {
-        ElementPropWindow *propWindow =  new ElementPropWindow(this);
-        Unimplemented();
-        propWindow->exec();
-    }), SLOT(signaled()));
-
-    itemMenu->addAction("Удалить", new connector(this, [this]
-    {
-        scene->removeSelectedItems();
-    }), SLOT(signaled()), QKeySequence(Qt::Key_Delete));
-
     //создаём меню для лога
     logMenu = new QMenu(this);
     std::function<void(void)> copyLog =
@@ -118,7 +104,7 @@ Document::Document(QWidget *parent) :
     logMenu->addAction("Очистить", this, SLOT(clearLog()));
 
     bool bDropShadow = set.value("Scene/DropShadow", true).toBool();
-    scene = new ModelScene(ui->graphicsView, itemMenu, bDropShadow);
+    scene = new ModelScene(ui->graphicsView, bDropShadow);
 
     ui->graphicsView->setScene(scene);
     storage = new ModelStorage();
@@ -188,7 +174,7 @@ Document::Document(QWidget *parent) :
     {
         QStandardItem *item = new QStandardItem("Генератор");
         item->setData(int(ItemType::Generator));
-        item->setIcon(QIcon(ModelItem(ItemType::Generator, -1, nullptr).image()));
+        item->setIcon(QIcon(ModelItem(ItemType::Generator).image()));
         //item->setSizeHint(QSize(32, 32));
         groupItem->appendRow(item);
         generatorIndex = item->index();
@@ -554,7 +540,6 @@ bool Document::tryApplyCode()
         QMessageBox::critical(this, windowTitle(), "Возникла ошибка при разборе XML");
 
     return ret;
-
 }
 
 void Document::on_simulationLog_customContextMenuRequested(const QPoint &pos)

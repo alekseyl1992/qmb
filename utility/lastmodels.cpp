@@ -1,4 +1,4 @@
-#include "lastmodels.h"
+п»ї#include "lastmodels.h"
 #include <QFile>
 #include <QTextStream>
 #include <QApplication>
@@ -12,13 +12,13 @@ QStringList LastModels::getList()
 {
     if(!bCashed)
     {
-        //формируем список недавних проектов
+        //С„РѕСЂРјРёСЂСѓРµРј СЃРїРёСЃРѕРє РЅРµРґР°РІРЅРёС… РїСЂРѕРµРєС‚РѕРІ
         QFile lastModelsFile(QApplication::applicationDirPath() + fileName);
         lastModelsFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QTextStream stream(&lastModelsFile);
         if(stream.status() == QTextStream::Ok)
         {
-            //разбиваем файл на строки
+            //СЂР°Р·Р±РёРІР°РµРј С„Р°Р№Р» РЅР° СЃС‚СЂРѕРєРё
             list = stream.readAll()
                     .split(separator, QString::SkipEmptyParts);
             bool bListChanged = false;
@@ -29,14 +29,14 @@ QStringList LastModels::getList()
                 if(!QFile::exists(path))
                 {
                     list.removeAt(i);
-                    if(path != "") //пустую строку бесполезно стирать из файла
+                    if(path != "") //РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ Р±РµСЃРїРѕР»РµР·РЅРѕ СЃС‚РёСЂР°С‚СЊ РёР· С„Р°Р№Р»Р°
                         bListChanged = true;
                 }
             }
 
             if(bListChanged)
             {
-                //перезаписываем файл-список
+                //РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµРј С„Р°Р№Р»-СЃРїРёСЃРѕРє
                 lastModelsFile.close();
                 lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
                 QTextStream wstream(&lastModelsFile);
@@ -61,7 +61,7 @@ void LastModels::add(const QString &path)
         QTextStream stream(&lastModelsFile);
         if(stream.status() == QTextStream::Ok)
         {
-            //разбиваем файл на строки
+            //СЂР°Р·Р±РёРІР°РµРј С„Р°Р№Р» РЅР° СЃС‚СЂРѕРєРё
             list = stream.readAll()
                     .split(separator, QString::SkipEmptyParts);
             bCashed = true;
@@ -71,7 +71,7 @@ void LastModels::add(const QString &path)
     list.insert(list.begin(), path);
     list.removeDuplicates();
 
-    //перезаписываем файл-список
+    //РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµРј С„Р°Р№Р»-СЃРїРёСЃРѕРє
     lastModelsFile.close();
     lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     QTextStream wstream(&lastModelsFile);

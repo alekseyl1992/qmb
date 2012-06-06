@@ -1,4 +1,4 @@
-#ifndef OPTIONSDIALOG_H
+п»ї#ifndef OPTIONSDIALOG_H
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
@@ -7,7 +7,7 @@ namespace Ui {
 class OptionsDialog;
 }
 
-//! Окно настроек QMB
+//! РћРєРЅРѕ РЅР°СЃС‚СЂРѕРµРє QMB
 class OptionsDialog : public QDialog
 {
     Q_OBJECT

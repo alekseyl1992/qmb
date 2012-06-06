@@ -44,12 +44,11 @@
 #include "arrow.h"
 #include "logic/model.h" //TODO только из-за supportedLinks()
 
-ModelScene::ModelScene(QObject *parent, QMenu *itemMenu, bool dropShadow)
+ModelScene::ModelScene(QWidget *parent, bool dropShadow)
     : QGraphicsScene(parent)
 {
     myScale = 1;
     bModified = false;
-    myItemMenu = itemMenu;
     myMode = MoveItem;
     myItemType = ItemType::Generator;
     line = 0;
@@ -58,6 +57,18 @@ ModelScene::ModelScene(QObject *parent, QMenu *itemMenu, bool dropShadow)
     myTextColor = Qt::black;
     myLineColor = Qt::black;
     bDropShadow = dropShadow;
+
+    //создаем меню для элементов
+    myItemMenu = new QMenu(parent);
+    myItemMenu->addAction("Выровнять по сетке", this, SLOT(alignToGrid()), QKeySequence("Ctrl+G"));
+    myItemMenu->addAction("Свойства")->setEnabled(false);
+    /*{
+        //ElementPropWindow *propWindow =  new ElementPropWindow(this);
+        Unimplemented();
+        //propWindow->exec();
+    }), SLOT(signaled()));*/
+
+    myItemMenu->addAction("Удалить", this, SLOT(removeSelectedItems()), QKeySequence(Qt::Key_Delete));
 
     supportedLinks = logic::model::supportedLinks();
 }
@@ -127,6 +138,36 @@ void ModelScene::setItemType(ItemType type)
     myItemType = type;
 }
 
+void ModelScene::alignToGrid()
+{
+    const int cellWidth = 150;
+    const int cellHeight = 50;
+    //перенос начала координат к первому item'у
+    QPointF delta(items().first()->pos());
+
+    foreach(QGraphicsItem *it, selectedItems())
+    {
+        ModelItem *qit = qgraphicsitem_cast<ModelItem *>(it);
+        if(qit)
+        {
+            QPointF pos = qit->pos();
+            pos -= delta;
+            pos.setX((int)pos.x() / cellWidth * cellWidth);
+            pos.setY((int)pos.y() / cellHeight * cellHeight);
+            pos += delta;
+
+            qit->setPos(pos);
+            foreach(Arrow *arrow, qit->arrows())
+                arrow->updatePosition();
+            qit->setModified(true);
+
+            emit itemMoved(qit->itemType(),
+                           qit->id(),
+                           qit->scenePos().toPoint());
+        }
+    }
+}
+
 void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
 {
     if(keyEvent->key() == Qt::Key_Delete)
@@ -135,6 +176,8 @@ void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
         emit undoRequested();
     if(keyEvent->key() == Qt::Key_Y && keyEvent->modifiers().testFlag(Qt::ControlModifier))
         emit redoRequested();*/
+    if(keyEvent->key() == Qt::Key_G && keyEvent->modifiers().testFlag(Qt::ControlModifier))
+        alignToGrid();
 }
 
 void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -194,7 +237,7 @@ void ModelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     else if (myMode == MoveItem)
     {
         QGraphicsScene::mouseMoveEvent(mouseEvent);
-        //ресайз сцены при перемещаении элемента
+        //ресайз сцены при перемещении элемента
         resizeToPoint(mouseEvent->scenePos());
     }
 }
@@ -289,7 +332,6 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
             view->centerOn(itemAt(fPos));
         else
             view->centerOn(fPos);
-
 
         view->scale(scaleFactor, scaleFactor);
         foreach(QGraphicsItem *it, items())

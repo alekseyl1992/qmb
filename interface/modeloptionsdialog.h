@@ -1,4 +1,4 @@
-#ifndef MODELOPTIONSDIALOG_H
+﻿#ifndef MODELOPTIONSDIALOG_H
 #define MODELOPTIONSDIALOG_H
 
 #include <QDialog>
