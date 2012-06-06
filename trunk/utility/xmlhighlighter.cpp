@@ -22,6 +22,7 @@ static const QColor DEFAULT_ATTRIBUTE_NAME	= Qt::red;
 static const QColor DEFAULT_ATTRIBUTE_VALUE	= Qt::blue;
 static const QColor DEFAULT_ERROR			= Qt::darkMagenta;
 static const QColor DEFAULT_OTHER			= Qt::black;
+static const int ELEMENT_NAME_WEIGHT        = QFont::DemiBold;
 
 // Regular expressions for parsing XML borrowed from:
 // http://www.cs.sfu.ca/~cameron/REX.html
@@ -57,6 +58,7 @@ void XmlHighlighter::init()
 {
 	fmtSyntaxChar.setForeground(DEFAULT_SYNTAX_CHAR);
     fmtElementName.setForeground(DEFAULT_ELEMENT_NAME);
+    fmtElementName.setFontWeight(ELEMENT_NAME_WEIGHT);
 	fmtComment.setForeground(DEFAULT_COMMENT);
 	fmtAttributeName.setForeground(DEFAULT_ATTRIBUTE_NAME);
 	fmtAttributeValue.setForeground(DEFAULT_ATTRIBUTE_VALUE);

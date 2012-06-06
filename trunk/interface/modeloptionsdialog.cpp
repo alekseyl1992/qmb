@@ -1,4 +1,4 @@
-#include "modeloptionsdialog.h"
+﻿#include "modeloptionsdialog.h"
 #include "ui_modeloptionsdialog.h"
 
 ModelOptionsDialog::ModelOptionsDialog(QWidget *parent) :

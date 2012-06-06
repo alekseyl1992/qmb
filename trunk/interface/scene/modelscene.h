@@ -42,7 +42,7 @@
 
 #include <QGraphicsScene>
 #include <QWheelEvent>
-#include <map>
+#include <QMenu>
 #include "interface/scene/modelitem.h"
 #include "utility/ifillablemodel.h"
 #include "utility/common.h"
@@ -69,17 +69,16 @@ class ModelScene : public QGraphicsScene, public IFillableModel
 public:
     enum Mode { InsertItem, InsertLine, MoveItem };
 
-    ModelScene(QObject *parent, QMenu *itemMenu, bool dropShadow=true);
+    ModelScene(QWidget *parent, bool dropShadow=true);
     qreal scale()
     {
         return myScale;
     }
 
+    //реализация интерфейса IFillableModel
     void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint());
     void addLink(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void clear();
-
-    void removeSelectedItems();
 
     //модель изменена?
     bool isModified() const
@@ -91,7 +90,9 @@ public:
     { return bDropShadow; }
 public slots:
     void setMode(Mode mode);
-    void setItemType(ItemType type);
+    void setItemType(ItemType type); //!< Устанавливает тип элемента перед drop event
+    void alignToGrid(); //!< Выравнивает выбранные элементы по сетке
+    void removeSelectedItems();
 
 signals:
     //сигналы для оперативного изменения XML-дерева

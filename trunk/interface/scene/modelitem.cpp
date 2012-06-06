@@ -96,7 +96,7 @@ ModelItem::ModelItem(ItemType itemType, int itemId, bool dropShadow, QGraphicsIt
     setPolygon(myPolygon);
 
     //уменьшаем, если не для палитры
-    if(itemId != -1)
+    if(itemId)
         for(QPointF &pnt : myPolygon)
             pnt /= 2;
 

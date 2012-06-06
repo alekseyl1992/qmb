@@ -1,16 +1,16 @@
-#ifndef LASTMODELS_H
+п»ї#ifndef LASTMODELS_H
 #define LASTMODELS_H
 #include <QStringList>
 
-//! Класс предоставляет доступ к списку последних открытых моделей. Реализует паттерн singleton
+//! РљР»Р°СЃСЃ РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РґРѕСЃС‚СѓРї Рє СЃРїРёСЃРєСѓ РїРѕСЃР»РµРґРЅРёС… РѕС‚РєСЂС‹С‚С‹С… РјРѕРґРµР»РµР№. Р РµР°Р»РёР·СѓРµС‚ РїР°С‚С‚РµСЂРЅ singleton
 class LastModels : public QObject
 {
 Q_OBJECT
 private:
     const QString fileName;
-    static const int maxCount = 10; //максимальное кол-во записей
+    static const int maxCount = 10; //РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ Р·Р°РїРёСЃРµР№
     const char separator;
-    QStringList list; //!< Список моделей (кэш)
+    QStringList list; //!< РЎРїРёСЃРѕРє РјРѕРґРµР»РµР№ (РєСЌС€)
     bool bCashed;
 
     LastModels();
