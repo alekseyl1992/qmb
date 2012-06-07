@@ -17,7 +17,7 @@ public:
     ~OptionsDialog();
     
 private slots:
-    void onAccepted();
+    void onAccepted(); //!< Срабатывает при нажатии ОК
 
 private:
     Ui::OptionsDialog *ui;

@@ -4,9 +4,7 @@
 #include <QObject>
 #include <functional>
 
-/*!
- * Класс, позволяющий использовать lambda-exressions из C++11 в качестве аргумнта функции Qt connect()
- */
+//! Класс, позволяющий использовать lambda-exressions из C++11 в качестве аргумнта функции Qt connect()
 class connector : public QObject {
     Q_OBJECT
 public:

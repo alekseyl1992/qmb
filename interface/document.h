@@ -26,13 +26,18 @@ class Document : public QDialog
     Q_OBJECT
     
 public:
-    enum Tab {Scene, Code, Options}; //!< перечисление вкладок
+    enum Tab {Scene, Code}; //!< перечисление вкладок
 
+    /*! Инициализирует новый документ.
+     * После инициализации нужно вызвать createModel() или openModel().
+     * @see createModel()
+     * @see openModel()
+     */
     explicit Document(QWidget *parent);
 
     ~Document();
 
-    void showLog(bool show = true);
+    void showLog(bool show = true); //!< показывает/скрывает Лог симуляции
     void setActiveTab(Tab tab);
 
     void startSimulation();
@@ -44,7 +49,7 @@ public:
     bool isSavable() const;
 
 public slots:
-    void on_logButton_toggled(bool checked);
+    void on_logButton_toggled(bool checked); //!< Кнопка открытия/скрытия лога симуляции
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void onSimulationFinished(int event_time);
@@ -59,10 +64,10 @@ private slots:
     //! срабатывает при начале перетаскивания элемента с палитры на Сцену
     void on_toolsView_pressed(const QModelIndex &index);
 
-    void onStartAction();
-    void onStopAction();
-    void onUndoAction();
-    void onRedoAction();
+    void onStartAction(); //!< Нажатие кнопки Старт на панели инструментов
+    void onStopAction();  //!< Нажатие кнопки Стоп на панели инструментов
+    void onUndoAction();  //!< Нажатие кнопки Отмена на панели инструментов
+    void onRedoAction();  //!< Нажатие кнопки Повтор на панели инструментов
 
     //! срабатывает при смене текущей вкладки Tabs
     void on_tabWidget_currentChanged(int index);
@@ -75,10 +80,10 @@ private slots:
     void onReqBeganHandling(const int& hID, const logic::request_id& reqID, int event_time);
     void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, int event_time);
     void onReqTerminated(const int& tID, const logic::request_id& reqID, int event_time);
-    void onWrongLink(ItemType fromType, ItemType toType);
+    void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
 
 signals:
-    void beganSavable();
+    void beganSavable(); //!< Срабатывает после сохранения моедли через кнопку Сохранить на панели инструментов
 
 private:
     static const int ItemTypeRole = Qt::UserRole + 1;
@@ -87,11 +92,11 @@ private:
     ModelStorage *storage;
     QTextEdit *code;
     QMenu *logMenu;
-    QStandardItemModel *logModel;
+    QStandardItemModel *logModel; //!< Данные лога симуляции
     QAction *startAction, *stopAction;
     bool bSimulating;
 
-    bool tryApplyCode();
+    bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
     QString timeToString(int time);
 };
 

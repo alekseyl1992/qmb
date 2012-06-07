@@ -34,7 +34,7 @@ private slots:
 signals:
     void createModel();
     void openModel();
-    void openModelByPath(const QString& path);
+    void openModelByPath(const QString& path); //!< Срабатывает при выборе модели из списка последних открытых
     void aboutClick();
     void exitClick();
     void helpClick();

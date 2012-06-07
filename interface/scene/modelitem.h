@@ -69,6 +69,10 @@ class ModelItem : public QGraphicsPolygonItem, public ItemShadow
 public:
     enum { Type = UserType + 15 };
 
+    /*!
+     * Передача 0 в качестве itemId означает,
+     * что item создаётся для отрисовки на панели элементов, а не в сцене
+     */
     ModelItem(ItemType itemType, int itemId=0, bool dropShadow=false,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~ModelItem();
@@ -108,7 +112,7 @@ private:
     QPolygonF myPolygon;
     QMenu *myContextMenu;
     QList<Arrow *> myArrows;
-    QVector<QPointF> hotSpots; //точки крепления стрелок
+    QVector<QPointF> hotSpots; //!< точки крепления стрелок
     int myId;
     bool bModified;
 };

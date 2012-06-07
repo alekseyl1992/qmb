@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "utility/modelstorage.h"
 #include "interface/homewidget.h"
-#include "interface/createmodeldialog.h"
+#include "interface/modeloptionsdialog.h"
 #include "interface/aboutdialog.h"
 #include "interface/optionsdialog.h"
 #include <QMessageBox>
@@ -50,7 +50,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onCreateModel()
 {
-    CreateModelDialog *dialog = new CreateModelDialog(this);
+    ModelOptionsDialog *dialog = new ModelOptionsDialog(this);
     if(dialog->exec() == QDialog::Accepted)
     {
         Document *newDoc = new Document(this);
@@ -259,8 +259,10 @@ void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1)
 {
     if(!arg1 && ui->mdiArea->subWindowList().empty())
     {
-        homeTab = nullptr;
-        createHomeWidget();
+        if(!homeTab)
+            createHomeWidget();
+        else
+            close();
     }
 
     if(arg1)
