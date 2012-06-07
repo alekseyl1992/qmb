@@ -20,7 +20,7 @@ enum class ItemType : int
     Handler,
     Terminator,
     HubIn,
-    HubOut,
+    HubOut
 };
 
 //! Перечисление ошибок модели

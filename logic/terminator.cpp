@@ -25,7 +25,7 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqTerminated(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
+            emit parent->reqTerminated(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->start_time));
             //std::cout << cur_req->get_id().str_reqID() << " terminated in Terminator " << get_id() << endl;
 		}
 
