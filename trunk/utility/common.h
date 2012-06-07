@@ -32,7 +32,7 @@ enum error_code {
     N
 };
 
-char* error_code_str[error_code::N] = {
+const char* error_code_str[error_code::N] = {
     "INPUT_IN_GENERATOR",
     "OUTPUT_IN_TERMINATOR",
     "NO_GENERATORS",
@@ -46,7 +46,5 @@ QString itemTypeToString(ItemType type);
 qreal distance(QPointF p1, QPointF p2);
 
 typedef unsigned long long ull_t;
-
-ull_t get_now_time();
 
 #endif // COMMON_H
