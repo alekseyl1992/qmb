@@ -21,7 +21,6 @@ enum class ItemType : int
     Terminator,
     HubIn,
     HubOut,
-    item_N
 };
 
 //! Перечисление ошибок модели
