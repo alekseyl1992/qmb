@@ -23,7 +23,7 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqBeganHandling(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
+            emit parent->reqBeganHandling(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->start_time));
             //std::cout << cur_req->get_id().str_reqID() << " was put to the handler " << get_id() << endl;
 		}
 
@@ -31,7 +31,7 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqFinishedHandling(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
+            emit parent->reqFinishedHandling(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->start_time));
             //std::cout << cur_req->get_id().str_reqID() << " finished handling in handler " << get_id() << endl;
 		}
 
