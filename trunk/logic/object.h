@@ -1,40 +1,68 @@
-п»ї#ifndef H_OBJECT
-#define H_OBJECT
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <thread>
 #include <mutex>
 #include <string>
-#include <QObject>
-#include <QDebug>
 #include <sstream>
-#include <ctime>
+#include <iostream>
+#include <QObject>
 
 #include "../utility/common.h"
+#include "request.h"
 
 namespace logic
 {
     class model;
 
-    //! Р‘Р°Р·РѕРІС‹Р№ Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ СЌР»РµРјРµРЅС‚Р° РјРѕРґРµР»Рё
+	//! Базовый абстрактный класс для элемента модели
+
     class object : public QObject
 	{
         Q_OBJECT
 
 	public:
-        object(model* p, int id);
+		object(ItemType type = ItemType::NoType, ull_t id = 0);
         object(const object& obj);
         virtual ~object();
 
-        int get_id() const { return id; }
-		virtual void clean() = 0;
+		ItemType get_type() const  
+		{ return item_type; }
 
+        ull_t get_id() const 
+		{ return id; }
+
+		bool is_moveable() const				//!< Проверяет, можно ли из входного объекта "вытащить" запрос
+		{ return moveable_request_flag; }
+
+		bool is_free() const					//!< Проверяет, можно ли в текущего объект добавить запрос
+		{ return freedom_flag; }
+
+		void connect_with(object* _source);		//!< Служит для соединения объекта с входом
+		bool has_connection() const;			//!< Проверка наличия соединения
+		object* connected_with() const 
+		{ return input; }
+		void set_parrent(model* parent);		//!< Устанавливает указателя на родительскую модель
+
+		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
+		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
+		virtual void move_the_request();		//!< Служит для вызова виртуальной функции add
+		
 	protected:
+		ItemType item_type;
         model* parent;
-        int id;
+        ull_t id;
+		object* input;
+		request* cur_req;
+		
+		bool moveable_request_flag;
+		bool freedom_flag;
+		std::mutex item_mutex;
 
         //attributes
         std::string name;
 	};
 
-}
-#endif // !H_OBJECT
+} //end namespace logic
+
+#endif // !OBJECT_H

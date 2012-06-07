@@ -286,14 +286,14 @@ void Document::stopSimulation()
 {
     //TODO повторяющийся код
     bSimulating = false;
-    int time = storage->getModel()->simulation_stop();
+    storage->getModel()->simulation_stop();
     ui->graphicsView->setEnabled(true);
     ui->progressBar->hide();    
     startAction->setEnabled(true);
     stopAction->setEnabled(false);
 
     logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem(timeToString(0)) //ИСПРАВИТЬ!!!!!!
                         << new QStandardItem("")
                         << new QStandardItem("симуляция прервана"));
     ui->simulationLog->scrollToBottom();
@@ -551,9 +551,8 @@ void Document::onReqGenerated(const logic::request_id &reqID, int event_time)
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem(QString("%0:%1")
-                                             .arg(reqID.__req_gen_id)
-                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("%0")
+                                             .arg(reqID.str_reqID().c_str()))
                         << new QStandardItem("сгенерирован"));
 }
 
@@ -561,9 +560,8 @@ void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int e
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem(QString("%0:%1")
-                                             .arg(reqID.__req_gen_id)
-                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("%0")
+                                             .arg(reqID.str_reqID().c_str()))
                         << new QStandardItem(QString("добавлен в очередь %0")
                                              .arg(qID)));
     ui->simulationLog->scrollToBottom();
@@ -573,9 +571,8 @@ void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem(QString("%0:%1")
-                                             .arg(reqID.__req_gen_id)
-                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("%0")
+                                             .arg(reqID.str_reqID().c_str()))
                         << new QStandardItem(QString("попал в обработчик %0")
                                              .arg(hID)));
     ui->simulationLog->scrollToBottom();
@@ -585,9 +582,8 @@ void Document::onReqFinishedHandling(const int &hID, const logic::request_id &re
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem(QString("%0:%1")
-                                             .arg(reqID.__req_gen_id)
-                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("%0")
+                                             .arg(reqID.str_reqID().c_str()))
                         << new QStandardItem(QString("обработка завершена")));
     ui->simulationLog->scrollToBottom();
 }
@@ -596,9 +592,8 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, i
 {
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem(QString("%0:%1")
-                                             .arg(reqID.__req_gen_id)
-                                             .arg(reqID.__req_id))
+                        << new QStandardItem(QString("%0")
+                                             .arg(reqID.str_reqID().c_str()))
                         << new QStandardItem("уничтожен"));
     ui->simulationLog->scrollToBottom();
 }

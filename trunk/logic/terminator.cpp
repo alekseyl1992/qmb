@@ -1,46 +1,55 @@
-﻿#include "terminator.h"
-#include "object.h"
+#include "terminator.h"
 #include "model.h"
 
 namespace logic
 {
-
-    terminator::terminator(model *parent, int id, int period) :
-        object(parent, id), cur_req(), terminating_period(period), freedom_flag(true), count_of_terminated_requests(0)
+    terminator::terminator(ull_t id, int period) :
+		object(ItemType::Terminator, id), 
+		terminating_period(period), 
+		count_of_terminated_requests(0)
     { }
 
     terminator::terminator(const terminator &t) :
-        object(t.parent, t.id), cur_req(t.cur_req), terminating_period(t.terminating_period), freedom_flag(t.freedom_flag)//, count_of_terminated_requests(t.count_of_terminated_requests)
+        object(t), 
+		terminating_period(t.terminating_period), 
+		count_of_terminated_requests(t.count_of_terminated_requests)
     { }
 
-    terminator &terminator::operator =(const terminator &t)
-    {
-        if (this == &t)
-            return *this;
-        parent = t.parent;
-        id = t.id;
-        cur_req = t.cur_req;
-        terminating_period = t.terminating_period;
-        freedom_flag = t.freedom_flag;
-        count_of_terminated_requests = t.count_of_terminated_requests;
-        return *this;
-    }
+	terminator::~terminator() { }
 
-    void terminator::terminate(const request &req)
+    void terminator::terminate(request* req)
     {
-        std::lock_guard<std::mutex> lk(terminator_mutex);
-
-        freedom_flag = false;
-        cur_req = req;
+		cur_req = req;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(terminating_period));
-        ++count_of_terminated_requests;
 
-        freedom_flag = true;
+		if (parent->is_simulating())
+		{
+            emit parent->reqTerminated(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
+            //std::cout << cur_req->get_id().str_reqID() << " terminated in Terminator " << get_id() << endl;
+		}
 
-        emit parent->reqTerminated(id, cur_req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
-        qDebug() << cur_req.get_id().__req_gen_id << "-" << cur_req.get_id().__req_id << " terminated in Terminator " << get_id();
+		delete cur_req;
+		cur_req = nullptr;
 
-
+		moveable_request_flag = true;
+		freedom_flag = true;
+		++count_of_terminated_requests;
     }
-}
+
+	void terminator::add(request* req)
+	{
+		std::lock_guard<std::mutex> lk(item_mutex);
+
+		moveable_request_flag = false;
+		freedom_flag = false;
+		this->terminate(req);
+	}
+
+	request* terminator::get_request()
+	{
+		std::lock_guard<std::mutex> lk(item_mutex);
+		return new request();
+	}
+
+} //end namespace logic

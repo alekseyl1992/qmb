@@ -1,74 +1,52 @@
-п»ї#ifndef H_GENERATOR
-#define H_GENERATOR
-
-
+#ifndef GENERATOR_H
+#define GENERATOR_H
 
 #include "object.h"
 #include "request.h"
-#include "exceptions.h"
 
 namespace logic
 {
-    class object;
     class model;
 
-    //! РљР»Р°СЃСЃ СЏРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј РјРѕРґРµР»Рё (РєР»Р°СЃСЃ logic::model).
+	//! Класс генератора. Является элементом модели (класс logic::model).
     /*!
-     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РёСЃРїРѕР»СЊСѓРµРјС‹Р№ РґР»СЏ РіРµРЅРµСЂР°С†РёРё СЃРѕРѕР±С‰РµРЅРёР№ (Р·Р°РїСЂРѕСЃРѕРІ) РІ
-     * РјРѕРґРµР»Рё logic::model. РЇРІР»СЏРµС‚СЃСЏ Р°Р±СЃРѕР»СЋС‚РЅРѕ РЅРµР·Р°РІРёСЃРёРјС‹Рј СЌР»РµРјРµРЅС‚РѕРј РЎРњРћ, РЅРµ РёРјРµРµС‚ РІС…РѕРґР°, РјРѕР¶РµС‚ РёРјРµС‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ
-     * РІС‹С…РѕРґРѕРІ, СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ Р·Р°РїСЂРѕСЃРѕРІ РїРѕ СЃРІСЏР·СЏРј СЂР°СЃРїСЂРµРґРµР»СЏРµС‚СЃСЏ СЃР»СѓС‡Р°Р№РЅС‹Рј РѕР±СЂР°Р·РѕРј.
+     * Представляет собой объект, испольуемый для генерации сообщений (запросов) в
+     * модели logic::model. Является абсолютно независимым элементом СМО, не имеет входа.
+	 * Генерация происходит по различным законам распределения.
      */
+
     class generator : public object
-    {
-        std::mutex gen_mutex;
+	{
 	public:
-        generator(model* parent, int id=0, int period = 0, ull_t num_requests = 0, bool is_infinite = false);
+        generator(ull_t id = 0, int period = 0, ull_t num_requests = 0, bool is_random = false, bool is_infinite = false);
 		generator(const generator& gen);
-		generator& operator=(const generator& gen);
+        virtual ~generator();
 
-        ~generator();
+        ull_t get_num_requests() const 													//!< Возвращает количество запросов, которое требуется сгенерировать
+		{ return number_of_requests_to_generate; }	
 
+        ull_t get_current_num_requests() const											//!< Возвращает текущее количество сгенерированных запросов
+		{ return count_of_generated_requests; }
 
-		//generating new request
-		void generate_new_request();
-		//gets next request 
-		request get_request();
+        bool is_infinite() const													    //!< Возвращает флаг бесконечной генерации запросов
+		{ return infinite_generating; }
 
-		//gets generating period
-		int get_generating_period() const { return generating_period; }
-		//sets generating period
-		void set_generating_period(int period) { generating_period = period; }
+		bool is_finished() const														//!< Возвращает сообщение о завершенности работы генератора
+		{ return count_of_generated_requests == number_of_requests_to_generate; }
 
-		//gets generated flag
-		bool is_generated() const { return is_generated_flag; }
-
-		//gets number of required requests
-        ull_t get_num_requests() const { return number_of_requests_to_generate; }
-        //gets number of requests
-        ull_t get_current_num_requests() const { return cur_req_id; }
-		//sets number of required requests
-        void set_num_requests(ull_t num) { number_of_requests_to_generate = num; }
-        //if the generator has to generate requests infinetly
-        bool is_infinite() const { return infinite_generating; }
-
-		bool is_finished() const {
-            return cur_req_id >= number_of_requests_to_generate && new_req == nullptr;
-		}
-
-		virtual void clean() { }
+		void generate_new_request(ull_t r_id);											//!< Генерирует новый запрос
+		virtual request* get_request();													//!< Реализация виртуальной функции базового класса object
+		virtual void add(request*) { }													//!< Реализация виртуальной функции базового класса object
 
 	private:
-        //Fields
-		request* new_req;
 		int generating_period;
+		ull_t number_of_requests_to_generate;
+		bool random_generating;
         bool infinite_generating;
 
-        ull_t number_of_requests_to_generate;
-		bool is_generated_flag;
-        ull_t cur_req_id; //<- Р·Р°РїСЂРѕСЃ
+		ull_t count_of_generated_requests;
 	};
-
 
 } //end namespace logic
 
-#endif // !H_GENERATOR
+#endif // !GENERATOR_H

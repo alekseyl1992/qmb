@@ -1,4 +1,4 @@
-﻿#ifndef H_EXCEPTIONS
+#ifndef H_EXCEPTIONS
 #define H_EXCEPTIONS
 
 namespace logic

@@ -1,12 +1,56 @@
-﻿#include "object.h"
+#include "object.h"
+#include "request.h"
+#include "model.h"
 
 namespace logic
 {
-    object::object(model* p, int id) : parent(p), id(id) { }
+    object::object(ItemType type, ull_t id) :
+		item_type(type),
+		parent(nullptr), 
+		id(id), 
+		input(nullptr), 
+		cur_req(nullptr),
+		moveable_request_flag(false),
+		freedom_flag(true),
+		name("")
+	{ }
 
-    object::object(const object &obj): parent(obj.parent), id(obj.id)
+    object::object(const object &obj): 
+		item_type(obj.item_type),
+		parent(obj.parent), 
+		id(obj.id), 
+		input(obj.input), 
+		cur_req(obj.cur_req),
+		moveable_request_flag(obj.moveable_request_flag),
+		freedom_flag(obj.freedom_flag),
+		name(obj.name)
     { }
 
     object::~object()
-    { }
-}
+    {
+	}
+
+	void object::connect_with(object* _source)
+	{
+		this->input = _source;
+	}
+
+	bool object::has_connection() const
+	{
+		return input == nullptr ? false : true;
+	}
+
+	void object::set_parrent(model* _parent)
+	{
+		this->parent = _parent;
+	}
+
+	void object::move_the_request()
+	{
+		if (this->input->is_moveable() && this->is_free())
+		{
+			this->add(input->get_request());
+		}
+	}
+
+} //end namespace logic

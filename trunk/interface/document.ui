@@ -460,7 +460,7 @@ QTreeView::item:!enabled {
         </property>
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>292</width>
           <height>24</height>
          </size>
         </property>

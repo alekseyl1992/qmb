@@ -1,4 +1,4 @@
-﻿#include "exceptions.h"
+#include "exceptions.h"
 
 namespace logic
 {

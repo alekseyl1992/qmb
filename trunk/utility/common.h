@@ -14,10 +14,23 @@
 //! Перечисление составляющих модели
 enum class ItemType : int
 {
+    NoType,
     Generator,
     Queue,
     Handler,
-    Terminator
+    Terminator,
+    HubIn,
+    HubOut,
+    item_N
+};
+
+//! Перечисление ошибок модели
+enum error_code {
+    INPUT_IN_GENERATOR,
+    OUTPUT_IN_TERMINATOR,
+    NO_GENERATORS,
+    NO_TERMINATORS,
+    N
 };
 
 //! Преобразует тип элемента в строковое представление

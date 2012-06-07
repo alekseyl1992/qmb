@@ -70,7 +70,7 @@ ModelScene::ModelScene(QWidget *parent, bool dropShadow)
 
     myItemMenu->addAction("Удалить", this, SLOT(removeSelectedItems()), QKeySequence(Qt::Key_Delete));
 
-    supportedLinks = logic::model::supportedLinks();
+    //supportedLinks = logic::model::supportedLinks();
 }
 
 void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
