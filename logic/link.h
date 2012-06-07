@@ -1,12 +1,8 @@
-﻿#ifndef H_LINK
+#ifndef H_LINK
 #define H_LINK
 
 namespace logic
 {
-    //! Шаблонная структура связи
-    /*!
-     * Служит для связывания двух объектов модели logic::model
-     */
 	template<typename LHS_T, typename RHS_T>
 	struct link
 	{
@@ -18,4 +14,5 @@ namespace logic
 	};
 
 } //end namespace logic
+
 #endif // !H_LINK

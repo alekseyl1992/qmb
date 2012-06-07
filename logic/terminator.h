@@ -1,43 +1,38 @@
-п»ї#ifndef TERMINATOR_H
+#ifndef TERMINATOR_H
 #define TERMINATOR_H
-
 
 #include "object.h"
 #include "request.h"
-#include "exceptions.h"
 
 namespace logic
 {
-    class object;
     class model;
 
-    //! РљР»Р°СЃСЃ С‚РµСЂРјРёРЅР°С‚РѕСЂР°. РЇРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј logic::model.
+	//! Класс терминатора. Является элементом logic::model.
     /*!
-     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РёСЃРїРѕР»СЊСѓРµРјС‹Р№ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёР№ (Р·Р°РїСЂРѕСЃРѕРІ) РёР·
-     * РјРѕРґРµР»Рё logic::model. Р—Р°РІРµСЂС€Р°СЋС‚ "Р¶РёР·РЅСЊ" СЃРѕРѕР±С‰РµРЅРёСЏ РІ РјРѕРґРµР»Рё.
+     * Представляет собой объект, испольуемый для удаления сообщений (запросов) из
+     * модели logic::model. Завершают "жизнь" сообщения в модели.
      */
+
     class terminator : public object
     {
-        std::mutex terminator_mutex;
     public:
-        terminator(model* parent, int id=0, int period = 0);
+        terminator(ull_t id = 0, int period = 0);
         terminator(const terminator& t);
-        terminator& operator= (const terminator& t);
-        ~terminator() {
-        }
+        virtual ~terminator();
 
-        void terminate(const request& req);
+		ull_t get_count_of_terminated_requests() const  //!< Возвращает количество терминированных запросов
+		{ return count_of_terminated_requests; }
 
-        bool is_free() const { return freedom_flag; }
-        ull_t get_count_of_terminated_requests() { return count_of_terminated_requests; }
-
-        virtual void clean() { }
+        void terminate(request* req);					//!< Функция, терминирующая запрос
+		virtual void add(request* req);                 //!< Реализация виртуальной функции базового класса object
+		virtual request* get_request();					//!< Реализация виртуальной функции базового класса object                        
 
     private:
-        request cur_req;
         int terminating_period;
-        bool freedom_flag;
         ull_t count_of_terminated_requests;
     };
-}
+
+} //end namespace logic
+
 #endif // TERMINATOR_H

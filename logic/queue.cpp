@@ -1,62 +1,64 @@
-﻿#include "queue.h"
+#include "queue.h"
 #include "model.h"
 
 namespace logic
 {
-	//constructors
-    queue::queue(model* parent, int id):
-        object(parent, id), having_request_flag(false)
+    queue::queue(int id, bool from_top):
+		object(ItemType::Queue, id), 
+		to_get_from_top(from_top)
 	{ }
 
     queue::queue(const queue &q) :
-        object(q), requests_in_queue(q.requests_in_queue), having_request_flag(q.having_request_flag)
+        object(q), 
+		requests(q.requests), 
+		to_get_from_top(q.to_get_from_top)
 	{ }
 
-    queue::~queue() { }
+	queue::~queue() { }
 
-	//assignment
-	queue& queue::operator=(const queue& q) {
-		if (this == &q)
-			return *this;
-        parent = q.parent;
-		requests_in_queue.clear();
-		requests_in_queue.assign(q.requests_in_queue.begin(), q.requests_in_queue.end());
-
-		having_request_flag = q.having_request_flag;
-		return *this;
+	void queue::make_cur_request()
+	{
+		if (to_get_from_top)
+			cur_req = (requests.size() != 0) ? *requests.begin() : nullptr;
+		else
+			cur_req = (requests.size() != 0) ? *(requests.end() - 1) : nullptr;
 	}
 
-	//adding request to the queue
-    void queue::add(const request& req) {
-        std::lock_guard<std::mutex> lk(queue_mutex);
+    void queue::add(request* req)
+	{
+        std::lock_guard<std::mutex> lk(item_mutex);
 
-        requests_in_queue.push_back(req);
+        requests.push_back(req);
+		make_cur_request();
 
-        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
+        moveable_request_flag = (requests.size() == 0) ? false : true;
 
-        emit parent->reqQueued(id, req.get_id(), static_cast<int>(get_now_time() - parent->start_time));
-        qDebug() << req.get_id().__req_gen_id << "-" << req.get_id().__req_id << " was put to the queue " << get_id();
+		if (parent->is_simulating())
+		{
+            emit parent->reqQueued(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->start_time));
+            //std::cout << cur_req->get_id().str_reqID() << " was put to the queue " << get_id() << endl;
+		}
 	}
 
-	//getting next request
-	request queue::get_first() {
-        std::lock_guard<std::mutex> lk(queue_mutex);
-		request res = *(requests_in_queue.begin());
-		requests_in_queue.pop_front();
-
-        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
-
-		return res;
+	request* queue::get_first()
+	{
+		requests.pop_front();
+		return cur_req;
 	}
 
-	//getting last request
-	request queue::get_last() {
-        std::lock_guard<std::mutex> lk(queue_mutex);
-		request res = *(requests_in_queue.end() - 1);
-		requests_in_queue.pop_back();
+	request* queue::get_last()
+	{
+		requests.pop_back();
+		return cur_req;
+	}
 
-        having_request_flag = (requests_in_queue.size() == 0) ? false : true;
+	request* queue::get_request()
+	{
+		std::lock_guard<std::mutex> lk(item_mutex);
 
+		request* res = to_get_from_top ? get_first() : get_last();
+		make_cur_request();
+		moveable_request_flag = (requests.size() == 0) ? false : true;
 		return res;
 	}
 

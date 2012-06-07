@@ -1,30 +1,29 @@
-п»ї#ifndef H_REQUEST_ID
+#ifndef H_REQUEST_ID
 #define H_REQUEST_ID
 
-#include <iostream>
-#include <sstream>
+#include <string>
 
-#include "../utility/common.h"
+//#include "../utility/common.h"
+typedef unsigned long long ull_t;
 
 namespace logic
 {
-    //! РЎС‚СЂСѓРєС‚СѓСЂР° РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° СЃРѕРѕР±С‰РµРЅРёСЏ (Р·Р°РїСЂРѕСЃР°).
-	struct request_id
+	//! Класс идентификатора сообщения (запроса).
+
+	class request_id
 	{
+	public:
         request_id();
         request_id(ull_t req_gen_id, ull_t req_id);
         request_id(const request_id& req_id);
 
-        request_id& operator= (const request_id& req_id);
+        std::string str_reqID() const;             //!< Возвращает строковое представление id
 
-        std::string txt_reqID() const;
-
+	private:
         ull_t __req_gen_id;
         ull_t __req_id;
 	};
 
 } //end namespace logic
-
-std::basic_ostream<char>& operator<< (std::basic_ostream<char>& os, const logic::request_id &id);
 
 #endif // !H_REQUEST_ID

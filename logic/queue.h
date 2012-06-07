@@ -1,52 +1,45 @@
-п»ї#ifndef H_QUEUE
-#define H_QUEUE
+#ifndef QUEUE_H
+#define QUEUE_H
 
 #include <deque>
 
 #include "object.h"
 #include "request.h"
 
-
 namespace logic
 {
-    class object;
     class model;
-
-    //! РљР»Р°СЃСЃ РѕС‡РµСЂРµРґРё. РЇРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј logic::model.
+	
+	//! Класс очереди. Является элементом logic::model.
     /*!
-     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РёСЃРїРѕР»СЊСѓРµРјС‹Р№ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёР№ (Р·Р°РїСЂРѕСЃРѕРІ)
-     * РјРѕРґРµР»Рё logic::model Рё РґР°Р»СЊРЅРµР№С€РµР№ РїРµСЂРµРґР°С‡Рё СЃРѕРѕР±С‰РµРЅРёР№ РІ РґСЂСѓРіРёРµ СЌР»РµРјРЅС‚С‹ РјРѕРґРµР»Рё.
+     * Представляет собой объект, испольуемый для хранения сообщений (запросов)
+     * модели logic::model и дальнейшей передачи сообщений в другие элемнты модели.
      */
+
     class queue : public object
 	{
-        std::mutex queue_mutex;
     public:
-        queue(model* parent, int id=0);
+        queue(int id = 0, bool from_top = true);
         queue(const queue& q);
-		queue& operator=(const queue& q);
-
-		~queue();
+		virtual ~queue();
 		
-		//adding request to the queue
-        void add(const request& req);
-		//get number of elemets in the queue
-        ull_t get_size() const { return static_cast<ull_t>(requests_in_queue.size()); }
-
-		//getting next request
-		request get_first();
-		//getting last request
-		request get_last();
-
-		//if the queue has a request
-        bool has_request() { return having_request_flag; }
-
-		virtual void clean() { }
+        ull_t get_size() const                                    //!< Возвращает размер очереди
+		{ return static_cast<ull_t>(requests.size()); }
 
 	private:
-		std::deque<request> requests_in_queue;
-		bool having_request_flag;
+		void make_cur_request();                                  //!< Создает текущий запрос согласно начальным условиям
+
+	public:
+		virtual void add(request* req);                           //!< Реализация виртуальной функции базового класса object
+		request* get_first();                                     //!< Возвращает верхний элемент списка
+		request* get_last();									  //!< Возвращает нижний элемент списка
+		virtual request* get_request();                           //!< Реализация виртуальной функции базового класса object
+
+	private:
+		std::deque<request*> requests;
+		bool to_get_from_top;
 	};
 
 } //end namespace logic
 
-#endif // !H_QUEUE
+#endif // !QUEUE_H

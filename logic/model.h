@@ -1,80 +1,85 @@
-п»ї#ifndef H_MODEL
-#define H_MODEL
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <vector>
+#include <list>
+#include <utility>
 #include <algorithm>
 #include <thread>
 #include <mutex>
 #include <sstream>
-#include <vector>
 #include <QObject>
-#include <ctime>
 
-#include "utility/common.h"
-#include "request.h"
+#include "../utility/common.h"
 #include "generator.h"
 #include "queue.h"
 #include "handler.h"
 #include "terminator.h"
 #include "link.h"
-#include "exceptions.h"
 
 namespace logic
 {
-    //! РљР»Р°СЃСЃ СЏРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј РґР»СЏ РјРѕРґРµР»Рё (РєР»Р°СЃСЃ model).
+    //! Класс модель.
     /*!
-     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ СЃРїРёСЃРєРё РѕР±СЉРµРєС‚РѕРІ Рё СЂРµР°Р»РёР·СѓРµС‚ РІСЃРµ СЃРІСЏР·Рё РјРµР¶РґСѓ РѕР±СЉРµРєС‚Р°РјРё РјРѕРґРµР»Рё.
+     * Представляет собой объект, который содержит списки объектов и реализует все связи между ними.
      */
+
     class model : public QObject
 	{
         Q_OBJECT
 
-        friend class generator;
-        friend class queue;
-        friend class handler;
-        friend class terminator;
-
-        std::mutex model_mutex, model_mutex2, model_mutex3;
 	public:
-        model() { }
-		model(const model& ) { }
-        static std::vector< std::pair<ItemType, ItemType> > supportedLinks();
+        model();
+		model(const model& m);
+		~model();
 
-		~model() { }
-
+        //static std::vector< std::pair<ItemType, ItemType> > supportedLinks();
+		
     private:
-        bool are_all_generated(); //checks if all generators finished their work
-        bool are_all_queues_clear(); //it's obvious :)
-        bool are_all_handlers_finished_handling();
-        bool are_all_terminators_finished_terminating();
-        bool is_simulating_finished(); //checks the sumulation
-        void generating_th(); //links generators and queues
-        void queueing_th();
-        void queue_handler_link_th(); //links queues and handlers
-        void handler_terminator_link_th(); //links queues and handlers
+        bool are_all_generated();									//!< Проверяет, завершили ли все генераторы работу
+        bool are_all_queues_clear();								//!< Проверяет, нет ли в очередях запросов
+        bool are_all_handlers_finished_handling();					//!< Проверяет, закончили ли все обработчики свою работу
+        bool are_all_terminators_finished_terminating();			//!< Проверяет, закончили ли все термиторы свою работу
+        bool is_simulating_finished();								//!< Проверяет, завершена ли симуляция
+
+        void generating_th();										//!< Функция, создающая потоки для генерации сообщений
+		void threading();											//!< Функция, создающая потоки для перемещения запросов по модели
+		void checking_finished_th();								//!< Функция, провверяющая систему на завершенность
 
     public:
-        void simulation_start();
-        int simulation_stop();
+		void add_generator(generator &&gen);						//!< Добавляет генератор в модель
+        void add_queue(queue &&q);									//!< Добавляет очередь в модель
+        void add_handler(handler &&h);								//!< Добавляет обработчик в модель
+        void add_terminator(terminator &&t);						//!< Добавляет терминатор в модель
 
-        void add_generator(const generator &&gen);
-        void add_queue(const queue &&q);
-        void add_handler(const handler &&h);
-        void add_terminator(const terminator &&t);
-        void add_link_generator_queue(const link <generator *, queue *> &&link);
-        void add_link_queue_handler(const link<queue *, handler *> &&link);
-        void add_link_handler_terminator(const link<handler *, terminator *> &&link);
+		void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
 
-        generator* get_generator_by_id(int id);
-        queue* get_queue_by_id(int id);
-        handler* get_handler_by_id(int id);
-        terminator* get_terminator_by_id(int id);
+        generator* find_generator(int id);							//!< Возвращает адрес генератора с нужным id
+        queue* find_queue(int id);									//!< Возвращает адрес очереди с нужным id
+        handler* find_handler(int id);								//!< Возвращает адрес обработчика с нужным id
+        terminator* find_terminator(int id);						//!< Возвращает адрес терминатора с нужным id
 
-        link <generator*, queue*>* get_link_generator_queue_by_ids(int id_left, int id_right);
-        link <queue*, handler*>* get_link_queues_handlers_by_ids(int id_left, int id_right);
+		bool is_valid();											//!< Проверяет модель на наличие ошибок
+		std::string get_errors() const;								//!< Возвращает ошибки модели
+
+		bool is_simulating() const									//!< Показывает состояние симуляции (не то же, что is_simulating_finished())
+		{ return simulate_flag && !stop_flag; }
+
+		bool is_paused() const 										//!< Если модель стоит на паузе
+		{ return pause_flag; }
+
+		void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
+
+        void simulation_start();									//!< Начинает симуляцию
+        void simulation_stop();										//!< Останавливает симуляцию
+		void simulation_pause();									//!< Ставит симуляцию на паузу
 
     signals:
-        void simulationFinished(int time);
+		void simulationStarted(int time);
+		void simulationStopped(int time);
+		void simulationPaused(int time);
+		void simulationRestored(int time);
+		void simulationFinished(int time);
         void reqGenerated(const logic::request_id& reqID, int time);
         void reqQueued(const int& qID, const logic::request_id& reqID, int time);
         void reqBeganHandling(const int& hID, const logic::request_id& reqID, int time);
@@ -82,20 +87,27 @@ namespace logic
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private: //members
-		std::vector<generator> generators; //all generators are kept here
-		std::vector<queue> queues; //all queues are kept here
-		std::vector<handler> handlers; //all handlers are kept here
-        std::vector<terminator> terminators; //all terminators are kept here
+		typedef std::pair<const object* const, error_code> Pair;
 
-		//links
-		std::vector< link <generator*, queue*> > link_generators_queues;
-		std::vector< link <queue*, handler*> > link_queues_handlers;
-        std::vector< link <handler*, terminator*> > link_handlers_terminators;
+		std::list<generator> generators;
+		std::list<queue> queues;
+		std::list<handler> handlers;
+        std::list<terminator> terminators;
+
+        std::vector<object*> objects;
+
+		std::vector<Pair> errors;
+		std::vector<std::thread*> threads;
 
 		bool simulate_flag;
+		bool stop_flag;
+		bool pause_flag;
         ull_t start_time;
+
+		ull_t num_terminated;
+		ull_t num_generated;
 	};
 
 } //end namespace logic
 
-#endif // !H_MODEL
+#endif // !MODEL_H

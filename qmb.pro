@@ -21,23 +21,23 @@ SOURCES += main.cpp \
     interface/homewidget.cpp \
     utility/xmlhighlighter.cpp \
     utility/modelstorage.cpp \
-    logic/exceptions.cpp \
-    logic/link.cpp \
-    logic/object.cpp \
-    logic/request_id.cpp \
-    logic/request.cpp \
-    logic/generator.cpp \
-    logic/queue.cpp \
-    logic/handler.cpp \
-    logic/model.cpp \
-    utility/lsfss.cpp \
-    logic/terminator.cpp \
     interface/createmodeldialog.cpp \
     utility/common.cpp \
     utility/lastmodels.cpp \
     interface/aboutdialog.cpp \
     interface/modeloptionsdialog.cpp \
-    interface/optionsdialog.cpp
+    interface/optionsdialog.cpp \
+    logic/terminator.cpp \
+    logic/request_id.cpp \
+    logic/request.cpp \
+    logic/queue.cpp \
+    logic/object.cpp \
+    logic/model.cpp \
+    logic/link.cpp \
+    logic/hub_in.cpp \
+    logic/handler.cpp \
+    logic/generator.cpp \
+    logic/exceptions.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
@@ -52,21 +52,22 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/elementpropwindow.h \
     interface/scene/itemshadow.h \
     interface/homewidget.h \
-    logic/exceptions.h \
-    logic/link.h \
-    logic/object.h \
-    logic/request_id.h \
-    logic/request.h \
-    logic/generator.h \
-    logic/queue.h \
-    logic/handler.h \
-    logic/model.h \
-    logic/terminator.h \
     interface/createmodeldialog.h \
     utility/lastmodels.h \
     interface/aboutdialog.h \
     interface/modeloptionsdialog.h \
-    interface/optionsdialog.h
+    interface/optionsdialog.h \
+    logic/terminator.h \
+    logic/request_id.h \
+    logic/request.h \
+    logic/queue.h \
+    logic/object.h \
+    logic/model.h \
+    logic/link.h \
+    logic/hub_in.h \
+    logic/handler.h \
+    logic/generator.h \
+    logic/exceptions.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \

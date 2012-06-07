@@ -1,63 +1,38 @@
-п»ї#ifndef H_HANDLER
-#define H_HANDLER
+#ifndef HANDLER_H
+#define HANDLER_H
 
-#include <ostream>
-
-#include "request.h"
 #include "object.h"
-
+#include "request.h"
 
 namespace logic
 {
-    class object;
     class model;
 
-    //! РљР»Р°СЃСЃ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№. РЇРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј logic::model
+	//! Класс обработчика сообщений. Является элементом logic::model.
     /*!
-     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РёСЃРїРѕР»СЊСѓРµРјС‹Р№ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ (Р·Р°РїСЂРѕСЃРѕРІ) РІ
-     * РјРѕРґРµР»Рё logic::model. РћР±СЂР°Р±РѕС‚РєР° РїСЂРѕРёСЃС…РѕРґРёС‚ РїРѕ Р°Р±СЃРѕР»СЋС‚РЅРѕРјСѓ РІСЂРµРјРµРЅРё (РїРµСЂРёРѕРґСѓ).
+     * Представляет собой объект, испольуемый для обработки сообщений (запросов) в
+     * модели logic::model. Обработка происходит по абсолютному времени (периоду).
      */
+
     class handler : public object
 	{
-        friend class terminator;
-
-        std::mutex handler_mutex, handler_mutex2;
 	public:
-        handler(model* parent, int id=0, int _handlePeriod = 0);
+        handler(ull_t id = 0, int _handlePeriod = 0);
 		handler(const handler& h);
-		handler& operator=(const handler& h);
+        virtual ~handler();
 
-        ~handler() {
-        }
+        ull_t get_num_of_handled_requests() const     //!< Возвращает количество обработанных запросов
+		{ return count_of_handled_requests; }  
 
-		//gets generating period
-		int get_handling_period() const { return handling_period; }
-		//sets generating period
-		void set_handling_period(int period) { handling_period = period; }
-        //gets number of handled requests
-        ull_t get_num_of_handled_requests() const { return counter_of_handled_requests; }
-
-        //Check the busy flag of the handler
-        bool is_free() { return freedom_flag; }
-        bool is_handled() { return handled_flag; }
-        //Send request to the handler
-        void handle(const request& req);
-        //pops request out
-        request get_current_request();
-
-		virtual void clean() { }
+        void handle(request* req);					  //!< Функция, обрабатывающая запрос
+		virtual void add(request* req);               //!< Реализация виртуальной функции базового класса object
+        virtual request* get_request();				  //!< Реализация виртуальной функции базового класса object
 
 	private:
-
-		//fields
-        request cur_req;
 		int handling_period;
-		bool freedom_flag;
-        bool handled_flag;
-
-        ull_t counter_of_handled_requests;
+        ull_t count_of_handled_requests;
 	};
 
 } //end namespace logic
 
-#endif // !H_HANDLER
+#endif // !HANDLER_H
