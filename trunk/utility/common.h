@@ -33,6 +33,13 @@ enum error_code {
     N
 };
 
+char* error_code_str[error_code::N] = {
+    "INPUT_IN_GENERATOR",
+    "OUTPUT_IN_TERMINATOR",
+    "NO_GENERATORS",
+    "NO_TERMINATORS"
+};
+
 //! Преобразует тип элемента в строковое представление
 QString itemTypeToString(ItemType type);
 
