@@ -9,7 +9,7 @@
  * \section intro_sec Краткое описание
  *
  * QMB - Queueing Model Builder, программа, предназначенная для создания, редактирования, симуляции и сбора статистики систем массового обслуживания (СМО).
- * @n Адрес проекта: <a href="http://code.google.com/p/qmb/">http://code.google.com/p/qmb/</a>
+ * @n Адрес проекта: http://code.google.com/p/qmb/
  * @n@n Разработчики:
  * - Леонтьев Алексей
  * - Латкин Игорь
@@ -22,11 +22,15 @@
  *
  * \section install_sec Развёртка проекта
  * - Скачать и установить Qt Creator
- *   - Ссылка: <a href="http://qt.nokia.com/downloads/">http://qt.nokia.com/downloads/</a>
+ *   - Ссылка: http://qt.nokia.com/downloads/
  * - Скачать и установить MinGW 4.6.3
- *   - Ссылка: <a href="http://sourceforge.net/projects/mingw/files/">http://sourceforge.net/projects/mingw/files/</a>
+ *   - Ссылка: http://sourceforge.net/projects/mingw/files/
  * - Подключить MinGW к Qt
  * - Открыть проект в Qt Creator
+ * \section doc_sec Литература
+ * - Документация Qt: http://qt-project.org/doc/qt-4.8/
+ * - Cтатьи про Qt: http://habrahabr.ru/hub/qt_software/posts/
+ * - Документация по C++: http://cplusplus.com/
  */
 
 int main(int argc, char *argv[])

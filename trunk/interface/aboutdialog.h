@@ -1,4 +1,4 @@
-#ifndef ABOUTDIALOG_H
+п»ї#ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
 #include <QDialog>
@@ -7,7 +7,7 @@ namespace Ui {
 class AboutDialog;
 }
 
-//! Класс окна "О программе"
+//! РљР»Р°СЃСЃ РѕРєРЅР° "Рћ РїСЂРѕРіСЂР°РјРјРµ"
 class AboutDialog : public QDialog
 {
     Q_OBJECT
