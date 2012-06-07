@@ -7,11 +7,11 @@ class LastModels : public QObject
 {
 Q_OBJECT
 private:
-    const QString fileName;
-    static const int maxCount = 10; //максимальное кол-во записей
-    const char separator;
+    const QString fileName; //!< Имя файла со списком
+    static const int maxCount = 10; //!< максимальное количество записей
+    const char separator; //!< Символ разделения строк
     QStringList list; //!< Список моделей (кэш)
-    bool bCashed;
+    bool bCashed; //!< Загружен ли список в память
 
     LastModels();
 

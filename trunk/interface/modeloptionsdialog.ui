@@ -6,33 +6,43 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>391</width>
-    <height>184</height>
+    <width>414</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Настройки симуляции</string>
+   <string>Настройки модели</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="2" colspan="2">
-    <widget class="QGroupBox" name="optionsGroup">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Настройки</string>
+      <string>Модель</string>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
+     <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Время симуляции:</string>
+         <string>Имя:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="modelName"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Симуляция</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Время симуляции (мм:cc):</string>
         </property>
        </widget>
       </item>
@@ -76,7 +86,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

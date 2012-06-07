@@ -21,9 +21,7 @@
 #include <QColor>
 
 
-/*!
- * Класс реализует подсветку синтаксиса XML на вкладке Код
- */
+//! Класс реализует подсветку синтаксиса XML на вкладке Код
 class XmlHighlighter : public QSyntaxHighlighter
 {
 public:

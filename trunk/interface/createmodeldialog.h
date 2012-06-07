@@ -8,6 +8,9 @@ class CreateModelDialog;
 }
 
 //! Класс окна с запросом ввода имени модели
+/*!
+ * @deprecated Вместо него теперь используется ModelOptionsDialog
+ */
 class CreateModelDialog : public QDialog
 {
     Q_OBJECT

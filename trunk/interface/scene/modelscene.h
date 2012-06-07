@@ -67,7 +67,7 @@ class ModelScene : public QGraphicsScene, public IFillableModel
     Q_OBJECT
 
 public:
-    enum Mode { InsertItem, InsertLine, MoveItem };
+    enum Mode { InsertItem, InsertLine, MoveItem }; //!< режимы работы сцены
 
     ModelScene(QWidget *parent, bool dropShadow=true);
     qreal scale()
@@ -89,7 +89,7 @@ public:
     bool isDropShadow() const
     { return bDropShadow; }
 public slots:
-    void setMode(Mode mode);
+    void setMode(Mode mode); //! @see Mode
     void setItemType(ItemType type); //!< Устанавливает тип элемента перед drop event
     void alignToGrid(); //!< Выравнивает выбранные элементы по сетке
     void removeSelectedItems();
@@ -132,7 +132,7 @@ private:
     QColor myLineColor;
     bool bModified;
     typedef std::pair<ItemType, ItemType> link;
-    std::vector<link> supportedLinks;
+    std::vector<link> supportedLinks; //!< Список разрешённых связей, формируется в logic
     bool bDropShadow;
 
     void resizeToPoint(QPointF pos);

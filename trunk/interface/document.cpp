@@ -54,9 +54,9 @@ Document::Document(QWidget *parent) :
     act->setShortcut(QKeySequence("Ctrl+Y"));
     toolBar->addSeparator();
 
-    act = toolBar->addAction(QIcon(":/icons/modelOptions"), "Настройки симуляции", new connector(this, [this]
+    act = toolBar->addAction(QIcon(":/icons/modelOptions"), "Настройки модели", new connector(this, [this]
     {
-        ModelOptionsDialog *dialog = new ModelOptionsDialog(this);
+        ModelOptionsDialog *dialog = new ModelOptionsDialog(this, storage);
         Unimplemented();
         dialog->exec();
     }), SLOT(signaled()));
