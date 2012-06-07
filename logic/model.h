@@ -68,6 +68,9 @@ namespace logic
 		bool is_paused() const 										//!< Если модель стоит на паузе
 		{ return pause_flag; }
 
+        ull_t get_start_time() const
+        { return start_time; }
+
 		void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
         void simulation_start();									//!< Начинает симуляцию
