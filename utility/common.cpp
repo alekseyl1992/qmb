@@ -18,6 +18,23 @@ QString itemTypeToString(ItemType type)
     };
 }
 
+QString itemTypeToEngString(ItemType type)
+{
+    switch (type)
+    {
+        case ItemType::Generator:
+            return "Generator";
+        case ItemType::Queue:
+            return "Queue";
+        case ItemType::Handler:
+            return "Handler";
+        case ItemType::Terminator:
+            return "Terminator";
+        default:
+            return "IllegalItemType";
+    };
+}
+
 std::string itemTypeTo_stdString(ItemType type)
 {
     switch (type)

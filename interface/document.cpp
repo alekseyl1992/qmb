@@ -278,8 +278,8 @@ void Document::startSimulation()
                         << new QStandardItem("симуляция начата"));
     ui->simulationLog->scrollToBottom();
 
-    model->simulation_start();
     bSimulating = true;
+    model->simulation_start();
 }
 
 void Document::stopSimulation()
@@ -441,6 +441,7 @@ void Document::keyPressEvent(QKeyEvent *event)
 void Document::onSimulationFinished(int event_time)
 {    
     bSimulating = false;
+    storage->getModel()->simulation_stop();
     ui->progressBar->hide();    
     startAction->setEnabled(true);
     stopAction->setEnabled(false);

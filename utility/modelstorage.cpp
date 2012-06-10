@@ -63,16 +63,16 @@ logic::model* ModelStorage::getModel(bool create)
                 case Link: // 4 is Link
                 LinkType linkType;
 
-                if (fromType==ItemNames[int(ItemType::Generator)]
-                        && toType==ItemNames[int(ItemType::Queue)])
+                if (fromType==itemTypeToEngString(ItemType::Generator)
+                        && toType==itemTypeToEngString(ItemType::Queue))
                     linkType = LinkType::GeneratorToQueue;
 
-                if (fromType==ItemNames[int(ItemType::Queue)]
-                        && toType==ItemNames[int(ItemType::Handler)])
+                if (fromType==itemTypeToEngString(ItemType::Queue)
+                        && toType==itemTypeToEngString(ItemType::Handler))
                     linkType = LinkType::QueueToHandler;
 
-                if (fromType==ItemNames[int(ItemType::Handler)]
-                        && toType==ItemNames[int(ItemType::Terminator)])
+                if (fromType==itemTypeToEngString(ItemType::Handler)
+                        && toType==itemTypeToEngString(ItemType::Terminator))
                     linkType = LinkType::HandlerToTerminator;
 
                 AddLink(myModel,linkType,fromID,toID);

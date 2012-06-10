@@ -30,6 +30,7 @@ enum class ItemType : int
 
 //! Преобразует тип элемента в строковое представление
 QString itemTypeToString(ItemType type);
+QString itemTypeToEngString(ItemType type);
 std::string itemTypeTo_stdString(ItemType type);
 
 //! Вычисляет расстояние маежду двумя точками
