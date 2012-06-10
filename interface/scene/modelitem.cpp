@@ -88,6 +88,8 @@ ModelItem::ModelItem(ItemType itemType, int itemId, bool dropShadow, QGraphicsIt
             path = path.simplified();
             hotSpots << QPoint(0-dhs, 50);
             break;
+        default:
+            break;
     }
 
     itemRect = path.boundingRect();

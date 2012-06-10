@@ -1,6 +1,5 @@
 #include <sstream>
 #include "model.h"
-#include "..\Header.h"
 
 namespace logic
 {
@@ -154,7 +153,7 @@ namespace logic
 						try_pausing(); //если нажата пауза
 
 						if (obj->has_connection())
-							obj->move_the_request();
+                            obj->move_request();
 					}
 				}) );
 			}
@@ -212,7 +211,7 @@ namespace logic
 		std::for_each(errors.begin(), errors.end(), [&](std::pair<object const*, error_code> err) {
 			ss << "Error #" << err.second << " : " << error_code_str[err.second];
 			if (err.first != nullptr)
-                ss << " in " << itemTypeToString(err.first->get_type()) << " " << err.first->get_id();
+                ss << " in " << itemTypeTo_stdString(err.first->get_type()).c_str() << " " << err.first->get_id();
 			ss << std::endl;
 		});
 		return ss.str();
@@ -297,7 +296,7 @@ namespace logic
 		rhs->connect_with(lhs);
 	}
 
-    generator* model::find_generator(int id)
+    generator* model::find_generator(ull_t id)
     {
 		std::list<generator>::iterator iter;
 		for(auto it = generators.begin(); it != generators.end(); ++it)
@@ -311,7 +310,7 @@ namespace logic
         return &(*iter);
     }
 
-    queue* model::find_queue(int id)
+    queue* model::find_queue(ull_t id)
     {
         std::list<queue>::iterator iter;
         for(auto it = queues.begin(); it != queues.end(); ++it)
@@ -325,7 +324,7 @@ namespace logic
         return &(*iter);
     }
 
-    handler* model::find_handler(int id)
+    handler* model::find_handler(ull_t id)
     {
         std::list<handler>::iterator iter;
         for(auto it = handlers.begin(); it != handlers.end(); ++it)
@@ -339,7 +338,7 @@ namespace logic
         return &(*iter);
     }
 
-    terminator* model::find_terminator(int id)
+    terminator* model::find_terminator(ull_t id)
     {
         std::list<terminator>::iterator iter;
         for(auto it = terminators.begin(); it != terminators.end(); ++it)
