@@ -16,6 +16,18 @@
 #include "terminator.h"
 #include "exceptions.h"
 
+
+//! Перечисление ошибок модели
+enum error_code {
+    INPUT_IN_GENERATOR,
+    OUTPUT_IN_TERMINATOR,
+    NO_GENERATORS,
+    NO_TERMINATORS,
+    N
+};
+
+std::string error_code_str(error_code code);
+
 namespace logic
 {
     //! Класс модель.

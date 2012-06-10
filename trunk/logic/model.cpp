@@ -1,6 +1,24 @@
 #include <sstream>
 #include "model.h"
 
+std::string error_code_str(error_code code)
+{
+    switch (code)
+    {
+    case INPUT_IN_GENERATOR:
+        return "INPUT_IN_GENERATOR";
+
+    case OUTPUT_IN_TERMINATOR:
+        return "OUTPUT_IN_TERMINATOR";
+    case NO_GENERATORS:
+        return "NO_GENERATORS";
+    case NO_TERMINATORS:
+        return "NO_TERMINATORS";
+    default:
+        return "";
+    }
+}
+
 namespace logic
 {
 	model::model() :
@@ -120,14 +138,6 @@ namespace logic
 			{
 				for (ull_t cur_req_id = 1; cur_req_id <= gen.get_num_requests() && is_simulating(); cur_req_id++)
 				{
-					//пример работы паузы
-					/*if (count_of_generated_requests == 5)
-					{
-					parent->simulation_pause();
-					std::this_thread::sleep_for(std::chrono::seconds(5));
-					parent->simulation_start();
-					}*/
-
 					try_pausing(); //если нажата пауза
 
 					if (!gen.is_moveable())
@@ -209,7 +219,7 @@ namespace logic
 		std::stringstream ss;
 		ss << "errors occured:\n";
 		std::for_each(errors.begin(), errors.end(), [&](std::pair<object const*, error_code> err) {
-			ss << "Error #" << err.second << " : " << error_code_str[err.second];
+            ss << "Error #" << err.second << " : " << error_code_str(err.second);
 			if (err.first != nullptr)
                 ss << " in " << itemTypeTo_stdString(err.first->get_type()).c_str() << " " << err.first->get_id();
 			ss << std::endl;
