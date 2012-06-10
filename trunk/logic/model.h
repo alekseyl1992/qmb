@@ -10,12 +10,11 @@
 #include <sstream>
 #include <QObject>
 
-#include "../utility/common.h"
 #include "generator.h"
 #include "queue.h"
 #include "handler.h"
 #include "terminator.h"
-#include "link.h"
+#include "exceptions.h"
 
 namespace logic
 {
@@ -27,6 +26,11 @@ namespace logic
     class model : public QObject
 	{
         Q_OBJECT
+
+        friend class generator;
+        friend class queue;
+        friend class handler;
+        friend class terminator;
 
 	public:
         model();
@@ -44,7 +48,9 @@ namespace logic
 
         void generating_th();										//!< Функция, создающая потоки для генерации сообщений
 		void threading();											//!< Функция, создающая потоки для перемещения запросов по модели
-		void checking_finished_th();								//!< Функция, провверяющая систему на завершенность
+        void checking_finished_th();								//!< Функция, проверяющая систему на завершенность
+
+        void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
     public:
 		void add_generator(generator &&gen);						//!< Добавляет генератор в модель
@@ -54,10 +60,10 @@ namespace logic
 
 		void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
 
-        generator* find_generator(int id);							//!< Возвращает адрес генератора с нужным id
-        queue* find_queue(int id);									//!< Возвращает адрес очереди с нужным id
-        handler* find_handler(int id);								//!< Возвращает адрес обработчика с нужным id
-        terminator* find_terminator(int id);						//!< Возвращает адрес терминатора с нужным id
+        generator* find_generator(ull_t id);						//!< Возвращает адрес генератора с нужным id
+        queue* find_queue(ull_t id);								//!< Возвращает адрес очереди с нужным id
+        handler* find_handler(ull_t id);							//!< Возвращает адрес обработчика с нужным id
+        terminator* find_terminator(ull_t id);						//!< Возвращает адрес терминатора с нужным id
 
 		bool is_valid();											//!< Проверяет модель на наличие ошибок
 		std::string get_errors() const;								//!< Возвращает ошибки модели
@@ -70,8 +76,6 @@ namespace logic
 
         ull_t get_start_time() const
         { return start_time; }
-
-		void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
         void simulation_start();									//!< Начинает симуляцию
         void simulation_stop();										//!< Останавливает симуляцию
@@ -90,7 +94,7 @@ namespace logic
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private: //members
-		typedef std::pair<const object* const, error_code> Pair;
+        typedef std::pair<object*, error_code> Pair;
 
 		std::list<generator> generators;
 		std::list<queue> queues;

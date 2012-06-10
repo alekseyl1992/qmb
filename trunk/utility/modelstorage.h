@@ -15,9 +15,9 @@
 #ifndef MODELSTORAGE_H
 #define MODELSTORAGE_H
 
-#include "logic/model.h"
-#include "utility/common.h"
-#include "utility/ifillablemodel.h"
+#include "../logic/model.h"
+#include "common.h"
+#include "ifillablemodel.h"
 
 #include <QDebug>
 #include <QtXml/QDomDocument>

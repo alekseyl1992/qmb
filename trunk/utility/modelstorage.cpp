@@ -14,7 +14,7 @@ ModelStorage::ModelStorage() : myModel(nullptr)
 
 logic::model* ModelStorage::getModel(bool create)
 {  
-    const int Link = 4;
+    const int Link = 6;
 
     if(create) //создание модели
     {
@@ -45,19 +45,19 @@ logic::model* ModelStorage::getModel(bool create)
             switch(entries[ProcessingItem.nodeName()])
             {
                 case int(ItemType::Generator):
-                myModel->add_generator(logic::generator(myModel,id,period,num_of_reqs));
+                myModel->add_generator(logic::generator(id,period,num_of_reqs));
                 break;
 
                 case int(ItemType::Queue):
-                myModel->add_queue(logic::queue(myModel,id));
+                myModel->add_queue(logic::queue(id));
                 break;
 
                 case int(ItemType::Handler):
-                myModel->add_handler(logic::handler(myModel,id,period));
+                myModel->add_handler(logic::handler(id,period));
                 break;
 
                 case int(ItemType::Terminator):
-                myModel->add_terminator(logic::terminator(myModel,id,period));
+                myModel->add_terminator(logic::terminator(id,period));
                 break;
 
                 case Link: // 4 is Link
@@ -186,7 +186,7 @@ bool ModelStorage::undoModel()
 
 void ModelStorage::fillModel(IFillableModel *iModel) const
 {
-    const int Link = 4;
+    const int Link = 6;
     QMap<QString, int> entries;
     entries[ItemNames[0]] = int(ItemType::Generator);
     entries[ItemNames[1]] = int(ItemType::Queue);
@@ -282,6 +282,8 @@ void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
             break;
         case ItemType::Terminator:
             InsertedItem.setAttribute("period",0);
+            break;
+        default:
             break;
     };
     InsertedItem.setAttribute("x",pos.x());
@@ -422,25 +424,28 @@ void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID
     {
         case LinkType::GeneratorToQueue:
         {
-            generator* gen = curModel->get_generator_by_id(fromID);
-            queue* que = curModel->get_queue_by_id(toID);
-            curModel->add_link_generator_queue(link<generator*,queue*>(gen,que));
+            generator* gen = curModel->find_generator(fromID);
+            queue* que = curModel->find_queue(toID);
+            curModel->connect(gen, que);
+            //curModel->add_link_generator_queue(link<generator*,queue*>(gen,que));
             break;
         }
 
         case LinkType::QueueToHandler:
         {
-            queue* que = curModel->get_queue_by_id(fromID);
-            handler* hnd = curModel->get_handler_by_id(toID);
-            curModel->add_link_queue_handler(link<queue*, handler*>(que,hnd));
+            queue* que = curModel->find_queue(fromID);
+            handler* hnd = curModel->find_handler(toID);
+            curModel->connect(que, hnd);
+            //curModel->add_link_queue_handler(link<queue*, handler*>(que,hnd));
             break;
         }
 
         case LinkType::HandlerToTerminator:
         {
-            handler* hnd = curModel->get_handler_by_id(fromID);
-            terminator* ter = curModel->get_terminator_by_id(toID);
-            curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
+            handler* hnd = curModel->find_handler(fromID);
+            terminator* ter = curModel->find_terminator(toID);
+            curModel->connect(hnd, ter);
+            //curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
             break;
         }
     }

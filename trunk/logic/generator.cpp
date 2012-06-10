@@ -19,8 +19,8 @@ namespace logic
 		object(gen),
 		generating_period(gen.generating_period), 
 		number_of_requests_to_generate(gen.number_of_requests_to_generate), 
+        random_generating(gen.random_generating),
 		infinite_generating(gen.infinite_generating),
-		random_generating(gen.random_generating),
 		count_of_generated_requests(gen.count_of_generated_requests)
 	{ }
 

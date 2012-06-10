@@ -4,12 +4,15 @@
 #include <QPointF>
 #include <QString>
 #include <chrono>
+#include <string>
 #include <QMessageBox>
 
 //! Используется как заглушка для нереализованного функционала
 #define Unimplemented() QMessageBox::critical(this, "Внимание", "Данная функция не реализована")
 //! Используется, чтобы сообщить приложению о необходимости перезапуска
 #define RestartCode 1000
+
+typedef unsigned long long ull_t;
 
 //! Перечисление составляющих модели
 enum class ItemType : int
@@ -23,28 +26,18 @@ enum class ItemType : int
     HubOut
 };
 
-//! Перечисление ошибок модели
-enum error_code {
-    INPUT_IN_GENERATOR,
-    OUTPUT_IN_TERMINATOR,
-    NO_GENERATORS,
-    NO_TERMINATORS,
-    N
-};
 
-const char* error_code_str[error_code::N] = {
-    "INPUT_IN_GENERATOR",
-    "OUTPUT_IN_TERMINATOR",
-    "NO_GENERATORS",
-    "NO_TERMINATORS"
-};
 
 //! Преобразует тип элемента в строковое представление
 QString itemTypeToString(ItemType type);
+std::string itemTypeTo_stdString(ItemType type);
 
 //! Вычисляет расстояние маежду двумя точками
 qreal distance(QPointF p1, QPointF p2);
 
-typedef unsigned long long ull_t;
+ull_t get_now_time();
+
+
+
 
 #endif // COMMON_H

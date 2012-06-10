@@ -13,13 +13,6 @@
 
 namespace logic
 {
-    ull_t get_now_time()
-    {
-        auto now = std::chrono::system_clock::now();
-        auto duration  = now.time_since_epoch();
-        return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-    }
-
     class model;
 
 	//! Базовый абстрактный класс для элемента модели
@@ -53,7 +46,7 @@ namespace logic
 
 		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
 		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
-		virtual void move_the_request();		//!< Служит для вызова виртуальной функции add
+        virtual void move_request();		    //!< Служит для вызова виртуальной функции add
 		
 	protected:
 		ItemType item_type;

@@ -1,5 +1,4 @@
 #include "object.h"
-#include "request.h"
 #include "model.h"
 
 namespace logic
@@ -45,7 +44,7 @@ namespace logic
 		this->parent = _parent;
 	}
 
-	void object::move_the_request()
+    void object::move_request()
 	{
 		if (this->input->is_moveable() && this->is_free())
 		{
