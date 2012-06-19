@@ -239,7 +239,7 @@ namespace logic
 		else
 		{
 			simulate_flag = true;
-			//start_time = get_now_time();
+            start_time = get_now_time();
             emit simulationStarted(static_cast<int>(start_time));
             //std::cout << "simulation started" << std::endl;
 			
