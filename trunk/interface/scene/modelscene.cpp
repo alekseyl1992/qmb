@@ -369,7 +369,7 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     resizeToPoint(event->scenePos());
 
     ModelItem *item = new ModelItem(myItemType,
-                                    getFreeId(myItemType),
+                                    getFreeId(),
                                     bDropShadow);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
@@ -413,7 +413,7 @@ void ModelScene::resizeToPoint(QPointF pos)
     }
 }
 
-int ModelScene::getFreeId(ItemType itemType)
+int ModelScene::getFreeId()
 {
     //формируем список занятых id
     QSet<int> ids;
@@ -424,14 +424,11 @@ int ModelScene::getFreeId(ItemType itemType)
         ModelItem *modelItem = qgraphicsitem_cast<ModelItem *>(it);
         if(modelItem != nullptr)
         {
-            if(modelItem->itemType() == itemType)
-            {
-                ids << modelItem->id();
-                if(modelItem->id() > maxId)
-                    maxId = modelItem->id();
-                if(modelItem->id() < minId || minId == 0)
-                    minId = modelItem->id();
-            }
+            ids << modelItem->id();
+            if(modelItem->id() > maxId)
+                maxId = modelItem->id();
+            if(modelItem->id() < minId || minId == 0)
+                minId = modelItem->id();
         }
     }
 

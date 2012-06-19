@@ -14,8 +14,8 @@ SOURCES += main.cpp \
     utility/xmlhighlighter.cpp \
     utility/modelstorage.cpp \
     utility/common.cpp \
-    utility/lsfss.cpp \
     utility/lastmodels.cpp \
+    utility/lsfss.cpp \
     logic/exceptions.cpp \
     logic/request_id.cpp \
     logic/request.cpp \

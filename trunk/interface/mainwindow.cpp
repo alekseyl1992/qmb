@@ -1,6 +1,7 @@
 ﻿#include "interface/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utility/modelstorage.h"
+#include "utility/lsfss.h"
 #include "interface/homewidget.h"
 #include "interface/modeloptionsdialog.h"
 #include "interface/aboutdialog.h"

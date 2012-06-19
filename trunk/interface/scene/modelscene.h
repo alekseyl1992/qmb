@@ -136,7 +136,7 @@ private:
     bool bDropShadow;
 
     void resizeToPoint(QPointF pos);
-    int getFreeId(ItemType itemType); //находит ближайщий пустой id
+    int getFreeId(); //находит ближайщий пустой id
 };
 
 #endif // MODELSCENE_H
