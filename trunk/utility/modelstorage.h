@@ -25,11 +25,9 @@
 #include <QPoint>
 #include <QMap>
 
-//константы символьные. выношу как и обещал
-const QString ItemNames[] = {"Generator","Queue",
-                             "Handler","Terminator","Link"};
 
-//маскимальное количество шагов отката
+
+//маскимальное количество щагов отката
 const int MAX_STEPS=15;
 
 //! Класс - хранилище модели
@@ -50,14 +48,15 @@ private:
     QDomElement root; //корневой элемент (ех: модель №х )
     QString currentPath;
 
-    /*enum class LinkType : int
+    QMap<ItemType, QString> ItemNames;
+    enum class LinkType : int
     {
         GeneratorToQueue,
         QueueToHandler,
         HandlerToTerminator,
-    };*/
+    };
 
-    void AddLink(logic::model *curModel, /*LinkType linkType, */int fromID, int toID);
+    void AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID);
 
 public:
     ModelStorage();

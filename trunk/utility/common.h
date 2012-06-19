@@ -22,6 +22,7 @@ enum class ItemType : int
     Queue,
     Handler,
     Terminator,
+    Link,
     HubIn,
     HubOut
 };

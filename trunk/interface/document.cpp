@@ -607,11 +607,31 @@ void Document::onSimulationStarted(int time)
 
 void Document::onSimulationStopped(int time)
 {
+    //TODO повторяющийся код
+    bSimulating = false;
+    storage->getModel()->simulation_stop();
+    ui->progressBar->hide();
+    startAction->setEnabled(true);
+    startAction->setIcon(QIcon(":/icons/start"));
+    stopAction->setEnabled(false);
+    ui->graphicsView->setEnabled(true);
+
     logModel->appendRow(QList<QStandardItem *>()
                         << new QStandardItem(timeToString(time))
                         << new QStandardItem("")
                         << new QStandardItem("Симуляция прервана"));
     ui->simulationLog->scrollToBottom();
+
+    storage->freeModel();
+
+    int id = QMessageBox::question(
+                this, windowTitle(),
+                "Симуляция прервана!\nПоказать статистику?",
+                QMessageBox::Yes, QMessageBox::No);
+
+
+    if(id == QMessageBox::Yes)
+        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
 }
 
 void Document::onSimulationPaused(int time)
