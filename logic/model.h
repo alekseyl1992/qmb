@@ -92,7 +92,7 @@ namespace logic
 
         void simulation_start();									//!< Ќачинает симул€цию
         void simulation_stop();										//!< ќстанавливает симул€цию
-		void simulation_pause();									//!< —тавит симул€цию на паузу
+        void simulation_pause();
 
     signals:
 		void simulationStarted(int time);

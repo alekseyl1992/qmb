@@ -41,18 +41,18 @@ public:
     void setActiveTab(Tab tab);
 
     void startSimulation();
+    void pauseSimulation();
+    void restoreSimulation();
     void stopSimulation();
     bool isModified() const;
     void setModified(bool m);
 
     //! сохранялась ли когда-либо модель
     bool isSavable() const;
-
 public slots:
     void on_logButton_toggled(bool checked); //!< Кнопка открытия/скрытия лога симуляции
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    void onSimulationFinished(int event_time);
     void clearLog();
 
     bool createModel(const QString& name);
@@ -80,6 +80,14 @@ private slots:
     void onReqBeganHandling(const int& hID, const logic::request_id& reqID, int event_time);
     void onReqFinishedHandling(const int& hID, const logic::request_id& reqID, int event_time);
     void onReqTerminated(const int& tID, const logic::request_id& reqID, int event_time);
+
+    void onSimulationStarted(int time);
+    void onSimulationStopped(int time);
+    void onSimulationPaused(int time);
+    void onSimulationRestored(int time);
+    void onSimulationFinished(int time);
+
+
     void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
 
 signals:

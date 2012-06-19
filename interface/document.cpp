@@ -6,6 +6,7 @@
 #include "utility/common.h"
 #include "utility/lsfss.h"
 #include "utility/lastmodels.h"
+#include "utility/validator.h"
 #include <QMenu>
 #include <QComboBox>
 #include <QGraphicsOpacityEffect>
@@ -122,7 +123,8 @@ Document::Document(QWidget *parent) :
             storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
     connect(scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
             storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
-    connect(scene, SIGNAL(wrongLink(ItemType,ItemType)),
+
+    connect(&Validator::inst(), SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
 
     //создаём окошко для отображения масштаба модели
@@ -261,33 +263,52 @@ void Document::startSimulation()
     showLog();    
     ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
-    startAction->setEnabled(false);
+    startAction->setIcon(QIcon(":/icons/pause"));
     stopAction->setEnabled(true);
 
     logic::model *model = storage->getModel(true);
-    connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
     connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
     connect(model, SIGNAL(reqQueued(int,logic::request_id, int)), this, SLOT(onReqQueued(int,logic::request_id, int)));
     connect(model, SIGNAL(reqBeganHandling(int,logic::request_id, int)), this, SLOT(onReqBeganHandling(int,logic::request_id, int)));
     connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id, int)), this, SLOT(onReqFinishedHandling(int,logic::request_id, int)));
     connect(model, SIGNAL(reqTerminated(int,logic::request_id, int)), this, SLOT(onReqTerminated(int,logic::request_id, int)));
 
-    logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem("00:00.000")
-                        << new QStandardItem("")
-                        << new QStandardItem("симуляция начата"));
-    ui->simulationLog->scrollToBottom();
+    connect(model, SIGNAL(simulationStarted(int)), this, SLOT(onSimulationStarted(int)));
+    connect(model, SIGNAL(simulationStopped(int)), this, SLOT(onSimulationStopped(int)));
+    connect(model, SIGNAL(simulationPaused(int)), this, SLOT(onSimulationPaused(int)));
+    connect(model, SIGNAL(simulationRestored(int)), this, SLOT(onSimulationRestored(int)));
+    connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
 
     bSimulating = true;
     model->simulation_start();
 }
 
+void Document::pauseSimulation()
+{
+    bSimulating = false;
+    storage->getModel()->simulation_pause();
+
+    startAction->setIcon(QIcon(":/icons/start"));
+    ui->progressBar->hide();
+}
+
+void Document::restoreSimulation()
+{
+    showLog();
+    ui->progressBar->show();
+    startAction->setIcon(QIcon(":/icons/pause"));
+    stopAction->setEnabled(true);
+
+    bSimulating = true;
+    storage->getModel()->simulation_start();
+}
+
 void Document::stopSimulation()
 {
     //TODO повторяющийся код
-    bSimulating = false;
+    //bSimulating = false;
     storage->getModel()->simulation_stop();
-    ui->graphicsView->setEnabled(true);
+    /*ui->graphicsView->setEnabled(true);
     ui->progressBar->hide();    
     startAction->setEnabled(true);
     stopAction->setEnabled(false);
@@ -300,7 +321,7 @@ void Document::stopSimulation()
 
     //disconnect(Storage->getModel(), SIGNAL(simulationFinished()), this, SLOT(onSimulationFinished()));
     //disconnect(Storage->getModel(), SIGNAL(reqGenerated(request_id)), this, SLOT(onReqGenerated(logic::request_id)));
-    storage->freeModel();
+    storage->freeModel();*/
 }
 
 bool Document::isModified() const
@@ -438,32 +459,6 @@ void Document::keyPressEvent(QKeyEvent *event)
        QDialog::keyPressEvent(event);
 }
 
-void Document::onSimulationFinished(int event_time)
-{    
-    bSimulating = false;
-    storage->getModel()->simulation_stop();
-    ui->progressBar->hide();    
-    startAction->setEnabled(true);
-    stopAction->setEnabled(false);
-    ui->graphicsView->setEnabled(true);
-
-    logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(timeToString(event_time))
-                        << new QStandardItem("")
-                        << new QStandardItem("симуляция завершена успешно"));
-    ui->simulationLog->scrollToBottom();
-
-    storage->freeModel();
-
-    int id = QMessageBox::question(
-                this, windowTitle(),
-                "Симуляция завершена успешно!\nПоказать статистику?",
-                QMessageBox::Yes, QMessageBox::No);
-
-
-    if(id == QMessageBox::Yes)
-        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
-}
 
 void Document::clearLog()
 {
@@ -480,13 +475,15 @@ void Document::on_toolsView_pressed(const QModelIndex &index)
 
 void Document::onStartAction()
 {
-    if(ui->codeEdit->document()->isModified())
-    {
-        if(tryApplyCode())
-            startSimulation();
-    }
-    else
+    if(ui->codeEdit->document()->isModified() &&
+            !tryApplyCode())
+        return;
+
+    if(!bSimulating)
         startSimulation();
+    else
+        pauseSimulation();
+
 }
 
 void Document::onStopAction()
@@ -554,7 +551,7 @@ void Document::onReqGenerated(const logic::request_id &reqID, int event_time)
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0")
                                              .arg(reqID.str_reqID().c_str()))
-                        << new QStandardItem("сгенерирован"));
+                        << new QStandardItem("Сгенерирован"));
 }
 
 void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int event_time)
@@ -563,7 +560,7 @@ void Document::onReqQueued(const int &qID, const logic::request_id &reqID, int e
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0")
                                              .arg(reqID.str_reqID().c_str()))
-                        << new QStandardItem(QString("добавлен в очередь %0")
+                        << new QStandardItem(QString("Добавлен в очередь %0")
                                              .arg(qID)));
     ui->simulationLog->scrollToBottom();
 }
@@ -574,7 +571,7 @@ void Document::onReqBeganHandling(const int &hID, const logic::request_id &reqID
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0")
                                              .arg(reqID.str_reqID().c_str()))
-                        << new QStandardItem(QString("попал в обработчик %0")
+                        << new QStandardItem(QString("Попал в обработчик %0")
                                              .arg(hID)));
     ui->simulationLog->scrollToBottom();
 }
@@ -585,7 +582,7 @@ void Document::onReqFinishedHandling(const int &hID, const logic::request_id &re
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0")
                                              .arg(reqID.str_reqID().c_str()))
-                        << new QStandardItem(QString("обработка завершена")));
+                        << new QStandardItem(QString("Обработка завершена")));
     ui->simulationLog->scrollToBottom();
 }
 
@@ -595,8 +592,72 @@ void Document::onReqTerminated(const int &tID, const logic::request_id &reqID, i
                         << new QStandardItem(timeToString(event_time))
                         << new QStandardItem(QString("%0")
                                              .arg(reqID.str_reqID().c_str()))
-                        << new QStandardItem("уничтожен"));
+                        << new QStandardItem("Уничтожен"));
     ui->simulationLog->scrollToBottom();
+}
+
+void Document::onSimulationStarted(int time)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("Симуляция начата"));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onSimulationStopped(int time)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("Симуляция прервана"));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onSimulationPaused(int time)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("Симуляция приостановлена"));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onSimulationRestored(int time)
+{
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("Симуляция продолжена"));
+    ui->simulationLog->scrollToBottom();
+}
+
+void Document::onSimulationFinished(int time)
+{
+    bSimulating = false;
+    storage->getModel()->simulation_stop();
+    ui->progressBar->hide();
+    startAction->setEnabled(true);
+    startAction->setIcon(QIcon(":/icons/start"));
+    stopAction->setEnabled(false);
+    ui->graphicsView->setEnabled(true);
+
+    logModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem(timeToString(time))
+                        << new QStandardItem("")
+                        << new QStandardItem("Симуляция завершена успешно"));
+    ui->simulationLog->scrollToBottom();
+
+    storage->freeModel();
+
+    int id = QMessageBox::question(
+                this, windowTitle(),
+                "Симуляция завершена успешно!\nПоказать статистику?",
+                QMessageBox::Yes, QMessageBox::No);
+
+
+    if(id == QMessageBox::Yes)
+        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)

@@ -42,7 +42,7 @@
 
 #include "modelscene.h"
 #include "arrow.h"
-#include "logic/model.h" //TODO только из-за supportedLinks()
+#include "utility/validator.h"
 
 ModelScene::ModelScene(QWidget *parent, bool dropShadow)
     : QGraphicsScene(parent)
@@ -69,8 +69,6 @@ ModelScene::ModelScene(QWidget *parent, bool dropShadow)
     }), SLOT(signaled()));*/
 
     myItemMenu->addAction("Удалить", this, SLOT(removeSelectedItems()), QKeySequence(Qt::Key_Delete));
-
-    //supportedLinks = logic::model::supportedLinks();
 }
 
 void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
@@ -266,9 +264,8 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ModelItem *endItem =
                 qgraphicsitem_cast<ModelItem *>(endItems.first());
             //проверка связи на валидность
-            if(count(supportedLinks.begin(),
-                    supportedLinks.end(),
-                    link(startItem->itemType(), endItem->itemType())))
+            if(Validator::inst().validateLink(startItem->itemType(),
+                                              endItem->itemType()))
             {
                 Arrow *arrow = new Arrow(startItem, endItem);
                 arrow->setColor(myLineColor);
@@ -282,9 +279,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
                 emit linkInserted(startItem->itemType(), startItem->id(),
                                endItem->itemType(), endItem->id());
-            }
-            else
-                emit wrongLink(startItem->itemType(), endItem->itemType());
+            }            
         }
 
     }
