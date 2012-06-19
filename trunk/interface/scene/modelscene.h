@@ -101,7 +101,6 @@ signals:
     void itemRemoved(ItemType type, int id);
     void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
     void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
-    void wrongLink(ItemType fromType, ItemType toType);
     //void undoRequested(); //оба перенесены в Document
     //void redoRequested();
 
@@ -131,8 +130,6 @@ private:
     QColor myItemColor;
     QColor myLineColor;
     bool bModified;
-    typedef std::pair<ItemType, ItemType> link;
-    std::vector<link> supportedLinks; //!< Список разрешённых связей, формируется в logic
     bool bDropShadow;
 
     void resizeToPoint(QPointF pos);

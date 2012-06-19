@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     interface/createmodeldialog.cpp \
     interface/aboutdialog.cpp \
     interface/modeloptionsdialog.cpp \
-    interface/optionsdialog.cpp
+    interface/optionsdialog.cpp \
+    utility/validator.cpp
 
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
@@ -69,6 +70,7 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/aboutdialog.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
+    utility/validator.h
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
