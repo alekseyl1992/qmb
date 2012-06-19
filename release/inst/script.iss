@@ -28,6 +28,17 @@ SetupIconFile=D:\Projects\QT\qmb\release\inst\ico100.ico
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=True
+AppCopyright=(c) BeSoft, 2012 г.
+AppPublisher=BeSoft
+AppContact=queueing-model-builder@googlegroups.com
+VersionInfoVersion=0.1
+VersionInfoCompany=BeSoft
+VersionInfoDescription=Queueing Model Builder
+VersionInfoTextVersion=beta
+VersionInfoCopyright=(c) BeSoft, 2012 г.
+VersionInfoProductName=QMB
+VersionInfoProductVersion=0.1 beta
+VersionInfoProductTextVersion=beta
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -40,8 +51,7 @@ Name: "assoc"; Description: "Ассоциировать *.qm файлы с QMB"
 
 [Files]
 Source: "D:\Projects\QT\qmb\release\qmb.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projects\QT\qmb\debug\lastModels.dat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projects\QT\qmb\debug\models\*"; DestDir: "{app}/models/"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "D:\Projects\QT\qmb\release\models\*"; DestDir: "{app}/models/"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "D:\Projects\QT\qmb\release\dll\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Projects\QT\qmb\release\dll\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Projects\QT\qmb\release\dll\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
