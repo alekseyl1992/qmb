@@ -32,15 +32,17 @@ logic::model* ModelStorage::getModel(bool create)
 
         while (!ProcessingItem.isNull())
         {
-            int period, id, fromID, toID, num_of_reqs;
-            QString fromType, toType;
-            period = ProcessingItem.attribute("period").toInt();
-            id = ProcessingItem.attribute("id").toInt();
-            fromID = ProcessingItem.attribute("fromID").toInt();
-            toID = ProcessingItem.attribute("toID").toInt();
-            fromType = ProcessingItem.attribute("from");
-            toType = ProcessingItem.attribute("to");
-            num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
+            int id = ProcessingItem.attribute("id").toInt(),
+                fromID = ProcessingItem.attribute("fromID").toInt(),
+                toID = ProcessingItem.attribute("toID").toInt(),
+                period = ProcessingItem.attribute("period").toInt(),
+                num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
+
+            ItemType type = ProcessingItem.attribute("type");
+
+            //QString fromType = ProcessingItem.attribute("from");
+            //QString toType = ProcessingItem.attribute("to");
+
 
             switch(entries[ProcessingItem.nodeName()])
             {
@@ -60,7 +62,7 @@ logic::model* ModelStorage::getModel(bool create)
                 myModel->add_terminator(logic::terminator(id,period));
                 break;
 
-                case Link: // 4 is Link
+                /*case Link: // 4 is Link
                 LinkType linkType;
 
                 if (fromType==itemTypeToEngString(ItemType::Generator)
@@ -76,6 +78,9 @@ logic::model* ModelStorage::getModel(bool create)
                     linkType = LinkType::HandlerToTerminator;
 
                 AddLink(myModel,linkType,fromID,toID);
+  */
+
+                AddLink(myModel,fromID,toID);
                 break;
             }
             ProcessingItem = ProcessingItem.nextSiblingElement();
@@ -417,10 +422,13 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
 }
 // end реализация слотов //
 
-void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID)
+void ModelStorage::AddLink(logic::model *curModel, /*LinkType linkType,*/int fromID, int toID)
 {
-    using namespace logic;
-    switch(linkType)
+    logic::object* obj1 = curModel->find_object(fromID);
+    logic::object* obj2 = curModel->find_object(toID);
+    curModel->connect(obj1, obj2);
+
+    /*switch(linkType)
     {
         case LinkType::GeneratorToQueue:
         {
@@ -448,5 +456,5 @@ void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID
             //curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
             break;
         }
-    }
+    }*/
 }
