@@ -29,7 +29,7 @@
 const QString ItemNames[] = {"Generator","Queue",
                              "Handler","Terminator","Link"};
 
-//маскимальное количество щагов отката
+//маскимальное количество шагов отката
 const int MAX_STEPS=15;
 
 //! Класс - хранилище модели
@@ -50,14 +50,14 @@ private:
     QDomElement root; //корневой элемент (ех: модель №х )
     QString currentPath;
 
-    enum class LinkType : int
+    /*enum class LinkType : int
     {
         GeneratorToQueue,
         QueueToHandler,
         HandlerToTerminator,
-    };
+    };*/
 
-    void AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID);
+    void AddLink(logic::model *curModel, /*LinkType linkType, */int fromID, int toID);
 
 public:
     ModelStorage();

@@ -303,8 +303,22 @@ namespace logic
 
 	void model::connect(object* lhs, object* rhs)
 	{
-		rhs->connect_with(lhs);
-	}
+        rhs->connect_with(lhs);
+    }
+
+    object* model::find_object(ull_t global_id)
+    {
+        std::list<object*>::iterator iter;
+        for(auto it = objects.begin(); it != objects.end(); ++it)
+        {
+            if (it->get_global_id() == global_id)
+            {
+                iter = it;
+                break;
+            }
+        }
+        return &(*iter);
+    }
 
     generator* model::find_generator(ull_t id)
     {
