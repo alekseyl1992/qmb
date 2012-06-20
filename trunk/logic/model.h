@@ -72,6 +72,7 @@ namespace logic
 
 		void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
 
+        object* find_object(ull_t global_id);
         generator* find_generator(ull_t id);						//!< Возвращает адрес генератора с нужным id
         queue* find_queue(ull_t id);								//!< Возвращает адрес очереди с нужным id
         handler* find_handler(ull_t id);							//!< Возвращает адрес обработчика с нужным id
