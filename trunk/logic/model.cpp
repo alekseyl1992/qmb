@@ -258,6 +258,7 @@ namespace logic
 
     void model::simulation_stop()
 	{
+        pause_flag = false;
         stop_flag = true;
 		if (simulate_flag) //для корректного вывода
 		{
