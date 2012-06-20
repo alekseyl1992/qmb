@@ -1,4 +1,4 @@
-#include <sstream>
+п»ї#include <sstream>
 #include "model.h"
 
 std::string error_code_str(error_code code)
@@ -106,7 +106,7 @@ namespace logic
         {
 			num_terminated += it->get_count_of_terminated_requests();
         }
-		if (num_terminated != num_generated)  //проверка на то, что все сгенерированные сообщения отработаны
+		if (num_terminated != num_generated)  //РїСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, С‡С‚Рѕ РІСЃРµ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ РѕС‚СЂР°Р±РѕС‚Р°РЅС‹
 			all_completed = false;
 
         return all_completed;
@@ -138,7 +138,7 @@ namespace logic
 			{
 				for (ull_t cur_req_id = 1; cur_req_id <= gen.get_num_requests() && is_simulating(); cur_req_id++)
 				{
-					try_pausing(); //если нажата пауза
+					try_pausing(); //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РїР°СѓР·Р°
 
 					if (!gen.is_moveable())
 						gen.generate_new_request(cur_req_id);
@@ -160,7 +160,7 @@ namespace logic
 				{
 					for (;is_simulating(); )
 					{
-						try_pausing(); //если нажата пауза
+						try_pausing(); //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РїР°СѓР·Р°
 
 						if (obj->has_connection())
                             obj->move_request();
@@ -176,7 +176,7 @@ namespace logic
         {
             for (; ; )
             {
-				try_pausing(); //если нажата пауза
+				try_pausing(); //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РїР°СѓР·Р°
 
                 if (is_simulating_finished()) //if the user switched simulating off
                 {
@@ -259,7 +259,7 @@ namespace logic
     void model::simulation_stop()
 	{
         stop_flag = true;
-		if (simulate_flag) //для корректного вывода
+		if (simulate_flag) //РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕРіРѕ РІС‹РІРѕРґР°
 		{
             emit simulationStopped(static_cast<int>(get_now_time() - start_time));
             //std::cout << "simulation stopped" << std::endl;

@@ -1,4 +1,4 @@
-#include "terminator.h"
+﻿#include "terminator.h"
 #include "model.h"
 
 namespace logic

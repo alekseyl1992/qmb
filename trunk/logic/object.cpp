@@ -1,4 +1,4 @@
-#include "object.h"
+﻿#include "object.h"
 #include "model.h"
 
 namespace logic

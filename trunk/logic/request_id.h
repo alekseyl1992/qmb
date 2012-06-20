@@ -1,4 +1,4 @@
-#ifndef H_REQUEST_ID
+п»ї#ifndef H_REQUEST_ID
 #define H_REQUEST_ID
 
 #include <string>
@@ -8,7 +8,7 @@ typedef unsigned long long ull_t;
 
 namespace logic
 {
-	//! Класс идентификатора сообщения (запроса).
+	//! РљР»Р°СЃСЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° СЃРѕРѕР±С‰РµРЅРёСЏ (Р·Р°РїСЂРѕСЃР°).
 
 	class request_id
 	{
@@ -17,7 +17,7 @@ namespace logic
         request_id(ull_t req_gen_id, ull_t req_id);
         request_id(const request_id& req_id);
 
-        std::string str_reqID() const;             //!< Возвращает строковое представление id
+        std::string str_reqID() const;             //!< Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєРѕРІРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ id
 
 	private:
         ull_t __req_gen_id;

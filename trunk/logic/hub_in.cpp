@@ -1,4 +1,4 @@
-#include "hub_in.h"
+﻿#include "hub_in.h"
 #include "request.h"
 
 namespace logic

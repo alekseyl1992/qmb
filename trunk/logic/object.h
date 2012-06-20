@@ -1,4 +1,4 @@
-#ifndef OBJECT_H
+п»ї#ifndef OBJECT_H
 #define OBJECT_H
 
 #include <thread>
@@ -15,7 +15,7 @@ namespace logic
 {
     class model;
 
-	//! Базовый абстрактный класс для элемента модели
+	//! Р‘Р°Р·РѕРІС‹Р№ Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ СЌР»РµРјРµРЅС‚Р° РјРѕРґРµР»Рё
 
     class object : public QObject
 	{
@@ -35,21 +35,21 @@ namespace logic
         ull_t get_global_id() const
         { return global_id; }
 
-		bool is_moveable() const				//!< Проверяет, можно ли из входного объекта "вытащить" запрос
+		bool is_moveable() const				//!< РџСЂРѕРІРµСЂСЏРµС‚, РјРѕР¶РЅРѕ Р»Рё РёР· РІС…РѕРґРЅРѕРіРѕ РѕР±СЉРµРєС‚Р° "РІС‹С‚Р°С‰РёС‚СЊ" Р·Р°РїСЂРѕСЃ
 		{ return moveable_request_flag; }
 
-		bool is_free() const					//!< Проверяет, можно ли в текущего объект добавить запрос
+		bool is_free() const					//!< РџСЂРѕРІРµСЂСЏРµС‚, РјРѕР¶РЅРѕ Р»Рё РІ С‚РµРєСѓС‰РµРіРѕ РѕР±СЉРµРєС‚ РґРѕР±Р°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ
 		{ return freedom_flag; }
 
-		void connect_with(object* _source);		//!< Служит для соединения объекта с входом
-		bool has_connection() const;			//!< Проверка наличия соединения
+		void connect_with(object* _source);		//!< РЎР»СѓР¶РёС‚ РґР»СЏ СЃРѕРµРґРёРЅРµРЅРёСЏ РѕР±СЉРµРєС‚Р° СЃ РІС…РѕРґРѕРј
+		bool has_connection() const;			//!< РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ СЃРѕРµРґРёРЅРµРЅРёСЏ
 		object* connected_with() const 
 		{ return input; }
-		void set_parrent(model* parent);		//!< Устанавливает указателя на родительскую модель
+		void set_parrent(model* parent);		//!< РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СѓРєР°Р·Р°С‚РµР»СЏ РЅР° СЂРѕРґРёС‚РµР»СЊСЃРєСѓСЋ РјРѕРґРµР»СЊ
 
-		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
-		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
-        virtual void move_request();		    //!< Служит для вызова виртуальной функции add
+		virtual request* get_request() = 0;		//!< "Р’С‹С‚Р°СЃРєРёРІР°РµС‚" Р·Р°РїСЂРѕСЃ РёР· РІС…РѕРґР°
+		virtual void add(request* req) = 0;		//!< Р”РѕР±Р°РІР»РµРЅРёРµ Р·Р°РїСЂРѕСЃР° РІ С‚РµРєСѓС‰РёР№ РѕР±СЉРµРєС‚
+        virtual void move_request();		    //!< РЎР»СѓР¶РёС‚ РґР»СЏ РІС‹Р·РѕРІР° РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРё add
 		
 	protected:
 		ItemType item_type;

@@ -1,4 +1,4 @@
-#ifndef MODEL_H
+п»ї#ifndef MODEL_H
 #define MODEL_H
 
 #include <vector>
@@ -17,7 +17,7 @@
 #include "exceptions.h"
 
 
-//! Перечисление ошибок модели
+//! РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РѕС€РёР±РѕРє РјРѕРґРµР»Рё
 enum error_code {
     INPUT_IN_GENERATOR,
     OUTPUT_IN_TERMINATOR,
@@ -30,9 +30,9 @@ std::string error_code_str(error_code code);
 
 namespace logic
 {
-    //! Класс модель.
+    //! РљР»Р°СЃСЃ РјРѕРґРµР»СЊ.
     /*!
-     * Представляет собой объект, который содержит списки объектов и реализует все связи между ними.
+     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РєРѕС‚РѕСЂС‹Р№ СЃРѕРґРµСЂР¶РёС‚ СЃРїРёСЃРєРё РѕР±СЉРµРєС‚РѕРІ Рё СЂРµР°Р»РёР·СѓРµС‚ РІСЃРµ СЃРІСЏР·Рё РјРµР¶РґСѓ РЅРёРјРё.
      */
 
     class model : public QObject
@@ -52,47 +52,47 @@ namespace logic
         //static std::vector< std::pair<ItemType, ItemType> > supportedLinks();
 		
     private:
-        bool are_all_generated();									//!< Проверяет, завершили ли все генераторы работу
-        bool are_all_queues_clear();								//!< Проверяет, нет ли в очередях запросов
-        bool are_all_handlers_finished_handling();					//!< Проверяет, закончили ли все обработчики свою работу
-        bool are_all_terminators_finished_terminating();			//!< Проверяет, закончили ли все термиторы свою работу
-        bool is_simulating_finished();								//!< Проверяет, завершена ли симуляция
+        bool are_all_generated();									//!< РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РІРµСЂС€РёР»Рё Р»Рё РІСЃРµ РіРµРЅРµСЂР°С‚РѕСЂС‹ СЂР°Р±РѕС‚Сѓ
+        bool are_all_queues_clear();								//!< РџСЂРѕРІРµСЂСЏРµС‚, РЅРµС‚ Р»Рё РІ РѕС‡РµСЂРµРґСЏС… Р·Р°РїСЂРѕСЃРѕРІ
+        bool are_all_handlers_finished_handling();					//!< РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєРѕРЅС‡РёР»Рё Р»Рё РІСЃРµ РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЃРІРѕСЋ СЂР°Р±РѕС‚Сѓ
+        bool are_all_terminators_finished_terminating();			//!< РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РєРѕРЅС‡РёР»Рё Р»Рё РІСЃРµ С‚РµСЂРјРёС‚РѕСЂС‹ СЃРІРѕСЋ СЂР°Р±РѕС‚Сѓ
+        bool is_simulating_finished();								//!< РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°РІРµСЂС€РµРЅР° Р»Рё СЃРёРјСѓР»СЏС†РёСЏ
 
-        void generating_th();										//!< Функция, создающая потоки для генерации сообщений
-		void threading();											//!< Функция, создающая потоки для перемещения запросов по модели
-        void checking_finished_th();								//!< Функция, проверяющая систему на завершенность
+        void generating_th();										//!< Р¤СѓРЅРєС†РёСЏ, СЃРѕР·РґР°СЋС‰Р°СЏ РїРѕС‚РѕРєРё РґР»СЏ РіРµРЅРµСЂР°С†РёРё СЃРѕРѕР±С‰РµРЅРёР№
+		void threading();											//!< Р¤СѓРЅРєС†РёСЏ, СЃРѕР·РґР°СЋС‰Р°СЏ РїРѕС‚РѕРєРё РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ Р·Р°РїСЂРѕСЃРѕРІ РїРѕ РјРѕРґРµР»Рё
+        void checking_finished_th();								//!< Р¤СѓРЅРєС†РёСЏ, РїСЂРѕРІРµСЂСЏСЋС‰Р°СЏ СЃРёСЃС‚РµРјСѓ РЅР° Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚СЊ
 
-        void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
+        void try_pausing() const;									//!< Р”РµР№СЃС‚РІРёСЏ, СЃРІСЏР·Р°РЅРЅС‹Рµ СЃ РІРІРµРґРµРЅРёРµРј РјРѕРґРµР»Рё РІ СЃРѕСЃС‚РѕСЏРЅРёРµ РїР°СѓР·С‹
 
     public:
-		void add_generator(generator &&gen);						//!< Добавляет генератор в модель
-        void add_queue(queue &&q);									//!< Добавляет очередь в модель
-        void add_handler(handler &&h);								//!< Добавляет обработчик в модель
-        void add_terminator(terminator &&t);						//!< Добавляет терминатор в модель
+		void add_generator(generator &&gen);						//!< Р”РѕР±Р°РІР»СЏРµС‚ РіРµРЅРµСЂР°С‚РѕСЂ РІ РјРѕРґРµР»СЊ
+        void add_queue(queue &&q);									//!< Р”РѕР±Р°РІР»СЏРµС‚ РѕС‡РµСЂРµРґСЊ РІ РјРѕРґРµР»СЊ
+        void add_handler(handler &&h);								//!< Р”РѕР±Р°РІР»СЏРµС‚ РѕР±СЂР°Р±РѕС‚С‡РёРє РІ РјРѕРґРµР»СЊ
+        void add_terminator(terminator &&t);						//!< Р”РѕР±Р°РІР»СЏРµС‚ С‚РµСЂРјРёРЅР°С‚РѕСЂ РІ РјРѕРґРµР»СЊ
 
-		void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
+		void connect(object* lhs, object* rhs);						//!< РЎРѕРµРґРёРЅСЏРµС‚ РґРІР° СЌР»РµРјРµРЅС‚Р° РјРѕРґРµР»Рё
 
         object* find_object(ull_t global_id);
-        generator* find_generator(ull_t id);						//!< Возвращает адрес генератора с нужным id
-        queue* find_queue(ull_t id);								//!< Возвращает адрес очереди с нужным id
-        handler* find_handler(ull_t id);							//!< Возвращает адрес обработчика с нужным id
-        terminator* find_terminator(ull_t id);						//!< Возвращает адрес терминатора с нужным id
+        generator* find_generator(ull_t id);						//!< Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°РґСЂРµСЃ РіРµРЅРµСЂР°С‚РѕСЂР° СЃ РЅСѓР¶РЅС‹Рј id
+        queue* find_queue(ull_t id);								//!< Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°РґСЂРµСЃ РѕС‡РµСЂРµРґРё СЃ РЅСѓР¶РЅС‹Рј id
+        handler* find_handler(ull_t id);							//!< Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°РґСЂРµСЃ РѕР±СЂР°Р±РѕС‚С‡РёРєР° СЃ РЅСѓР¶РЅС‹Рј id
+        terminator* find_terminator(ull_t id);						//!< Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°РґСЂРµСЃ С‚РµСЂРјРёРЅР°С‚РѕСЂР° СЃ РЅСѓР¶РЅС‹Рј id
 
-		bool is_valid();											//!< Проверяет модель на наличие ошибок
-		std::string get_errors() const;								//!< Возвращает ошибки модели
+		bool is_valid();											//!< РџСЂРѕРІРµСЂСЏРµС‚ РјРѕРґРµР»СЊ РЅР° РЅР°Р»РёС‡РёРµ РѕС€РёР±РѕРє
+		std::string get_errors() const;								//!< Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕС€РёР±РєРё РјРѕРґРµР»Рё
 
-		bool is_simulating() const									//!< Показывает состояние симуляции (не то же, что is_simulating_finished())
+		bool is_simulating() const									//!< РџРѕРєР°Р·С‹РІР°РµС‚ СЃРѕСЃС‚РѕСЏРЅРёРµ СЃРёРјСѓР»СЏС†РёРё (РЅРµ С‚Рѕ Р¶Рµ, С‡С‚Рѕ is_simulating_finished())
 		{ return simulate_flag && !stop_flag; }
 
-		bool is_paused() const 										//!< Если модель стоит на паузе
+		bool is_paused() const 										//!< Р•СЃР»Рё РјРѕРґРµР»СЊ СЃС‚РѕРёС‚ РЅР° РїР°СѓР·Рµ
 		{ return pause_flag; }
 
         ull_t get_start_time() const
         { return start_time; }
 
-        void simulation_start();									//!< Начинает симуляцию
-        void simulation_stop();										//!< Останавливает симуляцию
-		void simulation_pause();									//!< Ставит симуляцию на паузу
+        void simulation_start();									//!< РќР°С‡РёРЅР°РµС‚ СЃРёРјСѓР»СЏС†РёСЋ
+        void simulation_stop();										//!< РћСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃРёРјСѓР»СЏС†РёСЋ
+		void simulation_pause();									//!< РЎС‚Р°РІРёС‚ СЃРёРјСѓР»СЏС†РёСЋ РЅР° РїР°СѓР·Сѓ
 
     signals:
 		void simulationStarted(int time);

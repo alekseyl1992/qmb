@@ -1,4 +1,4 @@
-#include "generator.h"
+﻿#include "generator.h"
 #include "model.h"
 
 namespace logic

@@ -37,7 +37,7 @@ VersionInfoDescription=Queueing Model Builder
 VersionInfoTextVersion=beta
 VersionInfoCopyright=(c) BeSoft, 2012 ã.
 VersionInfoProductName=QMB
-VersionInfoProductVersion=0.1 beta
+VersionInfoProductVersion=0.1
 VersionInfoProductTextVersion=beta
 
 [Languages]

@@ -1,4 +1,4 @@
-#ifndef H_REQUEST
+﻿#ifndef H_REQUEST
 #define H_REQUEST
 
 #include "request_id.h"
