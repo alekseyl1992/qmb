@@ -1,4 +1,4 @@
-#ifndef HUB_IN_H
+﻿#ifndef HUB_IN_H
 #define HUB_IN_H
 
 #include <vector>

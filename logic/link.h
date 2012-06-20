@@ -1,9 +1,9 @@
-#ifndef H_LINK
+п»ї#ifndef H_LINK
 #define H_LINK
 
 namespace logic
 {
-    //! @deprecated Теперь связь реализуется через object::connect()
+    //! @deprecated РўРµРїРµСЂСЊ СЃРІСЏР·СЊ СЂРµР°Р»РёР·СѓРµС‚СЃСЏ С‡РµСЂРµР· object::connect()
     template<typename LHS_T, typename RHS_T>
 	struct link
 	{

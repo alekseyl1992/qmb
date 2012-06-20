@@ -1,4 +1,4 @@
-#ifndef TERMINATOR_H
+п»ї#ifndef TERMINATOR_H
 #define TERMINATOR_H
 
 #include "object.h"
@@ -8,10 +8,10 @@ namespace logic
 {
     class model;
 
-	//! Класс терминатора. Является элементом logic::model.
+	//! РљР»Р°СЃСЃ С‚РµСЂРјРёРЅР°С‚РѕСЂР°. РЇРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј logic::model.
     /*!
-     * Представляет собой объект, испольуемый для удаления сообщений (запросов) из
-     * модели logic::model. Завершают "жизнь" сообщения в модели.
+     * РџСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ РѕР±СЉРµРєС‚, РёСЃРїРѕР»СЊСѓРµРјС‹Р№ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёР№ (Р·Р°РїСЂРѕСЃРѕРІ) РёР·
+     * РјРѕРґРµР»Рё logic::model. Р—Р°РІРµСЂС€Р°СЋС‚ "Р¶РёР·РЅСЊ" СЃРѕРѕР±С‰РµРЅРёСЏ РІ РјРѕРґРµР»Рё.
      */
 
     class terminator : public object
@@ -21,12 +21,12 @@ namespace logic
         terminator(const terminator& t);
         virtual ~terminator();
 
-		ull_t get_count_of_terminated_requests() const  //!< Возвращает количество терминированных запросов
+		ull_t get_count_of_terminated_requests() const  //!< Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РµСЂРјРёРЅРёСЂРѕРІР°РЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРІ
 		{ return count_of_terminated_requests; }
 
-        void terminate(request* req);					//!< Функция, терминирующая запрос
-		virtual void add(request* req);                 //!< Реализация виртуальной функции базового класса object
-		virtual request* get_request();					//!< Реализация виртуальной функции базового класса object                        
+        void terminate(request* req);					//!< Р¤СѓРЅРєС†РёСЏ, С‚РµСЂРјРёРЅРёСЂСѓСЋС‰Р°СЏ Р·Р°РїСЂРѕСЃ
+		virtual void add(request* req);                 //!< Р РµР°Р»РёР·Р°С†РёСЏ РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРё Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° object
+		virtual request* get_request();					//!< Р РµР°Р»РёР·Р°С†РёСЏ РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ С„СѓРЅРєС†РёРё Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° object                        
 
     private:
         int terminating_period;
