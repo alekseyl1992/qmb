@@ -62,8 +62,8 @@ logic::model* ModelStorage::getModel(bool create)
 
                 case ItemType::Link:
                 {
-                    LinkType linkType;
-
+                   LinkType linkType;
+/*
                     if (fromType==itemTypeToEngString(ItemType::Generator)
                             && toType==itemTypeToEngString(ItemType::Queue))
                         linkType = LinkType::GeneratorToQueue;
@@ -75,7 +75,7 @@ logic::model* ModelStorage::getModel(bool create)
                     if (fromType==itemTypeToEngString(ItemType::Handler)
                             && toType==itemTypeToEngString(ItemType::Terminator))
                         linkType = LinkType::HandlerToTerminator;
-
+*/
                     AddLink(myModel,linkType,fromID,toID);
                     break;
                 }
@@ -414,6 +414,11 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
 void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID)
 {
     using namespace logic;
+
+    object* obj1 = curModel->find_object(fromID);
+    object* obj2 = curModel->find_object(toID);
+    curModel->connect(obj1, obj2);
+    /*
     switch(linkType)
     {
         case LinkType::GeneratorToQueue:
@@ -442,5 +447,5 @@ void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID
             //curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
             break;
         }
-    }
+    }*/
 }

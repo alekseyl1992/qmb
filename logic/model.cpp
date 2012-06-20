@@ -240,7 +240,7 @@ namespace logic
 		{
 			simulate_flag = true;
             start_time = get_now_time();
-            emit simulationStarted(static_cast<int>(start_time));
+            emit simulationStarted(0);
             //std::cout << "simulation started" << std::endl;
 			
 			generating_th();
@@ -303,8 +303,22 @@ namespace logic
 
 	void model::connect(object* lhs, object* rhs)
 	{
-		rhs->connect_with(lhs);
-	}
+        rhs->connect_with(lhs);
+    }
+
+    object* model::find_object(ull_t global_id)
+    {
+        std::vector<object*>::iterator iter;
+        for(auto it = objects.begin(); it != objects.end(); ++it)
+        {
+            if ((*it)->get_global_id() == global_id)
+            {
+                iter = it;
+                break;
+            }
+        }
+        return *iter;
+    }
 
     generator* model::find_generator(ull_t id)
     {

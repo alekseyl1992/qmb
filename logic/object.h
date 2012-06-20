@@ -32,6 +32,9 @@ namespace logic
         ull_t get_id() const 
 		{ return id; }
 
+        ull_t get_global_id() const
+        { return global_id; }
+
 		bool is_moveable() const				//!< Проверяет, можно ли из входного объекта "вытащить" запрос
 		{ return moveable_request_flag; }
 
@@ -52,6 +55,7 @@ namespace logic
 		ItemType item_type;
         model* parent;
         ull_t id;
+        ull_t global_id;
 		object* input;
 		request* cur_req;
 		
