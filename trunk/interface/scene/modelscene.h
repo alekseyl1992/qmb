@@ -118,11 +118,10 @@ protected:
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
 
 private:
-    qreal myScale; //текущий масштаб сцены
-    ItemType myItemType; //TODO ?
+    qreal myScale; //!< текущий масштаб сцены
+    ItemType myItemType; //TODO получать тип элемента из dropEvent
     QMenu *myItemMenu;
     Mode myMode;
-    bool leftButtonDown;
     QPointF startPoint;
     QGraphicsLineItem *line;
     QFont myFont;
@@ -132,8 +131,8 @@ private:
     bool bModified;
     bool bDropShadow;
 
-    void resizeToPoint(QPointF pos);
-    int getFreeId(); //находит ближайщий пустой id
+    void resizeToPoint(QPointF pos); //!< Меняет размер Сцены так, чтобы точка pos попала в её границы
+    int getFreeId(); //!< находит ближайщий пустой id
 };
 
 #endif // MODELSCENE_H

@@ -3,7 +3,8 @@
 
 namespace logic
 {
-	template<typename LHS_T, typename RHS_T>
+    //! @deprecated Теперь связь реализуется через object::connect()
+    template<typename LHS_T, typename RHS_T>
 	struct link
 	{
 		link(LHS_T v_lhs, RHS_T v_rhs) : lhs(v_lhs), rhs(v_rhs) { }
