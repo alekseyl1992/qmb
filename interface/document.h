@@ -30,20 +30,19 @@ public:
 
     /*! Инициализирует новый документ.
      * После инициализации нужно вызвать createModel() или openModel().
-     * @see createModel()
-     * @see openModel()
      */
     explicit Document(QWidget *parent);
 
     ~Document();
 
     void showLog(bool show = true); //!< показывает/скрывает Лог симуляции
-    void setActiveTab(Tab tab);
+    void setActiveTab(Tab tab); //!< Меняет текущую вкладку (Сцена или Код)
 
     void startSimulation();
     void pauseSimulation();
     void restoreSimulation();
     void stopSimulation();
+
     bool isModified() const;
     void setModified(bool m);
 
@@ -51,7 +50,7 @@ public:
     bool isSavable() const;
 public slots:
     void on_logButton_toggled(bool checked); //!< Кнопка открытия/скрытия лога симуляции
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event); //!< Срабатывает при попытке закрыть документ
     void keyPressEvent(QKeyEvent *event);
     void clearLog();
 
@@ -87,7 +86,6 @@ private slots:
     void onSimulationRestored(int time);
     void onSimulationFinished(int time);
 
-
     void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
 
 signals:
@@ -102,10 +100,10 @@ private:
     QMenu *logMenu;
     QStandardItemModel *logModel; //!< Данные лога симуляции
     QAction *startAction, *stopAction;
-    bool bSimulating;
+    bool bSimulating; //!< Имеет значение true, если идёт симуляция
 
     bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
-    QString timeToString(int time);
+    QString timeToString(int time); //!< Преобразует время из миллисекунд в формат "мм:сс.мс"
 };
 
 #endif // DOCUMENT_H

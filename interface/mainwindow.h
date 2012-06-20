@@ -43,7 +43,8 @@ public slots:
 
     void openModel(const QString& path);
 
-    void closeEvent(QCloseEvent *event);    
+    //! Вызывается при попытки закрытия главного окна
+    void closeEvent(QCloseEvent *event);
 
     //! Создаёт вкладку с Домашней страницей
     void createHomeWidget();

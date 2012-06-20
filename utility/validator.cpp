@@ -1,8 +1,8 @@
-#include "validator.h"
+п»ї#include "validator.h"
 
 Validator::Validator()
 {
-    //заполняем список неподдерживаемых связей
+    //Р·Р°РїРѕР»РЅСЏРµРј СЃРїРёСЃРѕРє РЅРµРїРѕРґРґРµСЂР¶РёРІР°РµРјС‹С… СЃРІСЏР·РµР№
    /* invalidLinks.insert(ItemType::Generator, ItemType::Generator);
     invalidLinks.insert(ItemType::Terminator, ItemType::Terminator);
     invalidLinks.insert(ItemType::Terminator, ItemType::Generator);

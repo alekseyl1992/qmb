@@ -1,11 +1,12 @@
-#ifndef VALIDATOR_H
+п»ї#ifndef VALIDATOR_H
 #define VALIDATOR_H
 
-//#include <QObject>
+#include <QObject>
 #include "common.h"
 
-/*! Класс предназначен для проверки модели на валидность.
-  * Реализует паттерн singleton
+//! РљР»Р°СЃСЃ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅ РґР»СЏ РїСЂРѕРІРµСЂРєРё РјРѕРґРµР»Рё РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ.
+/**
+  *  Р РµР°Р»РёР·СѓРµС‚ РїР°С‚С‚РµСЂРЅ singleton
   */
 class Validator : public QObject
 {
@@ -17,10 +18,15 @@ private:
     //QMultiMap<ItemType, ItemType> invalidLinks;
 
 public:
+    //! Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° Validator
     static Validator& inst();
-    bool validateLink(ItemType fromType, ItemType toType); //!< Формирует список неподдерживаемых моделью связей
+
+    //! РџСЂРѕРІРµСЂСЏРµС‚ РІРѕР·РјРѕР¶РЅРѕ Р»Рё СЃРІСЏР·Р°С‚СЊ fromType Рё toType.
+    //! Р•СЃР»Рё РґР°РЅРЅР°СЏ СЃРІСЏР·СЊ РЅРµРѕСЃСѓС‰РµСЃС‚РІРёРјР°, РІРѕР·РІСЂР°С‰Р°РµС‚ false Рё С€Р»С‘С‚ СЃРёРіРЅР°Р» wrongLink().
+    bool validateLink(ItemType fromType, ItemType toType);
 
 signals:
+    //! Р’С‹Р·С‹РІР°РµС‚СЃСЏ РёР· validateLink() РІ СЃР»СѓС‡Р°Рµ РЅРµРІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СЃРѕР·РґР°С‚СЊ СЃРІСЏР·СЊ
     void wrongLink(ItemType fromType, ItemType toType);
 };
 

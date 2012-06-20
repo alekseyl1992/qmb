@@ -99,9 +99,10 @@ public:
     void setModified(bool m)
     { bModified = m; }
 
+    //! Преобразует тип элемента в строковое представление для отображения на панели элементов
     QString typeAsString() const;
-    bool closeByHotStop(const QPointF& pt) const; //! < близка ли точка к одному из hs
-    QPointF closestHotSpot(QPointF pos) const; //! < возвращает позицию ближайшего hs
+    bool closeByHotStop(const QPointF& pt) const; //!< близка ли точка к одному из hs
+    QPointF closestHotSpot(QPointF pos) const; //!< возвращает позицию ближайшего hs
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
