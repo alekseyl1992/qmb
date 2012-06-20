@@ -101,6 +101,7 @@ private:
     QStandardItemModel *logModel; //!< Данные лога симуляции
     QAction *startAction, *stopAction;
     bool bSimulating; //!< Имеет значение true, если идёт симуляция
+    bool bPaused; //!< Имеет значение true, если симуляции поставлена на паузу
 
     bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
     QString timeToString(int time); //!< Преобразует время из миллисекунд в формат "мм:сс.мс"

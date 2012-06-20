@@ -24,7 +24,7 @@
 #include <QSettings>
 
 Document::Document(QWidget *parent) :
-    QDialog(parent), ui(new Ui::Document), bSimulating(false)
+    QDialog(parent), ui(new Ui::Document), bSimulating(false), bPaused(false)
 {
     ui->setupUi(this);
     ui->progressBar->hide();
@@ -286,9 +286,11 @@ void Document::startSimulation()
 void Document::pauseSimulation()
 {
     bSimulating = false;
+    bPaused = true;
     storage->getModel()->simulation_pause();
 
     startAction->setIcon(QIcon(":/icons/start"));
+    //stopAction->setEnabled(false);
     ui->progressBar->hide();
 }
 
@@ -300,6 +302,7 @@ void Document::restoreSimulation()
     stopAction->setEnabled(true);
 
     bSimulating = true;
+    bPaused = false;
     storage->getModel()->simulation_start();
 }
 
@@ -479,9 +482,11 @@ void Document::onStartAction()
             !tryApplyCode())
         return;
 
-    if(!bSimulating)
+    if(!bSimulating && !bPaused)        //запуск
         startSimulation();
-    else
+    else if(!bSimulating && bPaused)    //продолжение
+        restoreSimulation();
+    else                                //пауза
         pauseSimulation();
 
 }
@@ -608,7 +613,8 @@ void Document::onSimulationStarted(int time)
 void Document::onSimulationStopped(int time)
 {
     //TODO повторяющийся код
-    bSimulating = false;
+    bSimulating = false;    
+    bPaused = false;
     storage->getModel()->simulation_stop();
     ui->progressBar->hide();
     startAction->setEnabled(true);
@@ -655,6 +661,7 @@ void Document::onSimulationRestored(int time)
 void Document::onSimulationFinished(int time)
 {
     bSimulating = false;
+    bPaused = false;
     storage->getModel()->simulation_stop();
     ui->progressBar->hide();
     startAction->setEnabled(true);
