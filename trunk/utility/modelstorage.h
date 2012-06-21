@@ -26,7 +26,6 @@
 #include <QMap>
 
 
-
 //маскимальное количество щагов отката
 const int MAX_STEPS=15;
 
@@ -42,33 +41,34 @@ class ModelStorage : public QObject
 
 private:
     logic::model* myModel;
-    QDomDocument* curDoc; //хранилище структуры xml
-    QList<QDomElement> history; //хранилище undo
-    int history_pos; // позиция в истории (для redo)
-    QDomElement root; //корневой элемент (ех: модель №х )
+    QDomDocument* curDoc; //!< хранилище структуры xml
+    QList<QDomElement> history; //!< хранилище undo
+    int history_pos; //!< позиция в истории (для redo)
+    QDomElement root; //!< корневой элемент (ех: модель №х )
     QString currentPath;
 
     QMap<ItemType, QString> typeNames;
-    enum class LinkType : int
+    /*enum class LinkType : int
     {
         GeneratorToQueue,
         QueueToHandler,
         HandlerToTerminator,
-    };
+    };*/
 
-    void AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID);
+    void AddLink(logic::model *curModel, int fromID, int toID);
 
 public:
     ModelStorage();
+    ~ModelStorage();
 
-    QString getCodeString() const; //возвращает строку с XML-кодом сцены
-    bool setCodeString(QString code); //парсинг строки в документ //вызывается при ручном изсменении кода
-    QString getCurrentPath() const; //возвращает текущий путь к файлу документа
+    QString getCodeString() const; //!< возвращает строку с XML-кодом сцены
+    bool setCodeString(QString code); //!< парсинг строки в документ //вызывается при ручном изсменении кода
+    QString getCurrentPath() const; //!< возвращает текущий путь к файлу документа
 
     logic::model *getModel(bool create = false);
-    void freeModel();
+    void freeModel(); //!< @deprecated На данный момент используется отложенная очистка: при создании новой модели и в деструкторе
 
-    //получения поля name, item'а по его id для отображения на сцене
+    //! получения поля name, item'а по его id для отображения на сцене
     QString getModelName() const;
     void setModelName(const QString &name);
     bool createModel(const QString &name);
@@ -85,10 +85,10 @@ public:
 public slots:
 
     void onItemInserted(ItemType type, int id, QString name, QPoint pos);
-    void onItemMoved(ItemType type, int id, QPoint pos);
-    void onItemRemoved(ItemType type, int id);
-    void onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
-    void onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void onItemMoved(int id, QPoint pos);
+    void onItemRemoved(int id);
+    void onLinkInserted(int idFrom, int idTo);
+    void onLinkRemoved(int idFrom, int idTo);
 
 public:
 

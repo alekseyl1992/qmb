@@ -77,7 +77,7 @@ public:
 
     //реализация интерфейса IFillableModel
     void addItem(ItemType itemType, QString name, int id, QPoint pos = QPoint());
-    void addLink(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void addLink(int idFrom, int idTo);
     void clear();
 
     //модель изменена?
@@ -97,10 +97,10 @@ public slots:
 signals:
     //сигналы для оперативного изменения XML-дерева
     void itemInserted(ItemType type, int id, QString name, QPoint pos);
-    void itemMoved(ItemType type, int id, QPoint pos);
-    void itemRemoved(ItemType type, int id);
-    void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
-    void linkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo);
+    void itemMoved(int id, QPoint pos);
+    void itemRemoved(int id);
+    void linkInserted(int idFrom, int idTo);
+    void linkRemoved(int idFrom, int idTo);
     //void undoRequested(); //оба перенесены в Document
     //void redoRequested();
 
