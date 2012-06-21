@@ -115,14 +115,14 @@ Document::Document(QWidget *parent) :
     //связываем сцену с хранилищем
     connect(scene, SIGNAL(itemInserted(ItemType, int, QString, QPoint)),
             storage, SLOT(onItemInserted(ItemType, int, QString, QPoint)));
-    connect(scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
-            storage, SLOT(onItemMoved(ItemType, int, QPoint)));
-    connect(scene, SIGNAL(itemRemoved(ItemType, int)),
-            storage, SLOT(onItemRemoved(ItemType, int)));
-    connect(scene, SIGNAL(linkInserted(ItemType,int,ItemType,int)),
-            storage, SLOT(onLinkInserted(ItemType,int,ItemType,int)));
-    connect(scene, SIGNAL(linkRemoved(ItemType,int,ItemType,int)),
-            storage, SLOT(onLinkRemoved(ItemType,int,ItemType,int)));
+    connect(scene, SIGNAL(itemMoved(int, QPoint)),
+            storage, SLOT(onItemMoved(int, QPoint)));
+    connect(scene, SIGNAL(itemRemoved(int)),
+            storage, SLOT(onItemRemoved(int)));
+    connect(scene, SIGNAL(linkInserted(int, int)),
+            storage, SLOT(onLinkInserted(int, int)));
+    connect(scene, SIGNAL(linkRemoved(int, int)),
+            storage, SLOT(onLinkRemoved(int, int)));
 
     connect(&Validator::inst(), SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
@@ -615,7 +615,7 @@ void Document::onSimulationStopped(int time)
     //TODO повторяющийся код
     bSimulating = false;    
     bPaused = false;
-    storage->getModel()->simulation_stop();
+    //storage->getModel()->simulation_stop();
     ui->progressBar->hide();
     startAction->setEnabled(true);
     startAction->setIcon(QIcon(":/icons/start"));
@@ -628,7 +628,7 @@ void Document::onSimulationStopped(int time)
                         << new QStandardItem("Симуляция прервана"));
     ui->simulationLog->scrollToBottom();
 
-    storage->freeModel();
+    //storage->freeModel();
 
     int id = QMessageBox::question(
                 this, windowTitle(),
@@ -662,7 +662,7 @@ void Document::onSimulationFinished(int time)
 {
     bSimulating = false;
     bPaused = false;
-    storage->getModel()->simulation_stop();
+    //storage->getModel()->simulation_stop();
     ui->progressBar->hide();
     startAction->setEnabled(true);
     startAction->setIcon(QIcon(":/icons/start"));
@@ -675,7 +675,7 @@ void Document::onSimulationFinished(int time)
                         << new QStandardItem("Симуляция завершена успешно"));
     ui->simulationLog->scrollToBottom();
 
-    storage->freeModel();
+    //storage->freeModel();
 
     int id = QMessageBox::question(
                 this, windowTitle(),

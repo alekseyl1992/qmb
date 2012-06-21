@@ -82,7 +82,7 @@ void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
     QGraphicsScene::addItem(item);
 }
 
-void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idTo)
+void ModelScene::addLink(int idFrom, int idTo)
 {
     ModelItem *startItem = nullptr;
     ModelItem *endItem = nullptr;
@@ -92,9 +92,9 @@ void ModelScene::addLink(ItemType fromType, int idFrom, ItemType toType, int idT
         ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
         if(mItem != nullptr)
         {
-            if(mItem->itemType() == fromType && mItem->id() == idFrom)
+            if(mItem->id() == idFrom)
                 startItem = mItem;
-            else if(mItem->itemType() == toType && mItem->id() == idTo)
+            else if(mItem->id() == idTo)
                 endItem = mItem;
         }
     }
@@ -159,8 +159,7 @@ void ModelScene::alignToGrid()
                 arrow->updatePosition();
             qit->setModified(true);
 
-            emit itemMoved(qit->itemType(),
-                           qit->id(),
+            emit itemMoved(qit->id(),
                            qit->scenePos().toPoint());
         }
     }
@@ -277,8 +276,8 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 arrow->updatePosition();
                 bModified = true;
 
-                emit linkInserted(startItem->itemType(), startItem->id(),
-                               endItem->itemType(), endItem->id());
+                emit linkInserted(startItem->id(),
+                                  endItem->id());
             }            
         }
 
@@ -294,7 +293,7 @@ void ModelScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 ModelItem *item = qgraphicsitem_cast<ModelItem *>(qItem);
                 if(item && item->isModified())
                 {
-                    emit itemMoved(item->itemType(), item->id(), item->pos().toPoint());
+                    emit itemMoved(item->id(), item->pos().toPoint());
                     bModified = true;
                     item->setModified(false);
                 }
@@ -459,13 +458,13 @@ void ModelScene::removeSelectedItems()
         {
             ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
             mItem->removeArrows();
-            emit itemRemoved(mItem->itemType(), mItem->id());
+            emit itemRemoved(mItem->id());
         }
         else if(item->type() == Arrow::Type)
         {
             Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
-            emit linkRemoved(arrow->startItem()->itemType(), arrow->startItem()->id(),
-                             arrow->endItem()->itemType(), arrow->endItem()->id());
+            emit linkRemoved(arrow->startItem()->id(),
+                             arrow->endItem()->id());
         }
         removeItem(item);
         bModified = true;

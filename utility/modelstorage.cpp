@@ -19,6 +19,12 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     typeNames.insert(ItemType::Link, "Link");
 }
 
+ModelStorage::~ModelStorage()
+{
+    delete myModel;
+    myModel = nullptr;
+}
+
 logic::model* ModelStorage::getModel(bool create)
 {
 
@@ -62,8 +68,7 @@ logic::model* ModelStorage::getModel(bool create)
 
                 case ItemType::Link:
                 {
-                   LinkType linkType;
-/*
+                   /*
                     if (fromType==itemTypeToEngString(ItemType::Generator)
                             && toType==itemTypeToEngString(ItemType::Queue))
                         linkType = LinkType::GeneratorToQueue;
@@ -76,7 +81,7 @@ logic::model* ModelStorage::getModel(bool create)
                             && toType==itemTypeToEngString(ItemType::Terminator))
                         linkType = LinkType::HandlerToTerminator;
 */
-                    AddLink(myModel,linkType,fromID,toID);
+                    AddLink(myModel,fromID,toID);
                     break;
                 }
             }
@@ -215,9 +220,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
             case ItemType::Link:
                 fromID = ProcessingItem.attribute("fromID").toInt();
                  toID = ProcessingItem.attribute("toID").toInt();
-                fromType = ProcessingItem.attribute("from");
-                toType = ProcessingItem.attribute("to");
-                iModel->addLink(typeNames.key(fromType),fromID,typeNames.key(toType),toID);
+                iModel->addLink(fromID, toID);
             break;
         }
         ProcessingItem = ProcessingItem.nextSiblingElement();
@@ -263,7 +266,9 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
 {
     QDomElement InsertedItem;
     InsertedItem = curDoc->createElement(typeNames[type]);
-    InsertedItem.setAttribute("id",id);
+    InsertedItem.setAttribute("id", id);
+    InsertedItem.setAttribute("name", name);
+
     switch (type)
     {
         case ItemType::Generator:
@@ -281,7 +286,6 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
         default:
             break;
     };
-    InsertedItem.setAttribute("name", name);
     InsertedItem.setAttribute("x", pos.x());
     InsertedItem.setAttribute("y", pos.y());
     root.appendChild(InsertedItem);
@@ -297,14 +301,13 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
     history.push_front(root.cloneNode().toElement());
 }
 
-void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
+void ModelStorage::onItemMoved(int id, QPoint pos)
 {   
     QDomElement MovedItem = root.firstChildElement();
 
     while (!MovedItem.isNull())
     {
-        if (MovedItem.nodeName() == typeNames[type] &&
-            MovedItem.attribute("id").toInt() == id)
+        if (MovedItem.attribute("id").toInt() == id)
         {
             if ( MovedItem.attribute("x").toInt()!=pos.x() &&
                  MovedItem.attribute("y").toInt()!=pos.y() )
@@ -330,24 +333,26 @@ void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
     }
 }
 
-void ModelStorage::onItemRemoved(ItemType type, int id)
+void ModelStorage::onItemRemoved(int id)
 {
     QDomElement RemovedItem = root.firstChildElement();
     QDomElement ExistedLink = root.firstChildElement();
 
     while (!RemovedItem.isNull())
     {
-        if ( (RemovedItem.nodeName()==typeNames[type]) &&
-        (RemovedItem.attribute("id").toInt()==id) )
+        if (RemovedItem.attribute("id").toInt() == id)
         {
             while (!ExistedLink.isNull())
             {
-                if ( ( ExistedLink.attribute("from")==typeNames[type] &&
-                     ExistedLink.attribute("fromID").toInt()==id ) ||
-                     ( ExistedLink.attribute("to")==typeNames[type] &&
-                     ExistedLink.attribute("toID").toInt()==id ) )
+                if (ExistedLink.attribute("fromID").toInt() == id ||
+                     ExistedLink.attribute("toID").toInt() == id)
+                {
+                    QDomElement nextSibling = ExistedLink.nextSiblingElement();
                     root.removeChild(ExistedLink);
-                ExistedLink = ExistedLink.nextSiblingElement();
+                    ExistedLink = nextSibling;
+                }
+                else
+                    ExistedLink = ExistedLink.nextSiblingElement();
             }
             root.removeChild(RemovedItem);
         }
@@ -366,13 +371,11 @@ void ModelStorage::onItemRemoved(ItemType type, int id)
 
 }
 
-void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
+void ModelStorage::onLinkInserted(int idFrom, int idTo)
 {
     QDomElement InsertedLink;
     InsertedLink = curDoc->createElement(typeNames[ItemType::Link]);
-    InsertedLink.setAttribute("from",typeNames[fromType]);
     InsertedLink.setAttribute("fromID",idFrom);
-    InsertedLink.setAttribute("to",typeNames[toType]);
     InsertedLink.setAttribute("toID",idTo);
     root.appendChild(InsertedLink);
 
@@ -387,15 +390,13 @@ void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType
     history.push_front(root.cloneNode().toElement());
 }
 
-void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType, int idTo)
+void ModelStorage::onLinkRemoved(int idFrom, int idTo)
 {
     QDomElement RemovedLink = root.firstChildElement();
     while (!RemovedLink.isNull())
     {
         if ( RemovedLink.nodeName()==typeNames[ItemType::Link] ) // 4 is Link
-            if ( RemovedLink.attribute("from")==typeNames[fromType] &&
-                 RemovedLink.attribute("fromID").toInt()==idFrom &&
-                 RemovedLink.attribute("to")==typeNames[toType] &&
+            if ( RemovedLink.attribute("fromID").toInt()==idFrom &&
                  RemovedLink.attribute("toID").toInt()==idTo )
                 root.removeChild(RemovedLink);
         RemovedLink = RemovedLink.nextSiblingElement();
@@ -413,7 +414,7 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
 }
 // end реализация слотов //
 
-void ModelStorage::AddLink(logic::model *curModel, LinkType linkType, int fromID, int toID)
+void ModelStorage::AddLink(logic::model *curModel, int fromID, int toID)
 {
     using namespace logic;
 
