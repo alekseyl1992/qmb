@@ -96,7 +96,7 @@ public slots:
 
 signals:
     //сигналы для оперативного изменения XML-дерева
-    void itemInserted(ItemType type, int id, QPoint pos);
+    void itemInserted(ItemType type, int id, QString name, QPoint pos);
     void itemMoved(ItemType type, int id, QPoint pos);
     void itemRemoved(ItemType type, int id);
     void linkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
@@ -132,7 +132,9 @@ private:
     bool bDropShadow;
 
     void resizeToPoint(QPointF pos); //!< Меняет размер Сцены так, чтобы точка pos попала в её границы
-    int getFreeId(); //!< находит ближайщий пустой id
+    //! Находит ближайщий свободный id
+    //! @param type если передать type != Notype, то поиск будет осуществлять по элементам всех типов
+    int getFreeId(ItemType type = ItemType::NoType);
 };
 
 #endif // MODELSCENE_H

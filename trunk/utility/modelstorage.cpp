@@ -11,12 +11,12 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     // пока сюда
     history_pos=0; //то бишь начало списка (хотя он итак пуст)
 
-    //заполняем ItemNames
-    ItemNames.insert(ItemType::Generator, "Generator");
-    ItemNames.insert(ItemType::Queue, "Queue");
-    ItemNames.insert(ItemType::Handler, "Handler");
-    ItemNames.insert(ItemType::Terminator, "Terminator");
-    ItemNames.insert(ItemType::Link, "Link");
+    //заполняем typeNames
+    typeNames.insert(ItemType::Generator, "Generator");
+    typeNames.insert(ItemType::Queue, "Queue");
+    typeNames.insert(ItemType::Handler, "Handler");
+    typeNames.insert(ItemType::Terminator, "Terminator");
+    typeNames.insert(ItemType::Link, "Link");
 }
 
 logic::model* ModelStorage::getModel(bool create)
@@ -41,7 +41,7 @@ logic::model* ModelStorage::getModel(bool create)
             toType = ProcessingItem.attribute("to");
             num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
 
-            ItemType typeId = ItemNames.key(ProcessingItem.nodeName());
+            ItemType typeId = typeNames.key(ProcessingItem.nodeName());
             switch(typeId)
             {
                 case ItemType::Generator:
@@ -196,10 +196,11 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
         int id, fromID, toID;
         QString fromType, toType;
 
-        ItemType itemType = ItemNames.key(ProcessingItem.nodeName());
+        ItemType itemType = typeNames.key(ProcessingItem.nodeName());
         QPoint pos;
         pos.setX(ProcessingItem.attribute("x").toInt());
         pos.setY(ProcessingItem.attribute("y").toInt());
+        QString name = ProcessingItem.attribute("name");
 
         switch(itemType)
         {
@@ -208,7 +209,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
             case ItemType::Handler:
             case ItemType::Terminator:
                 id = ProcessingItem.attribute("id").toInt();
-                iModel->addItem(itemType,ItemNames[itemType],id,pos);
+                iModel->addItem(itemType,name,id,pos);
                 break;
 
             case ItemType::Link:
@@ -216,7 +217,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
                  toID = ProcessingItem.attribute("toID").toInt();
                 fromType = ProcessingItem.attribute("from");
                 toType = ProcessingItem.attribute("to");
-                iModel->addLink(ItemNames.key(fromType),fromID,ItemNames.key(toType),toID);
+                iModel->addLink(typeNames.key(fromType),fromID,typeNames.key(toType),toID);
             break;
         }
         ProcessingItem = ProcessingItem.nextSiblingElement();
@@ -258,10 +259,10 @@ bool ModelStorage::setCodeString(QString code)
 }
 
 // реализация слотов //
-void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
+void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint pos)
 {
     QDomElement InsertedItem;
-    InsertedItem = curDoc->createElement(ItemNames[type]);
+    InsertedItem = curDoc->createElement(typeNames[type]);
     InsertedItem.setAttribute("id",id);
     switch (type)
     {
@@ -280,8 +281,9 @@ void ModelStorage::onItemInserted(ItemType type, int id, QPoint pos)
         default:
             break;
     };
-    InsertedItem.setAttribute("x",pos.x());
-    InsertedItem.setAttribute("y",pos.y());
+    InsertedItem.setAttribute("name", name);
+    InsertedItem.setAttribute("x", pos.x());
+    InsertedItem.setAttribute("y", pos.y());
     root.appendChild(InsertedItem);
 
     if (history_pos!=0)
@@ -301,7 +303,7 @@ void ModelStorage::onItemMoved(ItemType type, int id, QPoint pos)
 
     while (!MovedItem.isNull())
     {
-        if (MovedItem.nodeName() == ItemNames[type] &&
+        if (MovedItem.nodeName() == typeNames[type] &&
             MovedItem.attribute("id").toInt() == id)
         {
             if ( MovedItem.attribute("x").toInt()!=pos.x() &&
@@ -335,14 +337,14 @@ void ModelStorage::onItemRemoved(ItemType type, int id)
 
     while (!RemovedItem.isNull())
     {
-        if ( (RemovedItem.nodeName()==ItemNames[type]) &&
+        if ( (RemovedItem.nodeName()==typeNames[type]) &&
         (RemovedItem.attribute("id").toInt()==id) )
         {
             while (!ExistedLink.isNull())
             {
-                if ( ( ExistedLink.attribute("from")==ItemNames[type] &&
+                if ( ( ExistedLink.attribute("from")==typeNames[type] &&
                      ExistedLink.attribute("fromID").toInt()==id ) ||
-                     ( ExistedLink.attribute("to")==ItemNames[type] &&
+                     ( ExistedLink.attribute("to")==typeNames[type] &&
                      ExistedLink.attribute("toID").toInt()==id ) )
                     root.removeChild(ExistedLink);
                 ExistedLink = ExistedLink.nextSiblingElement();
@@ -367,10 +369,10 @@ void ModelStorage::onItemRemoved(ItemType type, int id)
 void ModelStorage::onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo)
 {
     QDomElement InsertedLink;
-    InsertedLink = curDoc->createElement(ItemNames[ItemType::Link]);
-    InsertedLink.setAttribute("from",ItemNames[fromType]);
+    InsertedLink = curDoc->createElement(typeNames[ItemType::Link]);
+    InsertedLink.setAttribute("from",typeNames[fromType]);
     InsertedLink.setAttribute("fromID",idFrom);
-    InsertedLink.setAttribute("to",ItemNames[toType]);
+    InsertedLink.setAttribute("to",typeNames[toType]);
     InsertedLink.setAttribute("toID",idTo);
     root.appendChild(InsertedLink);
 
@@ -390,10 +392,10 @@ void ModelStorage::onLinkRemoved(ItemType fromType, int idFrom, ItemType toType,
     QDomElement RemovedLink = root.firstChildElement();
     while (!RemovedLink.isNull())
     {
-        if ( RemovedLink.nodeName()==ItemNames[ItemType::Link] ) // 4 is Link
-            if ( RemovedLink.attribute("from")==ItemNames[fromType] &&
+        if ( RemovedLink.nodeName()==typeNames[ItemType::Link] ) // 4 is Link
+            if ( RemovedLink.attribute("from")==typeNames[fromType] &&
                  RemovedLink.attribute("fromID").toInt()==idFrom &&
-                 RemovedLink.attribute("to")==ItemNames[toType] &&
+                 RemovedLink.attribute("to")==typeNames[toType] &&
                  RemovedLink.attribute("toID").toInt()==idTo )
                 root.removeChild(RemovedLink);
         RemovedLink = RemovedLink.nextSiblingElement();

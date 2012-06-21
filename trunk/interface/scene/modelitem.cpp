@@ -44,12 +44,13 @@
 #include "arrow.h"
 #include "modelscene.h"
 
-ModelItem::ModelItem(ItemType itemType, int itemId, bool dropShadow, QGraphicsItem *parent,
-             QGraphicsScene *scene)
+ModelItem::ModelItem(ItemType itemType, int itemId, QString name, bool dropShadow,
+             QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsPolygonItem(parent, scene), ItemShadow(this, dropShadow)
 {
     myItemType = itemType;
     myId = itemId;
+    myName = name;
     QPen iPen = pen();
     iPen.setWidth(2);
     setPen(iPen);
@@ -150,7 +151,7 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(QPen(Qt::black));
     painter->setBrush(QBrush(Qt::black));
     painter->drawText(polygon().boundingRect(),
-                      typeAsString() + QString(" %0").arg(myId),
+                      myName,
                       QTextOption(Qt::AlignCenter));
 
     //hotSpots
@@ -198,24 +199,6 @@ QPixmap ModelItem::image() const
     painter.drawPolyline(myPolygon);
 
     return pixmap;
-}
-
-QString ModelItem::typeAsString() const
-{
-    switch(myItemType)
-    {
-    case ItemType::Generator:
-        return "Генератор";
-    case ItemType::Queue:
-        return "Очередь";
-    case ItemType::Handler:
-        return "Обработчик";
-    case ItemType::Terminator:
-        return "Терминатор";
-
-    default:
-        return "Нечто";
-    }
 }
 
 bool ModelItem::closeByHotStop(const QPointF &pt) const

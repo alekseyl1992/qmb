@@ -73,7 +73,7 @@ public:
      * Передача 0 в качестве itemId означает,
      * что item создаётся для отрисовки на панели элементов, а не в сцене
      */
-    ModelItem(ItemType itemType, int itemId=0, bool dropShadow=false,
+    ModelItem(ItemType itemType, int itemId=0, QString name="", bool dropShadow=false,
         QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     ~ModelItem();
 
@@ -99,8 +99,6 @@ public:
     void setModified(bool m)
     { bModified = m; }
 
-    //! Преобразует тип элемента в строковое представление для отображения на панели элементов
-    QString typeAsString() const;
     bool closeByHotStop(const QPointF& pt) const; //!< близка ли точка к одному из hs
     QPointF closestHotSpot(QPointF pos) const; //!< возвращает позицию ближайшего hs
 
@@ -114,6 +112,7 @@ private:
     QMenu *myContextMenu;
     QList<Arrow *> myArrows;
     QVector<QPointF> hotSpots; //!< точки крепления стрелок
+    QString myName; //!< Отображаемое название элемента
     int myId;
     bool bModified;
 };

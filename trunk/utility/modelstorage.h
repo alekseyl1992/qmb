@@ -48,7 +48,7 @@ private:
     QDomElement root; //корневой элемент (ех: модель №х )
     QString currentPath;
 
-    QMap<ItemType, QString> ItemNames;
+    QMap<ItemType, QString> typeNames;
     enum class LinkType : int
     {
         GeneratorToQueue,
@@ -84,7 +84,7 @@ public:
 
 public slots:
 
-    void onItemInserted(ItemType type, int id, QPoint pos);
+    void onItemInserted(ItemType type, int id, QString name, QPoint pos);
     void onItemMoved(ItemType type, int id, QPoint pos);
     void onItemRemoved(ItemType type, int id);
     void onLinkInserted(ItemType fromType, int idFrom, ItemType toType, int idTo);
