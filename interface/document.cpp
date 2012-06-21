@@ -113,8 +113,8 @@ Document::Document(QWidget *parent) :
     code->setFontPointSize(set.value("Code/FontSize", 8).toInt());
 
     //связываем сцену с хранилищем
-    connect(scene, SIGNAL(itemInserted(ItemType, int, QPoint)),
-            storage, SLOT(onItemInserted(ItemType, int, QPoint)));
+    connect(scene, SIGNAL(itemInserted(ItemType, int, QString, QPoint)),
+            storage, SLOT(onItemInserted(ItemType, int, QString, QPoint)));
     connect(scene, SIGNAL(itemMoved(ItemType, int, QPoint)),
             storage, SLOT(onItemMoved(ItemType, int, QPoint)));
     connect(scene, SIGNAL(itemRemoved(ItemType, int)),

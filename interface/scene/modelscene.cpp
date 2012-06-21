@@ -75,7 +75,7 @@ void ModelScene::addItem(ItemType itemType, QString name, int id, QPoint pos)
 {
     resizeToPoint(pos);
 
-    ModelItem *item = new ModelItem(itemType, id, bDropShadow);
+    ModelItem *item = new ModelItem(itemType, id, name, bDropShadow);
     item->setPos(pos);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
@@ -363,14 +363,19 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     //ресайз сцены при добавлении элемента
     resizeToPoint(event->scenePos());
 
+    QString name = QString("%1 %2")
+            .arg(itemTypeToString(myItemType))
+            .arg(getFreeId(myItemType));
+
     ModelItem *item = new ModelItem(myItemType,
                                     getFreeId(),
+                                    name,
                                     bDropShadow);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
     QGraphicsScene::addItem(item);
     item->setPos(event->scenePos());
-    emit itemInserted(myItemType, item->id(), item->pos().toPoint());
+    emit itemInserted(myItemType, item->id(), name, item->pos().toPoint());
     myMode = Mode::MoveItem;
     bModified = true;
 
@@ -408,7 +413,7 @@ void ModelScene::resizeToPoint(QPointF pos)
     }
 }
 
-int ModelScene::getFreeId()
+int ModelScene::getFreeId(ItemType type)
 {
     //формируем список занятых id
     QSet<int> ids;
@@ -417,7 +422,8 @@ int ModelScene::getFreeId()
     foreach(QGraphicsItem *it, items())
     {
         ModelItem *modelItem = qgraphicsitem_cast<ModelItem *>(it);
-        if(modelItem != nullptr)
+        if(modelItem &&
+                (type == ItemType::NoType || modelItem->itemType() == type))
         {
             ids << modelItem->id();
             if(modelItem->id() > maxId)
