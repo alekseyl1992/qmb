@@ -452,21 +452,36 @@ int ModelScene::getFreeId(ItemType type)
 
 void ModelScene::removeSelectedItems()
 {
+    //для связей
     foreach(QGraphicsItem *item, selectedItems())
     {
-        if(item->type() == ModelItem::Type)
+        Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
+        if(arrow)
         {
-            ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
-            mItem->removeArrows();
-            emit itemRemoved(mItem->id());
-        }
-        else if(item->type() == Arrow::Type)
-        {
-            Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
+            removeItem(arrow);
             emit linkRemoved(arrow->startItem()->id(),
                              arrow->endItem()->id());
+
+            arrow->startItem()->removeArrow(arrow);
+            arrow->endItem()->removeArrow(arrow);
+
+            delete arrow;
+            bModified = true;
         }
-        removeItem(item);
-        bModified = true;
+    }
+
+    //для элементов
+    foreach(QGraphicsItem *item, selectedItems())
+    {
+        ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
+        if(mItem)
+        {
+            mItem->removeArrows();
+            emit itemRemoved(mItem->id());
+
+            removeItem(mItem);
+            delete mItem;
+            bModified = true;
+        }
     }
 }

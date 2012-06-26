@@ -102,6 +102,7 @@ private:
     QAction *startAction, *stopAction;
     bool bSimulating; //!< Имеет значение true, если идёт симуляция
     bool bPaused; //!< Имеет значение true, если симуляции поставлена на паузу
+    bool bClosing; //!< Имеет значение true, если окно готово к закрытию
 
     bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
     QString timeToString(int time); //!< Преобразует время из миллисекунд в формат "мм:сс.мс"
