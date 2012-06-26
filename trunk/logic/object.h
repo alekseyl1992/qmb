@@ -41,22 +41,33 @@ namespace logic
 		bool is_free() const					//!< Проверяет, можно ли в текущего объект добавить запрос
 		{ return freedom_flag; }
 
-		void connect_with(object* _source);		//!< Служит для соединения объекта с входом
-		bool has_connection() const;			//!< Проверка наличия соединения
-		object* connected_with() const 
+        void set_input(object* _source);		//!< Служит для соединения объекта с входом
+        void set_output(object* _dest);
+
+        bool has_input() const;
+        bool has_output() const;
+
+        object* input_connection() const    //ex connected_with()
 		{ return input; }
+
+        object* output_connection() const
+        { return output; }
+
 		void set_parrent(model* parent);		//!< Устанавливает указателя на родительскую модель
+
 
 		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
 		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
-        virtual void move_request();		    //!< Служит для вызова виртуальной функции add
-		
+        void move_request();                    //!< Служит для вызова виртуальной функции add
+        virtual bool is_completed() = 0;
+
 	protected:
 		ItemType item_type;
         model* parent;
         ull_t id;
         ull_t global_id;
 		object* input;
+        object* output;
 		request* cur_req;
 		
 		bool moveable_request_flag;

@@ -35,6 +35,9 @@ namespace logic
 		request* get_last();									  //!< Возвращает нижний элемент списка
 		virtual request* get_request();                           //!< Реализация виртуальной функции базового класса object
 
+        virtual bool is_completed()
+        { return get_size() == 0; }
+
 	private:
 		std::deque<request*> requests;
 		bool to_get_from_top;

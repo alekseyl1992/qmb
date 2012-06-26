@@ -48,14 +48,8 @@ namespace logic
         model();
 		model(const model& m);
 		~model();
-
-        //static std::vector< std::pair<ItemType, ItemType> > supportedLinks();
 		
     private:
-        bool are_all_generated();									//!< Проверяет, завершили ли все генераторы работу
-        bool are_all_queues_clear();								//!< Проверяет, нет ли в очередях запросов
-        bool are_all_handlers_finished_handling();					//!< Проверяет, закончили ли все обработчики свою работу
-        bool are_all_terminators_finished_terminating();			//!< Проверяет, закончили ли все термиторы свою работу
         bool is_simulating_finished();								//!< Проверяет, завершена ли симуляция
 
         void generating_th();										//!< Функция, создающая потоки для генерации сообщений
@@ -93,6 +87,7 @@ namespace logic
         void simulation_start();									//!< Начинает симуляцию
         void simulation_stop();										//!< Останавливает симуляцию
 		void simulation_pause();									//!< Ставит симуляцию на паузу
+        void simulation_restore();
 
     signals:
 		void simulationStarted(int time);

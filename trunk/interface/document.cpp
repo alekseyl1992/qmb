@@ -303,7 +303,7 @@ void Document::restoreSimulation()
 
     bSimulating = true;
     bPaused = false;
-    storage->getModel()->simulation_start();
+    storage->getModel()->simulation_restore();
 }
 
 void Document::stopSimulation()

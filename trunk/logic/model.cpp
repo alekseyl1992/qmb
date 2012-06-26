@@ -51,74 +51,34 @@ namespace logic
 	model::~model()
 	{ }
 
-    bool model::are_all_generated()
-	{
-        bool all_completed = true;
-		num_generated = 0;
-        for (auto it = generators.begin(); it != generators.end(); ++it)
-        {
-			num_generated += it->get_current_num_requests();
-            if (!it->is_finished())
-            {
-                all_completed = false;
-                break;
-            }
-        }
-
-        return all_completed;
-	}
-
-    bool model::are_all_queues_clear()
-    {
-        bool all_completed = true;
-        for (auto it = queues.begin(); it != queues.end(); ++it)
-        {
-			if (it->get_size() != 0)
-            {
-                all_completed = false;
-                break;
-            }
-        }
-
-        return all_completed;
-    }
-
-    bool model::are_all_handlers_finished_handling()
-    {
-        bool all_completed = true;
-        for (auto it = handlers.begin(); it != handlers.end(); ++it)
-        {
-			if (!it->is_free())
-            {
-                all_completed = false;
-                break;
-            }
-        }
-
-        return all_completed;
-    }
-
-    bool model::are_all_terminators_finished_terminating()
-    {
-        bool all_completed = true;
-		num_terminated = 0;
-        for (auto it = terminators.begin(); it != terminators.end(); ++it)
-        {
-			num_terminated += it->get_count_of_terminated_requests();
-        }
-		if (num_terminated != num_generated)  //проверка на то, что все сгенерированные сообщения отработаны
-			all_completed = false;
-
-        return all_completed;
-    }
 
     bool model::is_simulating_finished()
 	{
-        bool c1 = are_all_generated(),
-             c2 = are_all_queues_clear(),
-             c3 = are_all_handlers_finished_handling(),
-             c4 = are_all_terminators_finished_terminating();
-		return (c1 && c2 && c3 && c4) || !simulate_flag;
+        bool all_completed = true;
+        for(auto it = objects.begin(); it != objects.end(); ++it)
+        {
+            if (!(*it)->is_completed())
+            {
+                all_completed = false;
+                break;
+            }
+        }
+        if (all_completed)
+        {
+            num_generated = 0;
+            num_terminated = 0;
+            for (auto it = generators.begin(); it != generators.end(); ++it)
+                if (it->has_output())
+                    num_generated += it->get_current_num_requests();
+
+            for (auto it = terminators.begin(); it != terminators.end(); ++it)
+                num_terminated += it->get_count_of_terminated_requests();
+
+            if (num_terminated != num_generated)  //проверка на то, что все сгенерированные сообщения отработаны
+                all_completed = false;
+        }
+
+        return all_completed || !simulate_flag;
 	}
 
 	void model::try_pausing() const
@@ -154,23 +114,34 @@ namespace logic
 		std::for_each(objects.begin(), objects.end(),
 				[&](object* obj)
 		{
-			if (obj->get_type() != ItemType::Generator)
-			{
-				threads.push_back(new std::thread([obj, this]()
-				{
-					for (;is_simulating(); )
-					{
-						try_pausing(); //если нажата пауза
+              if (obj->has_input())
+              {
+                  threads.push_back(new std::thread([obj, this]()
+                  {
+                      for (;is_simulating(); )
+                      {
 
-						if (obj->has_connection())
-                            obj->move_request();
-					}
-				}) );
-			}
+                          try_pausing(); //если нажата пауза
+                          obj->move_request();
+                      }
+                  }) );
+              }
 		});
 	}
 
-	void model::checking_finished_th()
+    /*void model::checking_finished_th()
+    {
+        static int count = 0;
+        count++;
+        if (count == 1)
+        {
+            simulate_flag = false;
+            emit simulationFinished(static_cast<int>(get_now_time() - start_time));
+            //std::cout << "simulation finished" << std::endl;
+        }
+    }*/
+
+    void model::checking_finished_th()
 	{
 		threads.push_back(new std::thread([this]()
         {
@@ -178,8 +149,10 @@ namespace logic
             {
 				try_pausing(); //если нажата пауза
 
-                if (is_simulating_finished()) //if the user switched simulating off
+                if (is_simulating_finished())
                 {
+                    if (stop_flag)
+                        break;
 					simulate_flag = false;
                     emit simulationFinished(static_cast<int>(get_now_time() - start_time));
                     //std::cout << "simulation finished" << std::endl;
@@ -187,7 +160,7 @@ namespace logic
                 }
             }
         }) );
-	}
+    }
 
 	bool model::is_valid()
 	{
@@ -201,14 +174,17 @@ namespace logic
 
 		//search errors in generators and terminators
 		std::for_each(objects.begin(), objects.end(), [&](object* obj) {
-			if (obj->has_connection())
+            if (obj->has_input())
 			{
 				if (obj->get_type() == ItemType::Generator)
 					errors.push_back(Pair(obj, error_code::INPUT_IN_GENERATOR));
+            }
+            if (obj->has_output())
+            {
+                if (obj->get_type() == ItemType::Terminator)
+                    errors.push_back(Pair(obj, error_code::OUTPUT_IN_TERMINATOR));
+            }
 
-				if (obj->connected_with()->get_type() == ItemType::Terminator)
-					errors.push_back(Pair(obj->connected_with(), error_code::OUTPUT_IN_TERMINATOR));
-			}
 		});
 
 		return !(errors.size());
@@ -229,50 +205,52 @@ namespace logic
 
 	void model::simulation_start()
 	{
-		stop_flag = false;
-		if (pause_flag)
-		{
-			pause_flag = false;
-            emit simulationRestored(static_cast<int>(get_now_time() - start_time));
-            //std::cout << "simulation restored" << std::endl;
-		}
-		else
-		{
-			simulate_flag = true;
-            start_time = get_now_time();
-            emit simulationStarted(0);
-            //std::cout << "simulation started" << std::endl;
-			
-			generating_th();
-			threading();
-			checking_finished_th();
-		}
-		if (!is_simulating())
-		{
-			std::for_each(threads.begin(), threads.end(), [](std::thread* th)
-			{
-				th->join();
-			});
-		}
+        simulate_flag = true;
+        stop_flag = false;
+        pause_flag = false;
+
+        start_time = get_now_time();
+        emit simulationStarted(0);
+        //std::cout << "simulation started" << std::endl;
+
+        generating_th();
+        threading();
+        checking_finished_th();
+
+        std::for_each(threads.begin(), threads.end(), [](std::thread* th)
+        {
+            th->detach();
+        });
 	}
 
     void model::simulation_stop()
 	{
-        pause_flag = false;
+        simulate_flag = false;
         stop_flag = true;
-		if (simulate_flag) //для корректного вывода
-		{
-            emit simulationStopped(static_cast<int>(get_now_time() - start_time));
-            //std::cout << "simulation stopped" << std::endl;
-		}
+        pause_flag = false;
+
+        emit simulationStopped(static_cast<int>(get_now_time() - start_time));
+        //std::cout << "simulation stopped" << std::endl;
 	}
 	
 	void model::simulation_pause()
 	{
 		pause_flag = true;
+
         emit simulationPaused(static_cast<int>(get_now_time() - start_time));
         //std::cout << "simulation paused" << std::endl;
-	}
+    }
+
+    void model::simulation_restore()
+    {
+        if (pause_flag)
+        {
+            pause_flag = false;
+
+            emit simulationRestored(static_cast<int>(get_now_time() - start_time));
+            //std::cout << "simulation restored" << std::endl;
+        }
+    }
 
     void model::add_generator(generator &&gen)
     {
@@ -304,7 +282,8 @@ namespace logic
 
 	void model::connect(object* lhs, object* rhs)
 	{
-        rhs->connect_with(lhs);
+        lhs->set_output(rhs);
+        rhs->set_input(lhs);
     }
 
     object* model::find_object(ull_t global_id)
@@ -376,19 +355,6 @@ namespace logic
         }
         return &(*iter);
     }
-
-	/*
-    std::vector< std::pair<ItemType, ItemType> > model::supportedLinks()
-    {
-        typedef std::pair<ItemType, ItemType> pair;
-        std::vector<pair> links;
-
-        links.emplace_back(pair(ItemType::Generator, ItemType::Queue));
-        links.emplace_back(pair(ItemType::Queue, ItemType::Handler));
-        links.emplace_back(pair(ItemType::Handler, ItemType::Terminator));
-
-        return links;
-    }*/
 
 
 } //end namespace logic
