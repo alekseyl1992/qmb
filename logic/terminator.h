@@ -28,6 +28,9 @@ namespace logic
 		virtual void add(request* req);                 //!< Реализация виртуальной функции базового класса object
 		virtual request* get_request();					//!< Реализация виртуальной функции базового класса object                        
 
+        virtual bool is_completed()
+        { return is_free(); }
+
     private:
         int terminating_period;
         ull_t count_of_terminated_requests;

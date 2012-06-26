@@ -31,12 +31,12 @@ namespace logic
         bool is_infinite() const													    //!< Возвращает флаг бесконечной генерации запросов
 		{ return infinite_generating; }
 
-		bool is_finished() const														//!< Возвращает сообщение о завершенности работы генератора
-		{ return count_of_generated_requests == number_of_requests_to_generate; }
-
 		void generate_new_request(ull_t r_id);											//!< Генерирует новый запрос
 		virtual request* get_request();													//!< Реализация виртуальной функции базового класса object
 		virtual void add(request*) { }													//!< Реализация виртуальной функции базового класса object
+
+        virtual bool is_completed()
+        { return count_of_generated_requests == number_of_requests_to_generate; }
 
 	private:
 		int generating_period;

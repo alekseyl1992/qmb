@@ -9,6 +9,7 @@ namespace logic
 		id(id), 
         global_id(id),
 		input(nullptr), 
+        output(nullptr),
 		cur_req(nullptr),
 		moveable_request_flag(false),
 		freedom_flag(true),
@@ -21,6 +22,7 @@ namespace logic
 		id(obj.id), 
         global_id(obj.global_id),
 		input(obj.input), 
+        output(obj.output),
 		cur_req(obj.cur_req),
 		moveable_request_flag(obj.moveable_request_flag),
 		freedom_flag(obj.freedom_flag),
@@ -31,15 +33,25 @@ namespace logic
     {
 	}
 
-	void object::connect_with(object* _source)
+    void object::set_input(object* _source)
 	{
 		this->input = _source;
 	}
 
-	bool object::has_connection() const
+    void object::set_output(object* _dest)
+    {
+        this->output = _dest;
+    }
+
+    bool object::has_input() const
 	{
 		return input == nullptr ? false : true;
 	}
+
+    bool object::has_output() const
+    {
+        return output == nullptr ? false : true;
+    }
 
 	void object::set_parrent(model* _parent)
 	{
@@ -51,7 +63,9 @@ namespace logic
 		if (this->input->is_moveable() && this->is_free())
 		{
 			this->add(input->get_request());
-		}
-	}
+        }
+    }
+
+
 
 } //end namespace logic
