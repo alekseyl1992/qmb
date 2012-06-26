@@ -24,7 +24,7 @@
 #include <QSettings>
 
 Document::Document(QWidget *parent) :
-    QDialog(parent), ui(new Ui::Document), bSimulating(false), bPaused(false)
+    QDialog(parent), ui(new Ui::Document), bSimulating(false), bPaused(false), bClosing(false)
 {
     ui->setupUi(this);
     ui->progressBar->hide();
@@ -427,7 +427,10 @@ void Document::closeEvent(QCloseEvent *event)
                                        "Симуляция не завершена, вы действительно хотите закрыть модель?",
                                        QMessageBox::Yes, QMessageBox::No);
         if(id == QMessageBox::Yes)
+        {
+            bClosing = true;
             stopSimulation();
+        }
         else
             return event->ignore();
     }
@@ -493,10 +496,10 @@ void Document::onStartAction()
 
 void Document::onStopAction()
 {
-    if(QMessageBox::question(
+    /*if(QMessageBox::question(
                 this, windowTitle(),
                 "Вы действительно хотите прервать симуляцию?",
-                QMessageBox::Yes, QMessageBox::No))
+                QMessageBox::Yes, QMessageBox::No))*/
         stopSimulation();
 }
 
@@ -612,32 +615,36 @@ void Document::onSimulationStarted(int time)
 
 void Document::onSimulationStopped(int time)
 {
-    //TODO повторяющийся код
-    bSimulating = false;    
-    bPaused = false;
-    //storage->getModel()->simulation_stop();
-    ui->progressBar->hide();
-    startAction->setEnabled(true);
-    startAction->setIcon(QIcon(":/icons/start"));
-    stopAction->setEnabled(false);
-    ui->graphicsView->setEnabled(true);
+    if(!bClosing)
+    {
+        //TODO повторяющийся код
+        bSimulating = false;
+        bPaused = false;
+        //storage->getModel()->simulation_stop();
+        ui->progressBar->hide();
+        startAction->setEnabled(true);
+        startAction->setIcon(QIcon(":/icons/start"));
+        stopAction->setEnabled(false);
+        ui->graphicsView->setEnabled(true);
 
-    logModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem(timeToString(time))
-                        << new QStandardItem("")
-                        << new QStandardItem("Симуляция прервана"));
-    ui->simulationLog->scrollToBottom();
+        logModel->appendRow(QList<QStandardItem *>()
+                            << new QStandardItem(timeToString(time))
+                            << new QStandardItem("")
+                            << new QStandardItem("Симуляция прервана"));
+        ui->simulationLog->scrollToBottom();
 
-    //storage->freeModel();
-
-    int id = QMessageBox::question(
-                this, windowTitle(),
-                "Симуляция прервана!\nПоказать статистику?",
-                QMessageBox::Yes, QMessageBox::No);
+        //storage->freeModel();
 
 
-    if(id == QMessageBox::Yes)
-        QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+        int id = QMessageBox::question(
+                    this, windowTitle(),
+                    "Симуляция прервана!\nПоказать статистику?",
+                    QMessageBox::Yes, QMessageBox::No);
+
+
+        if(id == QMessageBox::Yes)
+            QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+    }
 }
 
 void Document::onSimulationPaused(int time)
