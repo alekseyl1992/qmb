@@ -1,12 +1,16 @@
 ﻿#ifndef OBJECT_H
 #define OBJECT_H
 
+#include <vector>
 #include <thread>
 #include <mutex>
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <QObject>
+#include <QDebug>
+
+#include <time.h>
 
 #include "../utility/common.h"
 #include "request.h"
@@ -42,31 +46,36 @@ namespace logic
 		{ return freedom_flag; }
 
         void set_input(object* _source);		//!< Служит для соединения объекта с входом
-        void set_output(object* _dest);
+        void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
 
         bool has_input() const;
         bool has_output() const;
 
-        object* input_connection() const    //ex connected_with()
-		{ return input; }
+        int inputs_count() const
+        { return static_cast<int>(inputs.size()); }
+
+        //object* input_connection() const    //ex connected_with()
+        //{ return input; }
 
         object* output_connection() const
         { return output; }
 
-		void set_parrent(model* parent);		//!< Устанавливает указателя на родительскую модель
+        void set_parrent(model* parent);		//!< Устанавливает указатель на родительскую модель
 
 
 		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
 		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
         void move_request();                    //!< Служит для вызова виртуальной функции add
-        virtual bool is_completed() = 0;
+        virtual bool is_completed() = 0;        //!< Служит для проверки объекта на завершенность работы
+
+        int get_event_time() const;
 
 	protected:
 		ItemType item_type;
         model* parent;
         ull_t id;
         ull_t global_id;
-		object* input;
+        std::vector<object*> inputs;
         object* output;
 		request* cur_req;
 		

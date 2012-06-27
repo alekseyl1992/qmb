@@ -44,6 +44,7 @@ namespace logic
         friend class handler;
         friend class terminator;
 
+        typedef std::pair<object*, error_code> Pair;
 	public:
         model();
 		model(const model& m);
@@ -73,10 +74,11 @@ namespace logic
         terminator* find_terminator(ull_t id);						//!< Возвращает адрес терминатора с нужным id
 
 		bool is_valid();											//!< Проверяет модель на наличие ошибок
-		std::string get_errors() const;								//!< Возвращает ошибки модели
+        std::vector<Pair> get_errors() const						//!< Возвращает ошибки модели
+        { return errors; }
 
 		bool is_simulating() const									//!< Показывает состояние симуляции (не то же, что is_simulating_finished())
-		{ return simulate_flag && !stop_flag; }
+        { return simulate_flag && !stop_flag; }
 
 		bool is_paused() const 										//!< Если модель стоит на паузе
 		{ return pause_flag; }
@@ -102,7 +104,7 @@ namespace logic
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private: //members
-        typedef std::pair<object*, error_code> Pair;
+
 
 		std::list<generator> generators;
 		std::list<queue> queues;
