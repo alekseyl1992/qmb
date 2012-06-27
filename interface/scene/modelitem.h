@@ -92,6 +92,8 @@ public:
         { return Type;}
     int id() const
         { return myId;}
+    QString name() const
+        { return myName; }
     const QList<Arrow *>& arrows()
     { return myArrows;}
     bool isModified() const

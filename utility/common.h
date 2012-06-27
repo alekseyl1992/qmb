@@ -3,6 +3,7 @@
 
 #include <QPointF>
 #include <QString>
+#include <QSet>
 #include <chrono>
 #include <string>
 #include <QMessageBox>
@@ -32,14 +33,14 @@ enum class ItemType : int
 //! Преобразует тип элемента в строковое представление
 QString itemTypeToString(ItemType type);
 QString itemTypeToEngString(ItemType type);
-std::string itemTypeTo_stdString(ItemType type);
 
 //! Вычисляет расстояние маежду двумя точками
 qreal distance(QPointF p1, QPointF p2);
 
 ull_t get_now_time();
 
-
+//! Находит свободный id в списке
+int getFreeId(QSet<int> ids);
 
 
 #endif // COMMON_H
