@@ -133,8 +133,9 @@ private:
 
     void resizeToPoint(QPointF pos); //!< Меняет размер Сцены так, чтобы точка pos попала в её границы
     //! Находит ближайщий свободный id
-    //! @param type если передать type != Notype, то поиск будет осуществлять по элементам всех типов
-    int getFreeId(ItemType type = ItemType::NoType);
+    int getFreeId() const;
+    //! Находит ближайщее свободное имя
+    QString getFreeName(ItemType itemType) const;
 };
 
 #endif // MODELSCENE_H

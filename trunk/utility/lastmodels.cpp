@@ -28,7 +28,7 @@ QStringList LastModels::getList()
                 QString path = list.at(i).trimmed();
                 if(!QFile::exists(path))
                 {
-                    list.removeAt(i);
+                    list.removeAt(i--);
                     if(path != "") //пустую строку бесполезно стирать из файла
                         bListChanged = true;
                 }

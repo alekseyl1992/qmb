@@ -362,19 +362,15 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     //ресайз сцены при добавлении элемента
     resizeToPoint(event->scenePos());
 
-    QString name = QString("%1 %2")
-            .arg(itemTypeToString(myItemType))
-            .arg(getFreeId(myItemType));
-
     ModelItem *item = new ModelItem(myItemType,
                                     getFreeId(),
-                                    name,
+                                    getFreeName(myItemType),
                                     bDropShadow);
     item->scaleShadow(myScale);
     item->setBrush(myItemColor);
     QGraphicsScene::addItem(item);
     item->setPos(event->scenePos());
-    emit itemInserted(myItemType, item->id(), name, item->pos().toPoint());
+    emit itemInserted(myItemType, item->id(), item->name(), item->pos().toPoint());
     myMode = Mode::MoveItem;
     bModified = true;
 
@@ -412,42 +408,46 @@ void ModelScene::resizeToPoint(QPointF pos)
     }
 }
 
-int ModelScene::getFreeId(ItemType type)
+int ModelScene::getFreeId() const
 {
     //формируем список занятых id
     QSet<int> ids;
-    int maxId = 1;
-    int minId = 0;
     foreach(QGraphicsItem *it, items())
     {
         ModelItem *modelItem = qgraphicsitem_cast<ModelItem *>(it);
-        if(modelItem &&
-                (type == ItemType::NoType || modelItem->itemType() == type))
-        {
+        if(modelItem)
             ids << modelItem->id();
-            if(modelItem->id() > maxId)
-                maxId = modelItem->id();
-            if(modelItem->id() < minId || minId == 0)
-                minId = modelItem->id();
+    }
+
+    return ::getFreeId(ids);
+}
+
+QString ModelScene::getFreeName(ItemType itemType) const
+{
+    //формируем список свободных "локальных" id
+    QSet<int> itemIds;
+    QRegExp expr(QString("%0\\s\\d+")
+              .arg(itemTypeToString(itemType))); //ex: "Генератор 12"
+
+    //по всем элементам типа itemType
+    foreach(QGraphicsItem *item, items())
+    {
+        ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(item);
+        if(mItem && expr.exactMatch(mItem->name()))
+        {
+            QRegExp idExp("\\d+");
+            idExp.indexIn(mItem->name());
+            int id = idExp.cap().toInt();
+            itemIds << id;
         }
     }
 
-    //ищем свободный
-    if(!ids.empty())
-    {
-        if(minId != 1) //если есть пропуск вначале
-            return 1;
+    //находим свободный индекс
+    int freeId = ::getFreeId(itemIds);
 
-        //ищем разрыв в нумерации
-        for(auto it = ids.begin(); it != ids.end()-1; ++it)
-            if((*it+1) != *(it+1))
-                return (*it+1);
-
-        //не нашли, значит max
-        return maxId + 1;
-    }
-    else //пустая сцена
-        return 1;
+    return QString("%0 %1")
+            .arg(itemTypeToString(itemType))
+            .arg(freeId);
 }
 
 void ModelScene::removeSelectedItems()
