@@ -35,8 +35,8 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqQueued(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->get_start_time()));
-            //std::cout << cur_req->get_id().str_reqID() << " was put to the queue " << get_id() << endl;
+            emit parent->reqQueued(id, requests.back()->get_id(), get_event_time());
+            qDebug() << cur_req->get_id().str_reqID().c_str() << " was put to the queue " << get_id();
 		}
 	}
 

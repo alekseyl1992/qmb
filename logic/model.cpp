@@ -7,7 +7,6 @@ std::string error_code_str(error_code code)
     {
     case INPUT_IN_GENERATOR:
         return "INPUT_IN_GENERATOR";
-
     case OUTPUT_IN_TERMINATOR:
         return "OUTPUT_IN_TERMINATOR";
     case NO_GENERATORS:
@@ -120,7 +119,6 @@ namespace logic
                   {
                       for (;is_simulating(); )
                       {
-
                           try_pausing(); //если нажата пауза
                           obj->move_request();
                       }
@@ -154,11 +152,13 @@ namespace logic
                     if (stop_flag)
                         break;
 					simulate_flag = false;
+
                     emit simulationFinished(static_cast<int>(get_now_time() - start_time));
-                    //std::cout << "simulation finished" << std::endl;
+                    qDebug() << "simulation finished" << endl;
+
                     break;
                 }
-            }
+        }
         }) );
     }
 
@@ -190,19 +190,6 @@ namespace logic
 		return !(errors.size());
 	}
 
-	std::string model::get_errors() const
-	{
-		std::stringstream ss;
-		ss << "errors occured:\n";
-		std::for_each(errors.begin(), errors.end(), [&](std::pair<object const*, error_code> err) {
-            ss << "Error #" << err.second << " : " << error_code_str(err.second);
-			if (err.first != nullptr)
-                ss << " in " << itemTypeTo_stdString(err.first->get_type()).c_str() << " " << err.first->get_id();
-			ss << std::endl;
-		});
-		return ss.str();
-	}
-
 	void model::simulation_start()
 	{
         simulate_flag = true;
@@ -211,7 +198,7 @@ namespace logic
 
         start_time = get_now_time();
         emit simulationStarted(0);
-        //std::cout << "simulation started" << std::endl;
+        qDebug() << "simulation started";
 
         generating_th();
         threading();
@@ -230,7 +217,7 @@ namespace logic
         pause_flag = false;
 
         emit simulationStopped(static_cast<int>(get_now_time() - start_time));
-        //std::cout << "simulation stopped" << std::endl;
+        qDebug() << "simulation stopped";
 	}
 	
 	void model::simulation_pause()
@@ -238,7 +225,7 @@ namespace logic
 		pause_flag = true;
 
         emit simulationPaused(static_cast<int>(get_now_time() - start_time));
-        //std::cout << "simulation paused" << std::endl;
+        qDebug() << "simulation paused";
     }
 
     void model::simulation_restore()
@@ -248,7 +235,7 @@ namespace logic
             pause_flag = false;
 
             emit simulationRestored(static_cast<int>(get_now_time() - start_time));
-            //std::cout << "simulation restored" << std::endl;
+            qDebug() << "simulation restored";
         }
     }
 

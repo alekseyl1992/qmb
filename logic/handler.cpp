@@ -23,16 +23,16 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqBeganHandling(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->get_start_time()));
-            //std::cout << cur_req->get_id().str_reqID() << " was put to the handler " << get_id() << endl;
+            emit parent->reqBeganHandling(id, cur_req->get_id(), get_event_time());
+            qDebug() << cur_req->get_id().str_reqID().c_str() << " was put to the handler " << get_id();
 		}
 
         std::this_thread::sleep_for(std::chrono::milliseconds(handling_period));
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqFinishedHandling(id, cur_req->get_id(), static_cast<int>(get_now_time() - parent->get_start_time()));
-            //std::cout << cur_req->get_id().str_reqID() << " finished handling in handler " << get_id() << endl;
+            emit parent->reqFinishedHandling(id, cur_req->get_id(), get_event_time());
+            qDebug() << cur_req->get_id().str_reqID().c_str() << " finished handling in handler " << get_id();
 		}
 
 		moveable_request_flag = true;

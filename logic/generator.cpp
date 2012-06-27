@@ -37,8 +37,8 @@ namespace logic
 
 		if (parent->is_simulating())
 		{
-            emit parent->reqGenerated(cur_req->get_id(), static_cast<int>(get_now_time() - parent->get_start_time())); //indicates that the new request is generated
-            //std::cout << cur_req->get_id().str_reqID() << " generated" << endl;
+            emit parent->reqGenerated(cur_req->get_id(), get_event_time()); //indicates that the new request is generated
+            qDebug() << cur_req->get_id().str_reqID().c_str() << " generated";
 		}
 
 		if (infinite_generating == true)
