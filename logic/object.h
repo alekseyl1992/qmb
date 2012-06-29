@@ -1,7 +1,6 @@
 ﻿#ifndef OBJECT_H
 #define OBJECT_H
 
-#include <vector>
 #include <thread>
 #include <mutex>
 #include <string>
@@ -9,8 +8,6 @@
 #include <iostream>
 #include <QObject>
 #include <QDebug>
-
-#include <time.h>
 
 #include "../utility/common.h"
 #include "request.h"
@@ -45,17 +42,14 @@ namespace logic
 		bool is_free() const					//!< Проверяет, можно ли в текущего объект добавить запрос
 		{ return freedom_flag; }
 
-        void set_input(object* _source);		//!< Служит для соединения объекта с входом
-        void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
+        virtual void set_input(object* _source);		//!< Служит для соединения объекта с входом
+        virtual void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
 
-        bool has_input() const;
-        bool has_output() const;
+        virtual bool has_input() const;
+        virtual bool has_output() const;
 
-        int inputs_count() const
-        { return static_cast<int>(inputs.size()); }
-
-        //object* input_connection() const    //ex connected_with()
-        //{ return input; }
+        object* input_connection() const    //ex connected_with()
+        { return input; }
 
         object* output_connection() const
         { return output; }
@@ -65,7 +59,7 @@ namespace logic
 
 		virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
 		virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
-        void move_request();                    //!< Служит для вызова виртуальной функции add
+        virtual void move_request();            //!< Служит для вызова виртуальной функции add
         virtual bool is_completed() = 0;        //!< Служит для проверки объекта на завершенность работы
 
         int get_event_time() const;
@@ -75,7 +69,7 @@ namespace logic
         model* parent;
         ull_t id;
         ull_t global_id;
-        std::vector<object*> inputs;
+        object* input;
         object* output;
 		request* cur_req;
 		

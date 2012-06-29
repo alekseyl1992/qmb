@@ -24,7 +24,7 @@ SOURCES += main.cpp \
     logic/queue.cpp \
     logic/handler.cpp \
     logic/terminator.cpp \
-    logic/hub_in.cpp \
+    logic/collector.cpp \
     logic/model.cpp \
     logic/link.cpp \
     interface/mainwindow.cpp \
@@ -41,6 +41,7 @@ SOURCES += main.cpp \
     interface/optionsdialog.cpp \
     utility/validator.cpp
 
+
 HEADERS  += utility/xmlhighlighter.h \
     utility/modelstorage.h \
     utility/common.h \
@@ -55,7 +56,7 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/queue.h \
     logic/handler.h \
     logic/terminator.h \
-    logic/hub_in.h \
+    logic/collector.h \
     logic/model.h \
     logic/link.h \
     interface/mainwindow.h \
@@ -71,6 +72,7 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
     utility/validator.h
+
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \

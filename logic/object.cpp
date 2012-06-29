@@ -8,7 +8,7 @@ namespace logic
 		parent(nullptr), 
 		id(id), 
         global_id(id),
-        //input(nullptr),
+        input(nullptr),
         output(nullptr),
 		cur_req(nullptr),
 		moveable_request_flag(false),
@@ -21,7 +21,7 @@ namespace logic
 		parent(obj.parent), 
 		id(obj.id), 
         global_id(obj.global_id),
-        //input(obj.input),
+        input(obj.input),
         output(obj.output),
 		cur_req(obj.cur_req),
 		moveable_request_flag(obj.moveable_request_flag),
@@ -35,7 +35,7 @@ namespace logic
 
     void object::set_input(object* _source)
 	{
-        this->inputs.push_back(_source);
+        this->input = _source;
 	}
 
     void object::set_output(object* _dest)
@@ -45,7 +45,7 @@ namespace logic
 
     bool object::has_input() const
 	{
-        return inputs.size() == 0 ? false : true;
+        return input == nullptr ? false : true;
 	}
 
     bool object::has_output() const
@@ -60,12 +60,9 @@ namespace logic
 
     void object::move_request()
 	{
-        srand(time(NULL));
-        int i = rand() % inputs_count();
-
-        if (this->inputs[i]->is_moveable() && this->is_free())
+        if (this->input->is_moveable() && this->is_free())
 		{
-            this->add(inputs[i]->get_request());
+            this->add(input->get_request());
         }
     }
 
