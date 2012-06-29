@@ -24,8 +24,8 @@ enum class ItemType : int
     Handler,
     Terminator,
     Link,
-    HubIn,
-    HubOut
+    Collector,
+    Separator
 };
 
 
