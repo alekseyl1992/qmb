@@ -23,9 +23,9 @@ enum class ItemType : int
     Queue,
     Handler,
     Terminator,
-    Link,
     Collector,
-    Separator
+    Separator,
+    Link
 };
 
 

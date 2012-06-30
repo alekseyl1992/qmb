@@ -39,7 +39,7 @@ namespace logic
 
 	void terminator::add(request* req)
 	{
-		std::lock_guard<std::mutex> lk(item_mutex);
+        std::lock_guard<std::mutex> lk(item_mutex);
 
 		moveable_request_flag = false;
 		freedom_flag = false;
@@ -48,7 +48,7 @@ namespace logic
 
 	request* terminator::get_request()
 	{
-		std::lock_guard<std::mutex> lk(item_mutex);
+        std::lock_guard<std::mutex> lk(item_mutex);
 		return new request();
 	}
 

@@ -50,7 +50,7 @@ namespace logic
 
 	void handler::add(request* req)
 	{
-		std::lock_guard<std::mutex> lk(item_mutex);
+        std::lock_guard<std::mutex> lk(item_mutex);
 
 		freedom_flag = false;
 		moveable_request_flag = false;

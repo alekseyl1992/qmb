@@ -54,7 +54,7 @@ namespace logic
 
 	request* queue::get_request()
 	{
-		std::lock_guard<std::mutex> lk(item_mutex);
+        std::lock_guard<std::mutex> lk(item_mutex);
 
 		request* res = to_get_from_top ? get_first() : get_last();
 		make_cur_request();

@@ -32,6 +32,8 @@ namespace logic
 
     request* collector::get_request()
     {
+        std::lock_guard<std::mutex> lk(item_mutex);
+
         moveable_request_flag = false;
         freedom_flag = true;
         return cur_req;
@@ -39,6 +41,8 @@ namespace logic
 
     void collector::add(request* req)
     {
+        std::lock_guard<std::mutex> lk(item_mutex);
+
         freedom_flag = false;
         cur_req = req;
         moveable_request_flag = true;
