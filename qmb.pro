@@ -25,6 +25,7 @@ SOURCES += main.cpp \
     logic/handler.cpp \
     logic/terminator.cpp \
     logic/collector.cpp \
+    logic/separator.cpp \
     logic/model.cpp \
     logic/link.cpp \
     interface/mainwindow.cpp \
@@ -57,6 +58,7 @@ HEADERS  += utility/xmlhighlighter.h \
     logic/handler.h \
     logic/terminator.h \
     logic/collector.h \
+    logic/separator.h \
     logic/model.h \
     logic/link.h \
     interface/mainwindow.h \
