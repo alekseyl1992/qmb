@@ -264,6 +264,7 @@ void Document::startSimulation()
     ui->graphicsView->setEnabled(false);
     ui->progressBar->show();
     startAction->setIcon(QIcon(":/icons/pause"));
+    startAction->setText("Приостановить");
     stopAction->setEnabled(true);
 
     logic::model *model = storage->getModel(true);
@@ -289,8 +290,8 @@ void Document::pauseSimulation()
     bPaused = true;
     storage->getModel()->simulation_pause();
 
-    startAction->setIcon(QIcon(":/icons/start"));
-    //stopAction->setEnabled(false);
+    startAction->setIcon(QIcon(":/icons/continue"));
+    startAction->setText("Продолжить");
     ui->progressBar->hide();
 }
 
@@ -299,6 +300,7 @@ void Document::restoreSimulation()
     showLog();
     ui->progressBar->show();
     startAction->setIcon(QIcon(":/icons/pause"));
+    startAction->setText("Приостановить");
     stopAction->setEnabled(true);
 
     bSimulating = true;
@@ -624,6 +626,7 @@ void Document::onSimulationStopped(int time)
         ui->progressBar->hide();
         startAction->setEnabled(true);
         startAction->setIcon(QIcon(":/icons/start"));
+        startAction->setText("Старт");
         stopAction->setEnabled(false);
         ui->graphicsView->setEnabled(true);
 
@@ -673,6 +676,7 @@ void Document::onSimulationFinished(int time)
     ui->progressBar->hide();
     startAction->setEnabled(true);
     startAction->setIcon(QIcon(":/icons/start"));
+    startAction->setText("Старт");
     stopAction->setEnabled(false);
     ui->graphicsView->setEnabled(true);
 

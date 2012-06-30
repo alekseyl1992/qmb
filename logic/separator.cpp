@@ -1,4 +1,4 @@
-#include "separator.h"
+ï»¿#include "separator.h"
 
 #include <time.h>
 
@@ -50,7 +50,7 @@ namespace logic
 
     void separator::move_request()
     {
-        //âûòàñêèâàåì çàïðîñ èç input
+        //Ð²Ñ‹Ñ‚Ð°ÑÐºÐ¸Ð²Ð°ÐµÐ¼ Ð·Ð°Ð¿Ñ€Ð¾Ñ Ð¸Ð· input
         if (input->is_moveable() && this->is_free())
         {
             this->add(input->get_request());
@@ -63,7 +63,7 @@ namespace logic
             auto it = outputs.begin();
             advance(it, i);
 
-            //ïîìåùàåì çàïðîñ â îäèí èç âûõîäîâ â ñëó÷àå åñëè íà âûõîäå ÍÅ êîëëåêòîð
+            //Ð¿Ð¾Ð¼ÐµÑ‰Ð°ÐµÐ¼ Ð·Ð°Ð¿Ñ€Ð¾Ñ Ð² Ð¾Ð´Ð¸Ð½ Ð¸Ð· Ð²Ñ‹Ñ…Ð¾Ð´Ð¾Ð² Ð² ÑÐ»ÑƒÑ‡Ð°Ðµ ÐµÑÐ»Ð¸ Ð½Ð° Ð²Ñ‹Ñ…Ð¾Ð´Ðµ ÐÐ• ÐºÐ¾Ð»Ð»ÐµÐºÑ‚Ð¾Ñ€
             if (this->is_moveable() && (*it)->is_free() && (*it)->get_type() != ItemType::Collector)
             {
                 (*it)->add(this->get_request());

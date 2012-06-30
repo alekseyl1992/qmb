@@ -1,4 +1,4 @@
-#ifndef COLLECTOR_H
+ï»¿#ifndef COLLECTOR_H
 #define COLLECTOR_H
 
 #include <list>
@@ -15,7 +15,7 @@ namespace logic
 
         virtual ~collector() { }
 
-        virtual void set_input(object* _source);		//!< Ñëóæèò äëÿ ñîåäèíåíèÿ îáúåêòà ñ âõîäîì
+        virtual void set_input(object* _source);		//!< Ð¡Ð»ÑƒÐ¶Ð¸Ñ‚ Ð´Ð»Ñ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ Ð¾Ð±ÑŠÐµÐºÑ‚Ð° Ñ Ð²Ñ…Ð¾Ð´Ð¾Ð¼
         //virtual void set_output(object* _dest);  //inherited
 
         virtual bool has_input() const;

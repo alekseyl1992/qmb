@@ -1,4 +1,4 @@
-#include "collector.h"
+﻿#include "collector.h"
 
 #include <time.h>
 
