@@ -31,7 +31,12 @@ namespace logic
 
     object::~object()
     {
-	}
+    }
+
+    bool object::has_request() const
+    {
+        return cur_req == nullptr ? false : true;
+    }
 
     void object::set_input(object* _source)
 	{

@@ -91,6 +91,18 @@ namespace logic
 		});
     }
 
+    void model::new_thread(object* obj)
+    {
+        threads.push_back(new std::thread([obj, this]()
+        {
+            while (is_simulating())
+            {
+                try_pausing(); //если нажата пауза
+                obj->move_request();
+            }
+        }) );
+    }
+
 	void model::threading()
 	{
 		std::for_each(objects.begin(), objects.end(),
@@ -98,17 +110,20 @@ namespace logic
 		{
               if (obj->has_input())
               {
-                  threads.push_back(new std::thread([obj, this]()
+                  if (obj->get_type() != ItemType::Collector)
                   {
-                      for (;is_simulating(); )
+                      if (obj->input_connection()->get_type() != ItemType::Separator)
                       {
-                          try_pausing(); //если нажата пауза
-                          obj->move_request();
+                          new_thread(obj);
                       }
-                  }) );
+                  }
+                  else  //if obj is Collector
+                      new_thread(obj);
               }
-		});
-	}
+        });
+    }
+
+
 
     void model::checking_finished_th()
 	{

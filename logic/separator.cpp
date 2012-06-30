@@ -5,11 +5,11 @@
 namespace logic
 {
     separator::separator(ull_t id) :
-        object(ItemType::Collector, id)
+        object(ItemType::Separator, id)
     { }
 
-    separator::separator(separator &col) :
-        object(col)
+    separator::separator(separator &sep) :
+        object(sep)
     { }
 
     void separator::set_output(object* _dest)
@@ -52,15 +52,18 @@ namespace logic
             this->add(input->get_request());
         }
 
-        srand(time(NULL));
-        const int i = rand() % outputs_count();
-        auto it = outputs.begin();
-        advance(it, i);
-
-        //помещаем запрос в один из выходов
-        if (this->is_moveable() && (*it)->is_free())
+        if (this->has_request())
         {
-            (*it)->add(this->get_request());
+            srand(time(NULL));
+            const int i = rand() % outputs_count();
+            auto it = outputs.begin();
+            advance(it, i);
+
+            //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
+            if (this->is_moveable() && (*it)->is_free() && (*it)->get_type() != ItemType::Collector)
+            {
+                (*it)->add(this->get_request());
+            }
         }
     }
 
