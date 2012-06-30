@@ -42,6 +42,8 @@ namespace logic
 		bool is_free() const					//!< Проверяет, можно ли в текущего объект добавить запрос
 		{ return freedom_flag; }
 
+        bool has_request() const;
+
         virtual void set_input(object* _source);		//!< Служит для соединения объекта с входом
         virtual void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
 

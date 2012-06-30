@@ -14,7 +14,7 @@ namespace logic
     {
     public:
         separator(ull_t id);
-        separator(separator& col);
+        separator(separator& sep);
 
         virtual ~separator() { }
 
@@ -32,7 +32,7 @@ namespace logic
         virtual bool is_completed();
 
     private:
-        //std::list<object*> inputs; //inherited
+        //object* input; //inherited
         std::list<object*> outputs;
     };
 
