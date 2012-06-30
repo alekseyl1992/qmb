@@ -14,6 +14,8 @@
 #include "queue.h"
 #include "handler.h"
 #include "terminator.h"
+#include "collector.h"
+#include "separator.h"
 #include "exceptions.h"
 
 
@@ -43,6 +45,8 @@ namespace logic
         friend class queue;
         friend class handler;
         friend class terminator;
+        friend class collector;
+        friend class separator;
 
         typedef std::pair<object*, error_code> Pair;
 	public:
@@ -64,6 +68,8 @@ namespace logic
         void add_queue(queue &&q);									//!< Добавляет очередь в модель
         void add_handler(handler &&h);								//!< Добавляет обработчик в модель
         void add_terminator(terminator &&t);						//!< Добавляет терминатор в модель
+        void add_collector(collector &&col);                        //!< Добавляет собиратель в модель
+        void add_separator(separator &&sep);                        //!< Добавляет разделитель в модель
 
 		void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
 
@@ -72,6 +78,8 @@ namespace logic
         queue* find_queue(ull_t id);								//!< Возвращает адрес очереди с нужным id
         handler* find_handler(ull_t id);							//!< Возвращает адрес обработчика с нужным id
         terminator* find_terminator(ull_t id);						//!< Возвращает адрес терминатора с нужным id
+        collector* find_collector(ull_t id);						//!< Возвращает адрес собирателя с нужным id
+        separator* find_separator(ull_t id);						//!< Возвращает адрес разделителя с нужным id
 
 		bool is_valid();											//!< Проверяет модель на наличие ошибок
         std::vector<Pair> get_errors() const						//!< Возвращает ошибки модели
@@ -89,7 +97,7 @@ namespace logic
         void simulation_start();									//!< Начинает симуляцию
         void simulation_stop();										//!< Останавливает симуляцию
 		void simulation_pause();									//!< Ставит симуляцию на паузу
-        void simulation_restore();
+        void simulation_restore();                                  //!< Восстанавливает симуляцию с паузы
 
     signals:
 		void simulationStarted(int time);
@@ -104,12 +112,12 @@ namespace logic
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private: //members
-
-
 		std::list<generator> generators;
 		std::list<queue> queues;
 		std::list<handler> handlers;
         std::list<terminator> terminators;
+        std::list<collector> collectors;
+        std::list<separator> separators;
 
         std::vector<object*> objects;
 

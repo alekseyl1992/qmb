@@ -1,23 +1,6 @@
 ﻿#include <sstream>
 #include "model.h"
 
-std::string error_code_str(error_code code)
-{
-    switch (code)
-    {
-    case INPUT_IN_GENERATOR:
-        return "INPUT_IN_GENERATOR";
-    case OUTPUT_IN_TERMINATOR:
-        return "OUTPUT_IN_TERMINATOR";
-    case NO_GENERATORS:
-        return "NO_GENERATORS";
-    case NO_TERMINATORS:
-        return "NO_TERMINATORS";
-    default:
-        return "";
-    }
-}
-
 namespace logic
 {
 	model::model() :
@@ -126,18 +109,6 @@ namespace logic
               }
 		});
 	}
-
-    /*void model::checking_finished_th()
-    {
-        static int count = 0;
-        count++;
-        if (count == 1)
-        {
-            simulate_flag = false;
-            emit simulationFinished(static_cast<int>(get_now_time() - start_time));
-            //std::cout << "simulation finished" << std::endl;
-        }
-    }*/
 
     void model::checking_finished_th()
 	{
@@ -264,7 +235,21 @@ namespace logic
     {
 		t.set_parrent(this);
         terminators.emplace_back(t);
-		objects.push_back(&terminators.back());
+        objects.push_back(&terminators.back());
+    }
+
+    void model::add_collector(collector &&col)
+    {
+        col.set_parrent(this);
+        collectors.emplace_back(col);
+        objects.push_back(&collectors.back());
+    }
+
+    void model::add_separator(separator &&sep)
+    {
+        sep.set_parrent(this);
+        separators.emplace_back(sep);
+        objects.push_back(&separators.back());
     }
 
 	void model::connect(object* lhs, object* rhs)
@@ -339,6 +324,34 @@ namespace logic
                 iter = it;
 				break;
 			}
+        }
+        return &(*iter);
+    }
+
+    collector* model::find_collector(ull_t id)
+    {
+        std::list<collector>::iterator iter;
+        for(auto it = collectors.begin(); it != collectors.end(); ++it)
+        {
+            if (it->get_id() == id)
+            {
+                iter = it;
+                break;
+            }
+        }
+        return &(*iter);
+    }
+
+    separator* model::find_separator(ull_t id)
+    {
+        std::list<separator>::iterator iter;
+        for(auto it = separators.begin(); it != separators.end(); ++it)
+        {
+            if (it->get_id() == id)
+            {
+                iter = it;
+                break;
+            }
         }
         return &(*iter);
     }
