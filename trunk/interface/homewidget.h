@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDebug>
+#include <QVBoxLayout>
 
 //! Пространство окон интерфейса
 namespace Ui {
@@ -41,6 +42,7 @@ signals:
 
 private:
     Ui::HomeWidget *ui;
+    QVBoxLayout *lastModelsLayout;
 };
 
 #endif // HOMEWIDGET_H
