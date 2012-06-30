@@ -16,6 +16,8 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     typeNames.insert(ItemType::Queue, "Queue");
     typeNames.insert(ItemType::Handler, "Handler");
     typeNames.insert(ItemType::Terminator, "Terminator");
+    typeNames.insert(ItemType::Collector, "Collector");
+    typeNames.insert(ItemType::Separator, "Separator");
     typeNames.insert(ItemType::Link, "Link");
 }
 
@@ -27,7 +29,6 @@ ModelStorage::~ModelStorage()
 
 logic::model* ModelStorage::getModel(bool create)
 {
-
     if(create) //создание модели
     {
         delete myModel;
@@ -51,39 +52,48 @@ logic::model* ModelStorage::getModel(bool create)
             switch(typeId)
             {
                 case ItemType::Generator:
-                myModel->add_generator(logic::generator(id,period,num_of_reqs));
-                break;
+                    myModel->add_generator(logic::generator(id,period,num_of_reqs));
+                    break;
 
                 case ItemType::Queue:
-                myModel->add_queue(logic::queue(id));
-                break;
+                    myModel->add_queue(logic::queue(id));
+                    break;
 
                 case ItemType::Handler:
-                myModel->add_handler(logic::handler(id,period));
-                break;
+                    myModel->add_handler(logic::handler(id,period));
+                    break;
 
                 case ItemType::Terminator:
-                myModel->add_terminator(logic::terminator(id,period));
-                break;
+                    myModel->add_terminator(logic::terminator(id,period));
+                    break;
+
+                case ItemType::Collector:
+                    myModel->add_collector(logic::collector(id));
+                    break;
+
+                case ItemType::Separator:
+                    myModel->add_separator(logic::separator(id));
+                    break;
 
                 case ItemType::Link:
-                {
-                   /*
-                    if (fromType==itemTypeToEngString(ItemType::Generator)
-                            && toType==itemTypeToEngString(ItemType::Queue))
-                        linkType = LinkType::GeneratorToQueue;
+                       /*
+                        if (fromType==itemTypeToEngString(ItemType::Generator)
+                                && toType==itemTypeToEngString(ItemType::Queue))
+                            linkType = LinkType::GeneratorToQueue;
 
-                    if (fromType==itemTypeToEngString(ItemType::Queue)
-                            && toType==itemTypeToEngString(ItemType::Handler))
-                        linkType = LinkType::QueueToHandler;
+                        if (fromType==itemTypeToEngString(ItemType::Queue)
+                                && toType==itemTypeToEngString(ItemType::Handler))
+                            linkType = LinkType::QueueToHandler;
 
-                    if (fromType==itemTypeToEngString(ItemType::Handler)
-                            && toType==itemTypeToEngString(ItemType::Terminator))
-                        linkType = LinkType::HandlerToTerminator;
-*/
+                        if (fromType==itemTypeToEngString(ItemType::Handler)
+                                && toType==itemTypeToEngString(ItemType::Terminator))
+                            linkType = LinkType::HandlerToTerminator;
+    */
                     AddLink(myModel,fromID,toID);
                     break;
-                }
+
+                default:
+                    break;
             }
             ProcessingItem = ProcessingItem.nextSiblingElement();
         }
@@ -199,7 +209,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     while (!ProcessingItem.isNull())
     {
         int id, fromID, toID;
-        QString fromType, toType;
+        //QString fromType, toType;
 
         ItemType itemType = typeNames.key(ProcessingItem.nodeName());
         QPoint pos;
@@ -213,15 +223,19 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
             case ItemType::Queue:
             case ItemType::Handler:
             case ItemType::Terminator:
+            case ItemType::Collector:
+            case ItemType::Separator:
                 id = ProcessingItem.attribute("id").toInt();
                 iModel->addItem(itemType,name,id,pos);
                 break;
 
             case ItemType::Link:
                 fromID = ProcessingItem.attribute("fromID").toInt();
-                 toID = ProcessingItem.attribute("toID").toInt();
+                toID = ProcessingItem.attribute("toID").toInt();
                 iModel->addLink(fromID, toID);
-            break;
+                break;
+            default:
+                break;
         }
         ProcessingItem = ProcessingItem.nextSiblingElement();
     }
@@ -283,6 +297,10 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
         case ItemType::Terminator:
             InsertedItem.setAttribute("period",0);
             break;
+        case ItemType::Collector:
+            break; //свойства будут
+        case ItemType::Separator:
+            break; //свойства будут
         default:
             break;
     };
@@ -416,10 +434,8 @@ void ModelStorage::onLinkRemoved(int idFrom, int idTo)
 
 void ModelStorage::AddLink(logic::model *curModel, int fromID, int toID)
 {
-    using namespace logic;
-
-    object* obj1 = curModel->find_object(fromID);
-    object* obj2 = curModel->find_object(toID);
+    logic::object* obj1 = curModel->find_object(fromID);
+    logic::object* obj2 = curModel->find_object(toID);
     curModel->connect(obj1, obj2);
     /*
     switch(linkType)
