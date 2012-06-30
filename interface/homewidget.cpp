@@ -9,9 +9,12 @@ HomeWidget::HomeWidget(QWidget *parent) :
     ui(new Ui::HomeWidget)
 {
     ui->setupUi(this);
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setAlignment(Qt::AlignTop);
-    ui->lastModels->setLayout(layout);
+    QWidget *list = new QWidget(ui->lastModels);
+    lastModelsLayout = new QVBoxLayout(list);
+    lastModelsLayout->setAlignment(Qt::AlignTop);
+    list->setLayout(lastModelsLayout);
+    ui->lastModels->setWidget(list);
+    ui->lastModels->setWidgetResizable(true);
 
     //"подписка" на обновления списка последних моделей
     connect(&LastModels::getInst(), SIGNAL(changed()), this, SLOT(updateLastModelsList()));
@@ -50,9 +53,8 @@ void HomeWidget::on_helpButton_clicked()
 
 void HomeWidget::updateLastModelsList()
 {
-    QLayout *layout = ui->lastModels->layout();
     QLayoutItem *item;
-    while ((item = layout->takeAt(0)))
+    while ((item = lastModelsLayout->takeAt(0)))
     {
         delete item->widget();
         delete item;
@@ -66,6 +68,7 @@ void HomeWidget::updateLastModelsList()
         button->setText(name);
         button->setDescription(path);
         button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
         button->setIcon(QIcon(":/icons/logo"));
         button->setIconSize(QSize(32, 32));
 
@@ -74,9 +77,9 @@ void HomeWidget::updateLastModelsList()
             emit openModelByPath(path);
         });
 
-        layout->addWidget(button);
+        lastModelsLayout->addWidget(button);
     }
 
-    layout->update();
+    lastModelsLayout->update();
     repaint();
 }

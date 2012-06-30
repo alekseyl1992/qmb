@@ -158,9 +158,6 @@
        </item>
        <item>
         <widget class="QScrollArea" name="lastModels">
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
          <widget class="QWidget" name="scrollAreaWidgetContents">
           <property name="geometry">
            <rect>
