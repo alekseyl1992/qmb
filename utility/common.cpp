@@ -1,5 +1,10 @@
 ﻿#include "common.h"
 
+void Unimplemented(QWidget *w)
+{
+    QMessageBox::critical(w, "Внимание", "Данная функция не реализована");
+}
+
 QString itemTypeToString(ItemType type)
 {
     switch (type)

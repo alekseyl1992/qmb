@@ -71,6 +71,10 @@ void LastModels::add(const QString &path)
     list.insert(list.begin(), path);
     list.removeDuplicates();
 
+    //обрезаем список до 10 записей
+    while(list.count() > maxCount)
+        list.removeLast();
+
     //перезаписываем файл-список
     lastModelsFile.close();
     lastModelsFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);

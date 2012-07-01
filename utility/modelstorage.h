@@ -48,12 +48,6 @@ private:
     QString currentPath;
 
     QMap<ItemType, QString> typeNames;
-    /*enum class LinkType : int
-    {
-        GeneratorToQueue,
-        QueueToHandler,
-        HandlerToTerminator,
-    };*/
 
     void AddLink(logic::model *curModel, int fromID, int toID);
 
@@ -79,8 +73,8 @@ public:
     bool redoModel(); //!< откат модели на один шаг вперед
     void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
-    //TODO здесь будут метода для получения и записи полного списка параметров
-    //просто пока ещё не продуман формат хранения этих самых параметров
+    QVariant getElementProperty(QString propName) const;
+    void setElementProperty(QString propName, QVariant value);
 
 public slots:
 
