@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include "interface/scene/modelscene.h"
+#include "interface/elementpropertiesdialog.h"
 #include "utility/modelstorage.h"
 #include "logic/model.h"
 #include "logic/request_id.h"
@@ -85,6 +86,7 @@ private slots:
     void onSimulationPaused(int time);
     void onSimulationRestored(int time);
     void onSimulationFinished(int time);
+    void onSelectionChanged();
 
     void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
 
@@ -99,6 +101,7 @@ private:
     QTextEdit *code;
     QMenu *logMenu;
     QStandardItemModel *logModel; //!< Данные лога симуляции
+    ElementPropertiesDialog *propDialog;
     QAction *startAction, *stopAction;
     bool bSimulating; //!< Имеет значение true, если идёт симуляция
     bool bPaused; //!< Имеет значение true, если симуляции поставлена на паузу

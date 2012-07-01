@@ -1,7 +1,6 @@
 ﻿#include "interface/document.h"
 #include "ui_document.h"
 #include "utility/xmlhighlighter.h"
-#include "interface/elementpropwindow.h"
 #include "interface/modeloptionsdialog.h"
 #include "utility/common.h"
 #include "utility/lsfss.h"
@@ -22,6 +21,7 @@
 #include <QFileDialog>
 #include <QToolBar>
 #include <QSettings>
+#include <QGraphicsProxyWidget>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false), bPaused(false), bClosing(false)
@@ -29,6 +29,7 @@ Document::Document(QWidget *parent) :
     ui->setupUi(this);
     ui->progressBar->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
+    propDialog = nullptr;
 
     QSettings set;
 
@@ -123,6 +124,7 @@ Document::Document(QWidget *parent) :
             storage, SLOT(onLinkInserted(int, int)));
     connect(scene, SIGNAL(linkRemoved(int, int)),
             storage, SLOT(onLinkRemoved(int, int)));
+    connect(scene, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 
     connect(&Validator::inst(), SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
@@ -232,14 +234,12 @@ Document::Document(QWidget *parent) :
     logModel->setHeaderData(1, Qt::Horizontal, "Запрос");
     logModel->setHeaderData(2, Qt::Horizontal, "Статус");
     ui->simulationLog->setModel(logModel);
-
-
     ui->logDock->resize(0, 360);
 }
 
 Document::~Document()
 {
-    //релиз в порядке обратном иниту
+    delete propDialog;
     delete storage;
     delete ui;
 }
@@ -696,6 +696,27 @@ void Document::onSimulationFinished(int time)
 
     if(id == QMessageBox::Yes)
         QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+}
+
+void Document::onSelectionChanged()
+{
+    auto selectedItems = scene->selectedItems();
+    if(selectedItems.count())
+    {
+        //панель свойств
+        delete propDialog;
+        propDialog = new ElementPropertiesDialog(this);
+        propDialog->show();
+//        QGraphicsProxyWidget *proxyDialog = scene->addWidget(propDialog);
+
+//        proxyDialog->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
+//        proxyDialog->show();
+    }
+    else
+    {
+        delete propDialog;
+        propDialog = nullptr;
+    }
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)

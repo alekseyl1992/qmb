@@ -9,7 +9,7 @@
 #include <QMessageBox>
 
 //! Используется как заглушка для нереализованного функционала
-#define Unimplemented() QMessageBox::critical(this, "Внимание", "Данная функция не реализована")
+void Unimplemented(QWidget *w = nullptr);
 //! Используется, чтобы сообщить приложению о необходимости перезапуска
 #define RestartCode 1000
 

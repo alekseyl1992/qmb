@@ -241,6 +241,16 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     }
 }
 
+QVariant ModelStorage::getElementProperty(QString propName) const
+{
+    return 0;
+}
+
+void ModelStorage::setElementProperty(QString propName, QVariant value)
+{
+    //здесь нужна интеграция с историей модели
+}
+
 QString ModelStorage::getCodeString() const
 {
     return curDoc->toString(3);

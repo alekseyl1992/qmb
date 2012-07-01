@@ -61,13 +61,7 @@ ModelScene::ModelScene(QWidget *parent, bool dropShadow)
     //создаем меню для элементов
     myItemMenu = new QMenu(parent);
     myItemMenu->addAction("Выровнять по сетке", this, SLOT(alignToGrid()), QKeySequence("Ctrl+G"));
-    myItemMenu->addAction("Свойства")->setEnabled(false);
-    /*{
-        //ElementPropWindow *propWindow =  new ElementPropWindow(this);
-        Unimplemented();
-        //propWindow->exec();
-    }), SLOT(signaled()));*/
-
+    myItemMenu->addSeparator();
     myItemMenu->addAction("Удалить", this, SLOT(removeSelectedItems()), QKeySequence(Qt::Key_Delete));
 }
 

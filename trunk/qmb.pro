@@ -33,14 +33,14 @@ SOURCES += main.cpp \
     interface/scene/modelscene.cpp \
     interface/scene/arrow.cpp \
     interface/scene/modelitem.cpp \
-    interface/elementpropwindow.cpp \
     interface/scene/itemshadow.cpp \
     interface/homewidget.cpp \
     interface/createmodeldialog.cpp \
     interface/aboutdialog.cpp \
     interface/modeloptionsdialog.cpp \
     interface/optionsdialog.cpp \
-    utility/validator.cpp
+    utility/validator.cpp \
+    interface/elementpropertiesdialog.cpp
 
 
 HEADERS  += utility/xmlhighlighter.h \
@@ -66,24 +66,24 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/scene/modelscene.h \
     interface/scene/arrow.h \
     interface/scene/modelitem.h \
-    interface/elementpropwindow.h \
     interface/scene/itemshadow.h \
     interface/homewidget.h \
     interface/createmodeldialog.h \
     interface/aboutdialog.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
-    utility/validator.h
+    utility/validator.h \
+    interface/elementpropertiesdialog.h
 
 
 FORMS    += interface/mainwindow.ui \
     interface/document.ui \
-    interface/elementpropwindow.ui \
     interface/homewidget.ui \
     interface/createmodeldialog.ui \
     interface/aboutdialog.ui \
     interface/modeloptionsdialog.ui \
-    interface/optionsdialog.ui
+    interface/optionsdialog.ui \
+    interface/elementpropertiesdialog.ui
 
 OTHER_FILES += \
     TODO.txt
