@@ -34,8 +34,8 @@ Document::Document(QWidget *parent) :
     QSettings set;
 
     //OpenGL acceleration
-    if(set.value("Scene/OpenGL", true).toBool())
-        ui->graphicsView->setViewport(new QGLWidget(this));
+    //if(set.value("Scene/OpenGL", true).toBool())
+    //    ui->graphicsView->setViewport(new QGLWidget(this));
 
     if(set.value("Code/HighlightXML", true).toBool())
         new XmlHighlighter(ui->codeEdit);
@@ -235,11 +235,18 @@ Document::Document(QWidget *parent) :
     logModel->setHeaderData(2, Qt::Horizontal, "Статус");
     ui->simulationLog->setModel(logModel);
     ui->logDock->resize(0, 360);
+
+    propDialog = new ElementPropertiesDialog(ui->graphicsView);
+    propDialog->setWindowFlags(Qt::BypassGraphicsProxyWidget);
+    QVBoxLayout *layout = new QVBoxLayout(ui->graphicsView);
+    layout->setMargin(0);
+    layout->addWidget(propDialog, 0, Qt::AlignBottom);
+    ui->graphicsView->setLayout(layout);
+    propDialog->hide();
 }
 
 Document::~Document()
 {
-    delete propDialog;
     delete storage;
     delete ui;
 }
@@ -702,21 +709,9 @@ void Document::onSelectionChanged()
 {
     auto selectedItems = scene->selectedItems();
     if(selectedItems.count())
-    {
-        //панель свойств
-        delete propDialog;
-        propDialog = new ElementPropertiesDialog(this);
         propDialog->show();
-//        QGraphicsProxyWidget *proxyDialog = scene->addWidget(propDialog);
-
-//        proxyDialog->setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
-//        proxyDialog->show();
-    }
     else
-    {
-        delete propDialog;
-        propDialog = nullptr;
-    }
+        propDialog->hide();
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)
