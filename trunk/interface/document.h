@@ -7,7 +7,6 @@
 #include "logic/model.h"
 #include "logic/request_id.h"
 #include <QDialog>
-#include <QTextEdit>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
 #include <QMenu>
