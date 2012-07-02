@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     interface/modeloptionsdialog.cpp \
     interface/optionsdialog.cpp \
     utility/validator.cpp \
-    interface/elementpropertiesdialog.cpp
+    interface/elementpropertiesdialog.cpp \
+    logic/attribute.cpp
 
 
 HEADERS  += utility/xmlhighlighter.h \
@@ -73,7 +74,8 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
     utility/validator.h \
-    interface/elementpropertiesdialog.h
+    interface/elementpropertiesdialog.h \
+    logic/attribute.h
 
 
 FORMS    += interface/mainwindow.ui \

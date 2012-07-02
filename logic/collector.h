@@ -10,7 +10,7 @@ namespace logic
     class collector : public object
     {
     public:
-        collector(ull_t id);
+        collector(int id);
         collector(collector& col);
 
         virtual ~collector() { }

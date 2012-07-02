@@ -4,7 +4,7 @@
 
 namespace logic
 {
-    collector::collector(ull_t id) :
+    collector::collector(int id) :
         object(ItemType::Collector, id)
     { }
 

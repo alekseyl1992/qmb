@@ -13,7 +13,7 @@ namespace logic
     class separator : public object
     {
     public:
-        separator(ull_t id);
+        separator(int id);
         separator(separator& sep);
 
         virtual ~separator() { }

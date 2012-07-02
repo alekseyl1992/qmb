@@ -3,53 +3,53 @@
 
 namespace logic
 {
-    terminator::terminator(ull_t id, int period) :
-		object(ItemType::Terminator, id), 
-		terminating_period(period), 
-		count_of_terminated_requests(0)
+    terminator::terminator(int id, int period) :
+        object(ItemType::Terminator, id),
+        terminating_period(period),
+        count_of_terminated_requests(0)
     { }
 
     terminator::terminator(const terminator &t) :
-        object(t), 
-		terminating_period(t.terminating_period), 
-		count_of_terminated_requests(t.count_of_terminated_requests)
+        object(t),
+        terminating_period(t.terminating_period),
+        count_of_terminated_requests(t.count_of_terminated_requests)
     { }
 
-	terminator::~terminator() { }
+    terminator::~terminator() { }
 
     void terminator::terminate(request* req)
     {
-		cur_req = req;
+        cur_req = req;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(terminating_period));
 
-		if (parent->is_simulating())
-		{
+        if (parent->is_simulating())
+        {
             emit parent->reqTerminated(id, cur_req->get_id(), get_event_time());
             qDebug() << cur_req->get_id().str_reqID().c_str() << " terminated in Terminator " << get_id();
-		}
+        }
 
-		delete cur_req;
-		cur_req = nullptr;
+        delete cur_req;
+        cur_req = nullptr;
 
-		moveable_request_flag = true;
-		freedom_flag = true;
-		++count_of_terminated_requests;
+        moveable_request_flag = true;
+        freedom_flag = true;
+        ++count_of_terminated_requests;
     }
 
-	void terminator::add(request* req)
-	{
+    void terminator::add(request* req)
+    {
         std::lock_guard<std::mutex> lk(item_mutex);
 
-		moveable_request_flag = false;
-		freedom_flag = false;
-		this->terminate(req);
-	}
+        moveable_request_flag = false;
+        freedom_flag = false;
+        this->terminate(req);
+    }
 
-	request* terminator::get_request()
-	{
+    request* terminator::get_request()
+    {
         std::lock_guard<std::mutex> lk(item_mutex);
-		return new request();
-	}
+        return new request();
+    }
 
 } //end namespace logic
