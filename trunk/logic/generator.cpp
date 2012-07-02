@@ -1,6 +1,8 @@
 ﻿#include "generator.h"
 #include "model.h"
 
+#include <time.h>
+
 namespace logic
 {
     generator::generator(int id, int period, ull_t num_requests, bool is_random, bool is_infinite):
@@ -30,6 +32,12 @@ namespace logic
     {
         std::lock_guard<std::mutex> lk(item_mutex);
 
+        if (random_generating)
+        {
+            srand(time(NULL));
+            generating_period = rand() % 5000;
+        }
+
         std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
 
         cur_req = new request(id, req_id);
@@ -37,7 +45,7 @@ namespace logic
 
         if (parent->is_simulating())
         {
-            emit parent->reqGenerated(cur_req->get_id(), get_event_time()); //indicates that the new request is generated
+            emit parent->reqGenerated(cur_req->get_id(), get_event_time());
             qDebug() << cur_req->get_id().str_reqID().c_str() << " generated";
         }
 

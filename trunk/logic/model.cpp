@@ -374,5 +374,20 @@ namespace logic
         return &(*iter);
     }
 
+    void model::add_attribute(attribute &attr)
+    {
+        attributes.add(attr);
+    }
+
+    void model::remove_attribute(int id)
+    {
+        attributes.erase(id);
+    }
+
+    attribute& model::get_attribute(int id)
+    {
+        return attributes.get(id);
+    }
+
 
 } //end namespace logic

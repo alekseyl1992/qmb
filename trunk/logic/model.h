@@ -16,6 +16,7 @@
 #include "terminator.h"
 #include "collector.h"
 #include "separator.h"
+#include "attribute.h"
 #include "exceptions.h"
 
 
@@ -80,6 +81,10 @@ namespace logic
         collector* find_collector(int id);                          //!< Возвращает адрес собирателя с нужным id
         separator* find_separator(int id);                          //!< Возвращает адрес разделителя с нужным id
 
+        void add_attribute(attribute& attr);                        //!< Добавляет новый атрибут в модель
+        void remove_attribute(int id);                              //!< Удаляет атрибут из модели по id
+        attribute& get_attribute(int id);                           //!< Возвращает атрибут по id
+
         bool is_valid();											//!< Проверяет модель на наличие ошибок
         std::vector<Pair> get_errors() const						//!< Возвращает ошибки модели
         { return errors; }
@@ -122,6 +127,8 @@ namespace logic
 
         std::vector<Pair> errors;
         std::vector<std::thread*> threads;
+
+        attributes_list attributes;
 
         bool simulate_flag;
         bool stop_flag;
