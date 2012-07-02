@@ -3,7 +3,7 @@
 
 namespace logic
 {
-    //! @deprecated Теперь связь реализуется через object::connect()
+    //! @deprecated Теперь связь реализуется через model::connect()
     template<typename LHS_T, typename RHS_T>
 	struct link
 	{

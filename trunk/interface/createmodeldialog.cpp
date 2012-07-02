@@ -14,6 +14,7 @@ CreateModelDialog::CreateModelDialog(QWidget *parent) :
 
 CreateModelDialog::~CreateModelDialog()
 {
+
     delete ui;
 }
 

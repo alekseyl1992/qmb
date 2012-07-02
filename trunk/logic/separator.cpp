@@ -4,7 +4,7 @@
 
 namespace logic
 {
-    separator::separator(ull_t id) :
+    separator::separator(int id) :
         object(ItemType::Separator, id)
     { }
 
