@@ -7,7 +7,6 @@ ElementPropertiesDialog::ElementPropertiesDialog(QWidget *parent) :
     ui(new Ui::ElementPropertiesDialog)
 {
     ui->setupUi(this);
-    //формируем лог симуляции
     propModel = new QStandardItemModel(0, 3, this);
     propModel->setHeaderData(0, Qt::Horizontal, "Тип");
     propModel->setHeaderData(1, Qt::Horizontal, "Имя");

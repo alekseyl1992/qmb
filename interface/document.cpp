@@ -236,13 +236,18 @@ Document::Document(QWidget *parent) :
     ui->simulationLog->setModel(logModel);
     ui->logDock->resize(0, 360);
 
-    propDialog = new ElementPropertiesDialog(ui->graphicsView);
-    propDialog->setWindowFlags(Qt::BypassGraphicsProxyWidget);
-    QVBoxLayout *layout = new QVBoxLayout(ui->graphicsView);
-    layout->setMargin(0);
-    layout->addWidget(propDialog, 0, Qt::AlignBottom);
-    ui->graphicsView->setLayout(layout);
-    propDialog->hide();
+    QStandardItemModel *propModel = new QStandardItemModel(0, 3, this);
+    propModel->setHeaderData(0, Qt::Horizontal, "Тип");
+    propModel->setHeaderData(1, Qt::Horizontal, "Имя");
+    propModel->setHeaderData(2, Qt::Horizontal, "Период генерации");
+    propModel->appendRow(QList<QStandardItem *>()
+                        << new QStandardItem("Генератор")
+                        << new QStandardItem("Генератор 1")
+                        << new QStandardItem("10 сек."));
+
+
+    ui->propView->setModel(propModel);
+    ui->propSceneSplitter->setSizes(QList<int>() << 1000 << 1);
 }
 
 Document::~Document()
@@ -707,11 +712,11 @@ void Document::onSimulationFinished(int time)
 
 void Document::onSelectionChanged()
 {
-    auto selectedItems = scene->selectedItems();
+    /*auto selectedItems = scene->selectedItems();
     if(selectedItems.count())
         propDialog->show();
     else
-        propDialog->hide();
+        propDialog->hide();*/
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)

@@ -54,100 +54,9 @@
        <attribute name="title">
         <string>Модель</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
+       <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QSplitter" name="splitter">
-          <property name="palette">
-           <palette>
-            <active>
-             <colorrole role="Button">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </active>
-            <inactive>
-             <colorrole role="Button">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </inactive>
-            <disabled>
-             <colorrole role="Button">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </disabled>
-           </palette>
-          </property>
+         <widget class="QSplitter" name="splitter_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -250,28 +159,59 @@ QTreeView::item:!enabled {
             </layout>
            </widget>
           </widget>
-          <widget class="QGraphicsView" name="graphicsView">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <widget class="QSplitter" name="propSceneSplitter">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="mouseTracking">
-            <bool>false</bool>
+           <property name="opaqueResize">
+            <bool>true</bool>
            </property>
-           <property name="renderHints">
-            <set>QPainter::Antialiasing|QPainter::NonCosmeticDefaultPen|QPainter::TextAntialiasing</set>
+           <property name="handleWidth">
+            <number>1</number>
            </property>
-           <property name="dragMode">
-            <enum>QGraphicsView::RubberBandDrag</enum>
-           </property>
-           <property name="viewportUpdateMode">
-            <enum>QGraphicsView::SmartViewportUpdate</enum>
-           </property>
-           <property name="rubberBandSelectionMode">
-            <enum>Qt::IntersectsItemShape</enum>
-           </property>
+           <widget class="QGraphicsView" name="graphicsView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="mouseTracking">
+             <bool>false</bool>
+            </property>
+            <property name="renderHints">
+             <set>QPainter::Antialiasing|QPainter::NonCosmeticDefaultPen|QPainter::TextAntialiasing</set>
+            </property>
+            <property name="dragMode">
+             <enum>QGraphicsView::RubberBandDrag</enum>
+            </property>
+            <property name="viewportUpdateMode">
+             <enum>QGraphicsView::SmartViewportUpdate</enum>
+            </property>
+            <property name="rubberBandSelectionMode">
+             <enum>Qt::IntersectsItemShape</enum>
+            </property>
+           </widget>
+           <widget class="QTreeView" name="propView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="tabKeyNavigation">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectItems</enum>
+            </property>
+            <property name="indentation">
+             <number>10</number>
+            </property>
+            <property name="rootIsDecorated">
+             <bool>false</bool>
+            </property>
+           </widget>
           </widget>
          </widget>
         </item>
