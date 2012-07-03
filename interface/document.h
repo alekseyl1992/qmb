@@ -100,6 +100,7 @@ private:
     QTextEdit *code;
     QMenu *logMenu;
     QStandardItemModel *logModel; //!< Данные лога симуляции
+    QStandardItemModel *propModel;
     ElementPropertiesDialog *propDialog;
     QAction *startAction, *stopAction;
     bool bSimulating; //!< Имеет значение true, если идёт симуляция

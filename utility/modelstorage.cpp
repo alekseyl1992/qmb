@@ -241,14 +241,39 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     }
 }
 
-QVariant ModelStorage::getElementProperty(QString propName) const
+QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
 {
-    return 0;
+    QList<Property> props;
+
+    QDomElement elem = root.firstChildElement();
+    while(!elem.isNull())
+    {
+        if(elem.attribute("id").toInt() == id)
+        {
+            //строим список свойств
+            QDomNode node = elem.firstChild();
+            while(!node.isNull())
+            {
+                if(node.isAttr())
+                {
+                    QDomAttr attr = node.toAttr();
+                    props << Property{attr.name(), attr.value(), true};
+                }
+                node = node.nextSibling();
+            }
+
+            return props;
+        }
+
+       elem = elem.nextSiblingElement();
+    }
+
+    return props;
 }
 
-void ModelStorage::setElementProperty(QString propName, QVariant value)
+void ModelStorage::setElementProperties(int id, QList<Property>& props)
 {
-    //здесь нужна интеграция с историей модели
+    //TODO реализовать возможность отката
 }
 
 QString ModelStorage::getCodeString() const
