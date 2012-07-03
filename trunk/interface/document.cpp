@@ -30,6 +30,7 @@ Document::Document(QWidget *parent) :
     ui->progressBar->hide();
     qRegisterMetaType<logic::request_id>("logic::request_id");
     propDialog = nullptr;
+    propModel = nullptr;
 
     QSettings set;
 
@@ -236,17 +237,6 @@ Document::Document(QWidget *parent) :
     ui->simulationLog->setModel(logModel);
     ui->logDock->resize(0, 360);
 
-    QStandardItemModel *propModel = new QStandardItemModel(0, 3, this);
-    propModel->setHeaderData(0, Qt::Horizontal, "Тип");
-    propModel->setHeaderData(1, Qt::Horizontal, "Имя");
-    propModel->setHeaderData(2, Qt::Horizontal, "Период генерации");
-    propModel->appendRow(QList<QStandardItem *>()
-                        << new QStandardItem("Генератор")
-                        << new QStandardItem("Генератор 1")
-                        << new QStandardItem("10 сек."));
-
-
-    ui->propView->setModel(propModel);
     ui->propSceneSplitter->setSizes(QList<int>() << 1000 << 1);
 }
 
@@ -712,11 +702,26 @@ void Document::onSimulationFinished(int time)
 
 void Document::onSelectionChanged()
 {
-    /*auto selectedItems = scene->selectedItems();
+    //TODO передавать сюда сразу id
+    auto selectedItems = scene->selectedItems();
     if(selectedItems.count())
-        propDialog->show();
-    else
-        propDialog->hide();*/
+    {
+        int id = ((ModelItem*)selectedItems[0])->id(); //устранить пиздец
+        auto props = storage->getElementProperties(id);
+
+        delete propModel;
+        propModel = new QStandardItemModel(0, props.count(), this);
+        foreach(ModelStorage::Property prop, props)
+        {
+            propModel->setHeaderData(0, Qt::Horizontal, prop.name);
+            propModel->appendRow(QList<QStandardItem *>()
+                                << new QStandardItem(prop.value));
+        }
+
+
+        ui->propView->setModel(propModel);
+
+    }
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)

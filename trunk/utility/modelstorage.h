@@ -55,11 +55,19 @@ public:
     ModelStorage();
     ~ModelStorage();
 
+    //! Свойство элемента
+    struct Property
+    {
+        QString name; //!< имя свойства
+        QString value; //!< текущее значение
+        bool editable; //!< разрешено ли пользователю изменять значение
+    };
+
     QString getCodeString() const; //!< возвращает строку с XML-кодом сцены
-    bool setCodeString(QString code); //!< парсинг строки в документ //вызывается при ручном изсменении кода
+    bool setCodeString(QString code); //!< парсинг строки в документ; вызывается при ручном изменении кода
     QString getCurrentPath() const; //!< возвращает текущий путь к файлу документа
 
-    logic::model *getModel(bool create = false);
+    logic::model *getModel(bool create = false); //!< Возвращает текущую или формирует новую иодель (при create = true) на основе XML
     void freeModel(); //!< @deprecated На данный момент используется отложенная очистка: при создании новой модели и в деструкторе
 
     //! получения поля name, item'а по его id для отображения на сцене
@@ -73,8 +81,8 @@ public:
     bool redoModel(); //!< откат модели на один шаг вперед
     void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
-    QVariant getElementProperty(QString propName) const;
-    void setElementProperty(QString propName, QVariant value);
+    QList<Property> getElementProperties(int id) const;
+    void setElementProperties(int id, QList<Property>& props);
 
 public slots:
 
