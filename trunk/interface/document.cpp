@@ -711,16 +711,17 @@ void Document::onSelectionChanged()
 
         delete propModel;
         propModel = new QStandardItemModel(0, props.count(), this);
+        QList<QStandardItem *> line;
+        QStringList header;
         foreach(ModelStorage::Property prop, props)
         {
-            propModel->setHeaderData(0, Qt::Horizontal, prop.name);
-            propModel->appendRow(QList<QStandardItem *>()
-                                << new QStandardItem(prop.value));
+            header << prop.name;
+            line << new QStandardItem(prop.value);
         }
-
+        propModel->setHorizontalHeaderLabels(header);
+        propModel->appendRow(line);
 
         ui->propView->setModel(propModel);
-
     }
 }
 

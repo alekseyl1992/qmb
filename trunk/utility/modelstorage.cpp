@@ -251,15 +251,14 @@ QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
         if(elem.attribute("id").toInt() == id)
         {
             //строим список свойств
-            QDomNode node = elem.firstChild();
-            while(!node.isNull())
+            props << Property{"Тип", elem.nodeName(), false};
+            QDomNamedNodeMap attributes = elem.attributes();
+            for(int i = attributes.count()-1; i >= 0; --i) //реверс
             {
-                if(node.isAttr())
-                {
-                    QDomAttr attr = node.toAttr();
+                QDomAttr attr = attributes.item(i).toAttr();
+                QString name = attr.name();
+                if(name != "x" && name != "y") //исключаем координаты
                     props << Property{attr.name(), attr.value(), true};
-                }
-                node = node.nextSibling();
             }
 
             return props;
