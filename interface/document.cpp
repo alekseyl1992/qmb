@@ -129,6 +129,8 @@ Document::Document(QWidget *parent) :
 
     connect(&Validator::inst(), SIGNAL(wrongLink(ItemType,ItemType)),
             this, SLOT(onWrongLink(ItemType,ItemType)));
+    connect(&Validator::inst(), SIGNAL(modelError(logic::exceptions::LogicException&)),
+            this, SLOT(onModelError(logic::exceptions::LogicException&)));
 
     //создаём окошко для отображения масштаба модели
 //    QComboBox *box = new QComboBox(ui->graphicsView);
@@ -261,38 +263,34 @@ void Document::setActiveTab(Tab tab)
 
 void Document::startSimulation()
 {
-    clearLog();
-    showLog();    
-
+    clearLog();    
     logic::model *model = storage->getModel(true);
-    connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
-    connect(model, SIGNAL(reqQueued(int,logic::request_id, int)), this, SLOT(onReqQueued(int,logic::request_id, int)));
-    connect(model, SIGNAL(reqBeganHandling(int,logic::request_id, int)), this, SLOT(onReqBeganHandling(int,logic::request_id, int)));
-    connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id, int)), this, SLOT(onReqFinishedHandling(int,logic::request_id, int)));
-    connect(model, SIGNAL(reqTerminated(int,logic::request_id, int)), this, SLOT(onReqTerminated(int,logic::request_id, int)));
 
-    connect(model, SIGNAL(simulationStarted(int)), this, SLOT(onSimulationStarted(int)));
-    connect(model, SIGNAL(simulationStopped(int)), this, SLOT(onSimulationStopped(int)));
-    connect(model, SIGNAL(simulationPaused(int)), this, SLOT(onSimulationPaused(int)));
-    connect(model, SIGNAL(simulationRestored(int)), this, SLOT(onSimulationRestored(int)));
-    connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
-
-
-    try
+    if(Validator::inst().validateModel(model))
     {
+        showLog();
         bSimulating = true;
-        model->simulation_start();
 
         ui->graphicsView->setEnabled(false);
         ui->progressBar->show();
         startAction->setIcon(QIcon(":/icons/pause"));
         startAction->setText("Приостановить");
         stopAction->setEnabled(true);
-    }
-    catch(logic::exceptions::LogicException& ex)
-    {
-        bSimulating = false;
-        QMessageBox::warning(this, "Ошибка модели", ex.what(), QMessageBox::Ok);
+
+
+        connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
+        connect(model, SIGNAL(reqQueued(int,logic::request_id, int)), this, SLOT(onReqQueued(int,logic::request_id, int)));
+        connect(model, SIGNAL(reqBeganHandling(int,logic::request_id, int)), this, SLOT(onReqBeganHandling(int,logic::request_id, int)));
+        connect(model, SIGNAL(reqFinishedHandling(int,logic::request_id, int)), this, SLOT(onReqFinishedHandling(int,logic::request_id, int)));
+        connect(model, SIGNAL(reqTerminated(int,logic::request_id, int)), this, SLOT(onReqTerminated(int,logic::request_id, int)));
+
+        connect(model, SIGNAL(simulationStarted(int)), this, SLOT(onSimulationStarted(int)));
+        connect(model, SIGNAL(simulationStopped(int)), this, SLOT(onSimulationStopped(int)));
+        connect(model, SIGNAL(simulationPaused(int)), this, SLOT(onSimulationPaused(int)));
+        connect(model, SIGNAL(simulationRestored(int)), this, SLOT(onSimulationRestored(int)));
+        connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
+
+        model->simulation_start();
     }
 }
 
@@ -740,6 +738,11 @@ void Document::onWrongLink(ItemType fromType, ItemType toType)
     QMessageBox::critical(this, "Ошибка", QString("Не возможно соединить %0 и %1.")
                           .arg(itemTypeToString(fromType))
                           .arg(itemTypeToString(toType)));
+}
+
+void Document::onModelError(logic::exceptions::LogicException &ex)
+{
+    QMessageBox::warning(this, "Ошибка модели", ex.what(), QMessageBox::Ok);
 }
 
 QString Document::timeToString(int time)

@@ -26,3 +26,16 @@ bool Validator::validateLink(ItemType fromType, ItemType toType)
     else
         return true;
 }
+
+bool Validator::validateModel(logic::model* m)
+{
+    try
+    {
+        return m->is_valid();
+    }
+    catch (logic::exceptions::LogicException& ex)
+    {
+        emit modelError(ex);
+    }
+    return false;
+}

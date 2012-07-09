@@ -250,14 +250,6 @@ namespace logic
 
     void model::simulation_start()
     {
-        try
-        {
-            is_valid();
-        }
-        catch(exceptions::LogicException& ex)
-        {
-            throw ex;
-        }
         simulate_flag = true;
         stop_flag = false;
         pause_flag = false;

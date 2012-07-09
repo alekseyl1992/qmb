@@ -22,7 +22,7 @@ namespace logic
         {
         public:
             NoGeneratorsException()
-                : LogicException("В моделе не найдено генераторов")
+                : LogicException("В модели не найдено генераторов")
             { }
 
             NoGeneratorsException(const char* const & message)
