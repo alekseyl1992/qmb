@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <list>
+#include <string>
 #include <utility>
 #include <algorithm>
 #include <thread>
@@ -85,6 +86,9 @@ namespace logic
         void remove_attribute(int id);                              //!< Удаляет атрибут из модели по id
         attribute& get_attribute(int id);                           //!< Возвращает атрибут по id
 
+        bool ExitPointSearch(object* obj);
+        bool HasExitPoint(object* obj);
+        std::string intToString(int val);
         bool is_valid();											//!< Проверяет модель на наличие ошибок
         std::vector<Pair> get_errors() const						//!< Возвращает ошибки модели
         { return errors; }

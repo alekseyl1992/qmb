@@ -263,11 +263,6 @@ void Document::startSimulation()
 {
     clearLog();
     showLog();    
-    ui->graphicsView->setEnabled(false);
-    ui->progressBar->show();
-    startAction->setIcon(QIcon(":/icons/pause"));
-    startAction->setText("Приостановить");
-    stopAction->setEnabled(true);
 
     logic::model *model = storage->getModel(true);
     connect(model, SIGNAL(reqGenerated(logic::request_id, int)), this, SLOT(onReqGenerated(logic::request_id, int)));
@@ -282,8 +277,23 @@ void Document::startSimulation()
     connect(model, SIGNAL(simulationRestored(int)), this, SLOT(onSimulationRestored(int)));
     connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
 
-    bSimulating = true;
-    model->simulation_start();
+
+    try
+    {
+        bSimulating = true;
+        model->simulation_start();
+
+        ui->graphicsView->setEnabled(false);
+        ui->progressBar->show();
+        startAction->setIcon(QIcon(":/icons/pause"));
+        startAction->setText("Приостановить");
+        stopAction->setEnabled(true);
+    }
+    catch(logic::exceptions::LogicException& ex)
+    {
+        bSimulating = false;
+        QMessageBox::warning(this, "Ошибка модели", ex.what(), QMessageBox::Ok);
+    }
 }
 
 void Document::pauseSimulation()

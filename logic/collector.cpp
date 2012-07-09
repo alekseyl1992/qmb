@@ -22,6 +22,11 @@ namespace logic
         return inputs.size() == 0 ? false : true;
     }
 
+    std::list<object *> collector::input_connection() const
+    {
+        return inputs;
+    }
+
     int collector::inputs_count() const
     {
         return static_cast<int>(inputs.size());

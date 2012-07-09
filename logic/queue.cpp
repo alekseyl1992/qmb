@@ -36,7 +36,7 @@ namespace logic
         if (parent->is_simulating())
         {
             emit parent->reqQueued(id, requests.back()->get_id(), get_event_time());
-            qDebug() << cur_req->get_id().str_reqID().c_str() << " was put to the queue " << get_id();
+            qDebug() << requests.back()->get_id().str_reqID().c_str() << " was put to the queue " << get_id();
         }
     }
 
