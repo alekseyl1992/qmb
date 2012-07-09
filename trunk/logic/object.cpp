@@ -58,6 +58,20 @@ namespace logic
         return output == nullptr ? false : true;
     }
 
+    std::list<object *> object::input_connection() const
+    {
+        std::list<object*> inputs;
+        inputs.push_back(input);
+        return inputs;
+    }
+
+    std::list<object *> object::output_connection() const
+    {
+        std::list<object*> outputs;
+        outputs.push_back(output);
+        return outputs;
+    }
+
     void object::set_parrent(model* _parent)
     {
         this->parent = _parent;

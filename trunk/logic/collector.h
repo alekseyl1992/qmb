@@ -21,6 +21,9 @@ namespace logic
         virtual bool has_input() const;
         //virtual bool has_output() const;  //inherited
 
+        virtual std::list<object*> input_connection() const;
+        //virtual std::list<object*> output_connection() const; //inherited
+
         int inputs_count() const;
 
         virtual request* get_request();

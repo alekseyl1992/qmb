@@ -1,4 +1,5 @@
 ﻿#include <sstream>
+#include <string>
 #include "model.h"
 
 namespace logic
@@ -112,10 +113,10 @@ namespace logic
               {
                   if (obj->get_type() != ItemType::Collector)
                   {
-                      if (obj->input_connection()->get_type() != ItemType::Separator)
-                      {
+                      //if (obj->input_connection()->get_type() != ItemType::Separator)
+                      //{
                           new_thread(obj);
-                      }
+                      //}
                   }
                   else  //if obj is Collector
                       new_thread(obj);
@@ -148,8 +149,50 @@ namespace logic
         }) );
     }
 
+    bool model::ExitPointSearch(object *obj)
+    {
+        if (obj->has_output())
+        {
+            for(object* output_obj : obj->output_connection())
+            {
+                if (output_obj->get_type() == ItemType::Terminator)
+                    return true;
+                else
+                    return ExitPointSearch(output_obj);
+            }
+        }
+        return false;
+    }
+
+    bool model::HasExitPoint(object *obj)
+    {
+        return ExitPointSearch(obj);
+    }
+
+    std::string model::intToString(int val)
+    {
+        int digitsCount = 0;
+        int tmp = val;
+        while(tmp > 0)
+        {
+            tmp /= 10;
+            ++digitsCount;
+        }
+
+        char* txt_num = new char[digitsCount + 1];
+        itoa(val, txt_num, 10);
+
+        std::string res(txt_num);
+
+        delete txt_num;
+        txt_num = nullptr;
+
+        return res;
+    }
+
     bool model::is_valid()
     {
+        /*old checking
         //if no generators found
         if (generators.size() == 0)
             errors.push_back(Pair(nullptr, error_code::NO_GENERATORS));
@@ -172,12 +215,49 @@ namespace logic
             }
 
         });
-
         return !(errors.size());
+*/
+
+        if (generators.size() == 0)
+            throw exceptions::NoGeneratorsException();
+
+        if(terminators.size() == 0)
+            throw exceptions::NoTerminatorsException();
+
+        std::vector<generator*> bad_generators;
+        for(generator& gen : generators)
+        {
+            if(!HasExitPoint(&gen))
+            {
+                bad_generators.push_back(&gen);
+            }
+        }
+
+        if (bad_generators.size() != 0)
+        {
+            std::string _message = "Не для всех генераторов существует выходная точка:\n[id]";
+            for (auto it = bad_generators.begin(); it != bad_generators.end() - 1; ++it)
+            {
+                _message += intToString((*it)->get_id()) + ", ";
+            }
+            _message += intToString((*(bad_generators.end() - 1))->get_id());
+
+            throw exceptions::NoExitPointException(_message);
+        }
+
+        return true;
     }
 
     void model::simulation_start()
     {
+        try
+        {
+            is_valid();
+        }
+        catch(exceptions::LogicException& ex)
+        {
+            throw ex;
+        }
         simulate_flag = true;
         stop_flag = false;
         pause_flag = false;
@@ -388,6 +468,8 @@ namespace logic
     {
         return attributes.get(id);
     }
+
+
 
 
 } //end namespace logic

@@ -22,6 +22,11 @@ namespace logic
         return outputs.size() == 0 ? false : true;
     }
 
+    std::list<object *> separator::output_connection() const
+    {
+        return outputs;
+    }
+
     int separator::outputs_count() const
     {
         return static_cast<int>(outputs.size());

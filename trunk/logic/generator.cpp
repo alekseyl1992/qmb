@@ -1,6 +1,7 @@
 ﻿#include "generator.h"
 #include "model.h"
 
+#include <numeric>
 #include <time.h>
 
 namespace logic
@@ -32,6 +33,8 @@ namespace logic
     {
         std::lock_guard<std::mutex> lk(item_mutex);
 
+        if (req_id == std::numeric_limits<ull_t>::max()) //18,446,744,073,709,551,615
+            throw exceptions::TooBigIDException();
         if (random_generating)
         {
             srand(time(NULL));
@@ -39,7 +42,6 @@ namespace logic
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
-
         cur_req = new request(id, req_id);
         moveable_request_flag = true;
 

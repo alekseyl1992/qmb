@@ -1,6 +1,7 @@
 ﻿#ifndef OBJECT_H
 #define OBJECT_H
 
+#include <list>
 #include <thread>
 #include <mutex>
 #include <string>
@@ -50,11 +51,8 @@ namespace logic
         virtual bool has_input() const;
         virtual bool has_output() const;
 
-        object* input_connection() const    //ex connected_with()
-        { return input; }
-
-        object* output_connection() const
-        { return output; }
+        virtual std::list<object*> input_connection() const;    //ex connected_with()
+        virtual std::list<object*> output_connection() const;
 
         void set_parrent(model* parent);		//!< Устанавливает указатель на родительскую модель
 
