@@ -30,9 +30,10 @@ enum class ItemType : int
 
 
 
-//! Преобразует тип элемента в строковое представление
-QString itemTypeToString(ItemType type);
-QString itemTypeToEngString(ItemType type);
+//! Преобразует тип элемента в строковое представление для GUI
+QString itemTypeToGUIString(ItemType type);
+//! Преобразует тип элемента в строковое представление для XML
+QString itemTypeToXMLString(ItemType type);
 
 //! Вычисляет расстояние маежду двумя точками
 qreal distance(QPointF p1, QPointF p2);

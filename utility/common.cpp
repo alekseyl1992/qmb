@@ -5,7 +5,7 @@ void Unimplemented(QWidget *w)
     QMessageBox::critical(w, "Внимание", "Данная функция не реализована");
 }
 
-QString itemTypeToString(ItemType type)
+QString itemTypeToGUIString(ItemType type)
 {
     switch (type)
     {
@@ -17,13 +17,17 @@ QString itemTypeToString(ItemType type)
             return "Обработчик";
         case ItemType::Terminator:
             return "Терминатор";
+        case ItemType::Collector:
+            return "Коллектор";
+        case ItemType::Separator:
+            return "Разделитель";
 
     default:
         return "IllegalItemType";
     };
 }
 
-QString itemTypeToEngString(ItemType type)
+QString itemTypeToXMLString(ItemType type)
 {
     switch (type)
     {
@@ -35,6 +39,10 @@ QString itemTypeToEngString(ItemType type)
             return "Handler";
         case ItemType::Terminator:
             return "Terminator";
+        case ItemType::Collector:
+            return "Collector";
+        case ItemType::Separator:
+            return "Separator";
         default:
             return "IllegalItemType";
     };

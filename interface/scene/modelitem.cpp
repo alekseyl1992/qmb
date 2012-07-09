@@ -89,6 +89,20 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QString name, bool dropShado
             path = path.simplified();
             hotSpots << QPoint(0-dhs, 50);
             break;
+
+        case ItemType::Collector:
+            path.addPolygon(QPolygonF() << QPointF(0, 0) << QPointF(30, 50) << QPointF(0, 100));
+            hotSpots << QPoint(30+dhs, 50);
+            hotSpots << QPoint(0-dhs, 25);
+            hotSpots << QPoint(0-dhs, 75);
+            break;
+
+        case ItemType::Separator:
+            path.addPolygon(QPolygonF() << QPointF(30, 0) << QPointF(0, 50) << QPointF(30, 100));
+            hotSpots << QPoint(0-dhs, 50);
+            hotSpots << QPoint(30+dhs, 25);
+            hotSpots << QPoint(30+dhs, 75);
+            break;
         default:
             break;
     }
@@ -148,11 +162,14 @@ void ModelItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawPolygon(polygon(), fillRule());
 
     //текст
-    painter->setPen(QPen(Qt::black));
-    painter->setBrush(QBrush(Qt::black));
-    painter->drawText(polygon().boundingRect(),
-                      myName,
-                      QTextOption(Qt::AlignCenter));
+    if(itemType() != ItemType::Collector && itemType() != ItemType::Separator)
+    {
+        painter->setPen(QPen(Qt::black));
+        painter->setBrush(QBrush(Qt::black));
+        painter->drawText(polygon().boundingRect(),
+                          myName,
+                          QTextOption(Qt::AlignCenter));
+    }
 
     //hotSpots
     QPen hsPen;
