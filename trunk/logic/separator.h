@@ -18,8 +18,6 @@ namespace logic
 
         virtual ~separator() { }
 
-        int outputs_count() const;
-
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();    //работает по принципу "на выход"

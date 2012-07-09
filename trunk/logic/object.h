@@ -55,6 +55,9 @@ namespace logic
         virtual std::list<object*> input_connection() const;    //ex connected_with()
         virtual std::list<object*> output_connection() const;
 
+        int inputs_count() const;
+        int outputs_count() const;
+
         object* input() const;
         object* output() const;
 
