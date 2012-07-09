@@ -111,7 +111,6 @@ namespace logic
         {
               if (obj->has_input())
               {
-                  //new_thread(obj);
                   if (obj->get_type() != ItemType::Collector)
                   {
 

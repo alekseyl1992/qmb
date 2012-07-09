@@ -12,13 +12,6 @@ namespace logic
         object(sep)
     { }
 
-    int separator::outputs_count() const
-    {
-        return static_cast<int>(outputs.size());
-    }
-
-
-    //actual logic
 
     request* separator::get_request()
     {

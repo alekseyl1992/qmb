@@ -12,13 +12,6 @@ namespace logic
         object(col)
     { }
 
-    int collector::inputs_count() const
-    {
-        return static_cast<int>(inputs.size());
-    }
-
-
-    //actual logic
 
     request* collector::get_request()
     {

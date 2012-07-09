@@ -15,8 +15,6 @@ namespace logic
 
         virtual ~collector() { }
 
-        int inputs_count() const;
-
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();

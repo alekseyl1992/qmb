@@ -68,6 +68,16 @@ namespace logic
         return outputs;
     }
 
+    int object::inputs_count() const
+    {
+        return static_cast<int>(inputs.size());
+    }
+
+    int object::outputs_count() const
+    {
+        return static_cast<int>(outputs.size());
+    }
+
     object *object::input() const
     {
         return *(inputs.begin());
