@@ -13,8 +13,6 @@ void Unimplemented(QWidget *w = nullptr);
 //! Используется, чтобы сообщить приложению о необходимости перезапуска
 #define RestartCode 1000
 
-typedef unsigned long long ull_t;
-
 //! Перечисление составляющих модели
 enum class ItemType : int
 {
@@ -38,7 +36,7 @@ QString itemTypeToXMLString(ItemType type);
 //! Вычисляет расстояние маежду двумя точками
 qreal distance(QPointF p1, QPointF p2);
 
-ull_t get_now_time();
+unsigned long long get_now_time();
 
 //! Находит свободный id в списке
 int getFreeId(QSet<int> ids);

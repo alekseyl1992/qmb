@@ -12,21 +12,6 @@ namespace logic
         object(sep)
     { }
 
-    void separator::set_output(object* _dest)
-    {
-        outputs.push_back(_dest);
-    }
-
-    bool separator::has_output() const
-    {
-        return outputs.size() == 0 ? false : true;
-    }
-
-    std::list<object *> separator::output_connection() const
-    {
-        return outputs;
-    }
-
     int separator::outputs_count() const
     {
         return static_cast<int>(outputs.size());
@@ -55,10 +40,10 @@ namespace logic
 
     void separator::move_request()
     {
-        //вытаскиваем запрос из input
-        if (input->is_moveable() && this->is_free())
+        //вытаскиваем запрос из input()
+        if (input()->is_moveable() && this->is_free())
         {
-            this->add(input->get_request());
+            this->add(input()->get_request());
         }
 
         if (this->has_request())
