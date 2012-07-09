@@ -8,8 +8,8 @@ namespace logic
         parent(nullptr),
         id(id),
         global_id(id),
-        input(nullptr),
-        output(nullptr),
+        //input(nullptr),
+        //output(nullptr),
         cur_req(nullptr),
         moveable_request_flag(false),
         freedom_flag(true),
@@ -21,8 +21,8 @@ namespace logic
         parent(obj.parent),
         id(obj.id),
         global_id(obj.global_id),
-        input(obj.input),
-        output(obj.output),
+        //input(obj.input),
+        //output(obj.output),
         cur_req(obj.cur_req),
         moveable_request_flag(obj.moveable_request_flag),
         freedom_flag(obj.freedom_flag),
@@ -40,36 +40,42 @@ namespace logic
 
     void object::set_input(object* _source)
     {
-        this->input = _source;
+        this->inputs.push_back(_source);
     }
 
     void object::set_output(object* _dest)
     {
-        this->output = _dest;
+        this->outputs.push_back(_dest);
     }
 
     bool object::has_input() const
     {
-        return input == nullptr ? false : true;
+        return inputs.size() == 0 ? false : true;
     }
 
     bool object::has_output() const
     {
-        return output == nullptr ? false : true;
+        return outputs.size() == 0 ? false : true;
     }
 
     std::list<object *> object::input_connection() const
     {
-        std::list<object*> inputs;
-        inputs.push_back(input);
         return inputs;
     }
 
     std::list<object *> object::output_connection() const
     {
-        std::list<object*> outputs;
-        outputs.push_back(output);
         return outputs;
+    }
+
+    object *object::input() const
+    {
+        return *(inputs.begin());
+    }
+
+    object *object::output() const
+    {
+        return *(outputs.begin());
     }
 
     void object::set_parrent(model* _parent)
@@ -79,9 +85,9 @@ namespace logic
 
     void object::move_request()
     {
-        if (this->input->is_moveable() && this->is_free())
+        if (this->input()->is_moveable() && this->is_free())
         {
-            this->add(input->get_request());
+            this->add(input()->get_request());
         }
     }
 

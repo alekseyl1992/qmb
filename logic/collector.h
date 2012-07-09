@@ -15,25 +15,12 @@ namespace logic
 
         virtual ~collector() { }
 
-        virtual void set_input(object* _source);		//!< Служит для соединения объекта с входом
-        //virtual void set_output(object* _dest);  //inherited
-
-        virtual bool has_input() const;
-        //virtual bool has_output() const;  //inherited
-
-        virtual std::list<object*> input_connection() const;
-        //virtual std::list<object*> output_connection() const; //inherited
-
         int inputs_count() const;
 
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();
         virtual bool is_completed();
-
-    private:
-        std::list<object*> inputs;
-        //object* output; //inherited
     };
 
 } //end namespace logic

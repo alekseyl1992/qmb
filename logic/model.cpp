@@ -111,20 +111,10 @@ namespace logic
         {
               if (obj->has_input())
               {
-                  if (obj->get_type() != ItemType::Collector)
-                  {
-                      //if (obj->input_connection()->get_type() != ItemType::Separator)
-                      //{
-                          new_thread(obj);
-                      //}
-                  }
-                  else  //if obj is Collector
-                      new_thread(obj);
+                  new_thread(obj);
               }
         });
     }
-
-
 
     void model::checking_finished_th()
     {
@@ -153,13 +143,20 @@ namespace logic
     {
         if (obj->has_output())
         {
+            std::vector<bool> ouputs_res;
             for(object* output_obj : obj->output_connection())
             {
                 if (output_obj->get_type() == ItemType::Terminator)
-                    return true;
+                    ouputs_res.push_back(true);
                 else
-                    return ExitPointSearch(output_obj);
+                    ouputs_res.push_back(ExitPointSearch(output_obj));
             }
+            for(bool i : ouputs_res)
+            {
+                if (i == false)
+                    return false;
+            }
+            return true;
         }
         return false;
     }

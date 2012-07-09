@@ -13,6 +13,7 @@
 #include "../utility/common.h"
 #include "request.h"
 
+
 namespace logic
 {
     class model;
@@ -54,6 +55,9 @@ namespace logic
         virtual std::list<object*> input_connection() const;    //ex connected_with()
         virtual std::list<object*> output_connection() const;
 
+        object* input() const;
+        object* output() const;
+
         void set_parrent(model* parent);		//!< Устанавливает указатель на родительскую модель
 
         virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
@@ -68,8 +72,8 @@ namespace logic
         model* parent;
         int id;
         int global_id;
-        object* input;
-        object* output;
+        std::list<object*> inputs;
+        std::list<object*> outputs;
         request* cur_req;
 
         bool moveable_request_flag;

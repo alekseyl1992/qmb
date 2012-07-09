@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     utility/common.cpp \
     utility/lastmodels.cpp \
     utility/lsfss.cpp \
+    utility/validator.cpp \
     logic/exceptions.cpp \
+    logic/attribute.cpp \
     logic/request_id.cpp \
     logic/request.cpp \
     logic/object.cpp \
@@ -39,9 +41,7 @@ SOURCES += main.cpp \
     interface/aboutdialog.cpp \
     interface/modeloptionsdialog.cpp \
     interface/optionsdialog.cpp \
-    utility/validator.cpp \
-    interface/elementpropertiesdialog.cpp \
-    logic/attribute.cpp
+    interface/elementpropertiesdialog.cpp
 
 
 HEADERS  += utility/xmlhighlighter.h \
@@ -50,7 +50,9 @@ HEADERS  += utility/xmlhighlighter.h \
     utility/ifillablemodel.h \
     utility/lsfss.h \
     utility/lastmodels.h \
+    utility/validator.h \
     logic/exceptions.h \
+    logic/attribute.h \
     logic/request_id.h \
     logic/request.h \
     logic/object.h \
@@ -73,9 +75,7 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/aboutdialog.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
-    utility/validator.h \
-    interface/elementpropertiesdialog.h \
-    logic/attribute.h
+    interface/elementpropertiesdialog.h
 
 
 FORMS    += interface/mainwindow.ui \

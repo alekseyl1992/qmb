@@ -12,21 +12,6 @@ namespace logic
         object(col)
     { }
 
-    void collector::set_input(object* _source)
-    {
-        inputs.push_back(_source);
-    }
-
-    bool collector::has_input() const
-    {
-        return inputs.size() == 0 ? false : true;
-    }
-
-    std::list<object *> collector::input_connection() const
-    {
-        return inputs;
-    }
-
     int collector::inputs_count() const
     {
         return static_cast<int>(inputs.size());
