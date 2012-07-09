@@ -88,6 +88,7 @@ private slots:
     void onSelectionChanged();
 
     void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
+    void onModelError(logic::exceptions::LogicException& ex); //!< Срабатывает при возникновению ошибки в модели
 
 signals:
     void beganSavable(); //!< Срабатывает после сохранения моедли через кнопку Сохранить на панели инструментов
