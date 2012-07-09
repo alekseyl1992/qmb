@@ -176,8 +176,17 @@ Document::Document(QWidget *parent) :
     groupItem->setEnabled(false);
     parentItem->appendRow(groupItem);
 
+    for(ItemType type = ItemType::Generator; type < ItemType::Link; ++(int&)type)
+    {
+        QStandardItem *item = new QStandardItem(itemTypeToGUIString(type));
+        item->setData(int(type));
+        item->setIcon(QIcon(ModelItem(type).image()));
+        groupItem->appendRow(item);
+    }
+
+    /* DEPRECATED
     //генератор
-    QModelIndex generatorIndex;
+    //QModelIndex generatorIndex;
     {
         QStandardItem *item = new QStandardItem("Генератор");
         item->setData(int(ItemType::Generator));
@@ -207,6 +216,21 @@ Document::Document(QWidget *parent) :
         item->setIcon(QIcon(ModelItem(ItemType::Terminator).image()));
         groupItem->appendRow(item);
     }
+    //коллектор
+    {
+        QStandardItem *item = new QStandardItem("Терминатор");
+        item->setData(int(ItemType::Terminator));
+        item->setIcon(QIcon(ModelItem(ItemType::Terminator).image()));
+        groupItem->appendRow(item);
+    }
+    //сепаратор
+    {
+        QStandardItem *item = new QStandardItem("Терминатор");
+        item->setData(int(ItemType::Terminator));
+        item->setIcon(QIcon(ModelItem(ItemType::Terminator).image()));
+        groupItem->appendRow(item);
+    }*/
+
 
     /*//Прочее
     groupItem = new QStandardItem("Прочее");
@@ -229,7 +253,7 @@ Document::Document(QWidget *parent) :
     ui->toolsView->setModel(model);
     ui->toolsView->expandAll();
     //выбираем генератор
-    ui->toolsView->setCurrentIndex(generatorIndex);
+    //ui->toolsView->setCurrentIndex(generatorIndex);
 
     //формируем лог симуляции
     logModel = new QStandardItemModel(0, 3, this);
@@ -736,8 +760,8 @@ void Document::onSelectionChanged()
 void Document::onWrongLink(ItemType fromType, ItemType toType)
 {
     QMessageBox::critical(this, "Ошибка", QString("Не возможно соединить %0 и %1.")
-                          .arg(itemTypeToString(fromType))
-                          .arg(itemTypeToString(toType)));
+                          .arg(itemTypeToGUIString(fromType))
+                          .arg(itemTypeToGUIString(toType)));
 }
 
 void Document::onModelError(logic::exceptions::LogicException &ex)

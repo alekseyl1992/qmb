@@ -421,7 +421,7 @@ QString ModelScene::getFreeName(ItemType itemType) const
     //формируем список свободных "локальных" id
     QSet<int> itemIds;
     QRegExp expr(QString("%0\\s\\d+")
-              .arg(itemTypeToString(itemType))); //ex: "Генератор 12"
+              .arg(itemTypeToGUIString(itemType))); //ex: "Генератор 12"
 
     //по всем элементам типа itemType
     foreach(QGraphicsItem *item, items())
@@ -440,7 +440,7 @@ QString ModelScene::getFreeName(ItemType itemType) const
     int freeId = ::getFreeId(itemIds);
 
     return QString("%0 %1")
-            .arg(itemTypeToString(itemType))
+            .arg(itemTypeToGUIString(itemType))
             .arg(freeId);
 }
 
