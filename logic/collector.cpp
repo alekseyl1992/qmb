@@ -12,7 +12,6 @@ namespace logic
         object(col)
     { }
 
-
     request* collector::get_request()
     {
         std::lock_guard<std::mutex> lk(item_mutex);
@@ -29,6 +28,8 @@ namespace logic
         freedom_flag = false;
         cur_req = req;
         moveable_request_flag = true;
+
+        qDebug() << cur_req->get_id().str_reqID().c_str() << "is in Collector " << get_id();
     }
 
     void collector::move_request()
