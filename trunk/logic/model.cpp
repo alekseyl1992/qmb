@@ -111,9 +111,8 @@ namespace logic
         {
               if (obj->has_input())
               {
-                  if (obj->get_type() != ItemType::Collector)
+                  if (obj->get_type() != ItemType::Collector && obj->get_type() != ItemType::Separator)
                   {
-
                       if (obj->input()->get_type() != ItemType::Separator)
                       {
                           new_thread(obj);
