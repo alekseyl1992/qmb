@@ -8,8 +8,6 @@ namespace logic
         parent(nullptr),
         id(id),
         global_id(id),
-        //input(nullptr),
-        //output(nullptr),
         cur_req(nullptr),
         moveable_request_flag(false),
         freedom_flag(true),
@@ -21,8 +19,8 @@ namespace logic
         parent(obj.parent),
         id(obj.id),
         global_id(obj.global_id),
-        //input(obj.input),
-        //output(obj.output),
+        inputs(obj.inputs),
+        outputs(obj.outputs),
         cur_req(obj.cur_req),
         moveable_request_flag(obj.moveable_request_flag),
         freedom_flag(obj.freedom_flag),
@@ -88,7 +86,7 @@ namespace logic
         return *(outputs.begin());
     }
 
-    void object::set_parrent(model* _parent)
+    void object::set_parent(model* _parent)
     {
         this->parent = _parent;
     }

@@ -41,12 +41,13 @@ namespace logic
     {
         Q_OBJECT
 
-        friend class generator;
+        friend class object;
+        /*friend class generator;
         friend class queue;
         friend class handler;
         friend class terminator;
         friend class collector;
-        friend class separator;
+        friend class separator;*/
 
         typedef std::pair<object*, error_code> Pair;
     public:
@@ -65,22 +66,10 @@ namespace logic
         void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
     public:
-        void add_generator(generator &&gen);						//!< Добавляет генератор в модель
-        void add_queue(queue &&q);									//!< Добавляет очередь в модель
-        void add_handler(handler &&h);								//!< Добавляет обработчик в модель
-        void add_terminator(terminator &&t);						//!< Добавляет терминатор в модель
-        void add_collector(collector &&col);                        //!< Добавляет собиратель в модель
-        void add_separator(separator &&sep);                        //!< Добавляет разделитель в модель
+        void add_object(object* obj);
+        object* find_object(int global_id);
 
         void connect(object* lhs, object* rhs);						//!< Соединяет два элемента модели
-
-        object* find_object(int global_id);
-        generator* find_generator(int id);                          //!< Возвращает адрес генератора с нужным id
-        queue* find_queue(int id);                                  //!< Возвращает адрес очереди с нужным id
-        handler* find_handler(int id);                              //!< Возвращает адрес обработчика с нужным id
-        terminator* find_terminator(int id);						//!< Возвращает адрес терминатора с нужным id
-        collector* find_collector(int id);                          //!< Возвращает адрес собирателя с нужным id
-        separator* find_separator(int id);                          //!< Возвращает адрес разделителя с нужным id
 
         void add_attribute(attribute& attr);                        //!< Добавляет новый атрибут в модель
         void remove_attribute(int id);                              //!< Удаляет атрибут из модели по id
@@ -119,14 +108,13 @@ namespace logic
         void reqFinishedHandling(const int& hID, const logic::request_id& reqID, int time);
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
-    private: //members
-        std::list<generator> generators;
-        std::list<queue> queues;
-        std::list<handler> handlers;
-        std::list<terminator> terminators;
-        std::list<collector> collectors;
-        std::list<separator> separators;
-
+    private:
+        std::list<object*> generators;
+        std::list<object*> queues;
+        std::list<object*> handlers;
+        std::list<object*> terminators;
+        std::list<object*> collectors;
+        std::list<object*> separators;
         std::vector<object*> objects;
 
         std::vector<Pair> errors;

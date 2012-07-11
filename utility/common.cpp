@@ -18,7 +18,7 @@ QString itemTypeToGUIString(ItemType type)
         case ItemType::Terminator:
             return "Терминатор";
         case ItemType::Collector:
-            return "Коллектор";
+            return "Собиратель";
         case ItemType::Separator:
             return "Разделитель";
 

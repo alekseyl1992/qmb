@@ -24,12 +24,14 @@ namespace logic
         ull_t get_num_of_handled_requests() const     //!< Возвращает количество обработанных запросов
         { return count_of_handled_requests; }
 
-        void handle(request* req);					  //!< Функция, обрабатывающая запрос
         virtual void add(request* req);               //!< Реализация виртуальной функции базового класса object
         virtual request* get_request();				  //!< Реализация виртуальной функции базового класса object
 
         virtual bool is_completed()
         { return is_free(); }
+
+    private:
+        void handle(request* req);					  //!< Функция, обрабатывающая запрос
 
     private:
         int handling_period;

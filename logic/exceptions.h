@@ -2,9 +2,7 @@
 #define H_EXCEPTIONS
 
 #include <stdexcept>
-#include <list>
 #include <string>
-#include "generator.h"
 
 namespace logic
 {
