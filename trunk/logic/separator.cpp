@@ -36,28 +36,23 @@ namespace logic
     void separator::move_request()
     {
         //вытаскиваем запрос из input()
-        if (this->get_id() == 5)
-            int i = 5;
         if (input()->is_moveable() && this->is_free() &&
                  input()->get_type() != ItemType::Separator)
         {
             this->add(input()->get_request());
         }
 
-        //if (this->has_request())
-        //{
-            srand(time(NULL));
-            const int i = rand() % outputs_count();
-            auto it = outputs.begin();
-            advance(it, i);
+        srand(time(NULL));
+        const int i = rand() % outputs_count();
+        auto it = outputs.begin();
+        advance(it, i);
 
-            //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
-            if (this->is_moveable() && (*it)->is_free() &&
-                    (*it)->get_type() != ItemType::Collector)
-            {
-                (*it)->add(this->get_request());
-            }
-        //}
+        //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
+        if (this->is_moveable() && (*it)->is_free() &&
+                (*it)->get_type() != ItemType::Collector)
+        {
+            (*it)->add(this->get_request());
+        }
     }
 
     bool separator::is_completed()

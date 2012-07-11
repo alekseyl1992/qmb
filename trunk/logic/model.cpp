@@ -1,5 +1,6 @@
 ﻿#include <sstream>
 #include <string>
+#include <algorithm>
 #include "model.h"
 
 namespace logic
@@ -51,11 +52,11 @@ namespace logic
             num_generated = 0;
             num_terminated = 0;
             for (auto it = generators.begin(); it != generators.end(); ++it)
-                if (it->has_output())
-                    num_generated += it->get_current_num_requests();
+                if ((*it)->has_output())
+                    num_generated += (dynamic_cast<generator*>(*it))->get_current_num_requests();
 
             for (auto it = terminators.begin(); it != terminators.end(); ++it)
-                num_terminated += it->get_count_of_terminated_requests();
+                num_terminated += (dynamic_cast<terminator*>(*it))->get_count_of_terminated_requests();
 
             if (num_terminated != num_generated)  //проверка на то, что все сгенерированные сообщения отработаны
                 all_completed = false;
@@ -72,19 +73,21 @@ namespace logic
         }
     }
 
+
+
     void model::generating_th()
     {
         std::for_each(generators.begin(), generators.end(),
-            [&](generator& gen)
+            [&](object* gen)
         {
-            threads.push_back(new std::thread([this, &gen]()
+            threads.push_back(new std::thread([this, gen]()
             {
-                for (ull_t cur_req_id = 1; cur_req_id <= gen.get_num_requests() && is_simulating(); cur_req_id++)
+                for (ull_t cur_req_id = 1; cur_req_id <= (dynamic_cast<generator*>(gen))->get_num_requests() && is_simulating(); cur_req_id++)
                 {
                     try_pausing(); //если нажата пауза
 
-                    if (!gen.is_moveable())
-                        gen.generate_new_request(cur_req_id);
+                    if (!gen->is_moveable())
+                        (dynamic_cast<generator*>(gen))->generate_new_request(cur_req_id);
                     else
                         --cur_req_id;
                 }
@@ -149,24 +152,21 @@ namespace logic
 
     bool model::ExitPointSearch(object *obj)
     {
+        bool result = false;
         if (obj->has_output())
         {
-            std::vector<bool> ouputs_res;
+            std::vector<bool> outputs_res;
             for(object* output_obj : obj->output_connection())
             {
                 if (output_obj->get_type() == ItemType::Terminator)
-                    ouputs_res.push_back(true);
+                    outputs_res.push_back(true);
                 else
-                    ouputs_res.push_back(ExitPointSearch(output_obj));
+                    outputs_res.push_back(ExitPointSearch(output_obj));
             }
-            for(bool i : ouputs_res)
-            {
-                if (i == false)
-                    return false;
-            }
-            return true;
+            int falsesCount = (int)std::count(outputs_res.begin(), outputs_res.end(), false);
+            result = falsesCount == 0 ? true : false;
         }
-        return false;
+        return result;
     }
 
     bool model::HasExitPoint(object *obj)
@@ -197,44 +197,19 @@ namespace logic
 
     bool model::is_valid()
     {
-        /*old checking
-        //if no generators found
-        if (generators.size() == 0)
-            errors.push_back(Pair(nullptr, error_code::NO_GENERATORS));
-
-        //if no terminators found
-        if (terminators.size() == 0)
-            errors.push_back(Pair(nullptr, error_code::NO_TERMINATORS));
-
-        //search errors in generators and terminators
-        std::for_each(objects.begin(), objects.end(), [&](object* obj) {
-            if (obj->has_input())
-            {
-                if (obj->get_type() == ItemType::Generator)
-                    errors.push_back(Pair(obj, error_code::INPUT_IN_GENERATOR));
-            }
-            if (obj->has_output())
-            {
-                if (obj->get_type() == ItemType::Terminator)
-                    errors.push_back(Pair(obj, error_code::OUTPUT_IN_TERMINATOR));
-            }
-
-        });
-        return !(errors.size());
-*/
-
         if (generators.size() == 0)
             throw exceptions::NoGeneratorsException();
 
-        if(terminators.size() == 0)
+        if (terminators.size() == 0)
             throw exceptions::NoTerminatorsException();
 
-        std::vector<generator*> bad_generators;
-        for(generator& gen : generators)
+        std::vector<object*> bad_generators;
+
+        for(object* gen : generators)
         {
-            if(!HasExitPoint(&gen))
+            if(!HasExitPoint(gen))
             {
-                bad_generators.push_back(&gen);
+                bad_generators.push_back(gen);
             }
         }
 
@@ -305,52 +280,33 @@ namespace logic
         }
     }
 
-    void model::add_generator(generator &&gen)
+    void model::add_object(object *obj)
     {
-        gen.set_parrent(this);
-        generators.emplace_back(gen);
-        objects.push_back(&generators.back());
-    }
-
-    void model::add_queue(queue &&q)
-    {
-        q.set_parrent(this);
-        queues.emplace_back(q);
-        objects.push_back(&queues.back());
-    }
-
-    void model::add_handler(handler &&h)
-    {
-        h.set_parrent(this);
-        handlers.emplace_back(h);
-        objects.push_back(&handlers.back());
-    }
-
-    void model::add_terminator(terminator &&t)
-    {
-        t.set_parrent(this);
-        terminators.emplace_back(t);
-        objects.push_back(&terminators.back());
-    }
-
-    void model::add_collector(collector &&col)
-    {
-        col.set_parrent(this);
-        collectors.emplace_back(col);
-        objects.push_back(&collectors.back());
-    }
-
-    void model::add_separator(separator &&sep)
-    {
-        sep.set_parrent(this);
-        separators.emplace_back(sep);
-        objects.push_back(&separators.back());
-    }
-
-    void model::connect(object* lhs, object* rhs)
-    {
-        lhs->set_output(rhs);
-        rhs->set_input(lhs);
+        obj->set_parent(this);
+        objects.push_back(obj);
+        switch(obj->get_type())
+        {
+        case ItemType::Generator:
+            generators.push_back(obj);
+            break;
+        case ItemType::Queue:
+            queues.push_back(obj);
+            break;
+        case ItemType::Handler:
+            handlers.push_back(obj);
+            break;
+        case ItemType::Terminator:
+            terminators.push_back(obj);
+            break;
+        case ItemType::Collector:
+            collectors.push_back(obj);
+            break;
+        case ItemType::Separator:
+            separators.push_back(obj);
+            break;
+        default:
+            break;
+        }
     }
 
     object* model::find_object(int global_id)
@@ -367,88 +323,10 @@ namespace logic
         return *iter;
     }
 
-    generator* model::find_generator(int id)
+    void model::connect(object* lhs, object* rhs)
     {
-        std::list<generator>::iterator iter;
-        for(auto it = generators.begin(); it != generators.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
-    }
-
-    queue* model::find_queue(int id)
-    {
-        std::list<queue>::iterator iter;
-        for(auto it = queues.begin(); it != queues.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
-    }
-
-    handler* model::find_handler(int id)
-    {
-        std::list<handler>::iterator iter;
-        for(auto it = handlers.begin(); it != handlers.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
-    }
-
-    terminator* model::find_terminator(int id)
-    {
-        std::list<terminator>::iterator iter;
-        for(auto it = terminators.begin(); it != terminators.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
-    }
-
-    collector* model::find_collector(int id)
-    {
-        std::list<collector>::iterator iter;
-        for(auto it = collectors.begin(); it != collectors.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
-    }
-
-    separator* model::find_separator(int id)
-    {
-        std::list<separator>::iterator iter;
-        for(auto it = separators.begin(); it != separators.end(); ++it)
-        {
-            if (it->get_id() == id)
-            {
-                iter = it;
-                break;
-            }
-        }
-        return &(*iter);
+        lhs->set_output(rhs);
+        rhs->set_input(lhs);
     }
 
     void model::add_attribute(attribute &attr)

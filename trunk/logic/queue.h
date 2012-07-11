@@ -28,11 +28,11 @@ namespace logic
 
     private:
         void make_cur_request();                                  //!< Создает текущий запрос согласно начальным условиям
+        request* get_first();                                     //!< Возвращает верхний элемент списка
+        request* get_last();									  //!< Возвращает нижний элемент списка
 
     public:
         virtual void add(request* req);                           //!< Реализация виртуальной функции базового класса object
-        request* get_first();                                     //!< Возвращает верхний элемент списка
-        request* get_last();									  //!< Возвращает нижний элемент списка
         virtual request* get_request();                           //!< Реализация виртуальной функции базового класса object
 
         virtual bool is_completed()

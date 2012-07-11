@@ -51,7 +51,7 @@ namespace logic
             qDebug() << cur_req->get_id().str_reqID().c_str() << " generated";
         }
 
-        if (infinite_generating == true)
+        if (infinite_generating)
             ++number_of_requests_to_generate;
 
         ++count_of_generated_requests;

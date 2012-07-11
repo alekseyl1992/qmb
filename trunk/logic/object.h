@@ -52,7 +52,7 @@ namespace logic
         virtual bool has_input() const;
         virtual bool has_output() const;
 
-        virtual std::list<object*> input_connection() const;    //ex connected_with()
+        virtual std::list<object*> input_connection() const;
         virtual std::list<object*> output_connection() const;
 
         int inputs_count() const;
@@ -61,7 +61,7 @@ namespace logic
         object* input() const;
         object* output() const;
 
-        void set_parrent(model* parent);		//!< Устанавливает указатель на родительскую модель
+        void set_parent(model* parent);		//!< Устанавливает указатель на родительскую модель
 
         virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
         virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект

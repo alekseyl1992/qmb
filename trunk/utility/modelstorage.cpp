@@ -39,56 +39,40 @@ logic::model* ModelStorage::getModel(bool create)
         while (!ProcessingItem.isNull())
         {
             int period, id, fromID, toID, num_of_reqs;
-            QString fromType, toType;
             period = ProcessingItem.attribute("period").toInt();
             id = ProcessingItem.attribute("id").toInt();
             fromID = ProcessingItem.attribute("fromID").toInt();
             toID = ProcessingItem.attribute("toID").toInt();
-            fromType = ProcessingItem.attribute("from");
-            toType = ProcessingItem.attribute("to");
             num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
 
             ItemType typeId = typeNames.key(ProcessingItem.nodeName());
             switch(typeId)
             {
                 case ItemType::Generator:
-                    myModel->add_generator(logic::generator(id,period,num_of_reqs));
+                    myModel->add_object(new logic::generator(id,period,num_of_reqs));
                     break;
 
                 case ItemType::Queue:
-                    myModel->add_queue(logic::queue(id));
+                    myModel->add_object(new logic::queue(id));
                     break;
 
                 case ItemType::Handler:
-                    myModel->add_handler(logic::handler(id,period));
+                    myModel->add_object(new logic::handler(id,period));
                     break;
 
                 case ItemType::Terminator:
-                    myModel->add_terminator(logic::terminator(id,period));
+                    myModel->add_object(new logic::terminator(id,period));
                     break;
 
                 case ItemType::Collector:
-                    myModel->add_collector(logic::collector(id));
+                    myModel->add_object(new logic::collector(id));
                     break;
 
                 case ItemType::Separator:
-                    myModel->add_separator(logic::separator(id));
+                    myModel->add_object(new logic::separator(id));
                     break;
 
                 case ItemType::Link:
-                       /*
-                        if (fromType==itemTypeToEngString(ItemType::Generator)
-                                && toType==itemTypeToEngString(ItemType::Queue))
-                            linkType = LinkType::GeneratorToQueue;
-
-                        if (fromType==itemTypeToEngString(ItemType::Queue)
-                                && toType==itemTypeToEngString(ItemType::Handler))
-                            linkType = LinkType::QueueToHandler;
-
-                        if (fromType==itemTypeToEngString(ItemType::Handler)
-                                && toType==itemTypeToEngString(ItemType::Terminator))
-                            linkType = LinkType::HandlerToTerminator;
-    */
                     AddLink(myModel,fromID,toID);
                     break;
 
@@ -99,6 +83,13 @@ logic::model* ModelStorage::getModel(bool create)
         }
     }
     return myModel;
+}
+
+void ModelStorage::AddLink(logic::model *curModel, int fromID, int toID)
+{
+    logic::object* obj1 = curModel->find_object(fromID);
+    logic::object* obj2 = curModel->find_object(toID);
+    curModel->connect(obj1, obj2);
 }
 
 void ModelStorage::freeModel()
@@ -466,39 +457,4 @@ void ModelStorage::onLinkRemoved(int idFrom, int idTo)
 }
 // end реализация слотов //
 
-void ModelStorage::AddLink(logic::model *curModel, int fromID, int toID)
-{
-    logic::object* obj1 = curModel->find_object(fromID);
-    logic::object* obj2 = curModel->find_object(toID);
-    curModel->connect(obj1, obj2);
-    /*
-    switch(linkType)
-    {
-        case LinkType::GeneratorToQueue:
-        {
-            generator* gen = curModel->find_generator(fromID);
-            queue* que = curModel->find_queue(toID);
-            curModel->connect(gen, que);
-            //curModel->add_link_generator_queue(link<generator*,queue*>(gen,que));
-            break;
-        }
 
-        case LinkType::QueueToHandler:
-        {
-            queue* que = curModel->find_queue(fromID);
-            handler* hnd = curModel->find_handler(toID);
-            curModel->connect(que, hnd);
-            //curModel->add_link_queue_handler(link<queue*, handler*>(que,hnd));
-            break;
-        }
-
-        case LinkType::HandlerToTerminator:
-        {
-            handler* hnd = curModel->find_handler(fromID);
-            terminator* ter = curModel->find_terminator(toID);
-            curModel->connect(hnd, ter);
-            //curModel->add_link_handler_terminator(link<handler*, terminator*>(hnd,ter));
-            break;
-        }
-    }*/
-}
