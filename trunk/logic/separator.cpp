@@ -4,21 +4,19 @@
 
 namespace logic
 {
-    separator::separator(int id) :
-        object(ItemType::Separator, id)
-    {
-        script_engine = new QScriptEngine();
-    }
+    separator::separator(int id, QScriptEngine* engine)
+        : object(ItemType::Separator, id),
+          script_engine(engine)
+    { }
 
     separator::separator(separator &sep) :
-        object(sep), script_engine(new QScriptEngine()), script(sep.script)
+        object(sep), script_engine(sep.script_engine), script(sep.script)
     { }
 
     separator::~separator()
     {
         delete script_engine;
     }
-
 
     request* separator::get_request()
     {

@@ -13,12 +13,8 @@ namespace logic
     //не должны крутиться в потоках.
     class separator : public object
     {
-    private:
-        QScriptEngine* script_engine;
-        QString script;
-
     public:
-        separator(int id);
+        separator(int id, QScriptEngine* engine = new QScriptEngine());
         separator(separator& sep);
 
         virtual ~separator();
@@ -27,6 +23,10 @@ namespace logic
         virtual void add(request* req);
         virtual void move_request();    //работает по принципу "на выход"
         virtual bool is_completed();
+
+    private:
+        QScriptEngine* script_engine;
+        QString script;
     };
 
 } //end namespace logic
