@@ -49,11 +49,11 @@ namespace logic
         virtual void set_input(object* _source);		//!< Служит для соединения объекта с входом
         virtual void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
 
-        virtual bool has_input() const;
-        virtual bool has_output() const;
+        bool has_input() const;
+        bool has_output() const;
 
-        virtual std::list<object*> input_connection() const;
-        virtual std::list<object*> output_connection() const;
+        std::list<object*> input_connection() const;
+        std::list<object*> output_connection() const;
 
         int inputs_count() const;
         int outputs_count() const;
