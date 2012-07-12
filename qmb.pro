@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml opengl
+QT       += core gui xml opengl script
 QMAKE_CXXFLAGS += -std=c++0x
 
 TARGET = qmb
@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     interface/aboutdialog.cpp \
     interface/modeloptionsdialog.cpp \
     interface/optionsdialog.cpp \
-    interface/elementpropertiesdialog.cpp
+    interface/elementpropertiesdialog.cpp \
+    interface/separatordialog.cpp
 
 
 HEADERS  += utility/xmlhighlighter.h \
@@ -75,7 +76,8 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/aboutdialog.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
-    interface/elementpropertiesdialog.h
+    interface/elementpropertiesdialog.h \
+    interface/separatordialog.h
 
 
 FORMS    += interface/mainwindow.ui \
@@ -85,7 +87,8 @@ FORMS    += interface/mainwindow.ui \
     interface/aboutdialog.ui \
     interface/modeloptionsdialog.ui \
     interface/optionsdialog.ui \
-    interface/elementpropertiesdialog.ui
+    interface/elementpropertiesdialog.ui \
+    interface/separatordialog.ui
 
 OTHER_FILES += \
     TODO.txt

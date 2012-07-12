@@ -118,7 +118,6 @@ ModelItem::ModelItem(ItemType itemType, int itemId, QString name, bool dropShado
             pnt /= 2;
 
     //перемещаем hotSpot'ы
-    //for(auto it = hotSpots.begin(); it!= hotSpots.end(); ++it)
     for(QPointF &pnt : hotSpots)
     {
         pnt += QPointF(-itemRect.width()/2, -itemRect.height()/2);

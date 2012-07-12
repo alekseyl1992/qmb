@@ -35,8 +35,8 @@ Document::Document(QWidget *parent) :
     QSettings set;
 
     //OpenGL acceleration
-    //if(set.value("Scene/OpenGL", true).toBool())
-    //    ui->graphicsView->setViewport(new QGLWidget(this));
+    if(set.value("Scene/OpenGL", true).toBool())
+        ui->graphicsView->setViewport(new QGLWidget(this));
 
     if(set.value("Code/HighlightXML", true).toBool())
         new XmlHighlighter(ui->codeEdit);
