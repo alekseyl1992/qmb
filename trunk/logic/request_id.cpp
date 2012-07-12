@@ -3,11 +3,7 @@
 
 namespace logic
 {
-    request_id::request_id():
-        __req_gen_id(0),
-        __req_id(0)
-    { }
-    request_id::request_id(ull_t req_gen_id, ull_t req_id):
+    request_id::request_id(int req_gen_id, ull_t req_id):
         __req_gen_id(req_gen_id),
         __req_id(req_id)
     { }

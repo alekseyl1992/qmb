@@ -27,7 +27,6 @@ enum class ItemType : int
 };
 
 
-
 //! Преобразует тип элемента в строковое представление для GUI
 QString itemTypeToGUIString(ItemType type);
 //! Преобразует тип элемента в строковое представление для XML

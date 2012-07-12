@@ -83,7 +83,7 @@ namespace logic
         bool freedom_flag;
         std::mutex item_mutex;
 
-        //attributes
+        //properties
         std::string name;
     };
 

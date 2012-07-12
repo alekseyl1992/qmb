@@ -42,12 +42,12 @@ namespace logic
         Q_OBJECT
 
         friend class object;
-        /*friend class generator;
+        friend class generator;
         friend class queue;
         friend class handler;
         friend class terminator;
         friend class collector;
-        friend class separator;*/
+        friend class separator;
 
         typedef std::pair<object*, error_code> Pair;
     public:
@@ -58,12 +58,11 @@ namespace logic
     private:
         bool is_simulating_finished();								//!< Проверяет, завершена ли симуляция
 
+        bool thread_necessary(object* obj);                         //!< Проверяет, необходим ли поток для данного объекта
         void generating_th();										//!< Функция, создающая потоки для генерации сообщений
         void new_thread(object* obj);
         void threading();											//!< Функция, создающая потоки для перемещения запросов по модели
         void checking_finished_th();								//!< Функция, проверяющая систему на завершенность
-
-        void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
     public:
         void add_object(object* obj);
@@ -81,6 +80,8 @@ namespace logic
         bool is_valid();											//!< Проверяет модель на наличие ошибок
         std::vector<Pair> get_errors() const						//!< Возвращает ошибки модели
         { return errors; }
+
+        void try_pausing() const;									//!< Действия, связанные с введением модели в состояние паузы
 
         bool is_simulating() const									//!< Показывает состояние симуляции (не то же, что is_simulating_finished())
         { return simulate_flag && !stop_flag; }
@@ -127,8 +128,8 @@ namespace logic
         bool pause_flag;
         ull_t start_time;
 
-        ull_t num_terminated;
-        ull_t num_generated;
+        //ull_t num_terminated;
+        //ull_t num_generated;
     };
 
 } //end namespace logic
