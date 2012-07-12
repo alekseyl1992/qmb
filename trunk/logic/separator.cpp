@@ -52,7 +52,7 @@ namespace logic
         //srand(time(NULL));
         //const int i = rand() % outputs_count();
 
-        script = QString("Math.floor(Math.random()*%0)").arg(outputs.size());
+        script = QString("Math.floor(Math.random()*%0)").arg(outputs_count());
 
         QScriptValue val = script_engine->evaluate(script);
         int i = val.toInteger();

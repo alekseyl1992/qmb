@@ -104,6 +104,4 @@ namespace logic
         return static_cast<int>(get_now_time() - parent->get_start_time());
     }
 
-
-
 } //end namespace logic
