@@ -57,6 +57,19 @@ namespace logic
         ++count_of_generated_requests;
     }
 
+    void generator::generating()
+    {
+        for (ull_t ID = 1; ID <= this->get_num_requests() && parent->is_simulating(); ++ID)
+        {
+            parent->try_pausing(); //если нажата пауза
+
+            if (!this->is_moveable())
+                generate_new_request(ID);
+            else
+                --ID;
+        }
+    }
+
     request* generator::get_request()
     {
         std::lock_guard<std::mutex> lk(item_mutex);

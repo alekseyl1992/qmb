@@ -3,15 +3,14 @@
 #include <algorithm>
 #include "model.h"
 
+
 namespace logic
 {
     model::model() :
         simulate_flag(false),
         stop_flag(false),
         pause_flag(false),
-        start_time(0),
-        num_terminated(0),
-        num_generated(0)
+        start_time(0)
     { }
 
     model::model(const model& m) :
@@ -27,13 +26,17 @@ namespace logic
         simulate_flag(m.simulate_flag),
         stop_flag(m.stop_flag),
         pause_flag(m.pause_flag),
-        start_time(m.start_time),
-        num_terminated(m.num_terminated),
-        num_generated(m.num_generated)
+        start_time(m.start_time)
     { }
 
     model::~model()
-    { }
+    {
+        std::for_each(objects.begin(), objects.end(), [](object* obj)
+        {
+            delete obj;
+            obj = nullptr;
+        });
+    }
 
 
     bool model::is_simulating_finished()
@@ -49,16 +52,10 @@ namespace logic
         }
         if (all_completed)
         {
-            num_generated = 0;
-            num_terminated = 0;
-            for (auto it = generators.begin(); it != generators.end(); ++it)
-                if ((*it)->has_output())
-                    num_generated += (dynamic_cast<generator*>(*it))->get_current_num_requests();
+            ull_t num_generated = request::get_generated_count();
+            ull_t num_terminated = request::get_deleted_count();
 
-            for (auto it = terminators.begin(); it != terminators.end(); ++it)
-                num_terminated += (dynamic_cast<terminator*>(*it))->get_count_of_terminated_requests();
-
-            if (num_terminated != num_generated)  //проверка на то, что все сгенерированные сообщения отработаны
+            if (num_generated != num_terminated)  //проверка на то, что все сгенерированные сообщения отработаны
                 all_completed = false;
         }
 
@@ -69,35 +66,24 @@ namespace logic
     {
         for (;pause_flag;)
         {
-            std::this_thread::sleep_for(std::chrono::nanoseconds(1)); //if paused
+            std::this_thread::sleep_for(std::chrono::milliseconds(1)); //if paused
         }
     }
 
-
-
     void model::generating_th()
     {
-        std::for_each(generators.begin(), generators.end(),
-            [&](object* gen)
+        for (object* gen : generators)
         {
             threads.push_back(new std::thread([this, gen]()
             {
-                for (ull_t cur_req_id = 1; cur_req_id <= (dynamic_cast<generator*>(gen))->get_num_requests() && is_simulating(); cur_req_id++)
-                {
-                    try_pausing(); //если нажата пауза
-
-                    if (!gen->is_moveable())
-                        (dynamic_cast<generator*>(gen))->generate_new_request(cur_req_id);
-                    else
-                        --cur_req_id;
-                }
+                dynamic_cast<generator*>(gen)->generating();
             }) );
-        });
+        }
     }
 
     void model::new_thread(object* obj)
     {
-        threads.push_back(new std::thread([obj, this]()
+        threads.push_back(new std::thread([this, obj]()
         {
             while (is_simulating())
             {
@@ -107,23 +93,31 @@ namespace logic
         }) );
     }
 
+    bool model::thread_necessary(object *obj)
+    {
+        bool res = false;
+        if (obj->has_input())
+        {
+            if (obj->get_type() != ItemType::Collector && obj->get_type() != ItemType::Separator)
+            {
+                if (obj->input()->get_type() != ItemType::Separator)
+                {
+                    res = true;
+                }
+            }
+            else  //if obj is Collector or Separator
+                res = true;
+        }
+        return res;
+    }
+
     void model::threading()
     {
         std::for_each(objects.begin(), objects.end(),
                 [&](object* obj)
         {
-              if (obj->has_input())
-              {
-                  if (obj->get_type() != ItemType::Collector && obj->get_type() != ItemType::Separator)
-                  {
-                      if (obj->input()->get_type() != ItemType::Separator)
-                      {
-                          new_thread(obj);
-                      }
-                  }
-                  else  //if obj is Collector
-                      new_thread(obj);
-              }
+              if (thread_necessary(obj))
+                new_thread(obj);
         });
     }
 
@@ -311,15 +305,9 @@ namespace logic
 
     object* model::find_object(int global_id)
     {
-        std::vector<object*>::iterator iter;
-        for(auto it = objects.begin(); it != objects.end(); ++it)
-        {
-            if ((*it)->get_global_id() == global_id)
-            {
-                iter = it;
-                break;
-            }
-        }
+        auto iter = std::find_if(objects.begin(), objects.end(), [=](object* obj) {
+            return obj->get_global_id() == global_id;
+        });
         return *iter;
     }
 
@@ -343,8 +331,5 @@ namespace logic
     {
         return attributes.get(id);
     }
-
-
-
 
 } //end namespace logic

@@ -32,6 +32,7 @@ namespace logic
         { return infinite_generating; }
 
         void generate_new_request(ull_t r_id);											//!< Генерирует новый запрос
+        void generating();
         virtual request* get_request();													//!< Реализация виртуальной функции базового класса object
         virtual void add(request*) { }													//!< Реализация виртуальной функции базового класса object
 
