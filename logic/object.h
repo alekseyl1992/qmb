@@ -46,8 +46,8 @@ namespace logic
 
         bool has_request() const;
 
-        virtual void set_input(object* _source);		//!< Служит для соединения объекта с входом
-        virtual void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
+        void set_input(object* _source);		//!< Служит для соединения объекта с входом
+        void set_output(object* _dest);         //!< Служит для соединения объекта с выходом
 
         bool has_input() const;
         bool has_output() const;
