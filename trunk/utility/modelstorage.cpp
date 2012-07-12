@@ -266,6 +266,15 @@ void ModelStorage::setElementProperties(int id, QList<Property>& props)
     //TODO реализовать возможность отката
 }
 
+void ModelStorage::setItemScript(int id, const QString &script)
+{
+}
+
+QString ModelStorage::getItemScript(int id) const
+{
+    return R"($outputID = Math.random()%2$)";
+}
+
 QString ModelStorage::getCodeString() const
 {
     return curDoc->toString(3);

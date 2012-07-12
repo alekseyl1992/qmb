@@ -84,6 +84,9 @@ public:
     QList<Property> getElementProperties(int id) const;
     void setElementProperties(int id, QList<Property>& props);
 
+    void setItemScript(int id, const QString& script);
+    QString getItemScript(int id) const;
+
 public slots:
 
     void onItemInserted(ItemType type, int id, QString name, QPoint pos);

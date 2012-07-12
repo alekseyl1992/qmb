@@ -104,15 +104,6 @@ void ModelScene::addLink(int idFrom, int idTo)
         arrow->scaleShadow(myScale);
         arrow->updatePosition();
     }
-    /*else
-        QMessageBox::critical(
-                    (QWidget *)parent(),
-                    "Ошибка",
-                    QString("Произошла ошибка при добавлении связи на сцену:\n\tfromType = %1, idFrom = %2\n\ttoType = %3, idTo = %4")
-                        .arg((int)fromType)
-                        .arg(idFrom)
-                        .arg((int)toType)
-                        .arg(idTo));*/
 }
 
 void ModelScene::clear()
@@ -163,10 +154,6 @@ void ModelScene::keyPressEvent(QKeyEvent *keyEvent)
 {
     if(keyEvent->key() == Qt::Key_Delete)
         removeSelectedItems();
-    /*if(keyEvent->key() == Qt::Key_Z && keyEvent->modifiers().testFlag(Qt::ControlModifier))
-        emit undoRequested();
-    if(keyEvent->key() == Qt::Key_Y && keyEvent->modifiers().testFlag(Qt::ControlModifier))
-        emit redoRequested();*/
     if(keyEvent->key() == Qt::Key_G && keyEvent->modifiers().testFlag(Qt::ControlModifier))
         alignToGrid();
 }

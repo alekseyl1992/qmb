@@ -6,11 +6,18 @@ namespace logic
 {
     separator::separator(int id) :
         object(ItemType::Separator, id)
-    { }
+    {
+        script_engine = new QScriptEngine();
+    }
 
     separator::separator(separator &sep) :
-        object(sep)
+        object(sep), script_engine(new QScriptEngine()), script(sep.script)
     { }
+
+    separator::~separator()
+    {
+        delete script_engine;
+    }
 
 
     request* separator::get_request()
@@ -42,8 +49,14 @@ namespace logic
             this->add(input()->get_request());
         }
 
-        srand(time(NULL));
-        const int i = rand() % outputs_count();
+        //srand(time(NULL));
+        //const int i = rand() % outputs_count();
+
+        script = QString("Math.floor(Math.random()*%0)").arg(outputs.size());
+
+        QScriptValue val = script_engine->evaluate(script);
+        int i = val.toInteger();
+
         auto it = outputs.begin();
         advance(it, i);
 

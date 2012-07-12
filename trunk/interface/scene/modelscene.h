@@ -101,8 +101,6 @@ signals:
     void itemRemoved(int id);
     void linkInserted(int idFrom, int idTo);
     void linkRemoved(int idFrom, int idTo);
-    //void undoRequested(); //оба перенесены в Document
-    //void redoRequested();
 
 protected:
     void keyPressEvent(QKeyEvent *keyEvent);
@@ -132,9 +130,9 @@ private:
     bool bDropShadow;
 
     void resizeToPoint(QPointF pos); //!< Меняет размер Сцены так, чтобы точка pos попала в её границы
-    //! Находит ближайщий свободный id
+    //! Находит свободный id
     int getFreeId() const;
-    //! Находит ближайщее свободное имя
+    //! Находит свободное имя
     QString getFreeName(ItemType itemType) const;
 };
 
