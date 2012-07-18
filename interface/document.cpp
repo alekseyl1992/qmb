@@ -139,11 +139,6 @@ Document::Document(QWidget *parent) :
 //    effect->setOpacity(0.5);
 //    box->setGraphicsEffect(effect);
 
-    //синхронизация записи в объект sLog и соответсвующее поле в интерфейсе
-    //DEPRECATED
-    //connect(&sLog, SIGNAL(changed(QString)), this, SLOT(logChanged(QString)));
-    //connect(&sLog, SIGNAL(cleared()), ui->simulationLog, SLOT(clear()));
-
     //убираем заголовок палитры
     QWidget *nullHeader = new QWidget(this);
     ui->toolsDock->setTitleBarWidget(nullHeader);
