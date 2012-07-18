@@ -752,6 +752,7 @@ void Document::onSelectionChanged()
         }
         propModel->setHorizontalHeaderLabels(header);
         propModel->appendRow(line);
+        propModel->setVerticalHeaderLabels(QStringList() << QString::number(id));
 
         ui->propView->setModel(propModel);
 
