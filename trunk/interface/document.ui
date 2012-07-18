@@ -163,12 +163,6 @@ QTreeView::item:!enabled {
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="opaqueResize">
-            <bool>true</bool>
-           </property>
-           <property name="handleWidth">
-            <number>1</number>
-           </property>
            <widget class="QGraphicsView" name="graphicsView">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -192,25 +186,10 @@ QTreeView::item:!enabled {
              <enum>Qt::IntersectsItemShape</enum>
             </property>
            </widget>
-           <widget class="QTreeView" name="propView">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="tabKeyNavigation">
+           <widget class="QTableView" name="propView">
+            <attribute name="verticalHeaderVisible">
              <bool>true</bool>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectItems</enum>
-            </property>
-            <property name="indentation">
-             <number>10</number>
-            </property>
-            <property name="rootIsDecorated">
-             <bool>false</bool>
-            </property>
+            </attribute>
            </widget>
           </widget>
          </widget>
