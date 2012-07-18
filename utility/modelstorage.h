@@ -47,7 +47,8 @@ private:
     QDomElement root; //!< корневой элемент (ех: модель №х )
     QString currentPath;
 
-    QMap<ItemType, QString> typeNames;
+    QMap<ItemType, QString> typeNames; //!< Список типов
+    QMap<QString, QString> propNames; //!< Список XMLName <-> GUIName
 
     void AddLink(logic::model *curModel, int fromID, int toID);
 

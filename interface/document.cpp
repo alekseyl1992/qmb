@@ -754,6 +754,10 @@ void Document::onSelectionChanged()
         propModel->appendRow(line);
 
         ui->propView->setModel(propModel);
+
+        //ресайз колонок
+        for(int i = 0; i < line.count(); ++i)
+            ui->propView->resizeColumnToContents(i);
     }
 }
 

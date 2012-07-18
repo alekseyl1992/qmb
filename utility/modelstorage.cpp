@@ -19,6 +19,11 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     typeNames.insert(ItemType::Collector, "Collector");
     typeNames.insert(ItemType::Separator, "Separator");
     typeNames.insert(ItemType::Link, "Link");
+
+    propNames.insert("id", "ID");
+    propNames.insert("name", "Имя");
+    propNames.insert("period", "Период");
+    propNames.insert("num_of_reqs", "Количество запросов");
 }
 
 ModelStorage::~ModelStorage()
@@ -249,7 +254,12 @@ QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
                 QDomAttr attr = attributes.item(i).toAttr();
                 QString name = attr.name();
                 if(name != "x" && name != "y") //исключаем координаты
-                    props << Property{attr.name(), attr.value(), true};
+                    props << Property
+                    {
+                        propNames[attr.name()], //преобразуем имя в xml в удобочитаемое
+                        attr.value(),
+                        true
+                    };
             }
 
             return props;
