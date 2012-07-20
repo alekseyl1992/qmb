@@ -86,6 +86,9 @@ public:
     void setModified(bool m)
     { bModified = m; }
 
+    //! Возвращает список ID выделенных элементов ModelItem
+    QList<int> selectedIds() const;
+
     bool isDropShadow() const
     { return bDropShadow; }
 public slots:
