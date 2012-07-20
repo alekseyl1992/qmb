@@ -111,6 +111,19 @@ void ModelScene::clear()
     QGraphicsScene::clear();
 }
 
+QList<int> ModelScene::selectedIds() const
+{
+    QList<int> ids;
+    foreach(QGraphicsItem *it, selectedItems())
+    {
+        ModelItem *mIt = qgraphicsitem_cast<ModelItem*>(it);
+        if(mIt)
+            ids << mIt->id();
+    }
+
+    return ids;
+}
+
 void ModelScene::setMode(Mode mode)
 {
     myMode = mode;

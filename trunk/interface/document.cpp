@@ -729,15 +729,16 @@ void Document::onSimulationFinished(int time)
 
 void Document::onSelectionChanged()
 {
-    //TODO передавать сюда сразу id
-    auto selectedItems = scene->selectedItems();
-    if(selectedItems.count())
+    QList<int> selectedIds = scene->selectedIds();
+
+    //TODO
+    delete propModel;
+    propModel = new QStandardItemModel(this);
+
+    foreach(int id, selectedIds)
     {
-        int id = ((ModelItem*)selectedItems[0])->id(); //устранить пиздец
         auto props = storage->getElementProperties(id);
 
-        delete propModel;
-        propModel = new QStandardItemModel(0, props.count(), this);
         QList<QStandardItem *> line;
         QStringList header;
         foreach(ModelStorage::Property prop, props)
@@ -745,16 +746,17 @@ void Document::onSelectionChanged()
             header << prop.name;
             line << new QStandardItem(prop.value);
         }
-        propModel->setHorizontalHeaderLabels(header);
+        //propModel->setHorizontalHeaderLabels(header);
         propModel->appendRow(line);
-        propModel->setVerticalHeaderLabels(QStringList() << QString::number(id));
+        //propModel->setVerticalHeaderLabels(QStringList() << QString::number(id));
 
-        ui->propView->setModel(propModel);
 
-        //ресайз колонок
-        for(int i = 0; i < line.count(); ++i)
-            ui->propView->resizeColumnToContents(i);
     }
+
+    ui->propView->setModel(propModel);
+    //ресайз колонок
+    for(int i = 0; i < propModel->columnCount(); ++i)
+        ui->propView->resizeColumnToContents(i);
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)

@@ -42,7 +42,8 @@ SOURCES += main.cpp \
     interface/modeloptionsdialog.cpp \
     interface/optionsdialog.cpp \
     interface/elementpropertiesdialog.cpp \
-    interface/separatordialog.cpp
+    interface/separatordialog.cpp \
+    interface/propertymodel.cpp
 
 
 HEADERS  += utility/xmlhighlighter.h \
@@ -77,7 +78,8 @@ HEADERS  += utility/xmlhighlighter.h \
     interface/modeloptionsdialog.h \
     interface/optionsdialog.h \
     interface/elementpropertiesdialog.h \
-    interface/separatordialog.h
+    interface/separatordialog.h \
+    interface/propertymodel.h
 
 
 FORMS    += interface/mainwindow.ui \
