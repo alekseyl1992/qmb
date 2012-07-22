@@ -187,8 +187,11 @@ QTreeView::item:!enabled {
             </property>
            </widget>
            <widget class="QTableView" name="propView">
+            <attribute name="horizontalHeaderHighlightSections">
+             <bool>false</bool>
+            </attribute>
             <attribute name="verticalHeaderVisible">
-             <bool>true</bool>
+             <bool>false</bool>
             </attribute>
            </widget>
           </widget>

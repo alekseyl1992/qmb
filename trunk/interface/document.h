@@ -110,6 +110,7 @@ private:
 
     bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
     QString timeToString(int time); //!< Преобразует время из миллисекунд в формат "мм:сс.мс"
+    void resizePropsWidget();
 };
 
 #endif // DOCUMENT_H

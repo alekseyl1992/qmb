@@ -82,8 +82,9 @@ public:
     bool redoModel(); //!< откат модели на один шаг вперед
     void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
-    QList<Property> getElementProperties(int id) const;
-    void setElementProperties(int id, QList<Property>& props);
+    QList<Property> getItemProperties(int id) const;
+    void setItemProperties(int id, QList<Property>& props);
+    QString getItemTypeString(int id) const;
 
     void setItemScript(int id, const QString& script);
     QString getItemScript(int id) const;
