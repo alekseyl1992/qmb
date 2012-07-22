@@ -257,8 +257,8 @@ Document::Document(QWidget *parent) :
     logModel->setHeaderData(2, Qt::Horizontal, "Статус");
     ui->simulationLog->setModel(logModel);
     ui->logDock->resize(0, 360);
-
-    ui->propSceneSplitter->setSizes(QList<int>() << 1000 << 1);
+    //ui->propSceneSplitter->setSizes(QList<int>() << 1000 << 1);
+    ui->propView->hide();
 }
 
 Document::~Document()
@@ -735,28 +735,31 @@ void Document::onSelectionChanged()
     delete propModel;
     propModel = new QStandardItemModel(this);
 
-    foreach(int id, selectedIds)
+    if(!selectedIds.empty())
     {
-        auto props = storage->getElementProperties(id);
-
-        QList<QStandardItem *> line;
+        int id = selectedIds.first();
         QStringList header;
+        header << "Тип" << "ID";
+        QList<QStandardItem *> line;
+        line << new QStandardItem(storage->getItemTypeString(id));
+        line << new QStandardItem(QString::number(id));
+
+        auto props = storage->getItemProperties(id);
         foreach(ModelStorage::Property prop, props)
         {
             header << prop.name;
             line << new QStandardItem(prop.value);
         }
-        //propModel->setHorizontalHeaderLabels(header);
+        propModel->setHorizontalHeaderLabels(header);
         propModel->appendRow(line);
-        //propModel->setVerticalHeaderLabels(QStringList() << QString::number(id));
 
+        ui->propView->setModel(propModel);
+        //ресайз колонок
+        ui->propView->resizeColumnsToContents();
+        ui->propView->resizeRowsToContents();
 
+        resizePropsWidget();
     }
-
-    ui->propView->setModel(propModel);
-    //ресайз колонок
-    for(int i = 0; i < propModel->columnCount(); ++i)
-        ui->propView->resizeColumnToContents(i);
 }
 
 void Document::onWrongLink(ItemType fromType, ItemType toType)
@@ -788,4 +791,19 @@ QString Document::timeToString(int time)
     str.sprintf("%02d:%02d.%03d", min, sec, msec);
 
     return str;
+}
+
+void Document::resizePropsWidget()
+{
+    QTableView *pTableView = ui->propView;
+    pTableView->show();
+
+    const int nNumRows = 1;
+    int nRowHeight = pTableView->rowHeight(0);
+    int nTableHeight =
+        (nNumRows * nRowHeight) +
+        pTableView->horizontalHeader()->height() +
+        2 * pTableView->frameWidth();
+    pTableView->setMinimumHeight(nTableHeight);
+    pTableView->setMaximumHeight(nTableHeight);
 }

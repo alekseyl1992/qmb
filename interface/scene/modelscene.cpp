@@ -365,6 +365,9 @@ void ModelScene::dropEvent(QGraphicsSceneDragDropEvent *event)
     QGraphicsScene::addItem(item);
     item->setPos(event->scenePos());
     emit itemInserted(myItemType, item->id(), item->name(), item->pos().toPoint());
+
+    clearSelection();
+    item->setSelected(true);
     myMode = Mode::MoveItem;
     bModified = true;
 

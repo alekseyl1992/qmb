@@ -20,7 +20,7 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     typeNames.insert(ItemType::Separator, "Separator");
     typeNames.insert(ItemType::Link, "Link");
 
-    propNames.insert("id", "ID");
+    propNames.insert("id", "ID"); //currenly unused
     propNames.insert("name", "Имя");
     propNames.insert("period", "Период");
     propNames.insert("num_of_reqs", "Количество запросов");
@@ -237,7 +237,7 @@ void ModelStorage::fillModel(IFillableModel *iModel) const
     }
 }
 
-QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
+QList<ModelStorage::Property> ModelStorage::getItemProperties(int id) const
 {
     QList<Property> props;
 
@@ -247,19 +247,26 @@ QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
         if(elem.attribute("id").toInt() == id)
         {
             //строим список свойств
-            props << Property{"Тип", elem.nodeName(), false};
             QDomNamedNodeMap attributes = elem.attributes();
-            for(int i = attributes.count()-1; i >= 0; --i) //реверс
+            for(int i = 0; i < attributes.count(); i++)
             {
                 QDomAttr attr = attributes.item(i).toAttr();
                 QString name = attr.name();
-                if(name != "x" && name != "y") //исключаем координаты
-                    props << Property
+
+                if(name != "x" && name != "y" && name != "id" && name != "name") //исключаем координаты и сам id
+                    props.append(
                     {
                         propNames[attr.name()], //преобразуем имя в xml в удобочитаемое
                         attr.value(),
                         true
-                    };
+                    });
+                else if(name == "name") //ставим имя в начало списка
+                    props.prepend(
+                    {
+                        propNames[attr.name()], //преобразуем имя в xml в удобочитаемое
+                        attr.value(),
+                        true
+                    });
             }
 
             return props;
@@ -271,9 +278,24 @@ QList<ModelStorage::Property> ModelStorage::getElementProperties(int id) const
     return props;
 }
 
-void ModelStorage::setElementProperties(int id, QList<Property>& props)
+void ModelStorage::setItemProperties(int id, QList<Property>& props)
 {
     //TODO реализовать возможность отката
+}
+
+
+QString ModelStorage::getItemTypeString(int id) const
+{
+    QDomElement elem = root.firstChildElement();
+    while(!elem.isNull())
+    {
+        if(elem.attribute("id").toInt() == id)
+            return elem.nodeName();
+        else
+            elem = elem.nextSiblingElement();
+    }
+
+    return "NoType";
 }
 
 void ModelStorage::setItemScript(int id, const QString &script)
@@ -475,5 +497,3 @@ void ModelStorage::onLinkRemoved(int idFrom, int idTo)
     history.push_front(root.cloneNode().toElement());
 }
 // end реализация слотов //
-
-
