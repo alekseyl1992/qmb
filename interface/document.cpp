@@ -734,6 +734,7 @@ void Document::onSelectionChanged()
     //TODO
     delete propModel;
     propModel = new QStandardItemModel(this);
+    connect(propModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemPropChanged(QStandardItem*)));
 
     if(!selectedIds.empty())
     {
@@ -757,6 +758,17 @@ void Document::onSelectionChanged()
         //ресайз колонок
         ui->propView->resizeColumnsToContents();
         ui->propView->resizeRowsToContents();
+    }
+}
+
+void Document::itemPropChanged(QStandardItem *item)
+{
+    auto ids = scene->selectedIds();
+    if(!ids.empty())
+    {
+        QString value = item->text();
+        QString prop = propModel->horizontalHeaderItem(item->column())->text();
+        storage->setItemProperty(ids.first(), prop, value);
     }
 }
 

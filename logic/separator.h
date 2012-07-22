@@ -14,7 +14,7 @@ namespace logic
     class separator : public object
     {
     public:
-        separator(int id, QScriptEngine* engine = new QScriptEngine());
+        separator(int id, QString script);
         separator(separator& sep);
 
         virtual ~separator();
@@ -25,7 +25,7 @@ namespace logic
         virtual bool is_completed();
 
     private:
-        QScriptEngine* script_engine;
+        QScriptEngine* engine;
         QString script;
     };
 

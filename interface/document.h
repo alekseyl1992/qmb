@@ -85,7 +85,9 @@ private slots:
     void onSimulationPaused(int time);
     void onSimulationRestored(int time);
     void onSimulationFinished(int time);
+
     void onSelectionChanged();
+    void itemPropChanged(QStandardItem* item);
 
     void onWrongLink(ItemType fromType, ItemType toType); //!< Срабатывает при попытке добавления неподдерживаемого типа связи. @see supportedLinks
     void onModelError(logic::exceptions::LogicException& ex); //!< Срабатывает при возникновению ошибки в модели
@@ -111,6 +113,7 @@ private:
     bool tryApplyCode(); //!< Применение кода с вкладки Код к модели
     QString timeToString(int time); //!< Преобразует время из миллисекунд в формат "мм:сс.мс"
     void resizePropsWidget();
+
 };
 
 #endif // DOCUMENT_H

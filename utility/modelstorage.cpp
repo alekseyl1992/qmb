@@ -20,10 +20,13 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     typeNames.insert(ItemType::Separator, "Separator");
     typeNames.insert(ItemType::Link, "Link");
 
-    propNames.insert("id", "ID"); //currenly unused
+    propNames.insert("id", "ID");
     propNames.insert("name", "Имя");
     propNames.insert("period", "Период");
     propNames.insert("num_of_reqs", "Количество запросов");
+    propNames.insert("script", "Скрипт");
+
+    defValues.insert("script", "outputID = randID");
 }
 
 ModelStorage::~ModelStorage()
@@ -43,6 +46,7 @@ logic::model* ModelStorage::getModel(bool create)
 
         while (!ProcessingItem.isNull())
         {
+            //натуральное насилие над Qt, зачем пытаться узнать те свойства, которых может не быть?
             int period, id, fromID, toID, num_of_reqs;
             period = ProcessingItem.attribute("period").toInt();
             id = ProcessingItem.attribute("id").toInt();
@@ -74,8 +78,11 @@ logic::model* ModelStorage::getModel(bool create)
                     break;
 
                 case ItemType::Separator:
-                    myModel->add_object(new logic::separator(id));
+                {
+                    QString script = ProcessingItem.attribute("script");
+                    myModel->add_object(new logic::separator(id, script));
                     break;
+                } //да, Creator не любит эти скобочки, хотя разметка где-то настраивается..
 
                 case ItemType::Link:
                     AddLink(myModel,fromID,toID);
@@ -278,9 +285,26 @@ QList<ModelStorage::Property> ModelStorage::getItemProperties(int id) const
     return props;
 }
 
-void ModelStorage::setItemProperties(int id, QList<Property>& props)
+void ModelStorage::setItemProperty(int id, QString prop, QString value)
 {
     //TODO реализовать возможность отката
+    //TODO реализовать проверки валидности введённых значений
+    //проверку на тип значения лучше сделать раньше
+    //скажем, передавать тип свойства в структуре Property
+
+    QDomElement elem = root.firstChildElement();
+    while(!elem.isNull())
+    {
+        if(elem.attribute("id").toInt() == id)
+        {
+            //переводим имя свойства GUI -> XML
+            prop = propNames.key(prop);
+
+            return elem.setAttribute(prop, value);
+        }
+        else
+            elem = elem.nextSiblingElement();
+    }
 }
 
 
@@ -366,7 +390,8 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
         case ItemType::Collector:
             break; //свойства будут
         case ItemType::Separator:
-            break; //свойства будут
+            InsertedItem.setAttribute("script", defValues["script"]);
+            break; //свойства будут. таки не будут, а есть!
         default:
             break;
     };
