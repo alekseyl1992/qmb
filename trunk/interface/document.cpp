@@ -258,7 +258,7 @@ Document::Document(QWidget *parent) :
     ui->simulationLog->setModel(logModel);
     ui->logDock->resize(0, 360);
     //ui->propSceneSplitter->setSizes(QList<int>() << 1000 << 1);
-    ui->propView->hide();
+    resizePropsWidget();
 }
 
 Document::~Document()
@@ -757,8 +757,6 @@ void Document::onSelectionChanged()
         //ресайз колонок
         ui->propView->resizeColumnsToContents();
         ui->propView->resizeRowsToContents();
-
-        resizePropsWidget();
     }
 }
 
@@ -796,14 +794,12 @@ QString Document::timeToString(int time)
 void Document::resizePropsWidget()
 {
     QTableView *pTableView = ui->propView;
-    pTableView->show();
-
-    const int nNumRows = 1;
-    int nRowHeight = pTableView->rowHeight(0);
+    int nRowHeight = pTableView->verticalHeader()->defaultSectionSize();
     int nTableHeight =
-        (nNumRows * nRowHeight) +
-        pTableView->horizontalHeader()->height() +
+        (2 * nRowHeight) +
+        /*pTableView->horizontalHeader()->height() +*/
         2 * pTableView->frameWidth();
+
     pTableView->setMinimumHeight(nTableHeight);
     pTableView->setMaximumHeight(nTableHeight);
 }
