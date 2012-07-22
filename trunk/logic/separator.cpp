@@ -1,21 +1,23 @@
 ﻿#include "separator.h"
 
 #include <time.h>
+#include <algorithm>
 
 namespace logic
 {
-    separator::separator(int id, QScriptEngine* engine)
+    separator::separator(int id, QString script)
         : object(ItemType::Separator, id),
-          script_engine(engine)
+          engine(new QScriptEngine()),
+          script(script)
     { }
 
     separator::separator(separator &sep) :
-        object(sep), script_engine(sep.script_engine), script(sep.script)
+        object(sep), engine(new QScriptEngine()), script(sep.script)
     { }
 
     separator::~separator()
     {
-        delete script_engine;
+        delete engine;
     }
 
     request* separator::get_request()
@@ -47,16 +49,30 @@ namespace logic
             this->add(input()->get_request());
         }
 
-        //srand(time(NULL));
-        //const int i = rand() % outputs_count();
+        //TODO где-то нужно (в Validator) реализовать проверку скриптов на ошибки
 
-        script = QString("Math.floor(Math.random()*%0)").arg(outputs_count());
+        //ниже - три строки маразма, они призваны сократить реализацию рандомного выбора выхода
+        //но заччем этот кусок кода, если он может и вовсе не использоваться?
+        //надо бы оформить его ввиде JS + C++ функции
+        std::list<object*>::iterator obegin = outputs.begin();
+        advance(obegin, rand()%outputs.size());
+        int randID = (*obegin)->get_id(); //случайный выход
 
-        QScriptValue val = script_engine->evaluate(script);
-        int i = val.toInteger();
+        engine->globalObject().setProperty("time", QScriptValue(get_event_time()));
+        engine->globalObject().setProperty("randID", QScriptValue(randID));
+        engine->globalObject().setProperty("outputsCount", QScriptValue(outputs.size()));
 
-        auto it = outputs.begin();
-        advance(it, i);
+        QScriptValue returnValue = engine->evaluate(script); //здесь есть метод isError() or smth
+        int outputID = engine->globalObject().property("outputID").toNumber();
+
+        //теперь нужно преобразовать id элемента в его id в списке outputs
+        auto it = std::find_if(outputs.begin(), outputs.end(), [outputID](const object *obj)
+        {
+            return obj->get_id() == outputID;
+        });
+
+        //auto it = outputs.begin();
+        //advance(it, i);
 
         //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
         if (this->is_moveable() && (*it)->is_free() &&

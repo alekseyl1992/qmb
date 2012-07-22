@@ -49,6 +49,10 @@ private:
 
     QMap<ItemType, QString> typeNames; //!< Список типов
     QMap<QString, QString> propNames; //!< Список XMLName <-> GUIName
+    QMap<QString, QString> defValues; //!< Значения аттрибутов по-умолчанию
+    //впринципе можно объединить две карты выше (сделать массив структур из трёх строк)
+    //но в этом случае придётся писать свои методы для поиска значений в нём
+    //скорей всего я (или Костя) сделаю это, нужно ведь ещё хранить типы свойств и факт из изменяемости
 
     void AddLink(logic::model *curModel, int fromID, int toID);
 
@@ -83,7 +87,7 @@ public:
     void fillModel(IFillableModel *iModel) const; //!< заполнение абстрактной модели
 
     QList<Property> getItemProperties(int id) const;
-    void setItemProperties(int id, QList<Property>& props);
+    void setItemProperty(int id, QString prop, QString value);
     QString getItemTypeString(int id) const;
 
     void setItemScript(int id, const QString& script);
