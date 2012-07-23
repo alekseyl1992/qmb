@@ -5,8 +5,8 @@
 
 namespace logic
 {
-    separator::separator(int id, QString script)
-        : object(ItemType::Separator, id),
+    separator::separator(std::string name, int id, QString script)
+        : object(ItemType::Separator, name, id),
           engine(new QScriptEngine()),
           script(script)
     { }
@@ -99,12 +99,5 @@ namespace logic
             (*it)->add(this->get_request());
         }
     }
-
-    bool separator::is_completed()
-    {
-        return is_free();
-    }
-
-
 
 } //end namespace logic

@@ -15,7 +15,7 @@
 #ifndef MODELSTORAGE_H
 #define MODELSTORAGE_H
 
-#include "../logic/model.h"
+#include "../logic/logic.h"
 #include "common.h"
 #include "ifillablemodel.h"
 

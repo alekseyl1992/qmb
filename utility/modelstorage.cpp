@@ -58,29 +58,29 @@ logic::model* ModelStorage::getModel(bool create)
             switch(typeId)
             {
                 case ItemType::Generator:
-                    myModel->add_object(new logic::generator(id,period,num_of_reqs));
+                    myModel->add_object(new logic::generator("", id,period,num_of_reqs));
                     break;
 
                 case ItemType::Queue:
-                    myModel->add_object(new logic::queue(id));
+                    myModel->add_object(new logic::queue("", id));
                     break;
 
                 case ItemType::Handler:
-                    myModel->add_object(new logic::handler(id,period));
+                    myModel->add_object(new logic::handler("", id,period));
                     break;
 
                 case ItemType::Terminator:
-                    myModel->add_object(new logic::terminator(id,period));
+                    myModel->add_object(new logic::terminator("", id,period));
                     break;
 
                 case ItemType::Collector:
-                    myModel->add_object(new logic::collector(id));
+                    myModel->add_object(new logic::collector("", id));
                     break;
 
                 case ItemType::Separator:
                 {
                     QString script = ProcessingItem.attribute("script");
-                    myModel->add_object(new logic::separator(id, script));
+                    myModel->add_object(new logic::separator("", id, script));
                     break;
                 } //да, Creator не любит эти скобочки, хотя разметка где-то настраивается..
 

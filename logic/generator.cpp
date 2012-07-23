@@ -6,8 +6,8 @@
 
 namespace logic
 {
-    generator::generator(int id, int period, ull_t num_requests, bool is_random, bool is_infinite):
-        object(ItemType::Generator, id),
+    generator::generator(std::string name, int id, int period, ull_t num_requests, bool is_random, bool is_infinite):
+        object(ItemType::Generator, name, id),
         generating_period(period),
         number_of_requests_to_generate(num_requests),
         random_generating(is_random),
@@ -76,6 +76,11 @@ namespace logic
 
         moveable_request_flag = false;
         return cur_req;
+    }
+
+    void generator::move_request()
+    {
+        this->generating();
     }
 
 } //end namespace logic

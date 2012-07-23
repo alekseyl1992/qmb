@@ -3,19 +3,20 @@
 
 namespace logic
 {
-    object::object(ItemType type, int id) :
+    object::object(ItemType type, std::string _name, int id) :
         item_type(type),
+        name(_name),
         parent(nullptr),
         id(id),
         global_id(id),
         cur_req(nullptr),
         moveable_request_flag(false),
-        freedom_flag(true),
-        name("")
+        freedom_flag(true)
     { }
 
     object::object(const object &obj):
         item_type(obj.item_type),
+        name(obj.name),
         parent(obj.parent),
         id(obj.id),
         global_id(obj.global_id),
@@ -23,8 +24,7 @@ namespace logic
         outputs(obj.outputs),
         cur_req(obj.cur_req),
         moveable_request_flag(obj.moveable_request_flag),
-        freedom_flag(obj.freedom_flag),
-        name(obj.name)
+        freedom_flag(obj.freedom_flag)
     { }
 
     object::~object()
@@ -97,6 +97,11 @@ namespace logic
         {
             this->add(input()->get_request());
         }
+    }
+
+    bool object::is_completed()
+    {
+        return is_free();
     }
 
     int object::get_event_time() const

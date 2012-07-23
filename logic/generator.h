@@ -18,7 +18,7 @@ namespace logic
     class generator : public object
     {
     public:
-        generator(int id = 0, int period = 0, ull_t num_requests = 0, bool is_random = false, bool is_infinite = false);
+        generator(std::string name, int id = 0, int period = 0, ull_t num_requests = 0, bool is_random = false, bool is_infinite = false);
         generator(const generator& gen);
         virtual ~generator();
 
@@ -34,7 +34,8 @@ namespace logic
         void generate_new_request(ull_t r_id);											//!< Генерирует новый запрос
         void generating();
         virtual request* get_request();													//!< Реализация виртуальной функции базового класса object
-        virtual void add(request*) { }													//!< Реализация виртуальной функции базового класса object
+        virtual void add(request*) { }                                                  //!< Реализация виртуальной функции базового класса object
+        virtual void move_request();
 
         virtual bool is_completed()
         { return count_of_generated_requests == number_of_requests_to_generate; }

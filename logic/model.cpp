@@ -13,22 +13,6 @@ namespace logic
         start_time(0)
     { }
 
-    model::model(const model& m) :
-        generators(m.generators),
-        queues(m.queues),
-        handlers(m.handlers),
-        terminators(m.terminators),
-
-        objects(m.objects),
-        errors(m.errors),
-        threads(m.threads),
-
-        simulate_flag(m.simulate_flag),
-        stop_flag(m.stop_flag),
-        pause_flag(m.pause_flag),
-        start_time(m.start_time)
-    { }
-
     model::~model()
     {
         std::for_each(objects.begin(), objects.end(), [](object* obj)
@@ -62,6 +46,11 @@ namespace logic
         return all_completed || !simulate_flag;
     }
 
+    bool model::is_simulating() const
+    {
+        return simulate_flag && !stop_flag;
+    }
+
     void model::try_pausing() const
     {
         for (;pause_flag;)
@@ -70,27 +59,25 @@ namespace logic
         }
     }
 
+    bool model::is_paused() const
+    {
+        return pause_flag;
+    }
+
+    ull_t model::get_start_time() const
+    {
+        return start_time;
+    }
+
     void model::generating_th()
     {
         for (object* gen : generators)
         {
             threads.push_back(new std::thread([this, gen]()
             {
-                dynamic_cast<generator*>(gen)->generating();
+                gen->move_request(); //invokes generating()
             }) );
         }
-    }
-
-    void model::new_thread(object* obj)
-    {
-        threads.push_back(new std::thread([this, obj]()
-        {
-            while (is_simulating())
-            {
-                try_pausing(); //если нажата пауза
-                obj->move_request();
-            }
-        }) );
     }
 
     bool model::thread_necessary(object *obj)
@@ -109,6 +96,18 @@ namespace logic
                 res = true;
         }
         return res;
+    }
+
+    void model::new_thread(object* obj)
+    {
+        threads.push_back(new std::thread([this, obj]()
+        {
+            while (is_simulating())
+            {
+                try_pausing(); //если нажата пауза
+                obj->move_request();
+            }
+        }) );
     }
 
     void model::threading()

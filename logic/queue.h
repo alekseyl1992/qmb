@@ -19,7 +19,7 @@ namespace logic
     class queue : public object
     {
     public:
-        queue(int id = 0, bool from_top = true);
+        queue(std::string name, int id = 0, bool from_top = true);
         queue(const queue& q);
         virtual ~queue();
 

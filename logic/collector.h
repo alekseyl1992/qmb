@@ -10,7 +10,7 @@ namespace logic
     class collector : public object
     {
     public:
-        collector(int id);
+        collector(std::string name, int id);
         collector(collector& col);
 
         virtual ~collector() { }
@@ -18,7 +18,6 @@ namespace logic
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();
-        virtual bool is_completed();
     };
 
 } //end namespace logic

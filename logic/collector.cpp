@@ -4,8 +4,8 @@
 
 namespace logic
 {
-    collector::collector(int id) :
-        object(ItemType::Collector, id)
+    collector::collector(std::string name, int id) :
+        object(ItemType::Collector, name, id)
     { }
 
     collector::collector(collector &col) :
@@ -44,12 +44,5 @@ namespace logic
             this->add((*it)->get_request());
         }
     }
-
-    bool collector::is_completed()
-    {
-        return is_free();
-    }
-
-
 
 } //end namespace logic
