@@ -14,6 +14,9 @@ namespace logic
             LogicException(const char* const & message)
                 : std::logic_error(message)
             { }
+            LogicException(const std::string& message)
+                : std::logic_error(message)
+            { }
         };
 
         class NoGeneratorsException : public LogicException
@@ -60,6 +63,22 @@ namespace logic
             { }
             TooBigIDException(const char* const & message)
                 : LogicException(message)
+            { }
+        };
+
+        class JSSepOutputNotSpecified : public LogicException
+        {
+        public:
+            JSSepOutputNotSpecified(const std::string& sepName)
+                : LogicException(std::string("В скрипте ") + sepName + " не определены outputID или outputName")
+            { }
+        };
+
+        class JSScriptError : public LogicException
+        {
+        public:
+            JSScriptError(const std::string& sepName, const std::string& error)
+                : LogicException(std::string("В скрипте ") + sepName + " произошла ошибка:\n" + error)
             { }
         };
 	}
