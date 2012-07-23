@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='Windows-1251'?>
 <!DOCTYPE qmodel>
 <model name="Пример модели">
-   <Generator x="-314" y="-80" period="500" num_of_reqs="10" id="1"/>
-   <Queue x="-136" y="-80" id="2"/>
-   <Handler x="56" y="-80" period="600" id="3"/>
-   <Terminator x="247" y="-80" period="0" id="4"/>
-   <Link fromID="1" toID="2" from="Generator" to="Queue"/>
-   <Link fromID="2" toID="3" from="Queue" to="Handler"/>
-   <Link fromID="3" toID="4" from="Handler" to="Terminator"/>
+   <Generator x="-406" y="-102" period="500" num_of_reqs="10" id="1" name="Генератор 1"/>
+   <Queue x="-157" y="-98" id="2" name="Очередь 1"/>
+   <Terminator x="91" y="-101" period="0" id="3" name="Терминатор 1"/>
+   <Link fromID="1" toID="2"/>
+   <Link fromID="2" toID="3"/>
 </model>
