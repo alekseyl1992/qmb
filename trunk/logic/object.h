@@ -25,7 +25,7 @@ namespace logic
         Q_OBJECT
 
     public:
-        object(ItemType type = ItemType::NoType, int id = 0);
+        object(ItemType type = ItemType::NoType, std::string _name = "", int id = 0);
         object(const object& obj);
         virtual ~object();
 
@@ -69,12 +69,13 @@ namespace logic
         virtual request* get_request() = 0;		//!< "Вытаскивает" запрос из входа
         virtual void add(request* req) = 0;		//!< Добавление запроса в текущий объект
         virtual void move_request();            //!< Служит для вызова виртуальной функции add
-        virtual bool is_completed() = 0;        //!< Служит для проверки объекта на завершенность работы
+        virtual bool is_completed();            //!< Служит для проверки объекта на завершенность работы
 
     protected:
         int get_event_time() const;
 
         ItemType item_type;
+        std::string name;
         model* parent;
         int id;
         int global_id;
@@ -86,8 +87,6 @@ namespace logic
         bool freedom_flag;
         std::mutex item_mutex;
 
-        //properties
-        std::string name;
     };
 
 } //end namespace logic

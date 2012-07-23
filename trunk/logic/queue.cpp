@@ -3,8 +3,8 @@
 
 namespace logic
 {
-    queue::queue(int id, bool from_top):
-        object(ItemType::Queue, id),
+    queue::queue(std::string name, int id, bool from_top):
+        object(ItemType::Queue, name, id),
         to_get_from_top(from_top)
     { }
 

@@ -17,7 +17,7 @@ namespace logic
     class terminator : public object
     {
     public:
-        terminator(int id = 0, int period = 0);
+        terminator(std::string name, int id = 0, int period = 0);
         terminator(const terminator& t);
         virtual ~terminator();
 
@@ -26,9 +26,6 @@ namespace logic
 
         virtual void add(request* req);                 //!< Реализация виртуальной функции базового класса object
         virtual request* get_request();					//!< Реализация виртуальной функции базового класса object
-
-        virtual bool is_completed()
-        { return is_free(); }
 
     private:
         void terminate(request* req);					//!< Функция, терминирующая запрос

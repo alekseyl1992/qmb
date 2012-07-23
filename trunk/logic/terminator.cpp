@@ -3,8 +3,8 @@
 
 namespace logic
 {
-    terminator::terminator(int id, int period) :
-        object(ItemType::Terminator, id),
+    terminator::terminator(std::string name, int id, int period) :
+        object(ItemType::Terminator, name, id),
         terminating_period(period),
         count_of_terminated_requests(0)
     { }

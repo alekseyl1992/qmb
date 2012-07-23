@@ -30,6 +30,7 @@ public:
 signals:
     //! Вызывается из validateLink() в случае невозможности создать связь
     void wrongLink(ItemType fromType, ItemType toType);
+    //! Вызывается из validateModel() в случае наличия логических ошибок в модели
     void modelError(logic::exceptions::LogicException& ex);
 };
 

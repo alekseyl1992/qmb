@@ -17,7 +17,7 @@ namespace logic
     class handler : public object
     {
     public:
-        handler(int id = 0, int _handlePeriod = 0);
+        handler(std::string name, int id = 0, int _handlePeriod = 0);
         handler(const handler& h);
         virtual ~handler();
 
@@ -26,9 +26,6 @@ namespace logic
 
         virtual void add(request* req);               //!< Реализация виртуальной функции базового класса object
         virtual request* get_request();				  //!< Реализация виртуальной функции базового класса object
-
-        virtual bool is_completed()
-        { return is_free(); }
 
     private:
         void handle(request* req);					  //!< Функция, обрабатывающая запрос

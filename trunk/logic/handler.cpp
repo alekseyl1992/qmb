@@ -3,8 +3,8 @@
 
 namespace logic
 {
-    handler::handler(int id, int _handlePeriod):
-        object(ItemType::Handler, id),
+    handler::handler(std::string name, int id, int _handlePeriod):
+        object(ItemType::Handler, name, id),
         handling_period(_handlePeriod),
         count_of_handled_requests(0)
     { }
