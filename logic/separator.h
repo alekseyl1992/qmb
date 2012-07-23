@@ -2,6 +2,7 @@
 #define COLLECTOR_H
 
 #include <list>
+#include <functional>
 #include <QtScript>
 
 #include "object.h"
@@ -13,6 +14,8 @@ namespace logic
     //не должны крутиться в потоках.
     class separator : public object
     {
+        Q_OBJECT
+
     public:
         separator(std::string name, int id, QString script);
         separator(separator& sep);
@@ -23,10 +26,14 @@ namespace logic
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();    //работает по принципу "на выход"
+        int some;
 
     private:
         QScriptEngine* engine;
         QString script;
+
+    public slots:
+        int randID(); //возвращает ID случайного выхода
     };
 
 } //end namespace logic

@@ -53,34 +53,35 @@ logic::model* ModelStorage::getModel(bool create)
             fromID = ProcessingItem.attribute("fromID").toInt();
             toID = ProcessingItem.attribute("toID").toInt();
             num_of_reqs = ProcessingItem.attribute("num_of_reqs").toInt();
+            std::string name = ProcessingItem.attribute("name").toStdString();
 
             ItemType typeId = typeNames.key(ProcessingItem.nodeName());
             switch(typeId)
             {
                 case ItemType::Generator:
-                    myModel->add_object(new logic::generator("", id,period,num_of_reqs));
+                    myModel->add_object(new logic::generator(name, id,period,num_of_reqs));
                     break;
 
                 case ItemType::Queue:
-                    myModel->add_object(new logic::queue("", id));
+                    myModel->add_object(new logic::queue(name, id));
                     break;
 
                 case ItemType::Handler:
-                    myModel->add_object(new logic::handler("", id,period));
+                    myModel->add_object(new logic::handler(name, id,period));
                     break;
 
                 case ItemType::Terminator:
-                    myModel->add_object(new logic::terminator("", id,period));
+                    myModel->add_object(new logic::terminator(name, id,period));
                     break;
 
                 case ItemType::Collector:
-                    myModel->add_object(new logic::collector("", id));
+                    myModel->add_object(new logic::collector(name, id));
                     break;
 
                 case ItemType::Separator:
                 {
                     QString script = ProcessingItem.attribute("script");
-                    myModel->add_object(new logic::separator("", id, script));
+                    myModel->add_object(new logic::separator(name, id, script));
                     break;
                 } //да, Creator не любит эти скобочки, хотя разметка где-то настраивается..
 

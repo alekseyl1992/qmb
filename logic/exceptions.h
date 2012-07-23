@@ -70,7 +70,7 @@ namespace logic
         {
         public:
             JSSepOutputNotSpecified(const std::string& sepName)
-                : LogicException(std::string("В скрипте ") + sepName + " не определены outputID или outputName")
+                : LogicException(std::string("В скрипте ") + sepName + " не определена переменная output")
             { }
         };
 

@@ -1,14 +1,13 @@
 ﻿#include "separator.h"
 #include "exceptions.h"
 #include <time.h>
-#include <algorithm>
 
 namespace logic
 {
     separator::separator(std::string name, int id, QString script)
         : object(ItemType::Separator, name, id),
           engine(new QScriptEngine()),
-          script(script)
+          script(script), some(3)
     { }
 
     separator::separator(separator &sep) :
@@ -24,45 +23,37 @@ namespace logic
     {
         //TODO где-то нужно (в Validator) реализовать проверку скриптов на ошибки
 
-        //ниже - три строки маразма, они призваны сократить реализацию рандомного выбора выхода
-        //но заччем этот кусок кода, если он может и вовсе не использоваться?
-        //надо бы оформить его ввиде JS + C++ функции
-        std::list<object*>::iterator obegin = outputs.begin();
-        advance(obegin, rand()%outputs.size());
-        int randID = (*obegin)->get_id(); //случайный выход
-
+        engine->setGlobalObject(engine->newQObject(this));
         engine->globalObject().setProperty("time", QScriptValue(get_event_time()));
-        engine->globalObject().setProperty("randID", QScriptValue(randID));
         engine->globalObject().setProperty("outputsCount", QScriptValue(outputs.size()));
 
         QScriptValue returnValue = engine->evaluate(script);
         if(returnValue.isError())
             throw exceptions::JSScriptError(name, returnValue.toString().toStdString());
 
-        QScriptValue sOutputID = engine->globalObject().property("outputID");
-        QScriptValue sOutputName = engine->globalObject().property("outputName");
+        QScriptValue sOutput = engine->globalObject().property("output");
 
         std::list<object*>::iterator it;
 
-        if(!sOutputID.isUndefined()) //id указан
+        if(sOutput.isNumber()) //id указан
         {
             //теперь нужно преобразовать id элемента в его id в списке outputs
-            int outputID = sOutputID.toNumber();
+            int outputID = sOutput.toNumber();
             it = std::find_if(outputs.begin(), outputs.end(), [outputID](const object *obj)
             {
                 return obj->get_id() == outputID;
             });
         }
-        else if(!sOutputName.isUndefined()) //указано имя
+        else if(sOutput.isString()) //указано имя
         {
             //теперь нужно преобразовать id элемента в его id в списке outputs
-            std::string outputName = sOutputName.toString().toStdString();
+            std::string outputName = sOutput.toString().toStdString();
             it = std::find_if(outputs.begin(), outputs.end(), [outputName](const object *obj)
             {
                 return obj->get_name() == outputName;
             });
         }
-        else
+        else //родила царица в ночь, ни то сына, ни то дочь..
             throw exceptions::JSSepOutputNotSpecified(name);
 
         return *it;
@@ -105,6 +96,13 @@ namespace logic
         {
             way->add(this->get_request());
         }
+    }
+
+    int separator::randID()
+    {
+        std::list<object*>::iterator obegin = outputs.begin();
+        advance(obegin, rand() % outputs.size());
+        return (*obegin)->get_id(); //случайный выход
     }
 
 } //end namespace logic
