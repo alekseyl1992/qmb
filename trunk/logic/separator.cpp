@@ -1,5 +1,5 @@
 ﻿#include "separator.h"
-
+#include "exceptions.h"
 #include <time.h>
 #include <algorithm>
 
@@ -62,17 +62,35 @@ namespace logic
         engine->globalObject().setProperty("randID", QScriptValue(randID));
         engine->globalObject().setProperty("outputsCount", QScriptValue(outputs.size()));
 
-        QScriptValue returnValue = engine->evaluate(script); //здесь есть метод isError() or smth
-        int outputID = engine->globalObject().property("outputID").toNumber();
+        QScriptValue returnValue = engine->evaluate(script);
+        if(returnValue.isError())
+            throw exceptions::JSScriptError(name, returnValue.toString().toStdString());
 
-        //теперь нужно преобразовать id элемента в его id в списке outputs
-        auto it = std::find_if(outputs.begin(), outputs.end(), [outputID](const object *obj)
+        QScriptValue sOutputID = engine->globalObject().property("outputID");
+        QScriptValue sOutputName = engine->globalObject().property("outputName");
+
+        std::list<object*>::iterator it;
+
+        if(!sOutputID.isUndefined()) //id указан
         {
-            return obj->get_id() == outputID;
-        });
-
-        //auto it = outputs.begin();
-        //advance(it, i);
+            //теперь нужно преобразовать id элемента в его id в списке outputs
+            int outputID = sOutputID.toNumber();
+            it = std::find_if(outputs.begin(), outputs.end(), [outputID](const object *obj)
+            {
+                return obj->get_id() == outputID;
+            });
+        }
+        else if(!sOutputName.isUndefined()) //указано имя
+        {
+            //теперь нужно преобразовать id элемента в его id в списке outputs
+            std::string outputName = sOutputName.toString().toStdString();
+            it = std::find_if(outputs.begin(), outputs.end(), [outputName](const object *obj)
+            {
+                return obj->get_name() == outputName;
+            });
+        }
+        else
+            throw exceptions::JSSepOutputNotSpecified(name);
 
         //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
         if (this->is_moveable() && (*it)->is_free() &&

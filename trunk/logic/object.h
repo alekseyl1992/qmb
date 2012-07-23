@@ -38,6 +38,9 @@ namespace logic
         int get_global_id() const
         { return global_id; }
 
+        std::string get_name() const
+        { return name; }
+
         bool is_moveable() const				//!< Проверяет, можно ли из входного объекта "вытащить" запрос
         { return moveable_request_flag; }
 
