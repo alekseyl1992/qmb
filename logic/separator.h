@@ -19,6 +19,7 @@ namespace logic
 
         virtual ~separator();
 
+        object* find_way();
         virtual request* get_request();
         virtual void add(request* req);
         virtual void move_request();    //работает по принципу "на выход"

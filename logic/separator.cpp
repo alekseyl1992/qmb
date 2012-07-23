@@ -20,35 +20,8 @@ namespace logic
         delete engine;
     }
 
-    request* separator::get_request()
+    object* separator::find_way()
     {
-        std::lock_guard<std::mutex> lk(item_mutex);
-
-        moveable_request_flag = false;
-        freedom_flag = true;
-        return cur_req;
-    }
-
-    void separator::add(request* req)
-    {
-        std::lock_guard<std::mutex> lk(item_mutex);
-
-        freedom_flag = false;
-        cur_req = req;
-        moveable_request_flag = true;
-
-        qDebug() << cur_req->get_id().str_reqID().c_str() << "is in Separator " << get_id();
-    }
-
-    void separator::move_request()
-    {
-        //вытаскиваем запрос из input()
-        if (input()->is_moveable() && this->is_free() &&
-                 input()->get_type() != ItemType::Separator)
-        {
-            this->add(input()->get_request());
-        }
-
         //TODO где-то нужно (в Validator) реализовать проверку скриптов на ошибки
 
         //ниже - три строки маразма, они призваны сократить реализацию рандомного выбора выхода
@@ -92,11 +65,45 @@ namespace logic
         else
             throw exceptions::JSSepOutputNotSpecified(name);
 
-        //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
-        if (this->is_moveable() && (*it)->is_free() &&
-                (*it)->get_type() != ItemType::Collector)
+        return *it;
+    }
+
+    request* separator::get_request()
+    {
+        std::lock_guard<std::mutex> lk(item_mutex);
+
+        moveable_request_flag = false;
+        freedom_flag = true;
+        return cur_req;
+    }
+
+    void separator::add(request* req)
+    {
+        std::lock_guard<std::mutex> lk(item_mutex);
+
+        freedom_flag = false;
+        cur_req = req;
+        moveable_request_flag = true;
+
+        qDebug() << cur_req->get_id().str_reqID().c_str() << "is in Separator " << get_id();
+    }
+
+    void separator::move_request()
+    {
+        //вытаскиваем запрос из input()
+        if (input()->is_moveable() && this->is_free() &&
+                 input()->get_type() != ItemType::Separator)
         {
-            (*it)->add(this->get_request());
+            this->add(input()->get_request());
+        }
+
+        object* way = find_way();
+
+        //помещаем запрос в один из выходов в случае если на выходе НЕ коллектор
+        if (this->is_moveable() && way->is_free() &&
+                way->get_type() != ItemType::Collector)
+        {
+            way->add(this->get_request());
         }
     }
 
