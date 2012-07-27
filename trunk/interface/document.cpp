@@ -21,7 +21,7 @@
 #include <QFileDialog>
 #include <QToolBar>
 #include <QSettings>
-#include <QGraphicsProxyWidget>
+#include <exception>
 
 Document::Document(QWidget *parent) :
     QDialog(parent), ui(new Ui::Document), bSimulating(false), bPaused(false), bClosing(false)
@@ -309,7 +309,15 @@ void Document::startSimulation()
         connect(model, SIGNAL(simulationRestored(int)), this, SLOT(onSimulationRestored(int)));
         connect(model, SIGNAL(simulationFinished(int)), this, SLOT(onSimulationFinished(int)));
 
-        model->simulation_start();
+
+        try
+        {
+            model->simulation_start();
+        }
+        catch(logic::exceptions::JSScriptError)
+        {
+            Unimplemented(this);
+        }
     }
 }
 
@@ -667,15 +675,29 @@ void Document::onSimulationStopped(int time)
 
         //storage->freeModel();
 
+        //узнаём причину остановки
+        auto stopReason = storage->getModel()->get_stop_reason();
+        if(stopReason != std::exception_ptr()) //если ошибка есть
+        {
+            try
+            {
+                std::rethrow_exception(stopReason);
+            }
+            catch(const logic::exceptions::LogicException& e)
+            {
+                QMessageBox::critical(this, "Произошла ошибка в ходе симуляции", e.what());
+            }
+        }
+        else
+        {
+            int id = QMessageBox::question(
+                        this, windowTitle(),
+                        "Симуляция прервана!\nПоказать статистику?",
+                        QMessageBox::Yes, QMessageBox::No);
 
-        int id = QMessageBox::question(
-                    this, windowTitle(),
-                    "Симуляция прервана!\nПоказать статистику?",
-                    QMessageBox::Yes, QMessageBox::No);
-
-
-        if(id == QMessageBox::Yes)
-            QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+            if(id == QMessageBox::Yes)
+                QMessageBox::information(this, windowTitle(), "Здесь будет отображено окно с собранной статистикой.");
+        }
     }
 }
 
@@ -768,7 +790,15 @@ void Document::itemPropChanged(QStandardItem *item)
     {
         QString value = item->text();
         QString prop = propModel->horizontalHeaderItem(item->column())->text();
-        storage->setItemProperty(ids.first(), prop, value);
+
+        if(prop == "Скрипт") //наверное нужно перенести проверку в ModelStorage, он знает что такое "script", а оттуда уже кидать сюда исключение..
+        {
+            QString error = Validator::inst().checkSyntax(value);
+            if(!error.isEmpty())
+                QMessageBox::critical(this, "Синтаксическая ошибка в скрипте", error);
+        }
+        else
+            storage->setItemProperty(ids.first(), prop, value); //отсюда
     }
 }
 

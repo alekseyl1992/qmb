@@ -16,7 +16,6 @@ class Validator : public QObject
 private:
     Validator();
 
-    //QMultiMap<ItemType, ItemType> invalidLinks;
 
 public:
     //! Возвращает объект класса Validator
@@ -26,6 +25,7 @@ public:
     //! Если данная связь неосуществима, возвращает false и шлёт сигнал wrongLink().
     bool validateLink(ItemType fromType, ItemType toType);
     bool validateModel(logic::model* m);
+    QString checkSyntax(const QString& script);
 
 signals:
     //! Вызывается из validateLink() в случае невозможности создать связь
