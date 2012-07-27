@@ -102,22 +102,34 @@ namespace logic
     {
         threads.push_back(new std::thread([this, obj]()
         {
-            while (is_simulating())
+            try
             {
-                try_pausing(); //если нажата пауза
-                obj->move_request();
+                while (is_simulating())
+                {
+                    try_pausing(); //если нажата пауза
+                    obj->move_request();
+                }
+            }
+            catch(exceptions::LogicException)
+            {
+                stop_reason = std::current_exception();
+                simulation_stop();
             }
         }) );
     }
 
     void model::threading()
     {
-        std::for_each(objects.begin(), objects.end(),
-                [&](object* obj)
+        //переделал на нормальный цикл
+        //std::for_each(objects.begin(), objects.end(),
+        //        [&](object* obj)
+        for(object* obj : objects)
         {
-              if (thread_necessary(obj))
+            if(!simulate_flag)
+                return;
+            else if (thread_necessary(obj))
                 new_thread(obj);
-        });
+        }
     }
 
     void model::checking_finished_th()
@@ -190,6 +202,7 @@ namespace logic
 
     bool model::is_valid()
     {
+        //и всё-таки не вижу причин не пеернести все проверки в Validator
         if (generators.size() == 0)
             throw exceptions::NoGeneratorsException();
 
@@ -208,6 +221,9 @@ namespace logic
 
         if (bad_generators.size() != 0)
         {
+            //надо строчку перетащить в код самого исключения ИМХО
+            //ну и унифицировать её, вроде:
+            //В элементе %0 нет выхода или типа того
             std::string _message = "Не для всех генераторов существует выходная точка:\n[id]";
             for (auto it = bad_generators.begin(); it != bad_generators.end() - 1; ++it)
             {

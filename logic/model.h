@@ -2,10 +2,13 @@
 #define MODEL_H
 
 #include <list>
+#include <iostream>
 #include <string>
 #include <algorithm>
 #include <thread>
 #include <QObject>
+#include <QtScript>
+#include <exception>
 
 #include "object.h"
 #include "attribute.h"
@@ -68,6 +71,8 @@ namespace logic
         void add_attribute(attribute& attr);                        //!< Добавляет новый атрибут в модель
         void remove_attribute(int id);                              //!< Удаляет атрибут из модели по id
         attribute& get_attribute(int id);                           //!< Возвращает атрибут по id
+        std::exception_ptr get_stop_reason() const                  //!< Вовращает причину остановки или пустой объект в случае отсутсвия оной
+        { return stop_reason; }
 
     signals:
         void simulationStarted(int time);
@@ -89,6 +94,8 @@ namespace logic
         std::list<object*> collectors;
         std::list<object*> separators;
         std::list<object*> objects;
+
+        std::exception_ptr stop_reason;
 
         std::vector<std::thread*> threads;
 

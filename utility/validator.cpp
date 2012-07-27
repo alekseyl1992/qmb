@@ -1,4 +1,5 @@
 ﻿#include "validator.h"
+#include <QtScript>
 
 Validator::Validator()
 {
@@ -33,4 +34,12 @@ bool Validator::validateModel(logic::model* m)
         emit modelError(ex);
     }
     return false;
+}
+
+QString Validator::checkSyntax(const QString &script)
+{
+    QScriptEngine eng;
+    auto result = eng.checkSyntax(script);
+
+    return result.errorMessage();
 }

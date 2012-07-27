@@ -26,7 +26,7 @@ ModelStorage::ModelStorage() : myModel(nullptr)
     propNames.insert("num_of_reqs", "Количество запросов");
     propNames.insert("script", "Скрипт");
 
-    defValues.insert("script", "outputID = randID");
+    defValues.insert("script", "outputID = randID()");
 }
 
 ModelStorage::~ModelStorage()
