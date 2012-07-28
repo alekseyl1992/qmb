@@ -796,9 +796,9 @@ void Document::itemPropChanged(QStandardItem *item)
             QString error = Validator::inst().checkSyntax(value);
             if(!error.isEmpty())
                 QMessageBox::critical(this, "Синтаксическая ошибка в скрипте", error);
+            else
+                storage->setItemProperty(ids.first(), prop, value); //отсюда
         }
-        else
-            storage->setItemProperty(ids.first(), prop, value); //отсюда
     }
 }
 

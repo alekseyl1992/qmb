@@ -59,9 +59,11 @@ logic::model* ModelStorage::getModel(bool create)
             switch(typeId)
             {
                 case ItemType::Generator:
-                    myModel->add_object(new logic::generator(name, id,period,num_of_reqs));
+                {
+                    QString script = ProcessingItem.attribute("script");
+                    myModel->add_object(new logic::generator(name, id, script, period,num_of_reqs));
                     break;
-
+                }
                 case ItemType::Queue:
                     myModel->add_object(new logic::queue(name, id));
                     break;
@@ -379,6 +381,7 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
         case ItemType::Generator:
             InsertedItem.setAttribute("period",500);
             InsertedItem.setAttribute("num_of_reqs",10);
+            InsertedItem.setAttribute("script", defValues["script"]);
             break;
         case ItemType::Queue:
             break;
@@ -392,7 +395,7 @@ void ModelStorage::onItemInserted(ItemType type, int id, QString name, QPoint po
             break; //свойства будут
         case ItemType::Separator:
             InsertedItem.setAttribute("script", defValues["script"]);
-            break; //свойства будут. таки не будут, а есть!
+            break; //свойства будут. //таки не будут, а есть!
         default:
             break;
     };

@@ -6,13 +6,14 @@
 
 namespace logic
 {
-    generator::generator(std::string name, int id, int period, ull_t num_requests, bool is_random, bool is_infinite):
+    generator::generator(std::string name, int id, QString script, int period, ull_t num_requests, bool is_random, bool is_infinite):
         object(ItemType::Generator, name, id),
         generating_period(period),
         number_of_requests_to_generate(num_requests),
         random_generating(is_random),
         infinite_generating(is_infinite),
-        count_of_generated_requests(0)
+        count_of_generated_requests(0),
+        script(script)
     {
         if (number_of_requests_to_generate == 0 && infinite_generating == true)
             ++number_of_requests_to_generate;
@@ -33,12 +34,25 @@ namespace logic
     {
         std::lock_guard<std::mutex> lk(item_mutex);
 
-        if (req_id == std::numeric_limits<ull_t>::max()) //18,446,744,073,709,551,615
+        if (req_id == std::numeric_limits<ull_t>::max()) //18,446,744,073,709,551,615 //вотэтоцииииифра
             throw exceptions::TooBigIDException();
         if (random_generating)
         {
             srand(time(NULL));
             generating_period = rand() % 5000;
+        }
+
+        engine.globalObject().setProperty("period", generating_period);
+        engine.globalObject().setProperty("infinite", infinite_generating);
+        engine.globalObject().setProperty("toGenerate", (qsreal)number_of_requests_to_generate);
+        engine.globalObject().setProperty("generated", (qsreal)count_of_generated_requests);
+
+        if(!engine.evaluate(script).isError())
+        {
+            generating_period = engine.globalObject().property("period").toInteger();
+            infinite_generating = engine.globalObject().property("infinite").toBool();
+            number_of_requests_to_generate = engine.globalObject().property("toGenerate").toNumber();
+            count_of_generated_requests = engine.globalObject().property("generated").toInteger();
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
