@@ -6,12 +6,20 @@
 
 namespace logic
 {
-    generator::generator(std::string name, int id, QString script, int period, ull_t num_requests, bool is_random, bool is_infinite):
+    generator::generator(std::string name,
+                         int id,
+                         QString script,
+                         int period,
+                         ull_t num_requests,
+                         bool is_random,
+                         bool is_infinite,
+                         bool is_auto_deleting):
         object(ItemType::Generator, name, id),
         generating_period(period),
         number_of_requests_to_generate(num_requests),
         random_generating(is_random),
         infinite_generating(is_infinite),
+        auto_deleting(is_auto_deleting),
         count_of_generated_requests(0),
         script(script)
     {
@@ -25,6 +33,7 @@ namespace logic
         number_of_requests_to_generate(gen.number_of_requests_to_generate),
         random_generating(gen.random_generating),
         infinite_generating(gen.infinite_generating),
+        auto_deleting(gen.auto_deleting),
         count_of_generated_requests(gen.count_of_generated_requests)
     { }
 
@@ -80,7 +89,17 @@ namespace logic
             if (!this->is_moveable())
                 generate_new_request(ID);
             else
-                --ID;
+            {
+                if (auto_deleting)
+                {
+                    delete cur_req;
+                    cur_req = nullptr;
+                    moveable_request_flag = true;
+                    generate_new_request(ID);
+                }
+                else
+                    --ID;
+            }
         }
     }
 
