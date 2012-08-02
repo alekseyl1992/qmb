@@ -69,6 +69,31 @@ namespace logic
         return start_time;
     }
 
+    void model::changeCondition(model::simulationCondition cond)
+    {
+        switch(cond)
+        {
+        case simulationCondition::Start:
+            simulate_flag = true;
+            stop_flag = false;
+            pause_flag = false;
+            break;
+        case simulationCondition::Stop:
+            simulate_flag = false;
+            stop_flag = true;
+            pause_flag = false;
+            break;
+        case simulationCondition::Pause:
+            pause_flag = true;
+            break;
+        case simulationCondition::Restore:
+            pause_flag = false;
+            break;
+        default:
+            break;
+        }
+    }
+
     void model::generating_th()
     {
         for (object* gen : generators)
@@ -120,9 +145,6 @@ namespace logic
 
     void model::threading()
     {
-        //переделал на нормальный цикл
-        //std::for_each(objects.begin(), objects.end(),
-        //        [&](object* obj)
         for(object* obj : objects)
         {
             if(!simulate_flag)
@@ -179,69 +201,47 @@ namespace logic
         return ExitPointSearch(obj);
     }
 
-    std::string model::intToString(int val)
-    {
-        int digitsCount = 0;
-        int tmp = val;
-        while(tmp > 0)
-        {
-            tmp /= 10;
-            ++digitsCount;
-        }
-
-        char* txt_num = new char[digitsCount + 1];
-        itoa(val, txt_num, 10);
-
-        std::string res(txt_num);
-
-        delete txt_num;
-        txt_num = nullptr;
-
-        return res;
-    }
-
     bool model::is_valid()
     {
-        //и всё-таки не вижу причин не пеернести все проверки в Validator
         if (generators.size() == 0)
             throw exceptions::NoGeneratorsException();
 
         if (terminators.size() == 0)
             throw exceptions::NoTerminatorsException();
 
-        std::vector<object*> bad_generators;
+        //проверка объектов на наличие нескольких входов или выходов (не относится к Коллекторам и Сепараторам)
+        std::vector<object*> bad_inputs_objects,
+                             bad_outputs_objects;
+        for(object* obj : objects)
+        {
+            if(obj->inputs_count() > 1 && obj->get_type() != ItemType::Collector)
+            {
+                bad_inputs_objects.push_back(obj);
+            }
+            if(obj->outputs_count() > 1 && obj->get_type() != ItemType::Separator)
+            {
+                bad_outputs_objects.push_back(obj);
+            }
+        }
+        if (bad_inputs_objects.size() != 0 || bad_outputs_objects.size() != 0)
+            throw exceptions::ManyInputsOutputsException(bad_inputs_objects, bad_outputs_objects);
 
+        //Проверка на существование "точки выхода"
+        std::vector<object*> bad_generators;
         for(object* gen : generators)
         {
             if(!HasExitPoint(gen))
-            {
                 bad_generators.push_back(gen);
-            }
         }
-
         if (bad_generators.size() != 0)
-        {
-            //надо строчку перетащить в код самого исключения ИМХО
-            //ну и унифицировать её, вроде:
-            //В элементе %0 нет выхода или типа того
-            std::string _message = "Не для всех генераторов существует выходная точка:\n[id]";
-            for (auto it = bad_generators.begin(); it != bad_generators.end() - 1; ++it)
-            {
-                _message += intToString((*it)->get_id()) + ", ";
-            }
-            _message += intToString((*(bad_generators.end() - 1))->get_id());
-
-            throw exceptions::NoExitPointException(_message);
-        }
+            throw exceptions::NoExitPointException(bad_generators);
 
         return true;
     }
 
     void model::simulation_start()
     {
-        simulate_flag = true;
-        stop_flag = false;
-        pause_flag = false;
+        changeCondition(simulationCondition::Start);
 
         start_time = get_now_time();
         emit simulationStarted(0);
@@ -262,9 +262,7 @@ namespace logic
 
     void model::simulation_stop()
     {
-        simulate_flag = false;
-        stop_flag = true;
-        pause_flag = false;
+        changeCondition(simulationCondition::Stop);
 
         emit simulationStopped(static_cast<int>(get_now_time() - start_time));
         qDebug() << "simulation stopped";
@@ -272,7 +270,7 @@ namespace logic
 
     void model::simulation_pause()
     {
-        pause_flag = true;
+        changeCondition(simulationCondition::Pause);
 
         emit simulationPaused(static_cast<int>(get_now_time() - start_time));
         qDebug() << "simulation paused";
@@ -282,7 +280,7 @@ namespace logic
     {
         if (pause_flag)
         {
-            pause_flag = false;
+            changeCondition(simulationCondition::Restore);
 
             emit simulationRestored(static_cast<int>(get_now_time() - start_time));
             qDebug() << "simulation restored";

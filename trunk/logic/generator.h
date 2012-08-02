@@ -45,14 +45,15 @@ namespace logic
         { return count_of_generated_requests == number_of_requests_to_generate; }
 
     private:
-        QString script;
-        QScriptEngine engine;
         int generating_period;
         ull_t number_of_requests_to_generate;
         bool random_generating;
         bool infinite_generating;
 
         ull_t count_of_generated_requests;
+
+        QString script;
+        QScriptEngine engine;
     };
 
 } //end namespace logic

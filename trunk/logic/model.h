@@ -8,7 +8,6 @@
 #include <thread>
 #include <QObject>
 #include <QtScript>
-#include <exception>
 
 #include "object.h"
 #include "attribute.h"
@@ -33,6 +32,14 @@ namespace logic
         //friend class collector;
         //friend class separator;
 
+        enum simulationCondition
+        {
+            Start,
+            Stop,
+            Pause,
+            Restore
+        };
+
     public:
         model();
         ~model();
@@ -45,6 +52,7 @@ namespace logic
         bool is_paused() const; 									//!< Проверяет модель на паузу
 
         ull_t get_start_time() const;                               //!< Функция, возвращающая время начала симуляции
+        void changeCondition(simulationCondition cond);
 
         void generating_th();										//!< Функция, создающая потоки для генерации сообщений
         bool thread_necessary(object* obj);                         //!< Проверяет, необходим ли поток для данного объекта
@@ -54,7 +62,6 @@ namespace logic
 
         bool ExitPointSearch(object* obj);                          //!< Функция, проверяющая налисие "выходной точки" у объекта
         bool HasExitPoint(object* obj);                             //!< Функция, вызывающая ExitPointSearch()
-        std::string intToString(int val);                           //!< Функция, конвертирующая целое число в строку
 
     public:
         bool is_valid();											//!< Проверяет модель на наличие ошибок
@@ -87,13 +94,13 @@ namespace logic
         void reqTerminated(const int& tID, const logic::request_id& reqID, int time);
 
     private:
+        std::list<object*> objects;
         std::list<object*> generators;
         std::list<object*> queues;
         std::list<object*> handlers;
         std::list<object*> terminators;
         std::list<object*> collectors;
         std::list<object*> separators;
-        std::list<object*> objects;
 
         std::exception_ptr stop_reason;
 
