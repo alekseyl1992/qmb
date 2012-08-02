@@ -22,7 +22,14 @@ namespace logic
         //Q_OBJECT
 
     public:
-        generator(std::string name, int id, QString script, int period = 0, ull_t num_requests = 0, bool is_random = false, bool is_infinite = false);
+        generator(std::string name,
+                  int id,
+                  QString script,
+                  int period = 0,
+                  ull_t num_requests = 0,
+                  bool is_random = false,
+                  bool is_infinite = false,
+                  bool is_auto_deleting = false);
         generator(const generator& gen);
         virtual ~generator();
 
@@ -49,6 +56,7 @@ namespace logic
         ull_t number_of_requests_to_generate;
         bool random_generating;
         bool infinite_generating;
+        bool auto_deleting;
 
         ull_t count_of_generated_requests;
 
