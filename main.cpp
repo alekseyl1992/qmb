@@ -1,4 +1,4 @@
-﻿#include <QtGui/QApplication>
+﻿#include <QApplication>
 #include <QTranslator>
 #include "interface/mainwindow.h"
 #include <QTextCodec>
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
         a.setOrganizationName("BeSoft");
 
         //TODO оставить весь текст на английском, затем перевети лингвистом
-        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+        QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
         QTranslator *qtTranslator = new QTranslator(&a);
         qtTranslator->load(":/translations/qt_ru.qm");

@@ -19,7 +19,7 @@
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QColor>
-
+#include <QTextEdit>
 
 //! Класс реализует подсветку синтаксиса XML на вкладке Код
 class XmlHighlighter : public QSyntaxHighlighter

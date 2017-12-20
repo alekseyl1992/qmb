@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include "modelscene.h"
 #include "arrow.h"
@@ -176,7 +176,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     //Выделение по ПКМ
     if(mouseEvent->button() == Qt::RightButton)
     {
-        QGraphicsItem *item = itemAt(mouseEvent->scenePos());
+        QGraphicsItem *item = itemAt(mouseEvent->scenePos(), QTransform());
         if(item)
         {
             //если нажали на невыделенном элементе
@@ -189,7 +189,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
     if(mouseEvent->button() == Qt::LeftButton)
     {
-        QGraphicsItem *qItem = itemAt(mouseEvent->scenePos());
+        QGraphicsItem *qItem = itemAt(mouseEvent->scenePos(), QTransform());
         ModelItem *mItem = qgraphicsitem_cast<ModelItem *>(qItem);
         if(mItem && mItem->closeByHotStop(mouseEvent->scenePos()))
         {
@@ -208,7 +208,7 @@ void ModelScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 void ModelScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
     //если что-то выбрано и мышь находиться над выбранным элементом
-    QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos());
+    QGraphicsItem *qItem = itemAt(contextMenuEvent->scenePos(), QTransform());
     /*qDebug() << !selectedItems().empty();
     qDebug() << qItem;
     if(qItem)
@@ -316,8 +316,8 @@ void ModelScene::wheelEvent(QGraphicsSceneWheelEvent *event)
         QGraphicsView *view = (QGraphicsView*)parent();
         QPointF fPos = event->scenePos();
 
-        if(itemAt(fPos) != nullptr)
-            view->centerOn(itemAt(fPos));
+        if(itemAt(fPos, QTransform()) != nullptr)
+            view->centerOn(itemAt(fPos, QTransform()));
         else
             view->centerOn(fPos);
 

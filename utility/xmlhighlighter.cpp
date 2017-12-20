@@ -138,7 +138,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
 
 	for (; i < text.length(); i++)
 	{
-		switch (text.at(i).toAscii())
+        switch (text.at(i).toLatin1())
 		{
 		case '<':
 			brackets++;

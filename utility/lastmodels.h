@@ -1,5 +1,6 @@
 ﻿#ifndef LASTMODELS_H
 #define LASTMODELS_H
+#include <QObject>
 #include <QStringList>
 
 //! Класс предоставляет доступ к списку последних открытых моделей. Реализует паттерн singleton

@@ -46,7 +46,7 @@
 
 ModelItem::ModelItem(ItemType itemType, int itemId, QString name, bool dropShadow,
              QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsPolygonItem(parent, scene), ItemShadow(this, dropShadow)
+    : QGraphicsPolygonItem(parent), ItemShadow(this, dropShadow)
 {
     myItemType = itemType;
     myId = itemId;

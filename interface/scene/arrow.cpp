@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QGraphicsDropShadowEffect>
 
 #include "arrow.h"
@@ -48,7 +48,7 @@ const qreal Pi = 3.14;
 
 Arrow::Arrow(ModelItem *startItem, ModelItem *endItem,
          bool dropShadow, QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsLineItem(parent, scene), ItemShadow(this, dropShadow)
+    : QGraphicsLineItem(parent), ItemShadow(this, dropShadow)
 {
     myStartItem = startItem;
     myEndItem = endItem;

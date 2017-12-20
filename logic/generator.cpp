@@ -51,17 +51,28 @@ namespace logic
             generating_period = rand() % 5000;
         }
 
+        //свойства генератора
         engine.globalObject().setProperty("period", generating_period);
         engine.globalObject().setProperty("infinite", infinite_generating);
         engine.globalObject().setProperty("toGenerate", (qsreal)number_of_requests_to_generate);
         engine.globalObject().setProperty("generated", (qsreal)count_of_generated_requests);
 
+        //свойства запроса
+        //auto req = engine.newArray();
+
+        //req.setProperty("id", QStringValue((int)req_id));
+        //engine.globalObject().setProperty("request", req);
+
         if(!engine.evaluate(script).isError())
         {
+            //получаем свойства генератора
             generating_period = engine.globalObject().property("period").toInteger();
             infinite_generating = engine.globalObject().property("infinite").toBool();
             number_of_requests_to_generate = engine.globalObject().property("toGenerate").toNumber();
             count_of_generated_requests = engine.globalObject().property("generated").toInteger();
+
+            //получаем свойства запроса
+            //for(auto prop: engine.globalObject().property("request").property())
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(generating_period));
